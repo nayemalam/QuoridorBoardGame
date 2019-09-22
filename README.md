@@ -5,7 +5,4 @@
 # Introduction
 
 View our <br/>
-[Deliverable 1 Report](#) <br/>
-Deliverable 2 Report <br/>
-Deliverable 3 Report <br/>
-Deliverable 4 Report <br/>
+[Deliverable 1 Report](https://github.com/McGill-ECSE223-Fall2019/ecse223-project--group-04/wiki/Deliverable-1-Report) <br/>
