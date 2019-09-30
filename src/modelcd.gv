@@ -11,7 +11,7 @@ digraph "model" {
 "];
 
   // Class: User
-  "User" [shape=plaintext margin=0 label=<<table border="1" cellspacing="0" cellborder="0" cellpadding="2"><tr><td cellpadding="4">    User    </td></tr><hr/><tr><td align="left" href="" title="string userName&#13;">  userName : string  </td></tr></table>>,
+  "User" [shape=plaintext margin=0 label=<<table border="1" cellspacing="0" cellborder="0" cellpadding="2"><tr><td cellpadding="4">    User    </td></tr><hr/><tr><td align="left" href="" title="String userName&#13;">  userName : String  </td></tr></table>>,
    tooltip="class User
 "];
 
@@ -26,14 +26,14 @@ digraph "model" {
 "];
 
   // Class: Pawn
-  "Pawn" [shape=plaintext margin=0 label=<<table border="1" cellspacing="0" cellborder="0" cellpadding="2"><tr><td cellpadding="4">    Pawn    </td></tr><tr><td cellpadding="4">&laquo;abstract&raquo;</td></tr><hr/><tr><td align="left" href="" title="Color color&#13;">  color : Color  </td></tr></table>>,
+  "Pawn" [shape=plaintext margin=0 label=<<table border="1" cellspacing="0" cellborder="0" cellpadding="2"><tr><td cellpadding="4">    Pawn    </td></tr><hr/><tr><td align="left" href="" title="Color color&#13;">  color : Color  </td></tr></table>>,
    tooltip="class Pawn
 "];
   "Pawn" -> "Token" [arrowhead="empty"; samehead="gen"];
 
 
   // Class: Wall
-  "Wall" [shape=plaintext margin=0 label=<<table border="1" cellspacing="0" cellborder="0" cellpadding="2"><tr><td cellpadding="4">    Wall    </td></tr><tr><td cellpadding="4">&laquo;abstract&raquo;</td></tr><hr/><tr><td align="left" href="" title="Orientation orientation&#13;">  orientation : Orientation  </td></tr></table>>,
+  "Wall" [shape=plaintext margin=0 label=<<table border="1" cellspacing="0" cellborder="0" cellpadding="2"><tr><td cellpadding="4">    Wall    </td></tr><hr/><tr><td align="left" href="" title="Orientation orientation&#13;">  orientation : Orientation  </td></tr></table>>,
    tooltip="class Wall
 "];
   "Wall" -> "Token" [arrowhead="empty"; samehead="gen"];
@@ -47,8 +47,8 @@ digraph "model" {
   // All associations
   "QuorridorGame" -> "User" [dir="back", arrowtail="diamond", taillabel="1 quorridorGame", headlabel="0..2 users", tooltip="QuorridorGame 1 quorridorGame <@>- 0..2 users User"];
   "QuorridorGame" -> "GameBoard" [dir="back", arrowtail="diamond", taillabel="1 quorridorGame", headlabel="1 gameBoard", tooltip="QuorridorGame 1 quorridorGame <@>- 1 gameBoard GameBoard"];
-  "User" -> "Wall" [dir="forward", arrowhead="open", taillabel="1 ", headlabel="0..10 walls", tooltip="User 1  -> 0..10 walls Wall"];
   "User" -> "Pawn" [dir="forward", arrowhead="open", taillabel="1 ", headlabel="0..1 pawn", tooltip="User 1  -> 0..1 pawn Pawn"];
+  "User" -> "Wall" [dir="forward", arrowhead="open", taillabel="1 ", headlabel="0..10 walls", tooltip="User 1  -> 0..10 walls Wall"];
   "GameBoard" -> "Wall" [dir="forward", arrowhead="open", taillabel="1 gameBoard", headlabel="0..20 walls", tooltip="GameBoard 1 gameBoard -> 0..20 walls Wall"];
   "GameBoard" -> "Pawn" [dir="forward", arrowhead="open", taillabel="1 gameBoard", headlabel="0..2 pawns", tooltip="GameBoard 1 gameBoard -> 0..2 pawns Pawn"];
   "Token" -> "Position" [dir="forward", arrowhead="open", taillabel="1 ", headlabel="0..1 gamePosition", tooltip="Token 1  -> 0..1 gamePosition Position"];
