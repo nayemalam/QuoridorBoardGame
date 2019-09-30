@@ -3,40 +3,33 @@
 
 package ca.mcgill.ecse223.quoridor.model;
 
-// line 31 "../../../../../model.ump"
-// line 40 "../../../../../model.ump"
-// line 100 "../../../../../model.ump"
-public class Wall extends Token
+// line 54 "../../../../../model.ump"
+public class Tile
 {
-
-  //------------------------
-  // ENUMERATIONS
-  //------------------------
-
-  public enum Orientation { Horizontal, Vertical }
 
   //------------------------
   // MEMBER VARIABLES
   //------------------------
 
-  //Wall Attributes
-  private Orientation orientation;
+  //Tile Attributes
+  private int row;
+  private char column;
 
-  //Wall Associations
+  //Tile Associations
   private Game game;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Wall(Orientation aOrientation, Game aGame)
+  public Tile(int aRow, char aColumn, Game aGame)
   {
-    super();
-    orientation = aOrientation;
+    row = aRow;
+    column = aColumn;
     boolean didAddGame = setGame(aGame);
     if (!didAddGame)
     {
-      throw new RuntimeException("Unable to create wall due to game");
+      throw new RuntimeException("Unable to create tile due to game");
     }
   }
 
@@ -44,17 +37,30 @@ public class Wall extends Token
   // INTERFACE
   //------------------------
 
-  public boolean setOrientation(Orientation aOrientation)
+  public boolean setRow(int aRow)
   {
     boolean wasSet = false;
-    orientation = aOrientation;
+    row = aRow;
     wasSet = true;
     return wasSet;
   }
 
-  public Orientation getOrientation()
+  public boolean setColumn(char aColumn)
   {
-    return orientation;
+    boolean wasSet = false;
+    column = aColumn;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public int getRow()
+  {
+    return row;
+  }
+
+  public char getColumn()
+  {
+    return column;
   }
   /* Code from template association_GetOne */
   public Game getGame()
@@ -65,14 +71,14 @@ public class Wall extends Token
   public boolean setGame(Game aGame)
   {
     boolean wasSet = false;
-    //Must provide game to wall
+    //Must provide game to tile
     if (aGame == null)
     {
       return wasSet;
     }
 
-    //game already at maximum (20)
-    if (aGame.numberOfWalls() >= Game.maximumNumberOfWalls())
+    //game already at maximum (81)
+    if (aGame.numberOfTiles() >= Game.maximumNumberOfTiles())
     {
       return wasSet;
     }
@@ -81,14 +87,14 @@ public class Wall extends Token
     game = aGame;
     if (existingGame != null && !existingGame.equals(aGame))
     {
-      boolean didRemove = existingGame.removeWall(this);
+      boolean didRemove = existingGame.removeTile(this);
       if (!didRemove)
       {
         game = existingGame;
         return wasSet;
       }
     }
-    game.addWall(this);
+    game.addTile(this);
     wasSet = true;
     return wasSet;
   }
@@ -99,16 +105,16 @@ public class Wall extends Token
     this.game = null;
     if(placeholderGame != null)
     {
-      placeholderGame.removeWall(this);
+      placeholderGame.removeTile(this);
     }
-    super.delete();
   }
 
 
   public String toString()
   {
-    return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "orientation" + "=" + (getOrientation() != null ? !getOrientation().equals(this)  ? getOrientation().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+    return super.toString() + "["+
+            "row" + ":" + getRow()+ "," +
+            "column" + ":" + getColumn()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "game = "+(getGame()!=null?Integer.toHexString(System.identityHashCode(getGame())):"null");
   }
 }

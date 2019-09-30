@@ -3,8 +3,8 @@
 
 package ca.mcgill.ecse223.quoridor.model;
 
-// line 24 "../../../../../model.ump"
-// line 113 "../../../../../model.ump"
+// line 27 "../../../../../model.ump"
+// line 105 "../../../../../model.ump"
 public abstract class Token
 {
 
@@ -13,7 +13,7 @@ public abstract class Token
   //------------------------
 
   //Token Associations
-  private Position gamePosition;
+  private Tile tile;
 
   //------------------------
   // CONSTRUCTOR
@@ -26,30 +26,28 @@ public abstract class Token
   // INTERFACE
   //------------------------
   /* Code from template association_GetOne */
-  public Position getGamePosition()
+  public Tile getTile()
   {
-    return gamePosition;
+    return tile;
   }
 
-  public boolean hasGamePosition()
+  public boolean hasTile()
   {
-    boolean has = gamePosition != null;
+    boolean has = tile != null;
     return has;
   }
   /* Code from template association_SetUnidirectionalOptionalOne */
-  public boolean setGamePosition(Position aNewGamePosition)
+  public boolean setTile(Tile aNewTile)
   {
     boolean wasSet = false;
-    gamePosition = aNewGamePosition;
+    tile = aNewTile;
     wasSet = true;
     return wasSet;
   }
 
   public void delete()
   {
-    gamePosition = null;
+    tile = null;
   }
-
-  public abstract String GetPositionAsString();
 
 }

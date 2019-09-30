@@ -3,9 +3,9 @@
 
 package ca.mcgill.ecse223.quoridor.model;
 
-// line 27 "../../../../../model.ump"
-// line 33 "../../../../../model.ump"
-// line 94 "../../../../../model.ump"
+// line 30 "../../../../../model.ump"
+// line 35 "../../../../../model.ump"
+// line 93 "../../../../../model.ump"
 public class Pawn extends Token
 {
 
@@ -22,14 +22,22 @@ public class Pawn extends Token
   //Pawn Attributes
   private Color color;
 
+  //Pawn Associations
+  private Game game;
+
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Pawn(Color aColor)
+  public Pawn(Color aColor, Game aGame)
   {
     super();
     color = aColor;
+    boolean didAddGame = setGame(aGame);
+    if (!didAddGame)
+    {
+      throw new RuntimeException("Unable to create pawn due to game");
+    }
   }
 
   //------------------------
@@ -48,21 +56,59 @@ public class Pawn extends Token
   {
     return color;
   }
+  /* Code from template association_GetOne */
+  public Game getGame()
+  {
+    return game;
+  }
+  /* Code from template association_SetOneToAtMostN */
+  public boolean setGame(Game aGame)
+  {
+    boolean wasSet = false;
+    //Must provide game to pawn
+    if (aGame == null)
+    {
+      return wasSet;
+    }
+
+    //game already at maximum (2)
+    if (aGame.numberOfPawns() >= Game.maximumNumberOfPawns())
+    {
+      return wasSet;
+    }
+    
+    Game existingGame = game;
+    game = aGame;
+    if (existingGame != null && !existingGame.equals(aGame))
+    {
+      boolean didRemove = existingGame.removePawn(this);
+      if (!didRemove)
+      {
+        game = existingGame;
+        return wasSet;
+      }
+    }
+    game.addPawn(this);
+    wasSet = true;
+    return wasSet;
+  }
 
   public void delete()
   {
+    Game placeholderGame = game;
+    this.game = null;
+    if(placeholderGame != null)
+    {
+      placeholderGame.removePawn(this);
+    }
     super.delete();
-  }
-
-  // line 36 "../../../../../model.ump"
-   public String GetPositionAsString(){
-    return "";
   }
 
 
   public String toString()
   {
     return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "color" + "=" + (getColor() != null ? !getColor().equals(this)  ? getColor().toString().replaceAll("  ","    ") : "this" : "null");
+            "  " + "color" + "=" + (getColor() != null ? !getColor().equals(this)  ? getColor().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "  " + "game = "+(getGame()!=null?Integer.toHexString(System.identityHashCode(getGame())):"null");
   }
 }

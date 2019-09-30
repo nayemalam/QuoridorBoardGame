@@ -7,36 +7,36 @@ import java.sql.Date;
 import java.sql.Time;
 
 // line 3 "../../../../../model.ump"
-// line 63 "../../../../../model.ump"
-public class QuorridorGame
+// line 60 "../../../../../model.ump"
+public class QuorridorSystem
 {
 
   //------------------------
   // MEMBER VARIABLES
   //------------------------
 
-  //QuorridorGame Associations
+  //QuorridorSystem Associations
   private List<User> users;
-  private GameBoard gameBoard;
+  private Game game;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public QuorridorGame(GameBoard aGameBoard)
+  public QuorridorSystem(Game aGame)
   {
     users = new ArrayList<User>();
-    if (aGameBoard == null || aGameBoard.getQuorridorGame() != null)
+    if (aGame == null || aGame.getQuorridorSystem() != null)
     {
-      throw new RuntimeException("Unable to create QuorridorGame due to aGameBoard");
+      throw new RuntimeException("Unable to create QuorridorSystem due to aGame");
     }
-    gameBoard = aGameBoard;
+    game = aGame;
   }
 
-  public QuorridorGame(Date aStartDateForGameBoard, Time aStartTimeForGameBoard)
+  public QuorridorSystem(Date aStartDateForGame, Time aStartTimeForGame)
   {
     users = new ArrayList<User>();
-    gameBoard = new GameBoard(aStartDateForGameBoard, aStartTimeForGameBoard, this);
+    game = new Game(aStartDateForGame, aStartTimeForGame, this);
   }
 
   //------------------------
@@ -73,9 +73,9 @@ public class QuorridorGame
     return index;
   }
   /* Code from template association_GetOne */
-  public GameBoard getGameBoard()
+  public Game getGame()
   {
-    return gameBoard;
+    return game;
   }
   /* Code from template association_MinimumNumberOfMethod */
   public static int minimumNumberOfUsers()
@@ -109,11 +109,11 @@ public class QuorridorGame
       return wasAdded;
     }
 
-    QuorridorGame existingQuorridorGame = aUser.getQuorridorGame();
-    boolean isNewQuorridorGame = existingQuorridorGame != null && !this.equals(existingQuorridorGame);
-    if (isNewQuorridorGame)
+    QuorridorSystem existingQuorridorSystem = aUser.getQuorridorSystem();
+    boolean isNewQuorridorSystem = existingQuorridorSystem != null && !this.equals(existingQuorridorSystem);
+    if (isNewQuorridorSystem)
     {
-      aUser.setQuorridorGame(this);
+      aUser.setQuorridorSystem(this);
     }
     else
     {
@@ -126,8 +126,8 @@ public class QuorridorGame
   public boolean removeUser(User aUser)
   {
     boolean wasRemoved = false;
-    //Unable to remove aUser, as it must always have a quorridorGame
-    if (!this.equals(aUser.getQuorridorGame()))
+    //Unable to remove aUser, as it must always have a quorridorSystem
+    if (!this.equals(aUser.getQuorridorSystem()))
     {
       users.remove(aUser);
       wasRemoved = true;
@@ -176,11 +176,11 @@ public class QuorridorGame
       users.remove(aUser);
     }
     
-    GameBoard existingGameBoard = gameBoard;
-    gameBoard = null;
-    if (existingGameBoard != null)
+    Game existingGame = game;
+    game = null;
+    if (existingGame != null)
     {
-      existingGameBoard.delete();
+      existingGame.delete();
     }
   }
 

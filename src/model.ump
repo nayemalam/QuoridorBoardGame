@@ -11,7 +11,7 @@ class User
   1 -> 0..1 Pawn pawn;
   String userName;
   1 -> 0..10 Wall wallStock;
-  1 <@>- 0..1 Move moves;
+  1 <@>- 0..1 Move currentMove;
   1 -> 0..10 Wall placedWalls;
 }
  
@@ -21,7 +21,7 @@ class Game
   1 game <@>- 0..2 Pawn pawns;
   Date startDate;
   Time startTime;
-  1 <@>- 0..81 Tile;
+  1 <@>- 81 Tile;
 }
 
 class Token
@@ -34,19 +34,14 @@ class Token
 
 class Pawn
 {
+  enum Color { Black, White } 
   Color color;
 }
 class Wall
 {
+  enum Orientation {Horizontal, Vertical}
   Orientation orientation;
-  }
-
-
-enum Color { Black, White } 
-enum Orientation {Horizontal, Vertical}
-
-
-
+}
 
 class Move
 {
@@ -78,7 +73,7 @@ class User
   position.association User__Wall 142,39 0,42;
   position.association Pawn__User 141,0 0,44;
   position.association User__Wall:walls 142,23 0,7;
-  position.association Pawn:pawn__User 142,57 0,2;
+  position.association Pawn:pawn__User 143,58 0,2;
   position.association User__Wall 142,14 64,27;
 }
 

@@ -5,15 +5,9 @@ package ca.mcgill.ecse223.quoridor.model;
 import java.util.*;
 
 // line 9 "../../../../../model.ump"
-// line 73 "../../../../../model.ump"
+// line 70 "../../../../../model.ump"
 public class User
 {
-
-  //------------------------
-  // ENUMERATIONS
-  //------------------------
-
-  public enum Orientation { Horizontal, Vertical }
 
   //------------------------
   // MEMBER VARIABLES
@@ -24,21 +18,24 @@ public class User
 
   //User Associations
   private Pawn pawn;
-  private List<Wall> walls;
-  private QuorridorGame quorridorGame;
+  private List<Wall> wallStock;
+  private Move currentMove;
+  private List<Wall> placedWalls;
+  private QuorridorSystem quorridorSystem;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public User(String aUserName, QuorridorGame aQuorridorGame)
+  public User(String aUserName, QuorridorSystem aQuorridorSystem)
   {
     userName = aUserName;
-    walls = new ArrayList<Wall>();
-    boolean didAddQuorridorGame = setQuorridorGame(aQuorridorGame);
-    if (!didAddQuorridorGame)
+    wallStock = new ArrayList<Wall>();
+    placedWalls = new ArrayList<Wall>();
+    boolean didAddQuorridorSystem = setQuorridorSystem(aQuorridorSystem);
+    if (!didAddQuorridorSystem)
     {
-      throw new RuntimeException("Unable to create user due to quorridorGame");
+      throw new RuntimeException("Unable to create user due to quorridorSystem");
     }
   }
 
@@ -70,39 +67,80 @@ public class User
     return has;
   }
   /* Code from template association_GetMany */
-  public Wall getWall(int index)
+  public Wall getWallStock(int index)
   {
-    Wall aWall = walls.get(index);
-    return aWall;
+    Wall aWallStock = wallStock.get(index);
+    return aWallStock;
   }
 
-  public List<Wall> getWalls()
+  public List<Wall> getWallStock()
   {
-    List<Wall> newWalls = Collections.unmodifiableList(walls);
-    return newWalls;
+    List<Wall> newWallStock = Collections.unmodifiableList(wallStock);
+    return newWallStock;
   }
 
-  public int numberOfWalls()
+  public int numberOfWallStock()
   {
-    int number = walls.size();
+    int number = wallStock.size();
     return number;
   }
 
-  public boolean hasWalls()
+  public boolean hasWallStock()
   {
-    boolean has = walls.size() > 0;
+    boolean has = wallStock.size() > 0;
     return has;
   }
 
-  public int indexOfWall(Wall aWall)
+  public int indexOfWallStock(Wall aWallStock)
   {
-    int index = walls.indexOf(aWall);
+    int index = wallStock.indexOf(aWallStock);
     return index;
   }
   /* Code from template association_GetOne */
-  public QuorridorGame getQuorridorGame()
+  public Move getCurrentMove()
   {
-    return quorridorGame;
+    return currentMove;
+  }
+
+  public boolean hasCurrentMove()
+  {
+    boolean has = currentMove != null;
+    return has;
+  }
+  /* Code from template association_GetMany */
+  public Wall getPlacedWall(int index)
+  {
+    Wall aPlacedWall = placedWalls.get(index);
+    return aPlacedWall;
+  }
+
+  public List<Wall> getPlacedWalls()
+  {
+    List<Wall> newPlacedWalls = Collections.unmodifiableList(placedWalls);
+    return newPlacedWalls;
+  }
+
+  public int numberOfPlacedWalls()
+  {
+    int number = placedWalls.size();
+    return number;
+  }
+
+  public boolean hasPlacedWalls()
+  {
+    boolean has = placedWalls.size() > 0;
+    return has;
+  }
+
+  public int indexOfPlacedWall(Wall aPlacedWall)
+  {
+    int index = placedWalls.indexOf(aPlacedWall);
+    return index;
+  }
+  /* Code from template association_GetOne */
+  public QuorridorSystem getQuorridorSystem()
+  {
+    return quorridorSystem;
   }
   /* Code from template association_SetUnidirectionalOptionalOne */
   public boolean setPawn(Pawn aNewPawn)
@@ -113,122 +151,238 @@ public class User
     return wasSet;
   }
   /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfWalls()
+  public static int minimumNumberOfWallStock()
   {
     return 0;
   }
   /* Code from template association_MaximumNumberOfMethod */
-  public static int maximumNumberOfWalls()
+  public static int maximumNumberOfWallStock()
   {
     return 10;
   }
   /* Code from template association_AddUnidirectionalOptionalN */
-  public boolean addWall(Wall aWall)
+  public boolean addWallStock(Wall aWallStock)
   {
     boolean wasAdded = false;
-    if (walls.contains(aWall)) { return false; }
-    if (numberOfWalls() < maximumNumberOfWalls())
+    if (wallStock.contains(aWallStock)) { return false; }
+    if (numberOfWallStock() < maximumNumberOfWallStock())
     {
-      walls.add(aWall);
+      wallStock.add(aWallStock);
       wasAdded = true;
     }
     return wasAdded;
   }
 
-  public boolean removeWall(Wall aWall)
+  public boolean removeWallStock(Wall aWallStock)
   {
     boolean wasRemoved = false;
-    if (walls.contains(aWall))
+    if (wallStock.contains(aWallStock))
     {
-      walls.remove(aWall);
+      wallStock.remove(aWallStock);
       wasRemoved = true;
     }
     return wasRemoved;
   }
   /* Code from template association_SetUnidirectionalOptionalN */
-  public boolean setWalls(Wall... newWalls)
+  public boolean setWallStock(Wall... newWallStock)
   {
     boolean wasSet = false;
-    ArrayList<Wall> verifiedWalls = new ArrayList<Wall>();
-    for (Wall aWall : newWalls)
+    ArrayList<Wall> verifiedWallStock = new ArrayList<Wall>();
+    for (Wall aWallStock : newWallStock)
     {
-      if (verifiedWalls.contains(aWall))
+      if (verifiedWallStock.contains(aWallStock))
       {
         continue;
       }
-      verifiedWalls.add(aWall);
+      verifiedWallStock.add(aWallStock);
     }
 
-    if (verifiedWalls.size() != newWalls.length || verifiedWalls.size() > maximumNumberOfWalls())
+    if (verifiedWallStock.size() != newWallStock.length || verifiedWallStock.size() > maximumNumberOfWallStock())
     {
       return wasSet;
     }
 
-    walls.clear();
-    walls.addAll(verifiedWalls);
+    wallStock.clear();
+    wallStock.addAll(verifiedWallStock);
     wasSet = true;
     return wasSet;
   }
   /* Code from template association_AddIndexControlFunctions */
-  public boolean addWallAt(Wall aWall, int index)
+  public boolean addWallStockAt(Wall aWallStock, int index)
   {  
     boolean wasAdded = false;
-    if(addWall(aWall))
+    if(addWallStock(aWallStock))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfWalls()) { index = numberOfWalls() - 1; }
-      walls.remove(aWall);
-      walls.add(index, aWall);
+      if(index > numberOfWallStock()) { index = numberOfWallStock() - 1; }
+      wallStock.remove(aWallStock);
+      wallStock.add(index, aWallStock);
       wasAdded = true;
     }
     return wasAdded;
   }
 
-  public boolean addOrMoveWallAt(Wall aWall, int index)
+  public boolean addOrMoveWallStockAt(Wall aWallStock, int index)
   {
     boolean wasAdded = false;
-    if(walls.contains(aWall))
+    if(wallStock.contains(aWallStock))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfWalls()) { index = numberOfWalls() - 1; }
-      walls.remove(aWall);
-      walls.add(index, aWall);
+      if(index > numberOfWallStock()) { index = numberOfWallStock() - 1; }
+      wallStock.remove(aWallStock);
+      wallStock.add(index, aWallStock);
       wasAdded = true;
     } 
     else 
     {
-      wasAdded = addWallAt(aWall, index);
+      wasAdded = addWallStockAt(aWallStock, index);
     }
     return wasAdded;
   }
-  /* Code from template association_SetOneToAtMostN */
-  public boolean setQuorridorGame(QuorridorGame aQuorridorGame)
+  /* Code from template association_SetOptionalOneToOne */
+  public boolean setCurrentMove(Move aNewCurrentMove)
   {
     boolean wasSet = false;
-    //Must provide quorridorGame to user
-    if (aQuorridorGame == null)
+    if (currentMove != null && !currentMove.equals(aNewCurrentMove) && equals(currentMove.getUser()))
+    {
+      //Unable to setCurrentMove, as existing currentMove would become an orphan
+      return wasSet;
+    }
+
+    currentMove = aNewCurrentMove;
+    User anOldUser = aNewCurrentMove != null ? aNewCurrentMove.getUser() : null;
+
+    if (!this.equals(anOldUser))
+    {
+      if (anOldUser != null)
+      {
+        anOldUser.currentMove = null;
+      }
+      if (currentMove != null)
+      {
+        currentMove.setUser(this);
+      }
+    }
+    wasSet = true;
+    return wasSet;
+  }
+  /* Code from template association_MinimumNumberOfMethod */
+  public static int minimumNumberOfPlacedWalls()
+  {
+    return 0;
+  }
+  /* Code from template association_MaximumNumberOfMethod */
+  public static int maximumNumberOfPlacedWalls()
+  {
+    return 10;
+  }
+  /* Code from template association_AddUnidirectionalOptionalN */
+  public boolean addPlacedWall(Wall aPlacedWall)
+  {
+    boolean wasAdded = false;
+    if (placedWalls.contains(aPlacedWall)) { return false; }
+    if (numberOfPlacedWalls() < maximumNumberOfPlacedWalls())
+    {
+      placedWalls.add(aPlacedWall);
+      wasAdded = true;
+    }
+    return wasAdded;
+  }
+
+  public boolean removePlacedWall(Wall aPlacedWall)
+  {
+    boolean wasRemoved = false;
+    if (placedWalls.contains(aPlacedWall))
+    {
+      placedWalls.remove(aPlacedWall);
+      wasRemoved = true;
+    }
+    return wasRemoved;
+  }
+  /* Code from template association_SetUnidirectionalOptionalN */
+  public boolean setPlacedWalls(Wall... newPlacedWalls)
+  {
+    boolean wasSet = false;
+    ArrayList<Wall> verifiedPlacedWalls = new ArrayList<Wall>();
+    for (Wall aPlacedWall : newPlacedWalls)
+    {
+      if (verifiedPlacedWalls.contains(aPlacedWall))
+      {
+        continue;
+      }
+      verifiedPlacedWalls.add(aPlacedWall);
+    }
+
+    if (verifiedPlacedWalls.size() != newPlacedWalls.length || verifiedPlacedWalls.size() > maximumNumberOfPlacedWalls())
     {
       return wasSet;
     }
 
-    //quorridorGame already at maximum (2)
-    if (aQuorridorGame.numberOfUsers() >= QuorridorGame.maximumNumberOfUsers())
+    placedWalls.clear();
+    placedWalls.addAll(verifiedPlacedWalls);
+    wasSet = true;
+    return wasSet;
+  }
+  /* Code from template association_AddIndexControlFunctions */
+  public boolean addPlacedWallAt(Wall aPlacedWall, int index)
+  {  
+    boolean wasAdded = false;
+    if(addPlacedWall(aPlacedWall))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfPlacedWalls()) { index = numberOfPlacedWalls() - 1; }
+      placedWalls.remove(aPlacedWall);
+      placedWalls.add(index, aPlacedWall);
+      wasAdded = true;
+    }
+    return wasAdded;
+  }
+
+  public boolean addOrMovePlacedWallAt(Wall aPlacedWall, int index)
+  {
+    boolean wasAdded = false;
+    if(placedWalls.contains(aPlacedWall))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfPlacedWalls()) { index = numberOfPlacedWalls() - 1; }
+      placedWalls.remove(aPlacedWall);
+      placedWalls.add(index, aPlacedWall);
+      wasAdded = true;
+    } 
+    else 
+    {
+      wasAdded = addPlacedWallAt(aPlacedWall, index);
+    }
+    return wasAdded;
+  }
+  /* Code from template association_SetOneToAtMostN */
+  public boolean setQuorridorSystem(QuorridorSystem aQuorridorSystem)
+  {
+    boolean wasSet = false;
+    //Must provide quorridorSystem to user
+    if (aQuorridorSystem == null)
+    {
+      return wasSet;
+    }
+
+    //quorridorSystem already at maximum (2)
+    if (aQuorridorSystem.numberOfUsers() >= QuorridorSystem.maximumNumberOfUsers())
     {
       return wasSet;
     }
     
-    QuorridorGame existingQuorridorGame = quorridorGame;
-    quorridorGame = aQuorridorGame;
-    if (existingQuorridorGame != null && !existingQuorridorGame.equals(aQuorridorGame))
+    QuorridorSystem existingQuorridorSystem = quorridorSystem;
+    quorridorSystem = aQuorridorSystem;
+    if (existingQuorridorSystem != null && !existingQuorridorSystem.equals(aQuorridorSystem))
     {
-      boolean didRemove = existingQuorridorGame.removeUser(this);
+      boolean didRemove = existingQuorridorSystem.removeUser(this);
       if (!didRemove)
       {
-        quorridorGame = existingQuorridorGame;
+        quorridorSystem = existingQuorridorSystem;
         return wasSet;
       }
     }
-    quorridorGame.addUser(this);
+    quorridorSystem.addUser(this);
     wasSet = true;
     return wasSet;
   }
@@ -236,12 +390,20 @@ public class User
   public void delete()
   {
     pawn = null;
-    walls.clear();
-    QuorridorGame placeholderQuorridorGame = quorridorGame;
-    this.quorridorGame = null;
-    if(placeholderQuorridorGame != null)
+    wallStock.clear();
+    Move existingCurrentMove = currentMove;
+    currentMove = null;
+    if (existingCurrentMove != null)
     {
-      placeholderQuorridorGame.removeUser(this);
+      existingCurrentMove.delete();
+      existingCurrentMove.setUser(null);
+    }
+    placedWalls.clear();
+    QuorridorSystem placeholderQuorridorSystem = quorridorSystem;
+    this.quorridorSystem = null;
+    if(placeholderQuorridorSystem != null)
+    {
+      placeholderQuorridorSystem.removeUser(this);
     }
   }
 
@@ -251,6 +413,7 @@ public class User
     return super.toString() + "["+
             "userName" + ":" + getUserName()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "pawn = "+(getPawn()!=null?Integer.toHexString(System.identityHashCode(getPawn())):"null") + System.getProperties().getProperty("line.separator") +
-            "  " + "quorridorGame = "+(getQuorridorGame()!=null?Integer.toHexString(System.identityHashCode(getQuorridorGame())):"null");
+            "  " + "currentMove = "+(getCurrentMove()!=null?Integer.toHexString(System.identityHashCode(getCurrentMove())):"null") + System.getProperties().getProperty("line.separator") +
+            "  " + "quorridorSystem = "+(getQuorridorSystem()!=null?Integer.toHexString(System.identityHashCode(getQuorridorSystem())):"null");
   }
 }
