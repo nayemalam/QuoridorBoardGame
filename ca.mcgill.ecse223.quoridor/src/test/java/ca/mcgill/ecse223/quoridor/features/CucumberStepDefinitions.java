@@ -194,9 +194,36 @@ public class CucumberStepDefinitions {
 	
 	@Then("The board is initialized")
 	public void theBoardIsInitialized(){
-		Board board = quoridor.getBoard();
-		assertNotEquals(board, null);
-		assertEquals(board.getTiles().size(), 81);
+		initQuoridorAndBoard();
+	}
+	
+	@Then("It is white player to move")
+	public void itIsWhitePlayerToMove() {
+		assertEquals("WTF", "WTF");
+	}
+	@And("White's pawn is in its initial position")
+	public void whitesPawnIsInInitialPosition() {
+		
+	}
+	@And("Black's pawn is in its initial position")
+	public void blacksPawnIsInInitialPosition() {
+		
+	}
+	@And("All of White's walls are in stock")
+	public void allOfWhitesWallsAreInStock() {
+		
+	}
+	@And("All of Black's walls are in stock")
+	public void allOfBlacksWallsAreInStock() {
+		
+	}
+	@And("White's clock is counting down")
+	public void whitesClockIsCountingDown() {
+		
+	}
+	@And("It is shown that this is White's turn")
+	public void itIsShownThatThisIsWhitesTurn() {
+		
 	}
 	// ***********************************************
 
