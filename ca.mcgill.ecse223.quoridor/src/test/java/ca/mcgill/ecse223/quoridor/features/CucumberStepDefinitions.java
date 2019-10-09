@@ -31,7 +31,12 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.fail;
 
 public class CucumberStepDefinitions {
-
+	// ***********************************************
+	// Constants
+	private int TOTAL_NUMBER_OF_TILES = 81;
+	private int TOTAL_NUMBER_OF_ROWS = 9;
+	private int TOTAL_NUMBER_OF_COLS = 9;
+	// ***********************************************
 	// ***********************************************
 	// Background step definitions
 	// ***********************************************
@@ -131,15 +136,15 @@ public class CucumberStepDefinitions {
 	 */
 	
 	// ***********************************************
-	// Initiate a new game scenario
+	// Start New Game Feature
 	
 	/**
-	 * When method for when a game is initializing
+	 * Method for when a game is initializing
 	 * @throws Exception 
 	 */
-	@When("A new game is initializing")
-	public void aNewGameIsInitializing() throws Exception {
-		QuoridorController.initializeNewGame(game);
+	@When("A new game is being initialized")
+	public void aNewGameIsBeingInitialized() throws Exception {
+		QuoridorController.initializeNewGame(QuoridorApplication.getQuoridor().getCurrentGame());
 	}
 	
 	/**
@@ -157,6 +162,7 @@ public class CucumberStepDefinitions {
 	 */
 	@And("Black player chooses a username")
 	public void blackPlayerHasAUserName() {
+		Game game = QuoridorApplication.getQuoridor().getCurrentGame();
 		Boolean userIsInvalidOrNull = game.equals(null) && game.getBlackPlayer().equals(null)
 				&& game.getBlackPlayer().getUser().equals(null);
 		if(userIsInvalidOrNull) {
@@ -191,8 +197,8 @@ public class CucumberStepDefinitions {
 	/**
 	 * Method to verify that the game is ready to start
 	 */
-	@Then("The game is ready to start")
-	public void theGameIsReadyToStart() {
+	@Then("The game shall become ready to start")
+	public void theGameShallBecomeReadyToStart() {
 		assertEquals(Game.GameStatus.ReadyToStart, QuoridorApplication.getQuoridor().getCurrentGame().getGameStatus());
 	}
 	
@@ -209,58 +215,86 @@ public class CucumberStepDefinitions {
 	 */
 	@When("I start the clock")
 	public void iStartTheClock() throws Exception {
-		QuoridorController.startClock(game);
+		QuoridorController.startClock(QuoridorApplication.getQuoridor().getCurrentGame());
 	}
 	
+	/**
+	 * Method used to verify that the board has been correctly initialized
+	 */
 	@And("The board is initialized")
 	public void andTheBoardIsInitialized(){
+		Board board = QuoridorApplication.getQuoridor().getBoard();
+		// Verify number of times
+		assertEquals(TOTAL_NUMBER_OF_TILES, board.getTiles().size());
+		
+		// Verify the indices of the tiles
+		for(int row = 0; row < TOTAL_NUMBER_OF_ROWS; row ++) {
+			for(int col = 0; col < TOTAL_NUMBER_OF_COLS; col++) {
+				// Obtain tile in the list and verify that the indices are correct
+				int index = ((TOTAL_NUMBER_OF_COLS)*(row) + (col));
+				Tile currentTile = board.getTile(index);
+				assertEquals(row, currentTile.getRow());
+				assertEquals(col, currentTile.getColumn());
+			}
+		}
+	}
+	
+	/**
+	 * Method to verify that the game is running.
+	 */
+	@Then("The game shall be running")
+	public void theGameShallBeRunning() {
+		assertEquals(Game.GameStatus.Running, QuoridorApplication.getQuoridor().getCurrentGame().getGameStatus());
+	}
+	
+	@And("The board shall be initialized")
+	public void theBoardShallBeInitialized() {
 		
 	}
 	
-//	@Then("The game is running")
-//	public void themtheGameIsRunning() {
-//		
-//	}
-	
 	// ***************************************************
+	// Initialize board Feature 
 	
 	@When("The initialization of the board is initiated")
 	public void theInitializationOfTheBoardIsInitiated() throws Exception {
+		Board board = QuoridorApplication.getQuoridor().getBoard();
 		QuoridorController.initializeBoard(board);
 	}
 	
-	@Then("It is white player to move")
-	public void itIsWhitePlayerToMove() {
+	@Then("It shall be white player to move")
+	public void itShallBeWhitePlayerToMove() {
+		QuoridorApplication.getQuoridor().getCurrentGame().get
 		throw new PendingException();
 	}
-	@And("White's pawn is in its initial position")
-	public void whitesPawnIsInInitialPosition() {
+	@And("White's pawn shall be in its initial position")
+	public void whitesPawnShallBeInItsInitialPosition() {
 		
 	}
-	@And("Black's pawn is in its initial position")
-	public void blacksPawnIsInInitialPosition() {
+	@And("Black's pawn shall be in its initial position")
+	public void blacksPawnShallBeInItsInitialPosition() {
 		
 	}
-	@And("All of White's walls are in stock")
-	public void allOfWhitesWallsAreInStock() {
+	@And("All of White's walls shall be in stock")
+	public void allOfWhitesWallsShallBeInStock() {
 		
 	}
-	@And("All of Black's walls are in stock")
-	public void allOfBlacksWallsAreInStock() {
+	@And("All of Black's walls shall be in stock")
+	public void allOfBlacksWallsShallBeInStock() {
 		
 	}
 	/**
 	 * Verify that the clock for the current player is counting down
 	 */
-	@And("White's clock is counting down")
-	public void whitesClockIsCountingDown() {
+	@And("White's clock shall be counting down")
+	public void whitesClockShallBeCountingDown() {
 		
 	}
 	/**
 	 * GUI step to verify that it is whites turn
 	 */
-	@And("It is shown that this is White's turn")
-	public void itIsShownThatThisIsWhitesTurn() {
+	@And("It shall be shown that this is White's turn")
+	public void itShallBeShownThatThisIsWhitesTurn() {
+		// GUI verification, throw pending exception -- TODO later
 		throw new PendingException();
 	}
 	// ***********************************************
