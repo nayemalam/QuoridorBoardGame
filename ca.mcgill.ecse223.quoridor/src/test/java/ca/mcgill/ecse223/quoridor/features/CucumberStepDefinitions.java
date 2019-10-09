@@ -19,9 +19,15 @@ import ca.mcgill.ecse223.quoridor.model.Tile;
 import ca.mcgill.ecse223.quoridor.model.User;
 import ca.mcgill.ecse223.quoridor.model.Wall;
 import ca.mcgill.ecse223.quoridor.model.WallMove;
+import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.fail;
 
 public class CucumberStepDefinitions {
 
@@ -115,6 +121,77 @@ public class CucumberStepDefinitions {
 	 * are implemented
 	 * 
 	 */
+	
+	// ***********************************************
+	// Code for starting a new game
+	
+	/**
+	 * When method for when a game is initializing
+	 */
+	@When("A new game is initializing")
+	public void aNewGameIsInitializing() {
+		assertEquals(game.getGameStatus(), Game.GameStatus.Initializing);
+		// What do I do next?
+	}
+	
+	/**
+	 * Method to verify that the white player has chosen a correct name
+	 */
+	@And("White player chooses a username")
+	public void whitePlayerHasAUserName() {
+		Boolean userIsInvalidOrNull = game.equals(null) && game.getWhitePlayer().equals(null)
+				&& game.getWhitePlayer().getUser().equals(null);
+		if(userIsInvalidOrNull) {
+			fail();
+		}
+		User whiteUser = game.getWhitePlayer().getUser();
+		validateUser(whiteUser);
+	}
+	
+	/**
+	 * Method to verify that the black player has chosen a correct name
+	 */
+	@And("Black player chooses a username")
+	public void blackPlayerHasAUserName() {
+		Boolean userIsInvalidOrNull = game.equals(null) && game.getBlackPlayer().equals(null)
+				&& game.getBlackPlayer().getUser().equals(null);
+		if(userIsInvalidOrNull) {
+			fail();
+		}
+		User blackUser = game.getBlackPlayer().getUser();
+		validateUser(blackUser);
+	}
+	
+	@And("Total thinking time is set")
+	public void totalThinkingTimeIsSet() {
+		// Verify player 1 thinking time
+		Time thinkingTimeP1 = player1.getRemainingTime();
+		if(thinkingTimeP1.equals(null) || thinkingTimeP1.equals(new Time(0))) {
+			fail();
+		}
+		Time thinkingTimeP2 = player2.getRemainingTime();
+		if(thinkingTimeP2.equals(null) || thinkingTimeP2.equals(new Time(0))) {
+			fail();
+		}
+	}
+	
+	@Then("The game is ready to start")
+	public void theGameIsReadyToStart() {
+		assertEquals(Game.GameStatus.ReadyToStart, game.getGameStatus());
+	}
+	
+	@When("I start the clock")
+	public void iStartTheClock() throws Exception {
+		QuoridorController.startClock(game.getBlackPlayer());
+	}
+	
+	@Then("The board is initialized")
+	public void theBoardIsInitialized(){
+		Board board = quoridor.getBoard();
+		assertNotEquals(board, null);
+		assertEquals(board.getTiles().size(), 81);
+	}
+	// ***********************************************
 
 	// ***********************************************
 	// Clean up
@@ -142,7 +219,24 @@ public class CucumberStepDefinitions {
 	// ***********************************************
 
 	// Place your extracted methods below
-
+	
+	private void validateUser(User user) {
+		if(user.equals(null)) {
+			fail();
+		}
+		if (!isUserNameValid(user.getName())) {
+			fail();
+		}
+	}
+	/**
+	 * Method to verify the validity of a selectedUsername.
+	 * @param userName - Name to verify
+	 */
+	private Boolean isUserNameValid(String userName) {
+		userName = userName.trim();
+		return (userName != null && !userName.isEmpty() && !userName.equals("") );
+	}
+	
 	private void initQuoridorAndBoard() {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
 		Board board = new Board(quoridor);
