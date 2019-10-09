@@ -19,6 +19,7 @@ import ca.mcgill.ecse223.quoridor.model.Tile;
 import ca.mcgill.ecse223.quoridor.model.User;
 import ca.mcgill.ecse223.quoridor.model.Wall;
 import ca.mcgill.ecse223.quoridor.model.WallMove;
+import cucumber.api.PendingException;
 import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;
@@ -123,15 +124,15 @@ public class CucumberStepDefinitions {
 	 */
 	
 	// ***********************************************
-	// Code for starting a new game
+	// Initiate a new game scenario
 	
 	/**
 	 * When method for when a game is initializing
+	 * @throws Exception 
 	 */
 	@When("A new game is initializing")
-	public void aNewGameIsInitializing() {
-		assertEquals(game.getGameStatus(), Game.GameStatus.Initializing);
-		// What do I do next?
+	public void aNewGameIsInitializing() throws Exception {
+		QuoridorController.initiateNewGame(game);
 	}
 	
 	/**
@@ -162,37 +163,72 @@ public class CucumberStepDefinitions {
 		validateUser(blackUser);
 	}
 	
+	/**
+	 * Method used to verify that the total thinking time for both players
+	 * has been set.
+	 */
 	@And("Total thinking time is set")
 	public void totalThinkingTimeIsSet() {
+		
+		Player playerWhite = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
+		Player playerBlack = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
+		
 		// Verify player 1 thinking time
-		Time thinkingTimeP1 = player1.getRemainingTime();
+		Time thinkingTimeP1 = playerWhite.getRemainingTime();
 		if(thinkingTimeP1.equals(null) || thinkingTimeP1.equals(new Time(0))) {
 			fail();
 		}
-		Time thinkingTimeP2 = player2.getRemainingTime();
+		// Verify player 2 thinking time
+		Time thinkingTimeP2 = playerBlack.getRemainingTime();
 		if(thinkingTimeP2.equals(null) || thinkingTimeP2.equals(new Time(0))) {
 			fail();
 		}
 	}
 	
+	/**
+	 * Method to verify that the game is ready to start
+	 */
 	@Then("The game is ready to start")
-	public void theGameIsReadyToStart() {
-		assertEquals(Game.GameStatus.ReadyToStart, game.getGameStatus());
+	public void th1eGameIsReadyToStart() {
+		assertEquals(Game.GameStatus.ReadyToStart, QuoridorApplication.getQuoridor().getCurrentGame().getGameStatus());
 	}
 	
+	// ***************************************************
+	// Start clock scenario
+	@Given("The game is ready to start")
+	public void theGameIsReadyToStart() throws Exception {
+		theGameIsRunning();
+	}
+	
+	/**
+	 * Method used to start the clock on the current player
+	 * @throws Exception
+	 */
 	@When("I start the clock")
 	public void iStartTheClock() throws Exception {
-		QuoridorController.startClock(game.getBlackPlayer());
+		QuoridorController.startClock(game);
 	}
 	
-	@Then("The board is initialized")
-	public void theBoardIsInitialized(){
-		initQuoridorAndBoard();
+	@And("The board is initialized")
+	public void andTheBoardIsInitialized(){
+		
+	}
+	
+	@Then("The game is running")
+	public void themtheGameIsRunning() {
+		
+	}
+	
+	// ***************************************************
+	
+	@When("The board is initialized")
+	public void whenTheBoardIsInitialized() throws Exception {
+		QuoridorController.initializeBoard(board);
 	}
 	
 	@Then("It is white player to move")
 	public void itIsWhitePlayerToMove() {
-		assertEquals("WTF", "WTF");
+		throw new PendingException();
 	}
 	@And("White's pawn is in its initial position")
 	public void whitesPawnIsInInitialPosition() {
@@ -210,13 +246,19 @@ public class CucumberStepDefinitions {
 	public void allOfBlacksWallsAreInStock() {
 		
 	}
+	/**
+	 * Verify that the clock for the current player is counting down
+	 */
 	@And("White's clock is counting down")
 	public void whitesClockIsCountingDown() {
 		
 	}
+	/**
+	 * GUI step to verify that it is whites turn
+	 */
 	@And("It is shown that this is White's turn")
 	public void itIsShownThatThisIsWhitesTurn() {
-		
+		throw new PendingException();
 	}
 	// ***********************************************
 
