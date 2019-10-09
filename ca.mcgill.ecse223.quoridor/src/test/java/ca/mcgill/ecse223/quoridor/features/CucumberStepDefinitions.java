@@ -228,8 +228,8 @@ public class CucumberStepDefinitions {
 	
 	// ***************************************************
 	
-	@When("The board is initialized")
-	public void whenTheBoardIsInitialized() throws Exception {
+	@When("The initialization of the board is initiated ")
+	public void theInitializationOfTheBoardIsInitiated() throws Exception {
 		QuoridorController.initializeBoard(board);
 	}
 	
