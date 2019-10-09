@@ -1,7 +1,6 @@
 package ca.mcgill.ecse223.quoridor.controller;
 
-import ca.mcgill.ecse223.quoridor.model.Game;
-import ca.mcgill.ecse223.quoridor.model.Player;
+import ca.mcgill.ecse223.quoridor.model.*;
 
 public class QuoridorController {
 	
@@ -12,4 +11,9 @@ public class QuoridorController {
 	public static void startClock(Player currentPlayer) throws Exception {
 		throw new Exception();
 	}
+	
+	public static void initializeBoard(Board board) throws Exception{
+		throw new Exception();
+	}
+	
 }
