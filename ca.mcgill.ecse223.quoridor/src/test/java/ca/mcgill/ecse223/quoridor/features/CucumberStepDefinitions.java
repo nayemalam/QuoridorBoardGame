@@ -139,7 +139,7 @@ public class CucumberStepDefinitions {
 	 */
 	@When("A new game is initializing")
 	public void aNewGameIsInitializing() throws Exception {
-		QuoridorController.initiateNewGame(game);
+		QuoridorController.initializeNewGame(game);
 	}
 	
 	/**
@@ -147,12 +147,8 @@ public class CucumberStepDefinitions {
 	 */
 	@And("White player chooses a username")
 	public void whitePlayerHasAUserName() {
-		Boolean userIsInvalidOrNull = game.equals(null) && game.getWhitePlayer().equals(null)
-				&& game.getWhitePlayer().getUser().equals(null);
-		if(userIsInvalidOrNull) {
-			fail();
-		}
-		User whiteUser = game.getWhitePlayer().getUser();
+		Player p = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
+		User whiteUser = p.getUser();
 		validateUser(whiteUser);
 	}
 	
@@ -196,7 +192,7 @@ public class CucumberStepDefinitions {
 	 * Method to verify that the game is ready to start
 	 */
 	@Then("The game is ready to start")
-	public void th1eGameIsReadyToStart() {
+	public void theGameIsReadyToStart() {
 		assertEquals(Game.GameStatus.ReadyToStart, QuoridorApplication.getQuoridor().getCurrentGame().getGameStatus());
 	}
 	
@@ -221,14 +217,14 @@ public class CucumberStepDefinitions {
 		
 	}
 	
-	@Then("The game is running")
-	public void themtheGameIsRunning() {
-		
-	}
+//	@Then("The game is running")
+//	public void themtheGameIsRunning() {
+//		
+//	}
 	
 	// ***************************************************
 	
-	@When("The initialization of the board is initiated ")
+	@When("The initialization of the board is initiated")
 	public void theInitializationOfTheBoardIsInitiated() throws Exception {
 		QuoridorController.initializeBoard(board);
 	}
