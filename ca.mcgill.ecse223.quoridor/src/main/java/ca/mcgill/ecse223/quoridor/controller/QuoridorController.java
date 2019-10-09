@@ -5,7 +5,7 @@ import ca.mcgill.ecse223.quoridor.model.*;
 public class QuoridorController {
 	
 	/**
-	 * Method - startNewGame(Game game)
+	 * Method - initializeNewGame(Game game)
 	 * 
 	 * This method, according to the Gherkin definition, should initialize a new game. 
 	 * It should perform the following:
@@ -14,7 +14,7 @@ public class QuoridorController {
 	 * @param game - Game to start
 	 * @author Tristan Bouchard
 	 */
-	public static void initiateNewGame(Game game) throws Exception {
+	public static void initializeNewGame(Game game) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 	
