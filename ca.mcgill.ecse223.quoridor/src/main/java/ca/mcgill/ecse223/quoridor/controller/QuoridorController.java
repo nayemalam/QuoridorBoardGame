@@ -136,6 +136,7 @@ public class QuoridorController {
 		throw new UnsupportedOperationException();
 	}
 
+
 	/**
 	 * Modifier method used to set the name of the white player
 	 * 
