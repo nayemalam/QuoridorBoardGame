@@ -13,7 +13,9 @@ class HelperMethods {
 	public static final int TOTAL_NUMBER_OF_COLS = 9;
 	public static final int WHITE_TILE_INDEX = 36;
 	public static final int BLACK_TILE_INDEX = 44;
+	public static final int TOTAL_WALL_STOCK_AT_START = 10;
 	// ***************************************
+	
 
 	/**
 	 * Helper method, used to validate if a user with a username is valid
