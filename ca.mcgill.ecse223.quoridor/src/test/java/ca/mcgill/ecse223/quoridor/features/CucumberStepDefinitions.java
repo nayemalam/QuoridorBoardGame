@@ -135,72 +135,7 @@ public class CucumberStepDefinitions {
 	 * 
 	 */
 	
-	// ***********************************************
-	// Start New Game Feature
 	
-	/**
-	 * Method for when a game is initializing
-	 * @throws Exception 
-	 */
-	@When("A new game is being initialized")
-	public void aNewGameIsBeingInitialized() throws Exception {
-		QuoridorController.initializeNewGame(QuoridorApplication.getQuoridor().getCurrentGame());
-	}
-	
-	/**
-	 * Method to verify that the white player has chosen a correct name
-	 */
-	@And("White player chooses a username")
-	public void whitePlayerHasAUserName() {
-		Player p = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
-		User whiteUser = p.getUser();
-		validateUser(whiteUser);
-	}
-	
-	/**
-	 * Method to verify that the black player has chosen a correct name
-	 */
-	@And("Black player chooses a username")
-	public void blackPlayerHasAUserName() {
-		Game game = QuoridorApplication.getQuoridor().getCurrentGame();
-		Boolean userIsInvalidOrNull = game.equals(null) && game.getBlackPlayer().equals(null)
-				&& game.getBlackPlayer().getUser().equals(null);
-		if(userIsInvalidOrNull) {
-			fail();
-		}
-		User blackUser = game.getBlackPlayer().getUser();
-		validateUser(blackUser);
-	}
-	
-	/**
-	 * Method used to verify that the total thinking time for both players
-	 * has been set.
-	 */
-	@And("Total thinking time is set")
-	public void totalThinkingTimeIsSet() {
-		
-		Player playerWhite = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
-		Player playerBlack = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
-		
-		// Verify player 1 thinking time
-		Time thinkingTimeP1 = playerWhite.getRemainingTime();
-		if(thinkingTimeP1.equals(null) || thinkingTimeP1.equals(new Time(0))) {
-			fail();
-		}
-		// Verify player 2 thinking time
-		Time thinkingTimeP2 = playerBlack.getRemainingTime();
-		if(thinkingTimeP2.equals(null) || thinkingTimeP2.equals(new Time(0))) {
-			fail();
-		}
-	}
-	
-	/**
-	 * Method to verify that the game is ready to start
-	 */
-	@Then("The game shall become ready to start")
-	public void theGameShallBecomeReadyToStart() {
-		assertEquals(Game.GameStatus.ReadyToStart, QuoridorApplication.getQuoridor().getCurrentGame().getGameStatus());
-	}
 	
 	// ***************************************************
 	// Start clock scenario
@@ -263,7 +198,7 @@ public class CucumberStepDefinitions {
 	
 	@Then("It shall be white player to move")
 	public void itShallBeWhitePlayerToMove() {
-		QuoridorApplication.getQuoridor().getCurrentGame().get
+		//QuoridorApplication.getQuoridor().getCurrentGame().get
 		throw new PendingException();
 	}
 	@And("White's pawn shall be in its initial position")
@@ -325,23 +260,6 @@ public class CucumberStepDefinitions {
 	// ***********************************************
 
 	// Place your extracted methods below
-	
-	private void validateUser(User user) {
-		if(user.equals(null)) {
-			fail();
-		}
-		if (!isUserNameValid(user.getName())) {
-			fail();
-		}
-	}
-	/**
-	 * Method to verify the validity of a selectedUsername.
-	 * @param userName - Name to verify
-	 */
-	private Boolean isUserNameValid(String userName) {
-		userName = userName.trim();
-		return (userName != null && !userName.isEmpty() && !userName.equals("") );
-	}
 	
 	private void initQuoridorAndBoard() {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
