@@ -6,6 +6,7 @@ import static org.junit.Assert.fail;
 import java.util.List;
 
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
+import ca.mcgill.ecse223.quoridor.controller.ControllerUtilities;
 import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
 import ca.mcgill.ecse223.quoridor.model.Board;
 import ca.mcgill.ecse223.quoridor.model.Game;
@@ -70,7 +71,7 @@ public class InitializeBoardStepDef {
 	@And("White's pawn shall be in its initial position")
 	public void whitesPawnShallBeInItsInitialPosition() {
 		PlayerPosition whitePos = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getWhitePosition();
-		Tile whiteInitialTile = QuoridorApplication.getQuoridor().getBoard().getTile(HelperMethods.WHITE_TILE_INDEX);
+		Tile whiteInitialTile = QuoridorApplication.getQuoridor().getBoard().getTile(ControllerUtilities.WHITE_TILE_INDEX);
 		assertEquals(whitePos.getTile(), whiteInitialTile);
 	}
 
@@ -83,7 +84,7 @@ public class InitializeBoardStepDef {
 	@And("Black's pawn shall be in its initial position")
 	public void blacksPawnShallBeInItsInitialPosition() {
 		PlayerPosition whitePos = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getBlackPosition();
-		Tile blackInitialTile = QuoridorApplication.getQuoridor().getBoard().getTile(HelperMethods.BLACK_TILE_INDEX);
+		Tile blackInitialTile = QuoridorApplication.getQuoridor().getBoard().getTile(ControllerUtilities.BLACK_TILE_INDEX);
 		assertEquals(whitePos.getTile(), blackInitialTile);
 	}
 
@@ -95,7 +96,7 @@ public class InitializeBoardStepDef {
 	@And("All of White's walls shall be in stock")
 	public void allOfWhitesWallsShallBeInStock() {
 		Game game = QuoridorApplication.getQuoridor().getCurrentGame();
-		assertEquals(HelperMethods.TOTAL_WALL_STOCK_AT_START, game.getCurrentPosition().getWhiteWallsInStock().size());
+		assertEquals(ControllerUtilities.TOTAL_WALL_STOCK_AT_START, game.getCurrentPosition().getWhiteWallsInStock().size());
 	}
 
 	/**
@@ -106,7 +107,7 @@ public class InitializeBoardStepDef {
 	@And("All of Black's walls shall be in stock")
 	public void allOfBlacksWallsShallBeInStock() {
 		Game game = QuoridorApplication.getQuoridor().getCurrentGame();
-		assertEquals(HelperMethods.TOTAL_WALL_STOCK_AT_START, game.getCurrentPosition().getBlackWallsInStock().size());
+		assertEquals(ControllerUtilities.TOTAL_WALL_STOCK_AT_START, game.getCurrentPosition().getBlackWallsInStock().size());
 	}
 
 	/**
