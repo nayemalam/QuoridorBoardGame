@@ -17,15 +17,34 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
+/**
+ * Class used to encapsulate the StartNewGame Gherkin feature
+ * 
+ * @author Tristan Bouchard
+ *
+ */
 public class StartNewGameFeatureStepDef {
 
+	// *********************************************
 	// Initiate new game scenario
-	
+	// *********************************************
+
+	/**
+	 * Method used to create a new game
+	 * 
+	 * @throws Exception
+	 * @author Tristan Bouchard
+	 */
 	@When("A new game is being initialized")
 	public void aNewGameIsBeingInitialized() throws Exception {
-		QuoridorController.initializeNewGame(QuoridorApplication.getQuoridor().getCurrentGame());
+		QuoridorController.initializeNewGame(QuoridorApplication.getQuoridor());
 	}
 
+	/**
+	 * Method used to verify that the white player has chosen a username
+	 * 
+	 * @author Tristan Bouchard
+	 */
 	@And("White player chooses a username")
 	public void whitePlayerHasAUserName() {
 		Player p = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
@@ -33,6 +52,11 @@ public class StartNewGameFeatureStepDef {
 		HelperMethods.validateUser(whiteUser);
 	}
 
+	/**
+	 * Method used to verify that the black player has chosen a username
+	 * 
+	 * @author Tristan Bouchard
+	 */
 	@And("Black player chooses a username")
 	public void blackPlayerHasAUserName() {
 		Game game = QuoridorApplication.getQuoridor().getCurrentGame();
@@ -45,6 +69,12 @@ public class StartNewGameFeatureStepDef {
 		HelperMethods.validateUser(blackUser);
 	}
 
+	/**
+	 * Method used to verify that the total thinking time for each player has been
+	 * set
+	 * 
+	 * @author Tristan Bouchard
+	 */
 	@And("Total thinking time is set")
 	public void totalThinkingTimeIsSet() {
 
@@ -63,30 +93,61 @@ public class StartNewGameFeatureStepDef {
 		}
 	}
 
+	/**
+	 * Method used to verify that the game is ready to begin
+	 * 
+	 * @author Tristan Bouchard
+	 */
 	@Then("The game shall become ready to start")
 	public void theGameShallBecomeReadyToStart() {
 		assertEquals(Game.GameStatus.ReadyToStart, QuoridorApplication.getQuoridor().getCurrentGame().getGameStatus());
 	}
 
-	// ***************************************************
+	// *********************************************
 	// Start clock scenario
+	// *********************************************
+
+	/**
+	 * Given method that ensures that the system is in a state such that the game is
+	 * ready to start
+	 * 
+	 * @throws Exception
+	 * @author Tristan Bouchard
+	 */
 	@Given("The game is ready to start")
 	public void theGameIsReadyToStart() throws Exception {
-		//theGameIsRunning();
+		// Here, I would call my controller method to start a game and put it in a
+		// known state where the clock is ready to be started, such as:
+
+		// QuoridorController.initializeNewGame(QuoridorApplication.getQuoridor().getCurrentGame());
 	}
-	
+
+	/**
+	 * Method used to initiate the action of starting the clock
+	 * 
+	 * @throws Exception
+	 * @author Tristan Bouchard
+	 */
 	@When("I start the clock")
 	public void iStartTheClock() throws Exception {
 		QuoridorController.startClock(QuoridorApplication.getQuoridor().getCurrentGame());
 	}
 
-	@And("The board is initialized")
-	public void andTheBoardIsInitialized() {
+	@Then("The game shall be running")
+	public void theGameShallBeRunning() {
+		assertEquals(Game.GameStatus.Running, QuoridorApplication.getQuoridor().getCurrentGame().getGameStatus());
+	}
+
+	/**
+	 * Verify here that the board is properly initialized
+	 */
+	@And("The board shall be initialized")
+	public void theBoardShallBeInitialized() {
 		Board board = QuoridorApplication.getQuoridor().getBoard();
-		// Verify number of times
+		// Verify number of tiles
 		assertEquals(HelperMethods.TOTAL_NUMBER_OF_TILES, board.getTiles().size());
 
-		// Verify the indices of the tiles
+		// Verify the indices of the tiles only if the total size is correct
 		for (int row = 0; row < HelperMethods.TOTAL_NUMBER_OF_ROWS; row++) {
 			for (int col = 0; col < HelperMethods.TOTAL_NUMBER_OF_COLS; col++) {
 				// Obtain tile in the list and verify that the indices are correct
@@ -96,15 +157,5 @@ public class StartNewGameFeatureStepDef {
 				assertEquals(col, currentTile.getColumn());
 			}
 		}
-	}
-
-	@Then("The game shall be running")
-	public void theGameShallBeRunning() {
-		assertEquals(Game.GameStatus.Running, QuoridorApplication.getQuoridor().getCurrentGame().getGameStatus());
-	}
-
-	@And("The board shall be initialized")
-	public void theBoardShallBeInitialized() {
-
 	}
 }

@@ -32,12 +32,6 @@ import static org.junit.Assert.fail;
 
 public class CucumberStepDefinitions {
 	// ***********************************************
-	// Constants
-	private int TOTAL_NUMBER_OF_TILES = 81;
-	private int TOTAL_NUMBER_OF_ROWS = 9;
-	private int TOTAL_NUMBER_OF_COLS = 9;
-	// ***********************************************
-	// ***********************************************
 	// Background step definitions
 	// ***********************************************
 
@@ -134,105 +128,6 @@ public class CucumberStepDefinitions {
 	 * are implemented
 	 * 
 	 */
-	
-	
-	
-	// ***************************************************
-	// Start clock scenario
-	@Given("The game is ready to start")
-	public void theGameIsReadyToStart() throws Exception {
-		theGameIsRunning();
-	}
-	
-	/**
-	 * Method used to start the clock on the current player
-	 * @throws Exception
-	 */
-	@When("I start the clock")
-	public void iStartTheClock() throws Exception {
-		QuoridorController.startClock(QuoridorApplication.getQuoridor().getCurrentGame());
-	}
-	
-	/**
-	 * Method used to verify that the board has been correctly initialized
-	 */
-	@And("The board is initialized")
-	public void andTheBoardIsInitialized(){
-		Board board = QuoridorApplication.getQuoridor().getBoard();
-		// Verify number of times
-		assertEquals(TOTAL_NUMBER_OF_TILES, board.getTiles().size());
-		
-		// Verify the indices of the tiles
-		for(int row = 0; row < TOTAL_NUMBER_OF_ROWS; row ++) {
-			for(int col = 0; col < TOTAL_NUMBER_OF_COLS; col++) {
-				// Obtain tile in the list and verify that the indices are correct
-				int index = ((TOTAL_NUMBER_OF_COLS)*(row) + (col));
-				Tile currentTile = board.getTile(index);
-				assertEquals(row, currentTile.getRow());
-				assertEquals(col, currentTile.getColumn());
-			}
-		}
-	}
-	
-	/**
-	 * Method to verify that the game is running.
-	 */
-	@Then("The game shall be running")
-	public void theGameShallBeRunning() {
-		assertEquals(Game.GameStatus.Running, QuoridorApplication.getQuoridor().getCurrentGame().getGameStatus());
-	}
-	
-	@And("The board shall be initialized")
-	public void theBoardShallBeInitialized() {
-		
-	}
-	
-	// ***************************************************
-	// Initialize board Feature 
-	
-	@When("The initialization of the board is initiated")
-	public void theInitializationOfTheBoardIsInitiated() throws Exception {
-		Board board = QuoridorApplication.getQuoridor().getBoard();
-		QuoridorController.initializeBoard(board);
-	}
-	
-	@Then("It shall be white player to move")
-	public void itShallBeWhitePlayerToMove() {
-		//QuoridorApplication.getQuoridor().getCurrentGame().get
-		throw new PendingException();
-	}
-	@And("White's pawn shall be in its initial position")
-	public void whitesPawnShallBeInItsInitialPosition() {
-		
-	}
-	@And("Black's pawn shall be in its initial position")
-	public void blacksPawnShallBeInItsInitialPosition() {
-		
-	}
-	@And("All of White's walls shall be in stock")
-	public void allOfWhitesWallsShallBeInStock() {
-		
-	}
-	@And("All of Black's walls shall be in stock")
-	public void allOfBlacksWallsShallBeInStock() {
-		
-	}
-	/**
-	 * Verify that the clock for the current player is counting down
-	 */
-	@And("White's clock shall be counting down")
-	public void whitesClockShallBeCountingDown() {
-		
-	}
-	/**
-	 * GUI step to verify that it is whites turn
-	 */
-	@And("It shall be shown that this is White's turn")
-	public void itShallBeShownThatThisIsWhitesTurn() {
-		// GUI verification, throw pending exception -- TODO later
-		throw new PendingException();
-	}
-	// ***********************************************
 
 	// ***********************************************
 	// Clean up
