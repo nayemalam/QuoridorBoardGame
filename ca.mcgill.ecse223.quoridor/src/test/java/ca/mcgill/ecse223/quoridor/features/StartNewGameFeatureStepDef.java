@@ -119,7 +119,7 @@ public class StartNewGameFeatureStepDef {
 		// Here, I would call my controller method to start a game and put it in a
 		// known state where the clock is ready to be started, such as:
 
-		// QuoridorController.initializeNewGame(QuoridorApplication.getQuoridor().getCurrentGame());
+		QuoridorController.initializeNewGame(QuoridorApplication.getQuoridor());
 	}
 
 	/**

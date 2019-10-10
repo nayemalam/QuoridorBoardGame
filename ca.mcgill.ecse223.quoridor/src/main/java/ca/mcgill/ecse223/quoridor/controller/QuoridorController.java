@@ -12,7 +12,7 @@ public class QuoridorController {
 	 * 1. Set a name to White and Black Players 
 	 * 2. Set the total thinking time to both players
 	 * 
-	 * @param game - Game to start
+	 * @param quoridor - Quoridor in which to start new game
 	 * @author Tristan Bouchard
 	 */
 	public static void initializeNewGame(Quoridor quoridor) throws Exception {
@@ -32,10 +32,10 @@ public class QuoridorController {
 		throw new UnsupportedOperationException();
 	}
 	/**
-	 * Method - initializeBoard(Board board)
+	 * Method - initializeBoard(Quoridor quoridor)
 	 * 
 	 * This method, based on the Gherkin definition, should initialize the game
-	 * board for the game to be played. It should:
+	 * board for the specified quoridor. It should:
 	 * 1. Set the current player to white player
 	 * 2. Set both pawns to their initial position
 	 * 3. Set all of the players walls to their stock
@@ -44,7 +44,7 @@ public class QuoridorController {
 	 * @throws Exception
 	 * @author Tristan Bouchard
 	 */
-	public static void initializeBoard(Board board) throws Exception{
+	public static void initializeBoard(Quoridor quoridor) throws Exception{
 		throw new UnsupportedOperationException();
 	}
 }
