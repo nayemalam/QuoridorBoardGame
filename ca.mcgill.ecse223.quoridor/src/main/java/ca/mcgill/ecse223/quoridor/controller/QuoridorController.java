@@ -5,16 +5,17 @@ import ca.mcgill.ecse223.quoridor.model.*;
 public class QuoridorController {
 	
 	/**
-	 * Method - initializeNewGame(Game game)
+	 * Method - initializeNewGame(Quoridor quoridor)
 	 * 
-	 * This method, according to the Gherkin definition, should initialize a new game. 
-	 * It should perform the following:
-	 * 1. Set a name to White and Black Players
+	 * This method, according to the Gherkin definition, should initialize a new
+	 * game in the Quoridor object It should perform the following: 
+	 * 1. Set a name to White and Black Players 
 	 * 2. Set the total thinking time to both players
+	 * 
 	 * @param game - Game to start
 	 * @author Tristan Bouchard
 	 */
-	public static void initializeNewGame(Game game) throws Exception {
+	public static void initializeNewGame(Quoridor quoridor) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 	

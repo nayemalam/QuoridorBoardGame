@@ -6,11 +6,14 @@ import ca.mcgill.ecse223.quoridor.model.User;
 
 class HelperMethods {
 	
+	
 	// ***************************************
 	// Constants
-	public static int TOTAL_NUMBER_OF_TILES = 81;
-	public static int TOTAL_NUMBER_OF_ROWS = 9;
-	public static int TOTAL_NUMBER_OF_COLS = 9;
+	public static final int TOTAL_NUMBER_OF_TILES = 81;
+	public static final int TOTAL_NUMBER_OF_ROWS = 9;
+	public static final int TOTAL_NUMBER_OF_COLS = 9;
+	public static final int WHITE_TILE_INDEX = 36;
+	public static final int BLACK_TILE_INDEX = 44;
 	// ***************************************
 	
 	public static void validateUser(User user) {
