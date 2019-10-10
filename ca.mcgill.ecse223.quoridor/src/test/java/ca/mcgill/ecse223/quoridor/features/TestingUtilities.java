@@ -2,18 +2,22 @@ package ca.mcgill.ecse223.quoridor.features;
 
 import static org.junit.Assert.fail;
 
+import java.sql.Time;
+
 import ca.mcgill.ecse223.quoridor.model.User;
 
-class HelperMethods {
+class TestingUtilities {
 
 	// ***************************************
 	// Constants
-	public static final int TOTAL_NUMBER_OF_TILES = 81;
-	public static final int TOTAL_NUMBER_OF_ROWS = 9;
-	public static final int TOTAL_NUMBER_OF_COLS = 9;
-	public static final int WHITE_TILE_INDEX = 36;
-	public static final int BLACK_TILE_INDEX = 44;
-	public static final int TOTAL_WALL_STOCK_AT_START = 10;
+	// ***************************************
+	
+	// ***************************************
+	// Some other constants used for tests
+	public static final String WHITE_PLAYER_NAME = "playerW";
+	public static final String BLACK_PLAYER_NAME = "playerB";
+	public static final long THINKING_TIME_MS = 30000; // 30,000ms = 30s
+	
 	// ***************************************
 	
 
