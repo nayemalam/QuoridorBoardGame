@@ -41,7 +41,6 @@ public class QuoridorController {
 	 * white player 2. Set both pawns to their initial position 3. Set all of the
 	 * players walls to their stock 4. Start the white player's clock
 	 * 
-	 * @param board - Board to initialize
 	 * @throws Exception
 	 * @author Tristan Bouchard
 	 */
@@ -50,16 +49,42 @@ public class QuoridorController {
 		throw new UnsupportedOperationException();
 	}
 
-	// 5:30
-	// when using Time class [[January 1st 1970]] 00:05:30 
+	/**
+	 * Method - setThinkingTime(int min, int sec)
+	 *
+	 * This method, according to the Gherkin definition, should set the total
+	 * thinking time for both players in the game, before the game begins
+	 *
+	 * @param min - int sets the number of minutes
+	 * @param sec - int sets the number of seconds
+	 * @author Nayem Alam
+	 */
 	public static void setThinkingTime(int min, int sec) throws Exception {
+		// convert min and sec to long and add it to new Time(add it here)
 		throw new UnsupportedOperationException();
 	}
-	
+	/**
+	 * Method - selectExistingUserName(String username)
+	 *
+	 * This method, according to the Gherkin definition, should allow a player
+	 * starting the game to select an existing username
+	 *
+	 * @param username - String username exists within the list of users
+	 * @author Nayem Alam
+	 */
 	public static void selectExistingUserName(String username) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * Method - selectNewUserName(String username)
+	 *
+	 * This method, according to the Gherkin definition, should allow a player
+	 * starting the game to select a new username
+	 *
+	 * @param username - String username is new and does not exist in list of users yet
+	 * @author Nayem Alam
+	 */
 	public static void selectNewUserName(String username) throws Exception {
 		throw new UnsupportedOperationException();
 	}
