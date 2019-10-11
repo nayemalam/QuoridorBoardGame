@@ -3,14 +3,10 @@ package ca.mcgill.ecse223.quoridor.features;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import java.util.List;
-
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.controller.ControllerUtilities;
 import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
-import ca.mcgill.ecse223.quoridor.model.Board;
 import ca.mcgill.ecse223.quoridor.model.Game;
-import ca.mcgill.ecse223.quoridor.model.GamePosition;
 import ca.mcgill.ecse223.quoridor.model.Player;
 import ca.mcgill.ecse223.quoridor.model.PlayerPosition;
 import ca.mcgill.ecse223.quoridor.model.Tile;
@@ -42,7 +38,7 @@ public class InitializeBoardStepDef {
 	public void theInitializationOfTheBoardIsInitiated() throws Exception {
 		// Here, the board could be null. Should I instead pass the quoridor object and
 		// associate a new board object within?
-		QuoridorController.initializeBoard(QuoridorApplication.getQuoridor());
+		QuoridorController.initializeBoard();
 	}
 
 	/**
