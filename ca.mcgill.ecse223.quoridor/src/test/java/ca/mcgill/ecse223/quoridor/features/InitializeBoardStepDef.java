@@ -3,14 +3,10 @@ package ca.mcgill.ecse223.quoridor.features;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import java.util.List;
-
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.controller.ControllerUtilities;
 import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
-import ca.mcgill.ecse223.quoridor.model.Board;
 import ca.mcgill.ecse223.quoridor.model.Game;
-import ca.mcgill.ecse223.quoridor.model.GamePosition;
 import ca.mcgill.ecse223.quoridor.model.Player;
 import ca.mcgill.ecse223.quoridor.model.PlayerPosition;
 import ca.mcgill.ecse223.quoridor.model.Tile;
@@ -70,7 +66,7 @@ public class InitializeBoardStepDef {
 	 */
 	@And("White's pawn shall be in its initial position")
 	public void whitesPawnShallBeInItsInitialPosition() {
-		PlayerPosition whitePos = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getWhitePosition();
+		PlayerPosition whitePos = QuoridorController.getWhitePlayerPosition();
 		Tile whiteInitialTile = QuoridorApplication.getQuoridor().getBoard().getTile(ControllerUtilities.WHITE_TILE_INDEX);
 		assertEquals(whitePos.getTile(), whiteInitialTile);
 	}
@@ -83,9 +79,9 @@ public class InitializeBoardStepDef {
 	 */
 	@And("Black's pawn shall be in its initial position")
 	public void blacksPawnShallBeInItsInitialPosition() {
-		PlayerPosition whitePos = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getBlackPosition();
+		PlayerPosition blackPos = QuoridorController.getBlackPlayerPlayerPosition();
 		Tile blackInitialTile = QuoridorApplication.getQuoridor().getBoard().getTile(ControllerUtilities.BLACK_TILE_INDEX);
-		assertEquals(whitePos.getTile(), blackInitialTile);
+		assertEquals(blackPos.getTile(), blackInitialTile);
 	}
 
 	/**
