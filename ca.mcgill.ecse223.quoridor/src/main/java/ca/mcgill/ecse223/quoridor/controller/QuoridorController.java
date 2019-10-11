@@ -28,11 +28,11 @@ public class QuoridorController {
 	 * 1. Run the game 
 	 * 2. Initialize the board
 	 * 
-	 * @param game
+	 * @param No parameters - The current player's clock will start counting down
 	 * @throws Exception
 	 * @author Tristan Bouchard
 	 */
-	public static void startClock(Game game) throws Exception {
+	public static void startClock() throws Exception {
 		throw new UnsupportedOperationException();
 	}
 
@@ -156,16 +156,17 @@ public class QuoridorController {
 		Boolean success = playerWhite.setRemainingTime(new Time(thinkingTime));
 		return success;
 	}
-	
+
 	/**
 	 * Query method used to verify the correct initialization of the board
+	 * 
 	 * @return
 	 * @author Tristan Bouchard
 	 */
 	public static Boolean verifyBoardInitialization() {
 		Board board = QuoridorApplication.getQuoridor().getBoard();
 		// Verify number of tiles
-		Boolean correctNumberOfTiles = ( board.getTiles().size() == ControllerUtilities.TOTAL_NUMBER_OF_TILES );
+		Boolean correctNumberOfTiles = (board.getTiles().size() == ControllerUtilities.TOTAL_NUMBER_OF_TILES);
 
 		// Verify the indices of the tiles only if the total size is correct
 		Boolean correctTileIndexing = true;
@@ -180,7 +181,31 @@ public class QuoridorController {
 		}
 		return correctNumberOfTiles && correctTileIndexing;
 	}
-	
-	
+
+	/**
+	 * Query method used to obtain the current position of the white player, as a
+	 * PlayerPosition
+	 * 
+	 * @return current PlayerPosition
+	 * @author Tristan Bouchard
+	 */
+	public static PlayerPosition getWhitePlayerPosition() {
+		PlayerPosition whitePos = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition()
+				.getWhitePosition();
+		return whitePos;
+	}
+
+	/**
+	 * Query method used to obtain the current position of the black player, as a
+	 * PlayerPosition
+	 * 
+	 * @return current PlayerPosition
+	 * @author Tristan Bouchard
+	 */
+	public static PlayerPosition getBlackPlayerPlayerPosition() {
+		PlayerPosition blackPos = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition()
+				.getBlackPosition();
+		return blackPos;
+	}
 
 }
