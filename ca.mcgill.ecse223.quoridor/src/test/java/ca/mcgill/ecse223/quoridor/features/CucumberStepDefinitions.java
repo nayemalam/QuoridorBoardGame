@@ -31,6 +31,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.fail;
 
 public class CucumberStepDefinitions {
+	private Player currentPlayer;
 	// ***********************************************
 	// Background step definitions
 	// ***********************************************
@@ -116,11 +117,88 @@ public class CucumberStepDefinitions {
 		ArrayList<Player> players = createUsersAndPlayers("user1", "user2");
 		new Game(GameStatus.Initializing, MoveMode.PlayerMove, players.get(0), players.get(1), QuoridorApplication.getQuoridor());
 	}
-
+	
 	// ***********************************************
 	// Scenario and scenario outline step definitions
 	// ***********************************************
+	
+	// SetTotalThinkingTime
+	@When("{int}:{int} is set as the thinking time")
+	public void MinSecIsSetAsTheThinkingTime(int min, int sec) throws Exception {
+		QuoridorController.setThinkingTime(min, sec);
+	}
+	
 
+	@Then("Both players shall have {int}:{int} remaining time left")
+	public void BothPlayersShallHaveMinSecRemainingTimeLeft(int min, int sec) {
+		Time t = new Time(min*60l*1000 + sec*1000l);
+		Player bPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
+		Player wPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
+		
+		assertEquals(t, wPlayer.getRemainingTime());
+		assertEquals(t, bPlayer.getRemainingTime());
+	}
+
+	// ProvideSelectUserName
+	
+	// Scenario Outline: Select existing user name
+	@Given("Next player to set user name is {string}")
+	public void NextPlayerToSetUserNameIsColor(String color) throws Exception {
+		Game g = QuoridorApplication.getQuoridor().getCurrentGame();
+//		Player currentPlayer = color.equals("white") ? g.getBlackPlayer() : g.getWhitePlayer();
+		if(color.equals("white")) {
+			currentPlayer = g.getBlackPlayer();
+			currentPlayer.setNextPlayer(g.getWhitePlayer());
+		}
+		else if(color.equals("black")) {
+			currentPlayer = g.getWhitePlayer();
+			currentPlayer.setNextPlayer(g.getBlackPlayer());
+		}
+	}
+
+	@And("There is existing user {string}")
+	public void ThereIsExistingUserName(String username) {
+		// populate empty list with existing user
+		QuoridorApplication.getQuoridor().getUsers().add(new User(username, QuoridorApplication.getQuoridor()));
+	}
+	
+	// Scenario Outline: Create new user name
+	@And("There is no existing user {string}")
+	public void ThereIsNoExistingUserName(String username) {
+		QuoridorApplication.getQuoridor().getUsers().remove(new User(username, QuoridorApplication.getQuoridor()));
+	}
+	
+	@When("The player provides new user name: {string}")
+	public void ThePlayerProvidesNewUserName(String username) throws Exception {
+		QuoridorController.selectNewUserName(username);
+	}
+	// END OF Scenario Outline: Create new user name
+
+	@When("The player selects existing {string}")
+	public void ThePlayerSelectsExistingUser(String username) throws Exception{
+		QuoridorController.selectExistingUserName(username);
+	}
+
+	@Then("The name of player {string} in the new game shall be {string}")
+	public void TheNameOfPlayerColorInTheNewGameShallBeUser(String color, String username) {
+		assertEquals(color, username);
+	}
+	
+	// Scenario Outline: User name already exists
+	@Then("The player shall be warned that {string} already exists")
+	public void ThePlayerShallBeWarnedThatUserNameAlreadyExists(String username) {
+		throw new PendingException();
+	}
+	
+	@And("Next player to set user name shall be {string}")
+	public void NextPlayerToSetUserNameShallBeColor(String color) {
+		assertEquals(color, currentPlayer.getNextPlayer().getUser().getName());
+	}
+	// END OF Scenario Outline: User name already exists
+	
+	// END OF Scenario Outline: Select existing user name
+	
+	
 	/*
 	 * TODO Insert your missing step definitions here
 	 * 

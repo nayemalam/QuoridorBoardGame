@@ -45,7 +45,22 @@ public class QuoridorController {
 	 * @throws Exception
 	 * @author Tristan Bouchard
 	 */
-	public static void initializeBoard(Quoridor quoridor) throws Exception {
+
+	public static void initializeBoard(Board board) throws Exception {
+		throw new UnsupportedOperationException();
+	}
+
+	// 5:30
+	// when using Time class [[January 1st 1970]] 00:05:30 
+	public static void setThinkingTime(int min, int sec) throws Exception {
+		throw new UnsupportedOperationException();
+	}
+	
+	public static void selectExistingUserName(String username) throws Exception {
+		throw new UnsupportedOperationException();
+	}
+
+	public static void selectNewUserName(String username) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 
