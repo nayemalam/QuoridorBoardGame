@@ -47,7 +47,7 @@ public class StartNewGameFeatureStepDef {
 	 * @author Tristan Bouchard
 	 */
 	@And("White player chooses a username")
-	public void whitePlayerHasAUserName() {
+	public void whitePlayerChoosesUserName() {
 
 		Boolean nameSetCorrectly = QuoridorController.setWhitePlayerUserName(TestingUtilities.WHITE_PLAYER_NAME);
 		if (!nameSetCorrectly) {
@@ -61,7 +61,7 @@ public class StartNewGameFeatureStepDef {
 	 * @author Tristan Bouchard
 	 */
 	@And("Black player chooses a username")
-	public void blackPlayerHasAUserName() {
+	public void blackPlayerChoosesUserName() {
 		Boolean nameSetCorrectly = QuoridorController.setBlackPlayerUserName(TestingUtilities.BLACK_PLAYER_NAME);
 		if (!nameSetCorrectly) {
 			fail();
@@ -103,8 +103,8 @@ public class StartNewGameFeatureStepDef {
 	public void theGameIsReadyToStart() throws Exception {
 		// Here, I would call my controller method to start a game and put it in a
 		// known state where the clock is ready to be started, such as:
-
 		QuoridorController.initializeNewGame(QuoridorApplication.getQuoridor());
+		// Maybe other steps, dunno?
 	}
 
 	/**
@@ -115,7 +115,7 @@ public class StartNewGameFeatureStepDef {
 	 */
 	@When("I start the clock")
 	public void iStartTheClock() throws Exception {
-		QuoridorController.startClock(QuoridorApplication.getQuoridor().getCurrentGame());
+		QuoridorController.startClock();
 	}
 
 	@Then("The game shall be running")
@@ -132,19 +132,5 @@ public class StartNewGameFeatureStepDef {
 		if(!success) {
 			fail();
 		}
-//		Board board = QuoridorApplication.getQuoridor().getBoard();
-//		// Verify number of tiles
-//		assertEquals(ControllerUtilities.TOTAL_NUMBER_OF_TILES, board.getTiles().size());
-//
-//		// Verify the indices of the tiles only if the total size is correct
-//		for (int row = 0; row < ControllerUtilities.TOTAL_NUMBER_OF_ROWS; row++) {
-//			for (int col = 0; col < ControllerUtilities.TOTAL_NUMBER_OF_COLS; col++) {
-//				// Obtain tile in the list and verify that the indices are correct
-//				int index = ((ControllerUtilities.TOTAL_NUMBER_OF_COLS) * (row) + (col));
-//				Tile currentTile = board.getTile(index);
-//				assertEquals(row, currentTile.getRow());
-//				assertEquals(col, currentTile.getColumn());
-//			}
-//		}
 	}
 }
