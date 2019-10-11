@@ -42,7 +42,7 @@ public class InitializeBoardStepDef {
 	public void theInitializationOfTheBoardIsInitiated() throws Exception {
 		// Here, the board could be null. Should I instead pass the quoridor object and
 		// associate a new board object within?
-		QuoridorController.initializeBoard(QuoridorApplication.getQuoridor());
+		QuoridorController.initializeBoard();
 	}
 
 	/**
