@@ -4,6 +4,7 @@ import static org.junit.Assert.fail;
 
 import java.sql.Time;
 
+import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.model.User;
 
 class TestingUtilities {
@@ -45,5 +46,20 @@ class TestingUtilities {
 	public static Boolean isUserNameValid(String userName) {
 		userName = userName.trim();
 		return (userName != null && !userName.isEmpty() && !userName.equals(""));
+	}
+
+	/**
+	 * Method to check if username already exists
+	 *
+	 * @param username - username to check
+	 * @author Nayem Alam
+	 */
+	public static boolean isExisting(String username) {
+		QuoridorApplication.getQuoridor().getUsers().add(new User(username, QuoridorApplication.getQuoridor()));
+		String existingUsername = QuoridorApplication.getQuoridor().getUsers().get(0).toString();
+		if(username.equals(existingUsername)) {
+			return true;
+		}
+		return false;
 	}
 }
