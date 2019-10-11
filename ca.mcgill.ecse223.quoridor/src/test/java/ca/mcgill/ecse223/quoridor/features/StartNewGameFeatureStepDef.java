@@ -6,6 +6,7 @@ import static org.junit.Assert.fail;
 import java.sql.Time;
 
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
+import ca.mcgill.ecse223.quoridor.controller.ControllerUtilities;
 import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
 import ca.mcgill.ecse223.quoridor.model.Board;
 import ca.mcgill.ecse223.quoridor.model.Game;
@@ -41,56 +42,40 @@ public class StartNewGameFeatureStepDef {
 	}
 
 	/**
-	 * Method used to verify that the white player has chosen a username
+	 * Method used to set a name for the white player
 	 * 
 	 * @author Tristan Bouchard
 	 */
 	@And("White player chooses a username")
 	public void whitePlayerHasAUserName() {
-		Player p = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
-		User whiteUser = p.getUser();
-		HelperMethods.validateUser(whiteUser);
+
+		Boolean nameSetCorrectly = QuoridorController.setWhitePlayerUserName(TestingUtilities.WHITE_PLAYER_NAME);
+		if (!nameSetCorrectly) {
+			fail();
+		}
 	}
 
 	/**
-	 * Method used to verify that the black player has chosen a username
+	 * Method used to set a name for the black player
 	 * 
 	 * @author Tristan Bouchard
 	 */
 	@And("Black player chooses a username")
 	public void blackPlayerHasAUserName() {
-		Game game = QuoridorApplication.getQuoridor().getCurrentGame();
-		Boolean userIsInvalidOrNull = game.equals(null) && game.getBlackPlayer().equals(null)
-				&& game.getBlackPlayer().getUser().equals(null);
-		if (userIsInvalidOrNull) {
+		Boolean nameSetCorrectly = QuoridorController.setBlackPlayerUserName(TestingUtilities.BLACK_PLAYER_NAME);
+		if (!nameSetCorrectly) {
 			fail();
 		}
-		User blackUser = game.getBlackPlayer().getUser();
-		HelperMethods.validateUser(blackUser);
 	}
 
 	/**
-	 * Method used to verify that the total thinking time for each player has been
-	 * set
+	 * Method used to set the total thinking time for each player
 	 * 
 	 * @author Tristan Bouchard
 	 */
 	@And("Total thinking time is set")
 	public void totalThinkingTimeIsSet() {
-
-		Player playerWhite = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
-		Player playerBlack = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
-
-		// Verify player 1 thinking time
-		Time thinkingTimeP1 = playerWhite.getRemainingTime();
-		if (thinkingTimeP1.equals(null) || thinkingTimeP1.equals(new Time(0))) {
-			fail();
-		}
-		// Verify player 2 thinking time
-		Time thinkingTimeP2 = playerBlack.getRemainingTime();
-		if (thinkingTimeP2.equals(null) || thinkingTimeP2.equals(new Time(0))) {
-			fail();
-		}
+		QuoridorController.setTotalThinkingTime(TestingUtilities.THINKING_TIME_MS);
 	}
 
 	/**
@@ -119,7 +104,7 @@ public class StartNewGameFeatureStepDef {
 		// Here, I would call my controller method to start a game and put it in a
 		// known state where the clock is ready to be started, such as:
 
-		// QuoridorController.initializeNewGame(QuoridorApplication.getQuoridor().getCurrentGame());
+		QuoridorController.initializeNewGame(QuoridorApplication.getQuoridor());
 	}
 
 	/**
@@ -143,19 +128,23 @@ public class StartNewGameFeatureStepDef {
 	 */
 	@And("The board shall be initialized")
 	public void theBoardShallBeInitialized() {
-		Board board = QuoridorApplication.getQuoridor().getBoard();
-		// Verify number of tiles
-		assertEquals(HelperMethods.TOTAL_NUMBER_OF_TILES, board.getTiles().size());
-
-		// Verify the indices of the tiles only if the total size is correct
-		for (int row = 0; row < HelperMethods.TOTAL_NUMBER_OF_ROWS; row++) {
-			for (int col = 0; col < HelperMethods.TOTAL_NUMBER_OF_COLS; col++) {
-				// Obtain tile in the list and verify that the indices are correct
-				int index = ((HelperMethods.TOTAL_NUMBER_OF_COLS) * (row) + (col));
-				Tile currentTile = board.getTile(index);
-				assertEquals(row, currentTile.getRow());
-				assertEquals(col, currentTile.getColumn());
-			}
+		Boolean success = QuoridorController.verifyBoardInitialization();
+		if(!success) {
+			fail();
 		}
+//		Board board = QuoridorApplication.getQuoridor().getBoard();
+//		// Verify number of tiles
+//		assertEquals(ControllerUtilities.TOTAL_NUMBER_OF_TILES, board.getTiles().size());
+//
+//		// Verify the indices of the tiles only if the total size is correct
+//		for (int row = 0; row < ControllerUtilities.TOTAL_NUMBER_OF_ROWS; row++) {
+//			for (int col = 0; col < ControllerUtilities.TOTAL_NUMBER_OF_COLS; col++) {
+//				// Obtain tile in the list and verify that the indices are correct
+//				int index = ((ControllerUtilities.TOTAL_NUMBER_OF_COLS) * (row) + (col));
+//				Tile currentTile = board.getTile(index);
+//				assertEquals(row, currentTile.getRow());
+//				assertEquals(col, currentTile.getColumn());
+//			}
+//		}
 	}
 }

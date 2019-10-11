@@ -1,13 +1,17 @@
 package ca.mcgill.ecse223.quoridor.features;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.util.List;
 
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
+import ca.mcgill.ecse223.quoridor.controller.ControllerUtilities;
 import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
 import ca.mcgill.ecse223.quoridor.model.Board;
+import ca.mcgill.ecse223.quoridor.model.Game;
 import ca.mcgill.ecse223.quoridor.model.GamePosition;
+import ca.mcgill.ecse223.quoridor.model.Player;
 import ca.mcgill.ecse223.quoridor.model.PlayerPosition;
 import ca.mcgill.ecse223.quoridor.model.Tile;
 import cucumber.api.PendingException;
@@ -36,10 +40,9 @@ public class InitializeBoardStepDef {
 	 */
 	@When("The initialization of the board is initiated")
 	public void theInitializationOfTheBoardIsInitiated() throws Exception {
-		Board board = QuoridorApplication.getQuoridor().getBoard();
 		// Here, the board could be null. Should I instead pass the quoridor object and
 		// associate a new board object within?
-		QuoridorController.initializeBoard(board);
+		QuoridorController.initializeBoard(QuoridorApplication.getQuoridor());
 	}
 
 	/**
@@ -51,7 +54,12 @@ public class InitializeBoardStepDef {
 	public void itShallBeWhitePlayerToMove() {
 		// How do I verify which player is the next player to play? How do I find the
 		// current player?
-		throw new PendingException();
+		Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
+		if(!whitePlayer.hasNextPlayer()) {
+			// Does this mean that we are the current player?
+			fail();
+		}
+		//throw new PendingException();
 	}
 
 	/**
@@ -63,7 +71,7 @@ public class InitializeBoardStepDef {
 	@And("White's pawn shall be in its initial position")
 	public void whitesPawnShallBeInItsInitialPosition() {
 		PlayerPosition whitePos = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getWhitePosition();
-		Tile whiteInitialTile = QuoridorApplication.getQuoridor().getBoard().getTile(HelperMethods.WHITE_TILE_INDEX);
+		Tile whiteInitialTile = QuoridorApplication.getQuoridor().getBoard().getTile(ControllerUtilities.WHITE_TILE_INDEX);
 		assertEquals(whitePos.getTile(), whiteInitialTile);
 	}
 
@@ -76,7 +84,7 @@ public class InitializeBoardStepDef {
 	@And("Black's pawn shall be in its initial position")
 	public void blacksPawnShallBeInItsInitialPosition() {
 		PlayerPosition whitePos = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getBlackPosition();
-		Tile blackInitialTile = QuoridorApplication.getQuoridor().getBoard().getTile(HelperMethods.BLACK_TILE_INDEX);
+		Tile blackInitialTile = QuoridorApplication.getQuoridor().getBoard().getTile(ControllerUtilities.BLACK_TILE_INDEX);
 		assertEquals(whitePos.getTile(), blackInitialTile);
 	}
 
@@ -87,7 +95,8 @@ public class InitializeBoardStepDef {
 	 */
 	@And("All of White's walls shall be in stock")
 	public void allOfWhitesWallsShallBeInStock() {
-		
+		Game game = QuoridorApplication.getQuoridor().getCurrentGame();
+		assertEquals(ControllerUtilities.TOTAL_WALL_STOCK_AT_START, game.getCurrentPosition().getWhiteWallsInStock().size());
 	}
 
 	/**
@@ -97,7 +106,8 @@ public class InitializeBoardStepDef {
 	 */
 	@And("All of Black's walls shall be in stock")
 	public void allOfBlacksWallsShallBeInStock() {
-
+		Game game = QuoridorApplication.getQuoridor().getCurrentGame();
+		assertEquals(ControllerUtilities.TOTAL_WALL_STOCK_AT_START, game.getCurrentPosition().getBlackWallsInStock().size());
 	}
 
 	/**
@@ -107,7 +117,9 @@ public class InitializeBoardStepDef {
 	 */
 	@And("White's clock shall be counting down")
 	public void whitesClockShallBeCountingDown() {
-
+		// Is this GUI?
+		// GUI verification, throw pending exception -- TODO later?
+		throw new PendingException();
 	}
 
 	/**

@@ -1,11 +1,13 @@
-package ca.mcgill.ecse223.quoridor.features;
+package ca.mcgill.ecse223.quoridor.controller;
 
-import static org.junit.Assert.fail;
-
-import ca.mcgill.ecse223.quoridor.model.User;
-
-class HelperMethods {
-
+/**
+ * Class used to group together common utilities and constants used by the application controller methods.
+ * @author Tristan Bouchard
+ *
+ */
+public class ControllerUtilities {
+	
+	
 	// ***************************************
 	// Constants
 	public static final int TOTAL_NUMBER_OF_TILES = 81;
@@ -13,23 +15,13 @@ class HelperMethods {
 	public static final int TOTAL_NUMBER_OF_COLS = 9;
 	public static final int WHITE_TILE_INDEX = 36;
 	public static final int BLACK_TILE_INDEX = 44;
+	public static final int TOTAL_WALL_STOCK_AT_START = 10;
 	// ***************************************
-
-	/**
-	 * Helper method, used to validate if a user with a username is valid
-	 * 
-	 * @param user
-	 * @author Tristan Bouchard
-	 */
-	public static void validateUser(User user) {
-		if (user.equals(null)) {
-			fail();
-		}
-		if (!isUserNameValid(user.getName())) {
-			fail();
-		}
-	}
-
+	
+	// ***************************************
+	// Helper methods
+	// ***************************************
+	
 	/**
 	 * Method to verify the validity of a selectedUsername.
 	 * 
