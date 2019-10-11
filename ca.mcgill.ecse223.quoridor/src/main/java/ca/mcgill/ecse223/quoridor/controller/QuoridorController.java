@@ -46,7 +46,7 @@ public class QuoridorController {
 	 * @author Tristan Bouchard
 	 */
 
-	public static void initializeBoard(Board board) throws Exception {
+	public static void initializeBoard(Quoridor quoridor) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 
