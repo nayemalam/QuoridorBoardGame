@@ -118,6 +118,11 @@ public class StartNewGameFeatureStepDef {
 		QuoridorController.startClock();
 	}
 
+	/**
+	 * Query method to verify that the game is in a running state
+	 * 
+	 * @author Tristan Bouchard
+	 */
 	@Then("The game shall be running")
 	public void theGameShallBeRunning() {
 		assertEquals(Game.GameStatus.Running, QuoridorApplication.getQuoridor().getCurrentGame().getGameStatus());
@@ -125,11 +130,13 @@ public class StartNewGameFeatureStepDef {
 
 	/**
 	 * Verify here that the board is properly initialized
+	 * 
+	 * @author Tristan Bouchard
 	 */
 	@And("The board shall be initialized")
 	public void theBoardShallBeInitialized() {
 		Boolean success = QuoridorController.verifyBoardInitialization();
-		if(!success) {
+		if (!success) {
 			fail();
 		}
 	}
