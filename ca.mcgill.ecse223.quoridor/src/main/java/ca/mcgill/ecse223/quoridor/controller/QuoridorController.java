@@ -191,7 +191,7 @@ public class QuoridorController {
 	}
 	
 	/**
-	 * Method that validates the new pawn position and returns it as its new position
+	 * Method that validates the pawn position and returns its position 
 	 * @param newPos
 	 * @throws UnsupportedOperationException
 	 * @author Alexander Legouverneur
@@ -231,19 +231,6 @@ public class QuoridorController {
 	public static Tile ValidateWallTile(int row, int col ) throws UnsupportedOperationException{
 		throw new UnsupportedOperationException();
 	}
-	
-	/**
-	 * This method verifies if the given wall exists
-	 * @param wallPos
-	 * @param Walldir
-	 * @return true/false -true for existing
-	 * @throws UnsupportedOperationException
-	 * @author Alexander Legouverneur
-	 */
-	public static boolean CheckWallExist(Tile wallPos, Direction Walldir) throws UnsupportedOperationException{
-		throw new UnsupportedOperationException();
-	}
-	
 	/**
 	 * Method that checks if wall Position is valid
 	 * @param aWall
@@ -266,5 +253,31 @@ public class QuoridorController {
 	public static boolean CheckWallSideEdge(Wall aWall) throws UnsupportedOperationException{
 		throw new UnsupportedOperationException();
 	}
-
+	
+	/**
+	 * Methods that checks if the move on the specified side is possible, with if statements to see if the move is 
+	 * legal
+	 * @param aWall
+	 * @param side
+	 * @return  Illegal/Side if the movement is legal it returns the side where to move
+	 * @throws UnsupportedOperationException
+	 * @author Alexander Legouverneur
+	 */
+	public static String VerifyMoveWallOnSide(Wall aWall, String side) throws UnsupportedOperationException{
+		throw new UnsupportedOperationException();
+	}
+	
+	/**
+	 * This method is linked with the verify move wall above, if verify move wall returns the String
+	 * side it will initiate the movement and returns , otherwise it won't do anything
+	 * movement of the wall
+	 * @param aWall
+	 * @param side
+	 * @return the wall with new position
+	 * @throws UnsupportedOperationException
+	 * @author Alexander Legouverneur
+	 */
+	public static String MoveWallOnSide(Wall aWall) throws UnsupportedOperationException{
+		throw new UnsupportedOperationException();
+	}
 }
