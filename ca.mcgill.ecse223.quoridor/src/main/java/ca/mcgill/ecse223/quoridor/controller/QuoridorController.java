@@ -126,7 +126,7 @@ public class QuoridorController {
 	 * @return
 	 * @author Tristan Bouchard
 	 */
-	private static Boolean setBlackPlayerThinkingTime(long thinkingTime) {
+	public static Boolean setBlackPlayerThinkingTime(long thinkingTime) {
 		Player playerBlack = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
 		if (thinkingTime < 0) {
 			return false;
@@ -142,7 +142,7 @@ public class QuoridorController {
 	 * @return
 	 * @author Tristan Bouchard
 	 */
-	private static Boolean setWhitePlayerThinkingTime(long thinkingTime) {
+	public static Boolean setWhitePlayerThinkingTime(long thinkingTime) {
 		Player playerWhite = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
 		if (thinkingTime < 0) {
 			return false;
@@ -150,5 +150,31 @@ public class QuoridorController {
 		Boolean success = playerWhite.setRemainingTime(new Time(thinkingTime));
 		return success;
 	}
+	
+	/**
+	 * Query method used to verify the correct initialization of the board
+	 * @return
+	 * @author Tristan Bouchard
+	 */
+	public static Boolean verifyBoardInitialization() {
+		Board board = QuoridorApplication.getQuoridor().getBoard();
+		// Verify number of tiles
+		Boolean correctNumberOfTiles = ( board.getTiles().size() == ControllerUtilities.TOTAL_NUMBER_OF_TILES );
+
+		// Verify the indices of the tiles only if the total size is correct
+		Boolean correctTileIndexing = true;
+		for (int row = 0; row < ControllerUtilities.TOTAL_NUMBER_OF_ROWS; row++) {
+			for (int col = 0; col < ControllerUtilities.TOTAL_NUMBER_OF_COLS; col++) {
+				// Obtain tile in the list and verify that the indices are correct
+				int index = ((ControllerUtilities.TOTAL_NUMBER_OF_COLS) * (row) + (col));
+				Tile currentTile = board.getTile(index);
+				correctTileIndexing = correctTileIndexing && (row == currentTile.getRow());
+				correctTileIndexing = correctTileIndexing && (col == currentTile.getColumn());
+			}
+		}
+		return correctNumberOfTiles && correctTileIndexing;
+	}
+	
+	
 
 }
