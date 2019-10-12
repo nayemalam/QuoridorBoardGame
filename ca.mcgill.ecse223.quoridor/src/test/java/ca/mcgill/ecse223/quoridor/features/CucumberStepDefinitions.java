@@ -130,47 +130,7 @@ public class CucumberStepDefinitions {
 	 * 
 	 */
 	
-	// ***********************************************
-	// Switch Player Feature
-	// ***********************************************
-	@Given("The player to move is /.*/")
-	public void getPlayerToMove() {
-		QuoridorController.getPlayer(QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer().getNextPlayer());
-		throw new PendingException();
-	}
 	
-	@And(" The clock of \"<player>\" is running$")
-	public void startPlayerClock() {
-		
-	}
-	
-	@And("The clock of \"<other>\" is stopped$")
-	public void stopPlayerClock() {
-		
-	}
-	
-	@When("Player \"<player>\" completes his move$")
-	public void completeMove(){
-		
-	}
-	
-	@Then("The user interface shall be showing it is \"<other>\" turn$")
-	public void showPlayerTurn() {
-		
-	}
-	@And("The clock of \"<player>\" shall be stopped$")
-	public void stopPlayerClock2() {
-		this.stopPlayerClock();
-	}
-	@And("The clock of \"<other>\" shall be running$")
-	public void startPlayer2Clock() {
-		this.startPlayerClock();
-	}
-	
-	@And("The next player to move shall be \"<other>\"$")
-	public void setNextPlayerToMove() {
-		
-	}
 
 	// ***********************************************
 	// Clean up
