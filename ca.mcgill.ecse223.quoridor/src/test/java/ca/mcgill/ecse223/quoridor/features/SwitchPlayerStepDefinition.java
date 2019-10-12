@@ -13,31 +13,31 @@ public class SwitchPlayerStepDefinition {
 	// ***********************************************
 		// Switch Player Feature
 		// ***********************************************
-		@Given("The player to move is /.*/")
+		@Given("The player to move is an? (.*)")
 		public void getPlayerToMove() throws Exception {
 			QuoridorController.getPlayer(QuoridorApplication.getQuoridor());
 		}
 		
-		@And(" The clock of \"<player>\" is running$")
+		@And(" The clock of \"<player>\" is an? (.*) ")
 		public void startPlayerClock() {
 			QuoridorController.startClock();
 		}
 		
-		@And("The clock of \"<other>\" is stopped$")
+		@And("The clock of \"<other>\" is stopped")
 		public void stopPlayerClock() throws Exception {
 			QuoridorController.stopClock();
 		}
 		
-		@When("Player \"<player>\" completes his move$")
+		@When("Player \"<player>\" completes his move")
 		public void completeMove(){
 			QuoridorController.completeMove();
 		}
 		
-		@Then("The user interface shall be showing it is \"<other>\" turn$")
+		@Then("The user interface shall be showing it is \"<other>\" turn")
 		public void showPlayerTurn() {
 			QuoridorController.showPlayerTurn();
 		}
-		@And("The clock of \"<player>\" shall be stopped$")
+		@And("The clock of \"<player>\" shall be stopped")
 		public void stopPlayerClock2() throws Exception {
 			QuoridorController.startClock();
 		}
@@ -46,7 +46,7 @@ public class SwitchPlayerStepDefinition {
 			QuoridorController.stopClock();
 		}
 		
-		@And("The next player to move shall be \"<other>\"$")
+		@And("The next player to move shall be \"<other>\"")
 		public void setNextPlayerToMove() {
 			QuoridorController.setNextPlayer();
 		}

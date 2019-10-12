@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.model.Board;
 import ca.mcgill.ecse223.quoridor.model.Direction;
@@ -21,15 +20,18 @@ import ca.mcgill.ecse223.quoridor.model.User;
 import ca.mcgill.ecse223.quoridor.model.Wall;
 import ca.mcgill.ecse223.quoridor.model.WallMove;
 import cucumber.api.PendingException;
+import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
-import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
-
+import io.cucumber.java.en.When;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.fail;
 
 public class CucumberStepDefinitions {
-
+	private Player currentPlayer;
 	// ***********************************************
 	// Background step definitions
 	// ***********************************************
@@ -116,21 +118,17 @@ public class CucumberStepDefinitions {
 		new Game(GameStatus.Initializing, MoveMode.PlayerMove, players.get(0), players.get(1), QuoridorApplication.getQuoridor());
 	}
 	
-	
-	
 	// ***********************************************
 	// Scenario and scenario outline step definitions
 	// ***********************************************
 
 	/*
 	 * TODO Insert your missing step definitions here
-	 * @author Ousmane Baricisse
+	 * 
 	 * Call the methods of the controller that will manipulate the model once they
 	 * are implemented
 	 * 
 	 */
-	
-	
 
 	// ***********************************************
 	// Clean up
@@ -158,7 +156,7 @@ public class CucumberStepDefinitions {
 	// ***********************************************
 
 	// Place your extracted methods below
-
+	
 	private void initQuoridorAndBoard() {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
 		Board board = new Board(quoridor);
