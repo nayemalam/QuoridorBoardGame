@@ -126,9 +126,7 @@ public class CucumberStepDefinitions {
 	 * are implemented
 	 * 
 	 */
-	
-	
-	
+
 	// ***********************************************
 	// END OF CODE - Ousmane Baricisse
 	// ***********************************************
