@@ -1,24 +1,12 @@
 package ca.mcgill.ecse223.quoridor.features;
 
-import java.sql.Time;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.model.*;
-import ca.mcgill.ecse223.quoridor.model.Game.GameStatus;
-import ca.mcgill.ecse223.quoridor.model.Game.MoveMode;
-import cucumber.api.PendingException;
 import ca.mcgill.ecse223.quoridor.controller.*;
-import io.cucumber.java.After;
-import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.fail;
 
 /**
  * Class that encapsulates the ValidatePosition Gherkin feature
@@ -40,8 +28,8 @@ public class ValidatePositionStepDefinition {
 	 * @param col
 	 * @author Alexander Legouverneur
 	 */
-	@Given("A game position is supplied with pawn coordinate {int}:{int}")
-	public void aGamePositionIsSuppliedWithPawnCoordinate(int row, int col) {
+	@Given("A game position is supplied with pawn coordinate \\({int}:{int})")
+	public void aGamePositionIsSuppliedWithPawnCoordinate(Integer row, Integer col) {
 		// Reinitialize board and system
 		csd.theGameIsRunning();
 
@@ -61,7 +49,15 @@ public class ValidatePositionStepDefinition {
 	@When("Validation of the position is initiated")
 	public void ValidationOfThePositionIsInitiated() {
 		Quoridor q = QuoridorApplication.getQuoridor();
-		QuoridorController.InitializeValidatePosition(q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getRow(),q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getColumn()); 
+		//if there are no walls placed on the board then call the  method initialize validation for pawns
+		//else call the method initialize validation for wall
+		if(q.getCurrentGame().getBlackPlayer().getWall(11).getMove()== null) {
+			QuoridorController.InitializeValidatePosition(q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getRow(),q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getColumn());
+		}
+		else {
+			QuoridorController.InitiatePosValidation(q.getCurrentGame().getBlackPlayer().getWall(11).getMove().getTargetTile(), q.getCurrentGame().getBlackPlayer().getWall(11).getMove().getWallDirection());
+		}
+		 
 	}
 
 	/**
@@ -79,82 +75,53 @@ public class ValidatePositionStepDefinition {
 	 * Method to check that position of wall is supplied with direction and coordinates
 	 * @author Alexander Legouverneur
 	 */
-	@Given("A game position is supplied with wall coordinate {int}:{int}-{dir}")
-	public void aGamePositionIsSuppliedWithWallCoordinateAndDir(int row, int col, Direction dir) {
+	@Given("A game position is supplied with wall coordinate {int}:{int}-{string}")
+	public void aGamePositionIsSuppliedWithWallCoordinateAndDir(Integer row, Integer col, String dir) {
 		// Reinitialize board and system
 		csd.theGameIsRunning();
 
 		// Access the system
 		Quoridor q = QuoridorApplication.getQuoridor();
-		Tile myTile = new Tile(row, col, q.getBoard());
 
 		//Assign the position and direction to the wall
 		Tile aTile = new Tile(row, col, q.getBoard());
 		Wall aWall = new Wall(11, q.getCurrentGame().getBlackPlayer());
-		WallMove Move = new WallMove( 1, 1, q.getCurrentGame().getBlackPlayer(), aTile, q.getCurrentGame(), dir, aWall);
-		aWall.setMove(Move);
+		if(dir == "vertical") {
+			WallMove Move = new WallMove( 1, 1, q.getCurrentGame().getBlackPlayer(), aTile, q.getCurrentGame(), Direction.Vertical, aWall);
+			aWall.setMove(Move);
+		}
+		if(dir == "horizontal") {
+			WallMove Move = new WallMove( 1, 1, q.getCurrentGame().getBlackPlayer(), aTile, q.getCurrentGame(), Direction.Horizontal, aWall);
+			aWall.setMove(Move);
+		}
 	}
 
 	/**
 	 * Method that initiates the validation of the position
 	 * @author Alexander Legouverneur
 	 */
-	@When("Validation of the position is initiated (Wall)")
-	public void ValidationOfWallPositionInitiated() {
-		Quoridor q = QuoridorApplication.getQuoridor();
-		QuoridorController.InitiatePosValidation(q.getCurrentGame().getBlackPlayer().getWall(11).getMove().getTargetTile(), q.getCurrentGame().getBlackPlayer().getWall(11).getMove().getWallDirection());
-
-	}
+//	@When("Validation of the position is initiated (Wall)")
+//	public void ValidationOfWallPositionInitiated() {
+//		Quoridor q = QuoridorApplication.getQuoridor();
+//		QuoridorController.InitiatePosValidation(q.getCurrentGame().getBlackPlayer().getWall(11).getMove().getTargetTile(), q.getCurrentGame().getBlackPlayer().getWall(11).getMove().getWallDirection());
+//
+//	}
 
 	/**
 	 * Method that verifies if the position of the wall is returned in result
 	 * @author Alexander Legouverneur
 	 */
-	@Then("The position shall be \"<result>\"(Wall)")
-	public void TheWallPositionShallBeResult(int row, int col, Direction result) {
+	@Then("The position shall be {string}")
+	public void TheWallPositionShallBeResult(Integer row, Integer col, Direction result) {
 		Quoridor q = QuoridorApplication.getQuoridor();
 		assertEquals(result,QuoridorController.ValidateWallDirection(q.getCurrentGame().getBlackPlayer().getWall(11)));
 		Tile r = QuoridorController.ValidateWallTile(row,col);
-		assertEquals(row, r.getRow());
-		assertEquals(row, r.getColumn());
+		Integer row1 = new Integer(r.getRow());
+		Integer col1 = new Integer(r.getColumn());
+		assertEquals(row, row1);
+		assertEquals(row, col1);
 	}
-
-	/**
-	 * Method that places the wall on the board
-	 * @author Alexander Legouverneur
-	 */
-	@Given("The following walls exist:")
-	public void ThefollowingWallsExist() {
-		//reinitialize game
-		csd.theGameIsRunning();
-
-		//access system
-		Quoridor q = QuoridorApplication.getQuoridor();
-
-		//place the wall 1
-		Wall aWall1 = new Wall(11, q.getCurrentGame().getBlackPlayer());
-		Tile aTile1 = new Tile(1,1,q.getBoard());
-		WallMove Move1 = new WallMove( 1, 1, q.getCurrentGame().getBlackPlayer(), aTile1, q.getCurrentGame(), Direction.Horizontal, aWall1);
-		aWall1.setMove(Move1);
-
-		//place wall 2
-		Wall aWall2 = new Wall(12, q.getCurrentGame().getBlackPlayer());
-		Tile aTile2 = new Tile(7,4,q.getBoard());
-		WallMove Move2 = new WallMove( 2, 1, q.getCurrentGame().getBlackPlayer(), aTile2, q.getCurrentGame(), Direction.Vertical, aWall2);
-		aWall2.setMove(Move2);
-	}
-
-	/**
-	 * Method to verify that the  validation of the wall position has been initiated
-	 */
-	@When("Validation of the position is initiated")
-	public void ValidationOfWallPositionIsInitiated() {
-		//access system
-		Quoridor q = QuoridorApplication.getQuoridor();
-		//QuoridorController.InitiatePosValidation(q.getCurrentGame().getBlackPlayer().getWall(11).getMove().getTargetTile(), q.getCurrentGame().getBlackPlayer().getWall(11).getMove().getWallDirection());
-		QuoridorController.InitiatePosValidation(q.getCurrentGame().getBlackPlayer().getWall(12).getMove().getTargetTile(), q.getCurrentGame().getBlackPlayer().getWall(12).getMove().getWallDirection());
-	}
-
+	
 	/**
 	 * Method that verifies if the position of the wall is valid
 	 * @author Alexander Legouverneur
@@ -165,141 +132,183 @@ public class ValidatePositionStepDefinition {
 		//assertEquals(true,QuoridorController.CheckWallValid(q.getCurrentGame().getBlackPlayer().getWall(11)));
 		assertEquals(true,QuoridorController.CheckWallValid(q.getCurrentGame().getBlackPlayer().getWall(12)));
 	}
+	
+	/**
+	 * Method that places the wall on the board
+	 * @author Alexander Legouverneur
+	 */
+//	@Given("The following walls exist:")
+//	public void ThefollowingWallsExist() {
+//		//reinitialize game
+//		csd.theGameIsRunning();
+//
+//		//access system
+//		Quoridor q = QuoridorApplication.getQuoridor();
+//
+//		//place the wall 1
+//		Wall aWall1 = new Wall(11, q.getCurrentGame().getBlackPlayer());
+//		Tile aTile1 = new Tile(1,1,q.getBoard());
+//		WallMove Move1 = new WallMove( 1, 1, q.getCurrentGame().getBlackPlayer(), aTile1, q.getCurrentGame(), Direction.Horizontal, aWall1);
+//		aWall1.setMove(Move1);
+//
+//		//place wall 2
+//		Wall aWall2 = new Wall(12, q.getCurrentGame().getBlackPlayer());
+//		Tile aTile2 = new Tile(7,4,q.getBoard());
+//		WallMove Move2 = new WallMove( 2, 1, q.getCurrentGame().getBlackPlayer(), aTile2, q.getCurrentGame(), Direction.Vertical, aWall2);
+//		aWall2.setMove(Move2);
+//	}
+
+	/**
+	 * Method to verify that the  validation of the wall position has been initiated
+	 * @author Alexander Legouverneur
+	 */
+//	@When("Validation of the position is initiated")
+//	public void ValidationOfWallPositionIsInitiated() {
+//		//access system
+//		Quoridor q = QuoridorApplication.getQuoridor();
+//		//QuoridorController.InitiatePosValidation(q.getCurrentGame().getBlackPlayer().getWall(11).getMove().getTargetTile(), q.getCurrentGame().getBlackPlayer().getWall(11).getMove().getWallDirection());
+//		QuoridorController.InitiatePosValidation(q.getCurrentGame().getBlackPlayer().getWall(12).getMove().getTargetTile(), q.getCurrentGame().getBlackPlayer().getWall(12).getMove().getWallDirection());
+//	}
+
+
 
 	/**
 	 * Method that places the wall on the board
 	 * @author Alexander Legouverneur
 	 */
-	@Given("The following walls exist:")
-	public void ThefollowingWallsExist2() {
-		//reinitialize game
-		csd.theGameIsRunning();
-
-		//access system
-		Quoridor q = QuoridorApplication.getQuoridor();
-
-		//place the wall 1
-		Wall aWall1 = new Wall(11, q.getCurrentGame().getBlackPlayer());
-		Tile aTile1 = new Tile(2,3,q.getBoard());
-		WallMove Move1 = new WallMove( 1, 1, q.getCurrentGame().getBlackPlayer(), aTile1, q.getCurrentGame(), Direction.Horizontal, aWall1);
-		aWall1.setMove(Move1);
-
-		//place wall 2
-		Wall aWall2 = new Wall(12, q.getCurrentGame().getBlackPlayer());
-		Tile aTile2 = new Tile(2,4,q.getBoard());
-		WallMove Move2 = new WallMove( 2, 1, q.getCurrentGame().getBlackPlayer(), aTile2, q.getCurrentGame(), Direction.Horizontal, aWall2);
-		aWall2.setMove(Move2);
-	}
+//	@Given("The following walls exist:")
+//	public void ThefollowingWallsExist2() {
+//		//reinitialize game
+//		csd.theGameIsRunning();
+//
+//		//access system
+//		Quoridor q = QuoridorApplication.getQuoridor();
+//
+//		//place the wall 1
+//		Wall aWall1 = new Wall(11, q.getCurrentGame().getBlackPlayer());
+//		Tile aTile1 = new Tile(2,3,q.getBoard());
+//		WallMove Move1 = new WallMove( 1, 1, q.getCurrentGame().getBlackPlayer(), aTile1, q.getCurrentGame(), Direction.Horizontal, aWall1);
+//		aWall1.setMove(Move1);
+//
+//		//place wall 2
+//		Wall aWall2 = new Wall(12, q.getCurrentGame().getBlackPlayer());
+//		Tile aTile2 = new Tile(2,4,q.getBoard());
+//		WallMove Move2 = new WallMove( 2, 1, q.getCurrentGame().getBlackPlayer(), aTile2, q.getCurrentGame(), Direction.Horizontal, aWall2);
+//		aWall2.setMove(Move2);
+//	}
 
 	/**
 	 * Method to verify that the  validation of the wall position has been initiated
+	 * @author Alexander Legouverneur
 	 */
-	@When("Validation of the position is initiated")
-	public void ValidationOfWallPositionIsInitiated2() {
-		//access system
-		Quoridor q = QuoridorApplication.getQuoridor();
-		//QuoridorController.InitiatePosValidation(q.getCurrentGame().getBlackPlayer().getWall(11).getMove().getTargetTile(), q.getCurrentGame().getBlackPlayer().getWall(11).getMove().getWallDirection());
-		QuoridorController.InitiatePosValidation(q.getCurrentGame().getBlackPlayer().getWall(12).getMove().getTargetTile(), q.getCurrentGame().getBlackPlayer().getWall(12).getMove().getWallDirection());
-	}
+//	@When("Validation of the position is initiated")
+//	public void ValidationOfWallPositionIsInitiated2() {
+//		//access system
+//		Quoridor q = QuoridorApplication.getQuoridor();
+//		//QuoridorController.InitiatePosValidation(q.getCurrentGame().getBlackPlayer().getWall(11).getMove().getTargetTile(), q.getCurrentGame().getBlackPlayer().getWall(11).getMove().getWallDirection());
+//		QuoridorController.InitiatePosValidation(q.getCurrentGame().getBlackPlayer().getWall(12).getMove().getTargetTile(), q.getCurrentGame().getBlackPlayer().getWall(12).getMove().getWallDirection());
+//	}
 
 	/**
 	 * Method that verifies if the position is invalid
 	 * @author Alexander Legouverneur
 	 */
-	@Then("The position shall be invalid")
-	public void ThePositionShallBeInvalid2() {
-		Quoridor q = QuoridorApplication.getQuoridor();
-		assertEquals(false,QuoridorController.CheckWallValid(q.getCurrentGame().getBlackPlayer().getWall(12)));	}
-
-
-/**
- * Method that places the wall on the board
- * @author Alexander Legouverneur
- */
-@Given("The following walls exist:")
-public void ThefollowingWallsExist3() {
-	//reinitialize game
-	csd.theGameIsRunning();
-
-	//access system
-	Quoridor q = QuoridorApplication.getQuoridor();
-
-	//place the wall 1
-	Wall aWall1 = new Wall(11, q.getCurrentGame().getBlackPlayer());
-	Tile aTile1 = new Tile(3,2,q.getBoard());
-	WallMove Move1 = new WallMove( 1, 1, q.getCurrentGame().getBlackPlayer(), aTile1, q.getCurrentGame(), Direction.Vertical, aWall1);
-	aWall1.setMove(Move1);
-
-	//place wall 2
-	Wall aWall2 = new Wall(12, q.getCurrentGame().getBlackPlayer());
-	Tile aTile2 = new Tile(2,2,q.getBoard());
-	WallMove Move2 = new WallMove( 2, 1, q.getCurrentGame().getBlackPlayer(), aTile2, q.getCurrentGame(), Direction.Vertical, aWall2);
-	aWall2.setMove(Move2);
-}
-
-/**
- * Method to verify that the  validation of the wall position has been initiated
- */
-@When("Validation of the position is initiated")
-public void ValidationOfWallPositionIsInitiated3() {
-	//access system
-	Quoridor q = QuoridorApplication.getQuoridor();
-	//QuoridorController.InitiatePosValidation(q.getCurrentGame().getBlackPlayer().getWall(11).getMove().getTargetTile(), q.getCurrentGame().getBlackPlayer().getWall(11).getMove().getWallDirection());
-	QuoridorController.InitiatePosValidation(q.getCurrentGame().getBlackPlayer().getWall(12).getMove().getTargetTile(), q.getCurrentGame().getBlackPlayer().getWall(12).getMove().getWallDirection());
-}
-
-/**
- * Method that verifies if the position is invalid
- * @author Alexander Legouverneur
- */
-@Then("The position shall be invalid")
-public void ThePositionShallBeInvalid3() {
-	Quoridor q = QuoridorApplication.getQuoridor();
-	assertEquals(false,QuoridorController.CheckWallValid(q.getCurrentGame().getBlackPlayer().getWall(12)));	
-	}
+//	@Then("The position shall be invalid")
+//	public void ThePositionShallBeInvalid2() {
+//		Quoridor q = QuoridorApplication.getQuoridor();
+//		assertEquals(false,QuoridorController.CheckWallValid(q.getCurrentGame().getBlackPlayer().getWall(12)));	}
+//
 
 /**
  * Method that places the wall on the board
  * @author Alexander Legouverneur
  */
-@Given("The following walls exist:")
-public void ThefollowingWallsExist4() {
-	//reinitialize game
-	csd.theGameIsRunning();
-
-	//access system
-	Quoridor q = QuoridorApplication.getQuoridor();
-
-	//place the wall 1
-	Wall aWall1 = new Wall(11, q.getCurrentGame().getBlackPlayer());
-	Tile aTile1 = new Tile(3,2,q.getBoard());
-	WallMove Move1 = new WallMove( 1, 1, q.getCurrentGame().getBlackPlayer(), aTile1, q.getCurrentGame(), Direction.Vertical, aWall1);
-	aWall1.setMove(Move1);
-
-	//place wall 2
-	Wall aWall2 = new Wall(12, q.getCurrentGame().getBlackPlayer());
-	Tile aTile2 = new Tile(3,2,q.getBoard());
-	WallMove Move2 = new WallMove( 2, 1, q.getCurrentGame().getBlackPlayer(), aTile2, q.getCurrentGame(), Direction.Horizontal, aWall2);
-	aWall2.setMove(Move2);
-}
+//@Given("The following walls exist:")
+//public void ThefollowingWallsExist3() {
+//	//reinitialize game
+//	csd.theGameIsRunning();
+//
+//	//access system
+//	Quoridor q = QuoridorApplication.getQuoridor();
+//
+//	//place the wall 1
+//	Wall aWall1 = new Wall(11, q.getCurrentGame().getBlackPlayer());
+//	Tile aTile1 = new Tile(3,2,q.getBoard());
+//	WallMove Move1 = new WallMove( 1, 1, q.getCurrentGame().getBlackPlayer(), aTile1, q.getCurrentGame(), Direction.Vertical, aWall1);
+//	aWall1.setMove(Move1);
+//
+//	//place wall 2
+//	Wall aWall2 = new Wall(12, q.getCurrentGame().getBlackPlayer());
+//	Tile aTile2 = new Tile(2,2,q.getBoard());
+//	WallMove Move2 = new WallMove( 2, 1, q.getCurrentGame().getBlackPlayer(), aTile2, q.getCurrentGame(), Direction.Vertical, aWall2);
+//	aWall2.setMove(Move2);
+//}
 
 /**
  * Method to verify that the  validation of the wall position has been initiated
+ * @author Alexander Legouverneur
  */
-@When("Validation of the position is initiated")
-public void ValidationOfWallPositionIsInitiated4() {
-	//access system
-	Quoridor q = QuoridorApplication.getQuoridor();
-	//QuoridorController.InitiatePosValidation(q.getCurrentGame().getBlackPlayer().getWall(11).getMove().getTargetTile(), q.getCurrentGame().getBlackPlayer().getWall(11).getMove().getWallDirection());
-	QuoridorController.InitiatePosValidation(q.getCurrentGame().getBlackPlayer().getWall(12).getMove().getTargetTile(), q.getCurrentGame().getBlackPlayer().getWall(12).getMove().getWallDirection());
-}
+//@When("Validation of the position is initiated")
+//public void ValidationOfWallPositionIsInitiated3() {
+//	//access system
+//	Quoridor q = QuoridorApplication.getQuoridor();
+//	//QuoridorController.InitiatePosValidation(q.getCurrentGame().getBlackPlayer().getWall(11).getMove().getTargetTile(), q.getCurrentGame().getBlackPlayer().getWall(11).getMove().getWallDirection());
+//	QuoridorController.InitiatePosValidation(q.getCurrentGame().getBlackPlayer().getWall(12).getMove().getTargetTile(), q.getCurrentGame().getBlackPlayer().getWall(12).getMove().getWallDirection());
+//}
 
 /**
  * Method that verifies if the position is invalid
  * @author Alexander Legouverneur
  */
-@Then("The position shall be invalid")
-public void ThePositionShallBeInvalid4() {
-	Quoridor q = QuoridorApplication.getQuoridor();
-	assertEquals(false,QuoridorController.CheckWallValid(q.getCurrentGame().getBlackPlayer().getWall(12)));	}
+//@Then("The position shall be invalid")
+//public void ThePositionShallBeInvalid3() {
+//	Quoridor q = QuoridorApplication.getQuoridor();
+//	assertEquals(false,QuoridorController.CheckWallValid(q.getCurrentGame().getBlackPlayer().getWall(12)));	
+//	}
+
+/**
+ * Method that places the wall on the board
+ * @author Alexander Legouverneur
+ */
+//@Given("The following walls exist:")
+//public void ThefollowingWallsExist4() {
+//	//reinitialize game
+//	csd.theGameIsRunning();
+//
+//	//access system
+//	Quoridor q = QuoridorApplication.getQuoridor();
+//
+//	//place the wall 1
+//	Wall aWall1 = new Wall(11, q.getCurrentGame().getBlackPlayer());
+//	Tile aTile1 = new Tile(3,2,q.getBoard());
+//	WallMove Move1 = new WallMove( 1, 1, q.getCurrentGame().getBlackPlayer(), aTile1, q.getCurrentGame(), Direction.Vertical, aWall1);
+//	aWall1.setMove(Move1);
+//
+//	//place wall 2
+//	Wall aWall2 = new Wall(12, q.getCurrentGame().getBlackPlayer());
+//	Tile aTile2 = new Tile(3,2,q.getBoard());
+//	WallMove Move2 = new WallMove( 2, 1, q.getCurrentGame().getBlackPlayer(), aTile2, q.getCurrentGame(), Direction.Horizontal, aWall2);
+//	aWall2.setMove(Move2);
+//}
+
+/**
+ * Method to verify that the  validation of the wall position has been initiated
+ * @author Alexander Legouverneur
+ */
+//@When("Validation of the position is initiated")
+//public void ValidationOfWallPositionIsInitiated4() {
+//	//access system
+//	Quoridor q = QuoridorApplication.getQuoridor();
+//	//QuoridorController.InitiatePosValidation(q.getCurrentGame().getBlackPlayer().getWall(11).getMove().getTargetTile(), q.getCurrentGame().getBlackPlayer().getWall(11).getMove().getWallDirection());
+//	QuoridorController.InitiatePosValidation(q.getCurrentGame().getBlackPlayer().getWall(12).getMove().getTargetTile(), q.getCurrentGame().getBlackPlayer().getWall(12).getMove().getWallDirection());
+//}
+
+/**
+ * Method that verifies if the position is invalid
+ * @author Alexander Legouverneur
+ */
+//@Then("The position shall be invalid")
+//public void ThePositionShallBeInvalid4() {
+//	Quoridor q = QuoridorApplication.getQuoridor();
+//	assertEquals(false,QuoridorController.CheckWallValid(q.getCurrentGame().getBlackPlayer().getWall(12)));	}
 }
