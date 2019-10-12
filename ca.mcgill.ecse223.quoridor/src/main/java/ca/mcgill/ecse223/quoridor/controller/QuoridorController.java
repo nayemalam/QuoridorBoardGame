@@ -246,5 +246,14 @@ public class QuoridorController {
 				.getBlackPosition();
 		return blackPos;
 	}
+	/**
+	 * Method used to rotate a wall
+	 * @author Iyatan Atchoro
+	 */
+	public static void rotateWall() throws Exception{
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
+		
+	}
 
 }
