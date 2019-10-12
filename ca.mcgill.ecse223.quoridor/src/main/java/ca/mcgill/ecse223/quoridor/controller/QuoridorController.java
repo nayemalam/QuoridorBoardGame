@@ -181,8 +181,9 @@ public class QuoridorController {
 
 	
 	/**
-	 * Method that initializes the Validation of the position
-	 * @param PawnPosition
+	 * Method that initializes the Validation of the position, 
+	 * @param PawnPosition/WallPosition
+	 * @param Direction (if wall)
 	 * @throws UnsupportedOperationException
 	 * @author Alexander Legouverneur
 	 */
@@ -191,9 +192,10 @@ public class QuoridorController {
 	}
 	
 	/**
-	 * Method that validates the pawn position and returns its position 
+	 * Method that returns if the position is valid by calling InitializeVaidatePostion()
 	 * @param newPos
 	 * @throws UnsupportedOperationException
+	 * @returns ok/error
 	 * @author Alexander Legouverneur
 	 */
 	public static String ValidatePawnPosition(int row, int col) throws UnsupportedOperationException {
@@ -256,28 +258,24 @@ public class QuoridorController {
 	
 	/**
 	 * Methods that checks if the move on the specified side is possible, with if statements to see if the move is 
-	 * legal
+	 * legal, if yes proceed to the move otherwise, call the method IlllegalWallMove()
 	 * @param aWall
 	 * @param side
-	 * @return  Illegal/Side if the movement is legal it returns the side where to move
 	 * @throws UnsupportedOperationException
 	 * @author Alexander Legouverneur
 	 */
-	public static String VerifyMoveWallOnSide(Wall aWall, String side) throws UnsupportedOperationException{
+	public static void VerifyMoveWallOnSide(Wall aWall, String side) throws UnsupportedOperationException{
 		throw new UnsupportedOperationException();
 	}
 	
 	/**
-	 * This method is linked with the verify move wall above, if verify move wall returns the String
-	 * side it will initiate the movement and returns , otherwise it won't do anything
-	 * movement of the wall
+	 * This method is called by VerifyMoveWallOnSide if the move is illegal. Returns a string "illegal", and makes
+	 * sure the coordinates of the wall remain the same as before
 	 * @param aWall
-	 * @param side
-	 * @return the wall with new position
+	 * @return
 	 * @throws UnsupportedOperationException
-	 * @author Alexander Legouverneur
 	 */
-	public static String MoveWallOnSide(Wall aWall) throws UnsupportedOperationException{
+	public static String IllegalWallMove(Wall aWall) throws UnsupportedOperationException{
 		throw new UnsupportedOperationException();
 	}
 }
