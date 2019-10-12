@@ -8,46 +8,49 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.fail;
 
 public class SwitchPlayerStepDefinition {
 	// ***********************************************
 		// Switch Player Feature
 		// ***********************************************
 		@Given("The player to move is an? (.*)")
-		public void getPlayerToMove() throws Exception {
+		public void thePlayerToMoveIsPlayer() throws Exception {
 			QuoridorController.getPlayer(QuoridorApplication.getQuoridor());
 		}
 		
 		@And(" The clock of \"<player>\" is an? (.*) ")
-		public void startPlayerClock() {
+		public void theClockOfPlayerXIsRunning() {
 			QuoridorController.startClock();
 		}
 		
 		@And("The clock of \"<other>\" is stopped")
-		public void stopPlayerClock() throws Exception {
+		public void theClockOfOtherIsStopped() throws Exception {
 			QuoridorController.stopClock();
 		}
 		
 		@When("Player \"<player>\" completes his move")
-		public void completeMove(){
+		public void playerXCompletesHisMove(){
 			QuoridorController.completeMove();
 		}
 		
 		@Then("The user interface shall be showing it is \"<other>\" turn")
-		public void showPlayerTurn() {
+		public void theUserInterfaceShallBeShowingItIsPlayerYTurn() {
 			QuoridorController.showPlayerTurn();
 		}
 		@And("The clock of \"<player>\" shall be stopped")
-		public void stopPlayerClock2() throws Exception {
+		public void theClockOfPlayerXShallBeStopped() throws Exception {
 			QuoridorController.startClock();
 		}
 		@And("The clock of \"<other>\" shall be running$")
-		public void startPlayer2Clock() throws Exception {
+		public void theClockOfPlayerYShallBeRunning() throws Exception {
 			QuoridorController.stopClock();
 		}
 		
 		@And("The next player to move shall be \"<other>\"")
-		public void setNextPlayerToMove() {
+		public void theNextPlayerToMoveShallBePlayerY() {
 			QuoridorController.setNextPlayer();
 		}
 }
