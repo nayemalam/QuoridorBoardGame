@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.model.Board;
 import ca.mcgill.ecse223.quoridor.model.Direction;
@@ -19,9 +20,13 @@ import ca.mcgill.ecse223.quoridor.model.Tile;
 import ca.mcgill.ecse223.quoridor.model.User;
 import ca.mcgill.ecse223.quoridor.model.Wall;
 import ca.mcgill.ecse223.quoridor.model.WallMove;
+import cucumber.api.PendingException;
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
+import io.cucumber.java.en.When;
+import io.cucumber.java.en.Then;
+
 
 public class CucumberStepDefinitions {
 
@@ -110,18 +115,62 @@ public class CucumberStepDefinitions {
 		ArrayList<Player> players = createUsersAndPlayers("user1", "user2");
 		new Game(GameStatus.Initializing, MoveMode.PlayerMove, players.get(0), players.get(1), QuoridorApplication.getQuoridor());
 	}
-
+	
+	
+	
 	// ***********************************************
 	// Scenario and scenario outline step definitions
 	// ***********************************************
 
 	/*
 	 * TODO Insert your missing step definitions here
-	 * 
+	 * @author Ousmane Baricisse
 	 * Call the methods of the controller that will manipulate the model once they
 	 * are implemented
 	 * 
 	 */
+	
+	// ***********************************************
+	// Switch Player Feature
+	// ***********************************************
+	@Given("The player to move is /.*/")
+	public void getPlayerToMove() {
+		QuoridorController.getPlayer(QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer().getNextPlayer());
+		throw new PendingException();
+	}
+	
+	@And(" The clock of \"<player>\" is running$")
+	public void startPlayerClock() {
+		
+	}
+	
+	@And("The clock of \"<other>\" is stopped$")
+	public void stopPlayerClock() {
+		
+	}
+	
+	@When("Player \"<player>\" completes his move$")
+	public void completeMove(){
+		
+	}
+	
+	@Then("The user interface shall be showing it is \"<other>\" turn$")
+	public void showPlayerTurn() {
+		
+	}
+	@And("The clock of \"<player>\" shall be stopped$")
+	public void stopPlayerClock2() {
+		this.stopPlayerClock();
+	}
+	@And("The clock of \"<other>\" shall be running$")
+	public void startPlayer2Clock() {
+		this.startPlayerClock();
+	}
+	
+	@And("The next player to move shall be \"<other>\"$")
+	public void setNextPlayerToMove() {
+		
+	}
 
 	// ***********************************************
 	// Clean up
