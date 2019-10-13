@@ -36,18 +36,18 @@ public class SwitchPlayerStepDefinition {
 	public void the_player_to_move_is(String string) throws Exception {
 		// Write code here that turns the phrase above into concrete actions
 		Game game = QuoridorApplication.getQuoridor().getCurrentGame();
-
-		if (currentPlayer.equals(game.getBlackPlayer())) {
-			currentPlayer = game.getWhitePlayer();
-		} else {
-			currentPlayer = game.getBlackPlayer();
+		
+		try {
+			currentPlayer = currentPlayer.getNextPlayer();
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("current player is not defined");
 		}
 	}
 
 	@Given("The clock of {string} is running")
 	public void the_clock_of_is_running(String string) {
 		// Write code here that turns the phrase above into concrete actions
-
 	}
 
 	@Given("The clock of {string} is stopped")

@@ -19,6 +19,7 @@ public class GrabWallStepDefinition {
 	public void i_have_more_walls_on_stock() {
 	    // Write code here that turns the phrase above into concrete actions
 		
+		
 	}
 
 	@When("I try to grab a wall from my stock")
