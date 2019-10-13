@@ -9,7 +9,7 @@ import io.cucumber.junit.CucumberOptions;
 @CucumberOptions(
 		plugin = "pretty", 
 		features = "src/test/resources",
-		tags="@RotateWall, @DropWall",
+		tags="@RotateWall or @DropWallValidValid or @DropWallInvalidValid",
 		glue = "ca.mcgill.ecse223.quoridor.features")
 public class CucumberTestsRunner {
 }
