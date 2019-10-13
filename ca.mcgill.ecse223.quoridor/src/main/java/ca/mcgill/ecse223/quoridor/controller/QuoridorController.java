@@ -251,9 +251,17 @@ public class QuoridorController {
 	 * @author Iyatan Atchoro
 	 */
 	public static void rotateWall() throws Exception{
-		// TODO Auto-generated method stub
+		
 		throw new UnsupportedOperationException();
 		
+	}
+	/**
+	 * Method used to drop a wall
+	 * @author Iyatan Atchoro
+	 */
+
+	public static void dropWall() {	
+		throw new UnsupportedOperationException();
 	}
 
 }

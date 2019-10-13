@@ -10,7 +10,7 @@ Feature: Drop Wall
       |    7 |    4 | vertical   |
     And It is my turn to move
     And I have a wall in my hand over the board
-
+@DropWall
   Scenario Outline: Valid wall placement 
     Given The wall move candidate with "<dir>" at position (<row>, <col>) is valid
     When I release the wall in my hand
