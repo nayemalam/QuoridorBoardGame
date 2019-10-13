@@ -18,7 +18,7 @@ public class GrabWallStepDefinition {
 	@Given("I have more walls on stock")
 	public void i_have_more_walls_on_stock() {
 	    // Write code here that turns the phrase above into concrete actions
-	    throw new cucumber.api.PendingException();
+		
 	}
 
 	@When("I try to grab a wall from my stock")
