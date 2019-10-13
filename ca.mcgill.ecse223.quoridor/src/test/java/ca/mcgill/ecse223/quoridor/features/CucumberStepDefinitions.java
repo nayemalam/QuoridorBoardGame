@@ -1,3 +1,4 @@
+
 package ca.mcgill.ecse223.quoridor.features;
 
 import java.sql.Time;
@@ -31,6 +32,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.fail;
 
 public class CucumberStepDefinitions {
+	private Player currentPlayer;
 	// ***********************************************
 	// Background step definitions
 	// ***********************************************
@@ -116,7 +118,7 @@ public class CucumberStepDefinitions {
 		ArrayList<Player> players = createUsersAndPlayers("user1", "user2");
 		new Game(GameStatus.Initializing, MoveMode.PlayerMove, players.get(0), players.get(1), QuoridorApplication.getQuoridor());
 	}
-
+	
 	// ***********************************************
 	// Scenario and scenario outline step definitions
 	// ***********************************************
@@ -237,3 +239,4 @@ public class CucumberStepDefinitions {
 	}
 
 }
+
