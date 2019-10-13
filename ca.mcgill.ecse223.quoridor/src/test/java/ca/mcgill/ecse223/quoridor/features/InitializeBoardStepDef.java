@@ -129,3 +129,4 @@ public class InitializeBoardStepDef {
 		throw new PendingException();
 	}
 }
+

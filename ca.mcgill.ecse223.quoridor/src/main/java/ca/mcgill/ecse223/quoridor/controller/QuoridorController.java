@@ -1,3 +1,4 @@
+
 package ca.mcgill.ecse223.quoridor.controller;
 
 import java.sql.Time;
@@ -96,6 +97,7 @@ public class QuoridorController {
 	public static void selectNewUserName(String username) throws Exception {
 		throw new UnsupportedOperationException();
 	}
+
 
 	/**
 	 * Modifier method used to set the name of the white player
@@ -250,4 +252,105 @@ public class QuoridorController {
 		return blackPos;
 	}
 
+
+	
+	/**
+	 * Method that initializes the Validation of the position, 
+	 * @param PawnPosition/WallPosition
+	 * @param Direction (if wall)
+	 * @throws UnsupportedOperationException
+	 * @author Alexander Legouverneur
+	 */
+	public static boolean InitializeValidatePosition(int row, int col) throws UnsupportedOperationException {
+		throw new UnsupportedOperationException();
+	}
+	
+	/**
+	 * Method that returns if the position is valid by calling InitializeVaidatePostion()
+	 * @param newPos
+	 * @throws UnsupportedOperationException
+	 * @returns ok/error
+	 * @author Alexander Legouverneur
+	 */
+	public static String ValidatePawnPosition(int row, int col) throws UnsupportedOperationException {
+		throw new UnsupportedOperationException();
+	}
+	/**
+	 * Method that initiates the validation of the position
+	 * @param wallPos
+	 * @param Walldir
+	 * @return true/false true for initialized validation
+	 * @throws UnsupportedOperationException
+	 * @author Alexander Legouverneur
+	 */
+	public static boolean InitiatePosValidation(int row, int col, String Walldir) throws UnsupportedOperationException{
+		throw new UnsupportedOperationException();
+	}
+	
+	/**
+	 * Method that returns the direction of the wall after validation
+	 * @param aWall
+	 * @return direction -of the wall
+	 * @throws UnsupportedOperationException
+	 * @author Alexander Legouverneur
+	 */
+	public static Direction ValidateWall(int row, int col, String dir ) throws UnsupportedOperationException{
+		throw new UnsupportedOperationException();
+	}
+	
+	/**
+	 * Returns the Tile of reference of the wall after the position is validated
+	 * @param aWall
+	 * @return Tile -where the wall starts
+	 * @throws UnsupportedOperationException
+	 */
+	public static Tile ValidateWallTile(int row, int col ) throws UnsupportedOperationException{
+		throw new UnsupportedOperationException();
+	}
+	/**
+	 * Method that checks if wall Position is valid
+	 * @param aWall
+	 * @return true/false
+	 * @throws UnsupportedOperationException
+	 * @author Alexander Legouverneur
+	 */
+	public static boolean CheckWallValid(int row, int col, String dir) throws UnsupportedOperationException{
+		throw new UnsupportedOperationException();
+	}
+	
+//end of validate position
+	/**
+	 * Checks if the wall is on the side edge of the board
+	 * @param aWall
+	 * @return true/false -true if on side edge
+	 * @throws UnsupportedOperationException
+	 * @author Alexander Legouverneur
+	 */
+	public static boolean CheckWallSideEdge(Wall aWall) throws UnsupportedOperationException{
+		throw new UnsupportedOperationException();
+	}
+	
+	/**
+	 * Methods that checks if the move on the specified side is possible, with if statements to see if the move is 
+	 * legal, if yes proceed to the move otherwise, call the method IlllegalWallMove()
+	 * @param aWall
+	 * @param side
+	 * @throws UnsupportedOperationException
+	 * @author Alexander Legouverneur
+	 */
+	public static void VerifyMoveWallOnSide(Wall aWall, String side) throws UnsupportedOperationException{
+		throw new UnsupportedOperationException();
+	}
+	
+	/**
+	 * This method is called by VerifyMoveWallOnSide if the move is illegal. Returns a string "illegal", and makes
+	 * sure the coordinates of the wall remain the same as before
+	 * @param aWall
+	 * @return
+	 * @throws UnsupportedOperationException
+	 */
+	public static String IllegalWallMove(Wall aWall) throws UnsupportedOperationException{
+		throw new UnsupportedOperationException();
+	}
 }
+
