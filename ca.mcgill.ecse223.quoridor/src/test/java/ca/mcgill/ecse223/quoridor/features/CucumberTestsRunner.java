@@ -21,6 +21,7 @@ import io.cucumber.junit.CucumberOptions;
 @CucumberOptions(
 		plugin = "pretty", 
 		features = "src/test/resources",
+		tags = "@ValidatePosition or @ValidatePosition2 or @ValidatePosition3 or @ValidatePosition4 or @ValidatePosition5 or @ValidatePosition6 or @MoveWall or @MoveWall1",
 		glue = "ca.mcgill.ecse223.quoridor.features")
 public class CucumberTestsRunner {
 	

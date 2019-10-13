@@ -209,7 +209,7 @@ public class QuoridorController {
 	 * @throws UnsupportedOperationException
 	 * @author Alexander Legouverneur
 	 */
-	public static boolean InitiatePosValidation(Tile wallPos, Direction Walldir) throws UnsupportedOperationException{
+	public static boolean InitiatePosValidation(int row, int col, String Walldir) throws UnsupportedOperationException{
 		throw new UnsupportedOperationException();
 	}
 	
@@ -220,7 +220,7 @@ public class QuoridorController {
 	 * @throws UnsupportedOperationException
 	 * @author Alexander Legouverneur
 	 */
-	public static Direction ValidateWallDirection(Wall aWall ) throws UnsupportedOperationException{
+	public static Direction ValidateWall(int row, int col, String dir ) throws UnsupportedOperationException{
 		throw new UnsupportedOperationException();
 	}
 	
@@ -240,7 +240,7 @@ public class QuoridorController {
 	 * @throws UnsupportedOperationException
 	 * @author Alexander Legouverneur
 	 */
-	public static boolean CheckWallValid(Wall aWall) throws UnsupportedOperationException{
+	public static boolean CheckWallValid(int row, int col, String dir) throws UnsupportedOperationException{
 		throw new UnsupportedOperationException();
 	}
 	
@@ -279,3 +279,4 @@ public class QuoridorController {
 		throw new UnsupportedOperationException();
 	}
 }
+
