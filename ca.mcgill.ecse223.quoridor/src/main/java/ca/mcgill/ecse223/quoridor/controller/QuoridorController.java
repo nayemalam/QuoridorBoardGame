@@ -46,6 +46,7 @@ public class QuoridorController {
 		}
 		
 	}
+	
 	/**
 	 * @author Ousmane Baricisse
 	 * @return
@@ -67,6 +68,9 @@ public class QuoridorController {
 	 */
 	
 	public static void setNextPlayer() {
+		throw new UnsupportedOperationException();
+	}
+	public static boolean numberOfWallsInStock() {
 		throw new UnsupportedOperationException();
 	}
 }
