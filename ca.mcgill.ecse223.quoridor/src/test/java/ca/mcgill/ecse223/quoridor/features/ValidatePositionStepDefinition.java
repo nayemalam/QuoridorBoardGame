@@ -14,6 +14,7 @@ import static org.junit.Assert.assertEquals;
  *
  */
 public class ValidatePositionStepDefinition {
+
 	private String Validity = new String();
 	
 	private int providedRow;
@@ -140,4 +141,5 @@ public class ValidatePositionStepDefinition {
 		Quoridor q = QuoridorApplication.getQuoridor();
 		assertEquals(false,QuoridorController.CheckWallValid(providedRow,providedColumn, providedDirection));	
 		}
+
 }
