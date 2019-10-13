@@ -29,7 +29,7 @@ public class SetTotalThinkingTimeStepDef {
      * @author Nayem Alam
      */
     @When("{int}:{int} is set as the thinking time")
-    public void MinSecIsSetAsTheThinkingTime(int min, int sec) throws Exception {
+    public void is_set_as_the_thinking_time(Integer min, Integer sec) throws Exception {
         // controller method should set same thinking time for both p1&p2 -- i think
         QuoridorController.setThinkingTime(min, sec);
     }
@@ -41,9 +41,9 @@ public class SetTotalThinkingTimeStepDef {
      * @author Nayem Alam
      */
     @Then("Both players shall have {int}:{int} remaining time left")
-    public void BothPlayersShallHaveMinSecRemainingTimeLeft(int min, int sec) {
+    public void both_players_shall_have_remaining_time_left(Integer min, Integer sec) {
         // converts min and sec to long type (unix epoch time)
-        Time t = new Time(min*60l*1000 + sec*1000l);
+        Time t = new Time(min* 60L *1000 + sec* 1000L);
         Player bPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
         Player wPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
 
