@@ -16,20 +16,11 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 public class RotateWallFeatureStepDev {
-	private CucumberStepDefinitions csd = new CucumberStepDefinitions();
-	
 	/**
 	 * Class used to define the step definitions related to the rotate wall feature
 	 * @throws Exception
 	 * @author Iyatan Atchoro
 	 */
-	
-	
-	 /**
-     * Method used to check if a wall move candidate exist
-     * @param string, int, int
-     */
-
 	
 	/**
      * Method to check that the rotate wall method works
@@ -40,5 +31,15 @@ public class RotateWallFeatureStepDev {
 	public void i_try_to_flip_the_wall() throws Exception {
 		QuoridorController.rotateWall();
 	}
+	 /**
+     * Method asserting whether it it properly rotated
+     * @param string
+     */
 
+	@Then("The wall shall be rotated over the board to {string}")
+	public void the_wall_shall_be_rotated_over_the_board_to(String string) {
+		// Checking if the board wall is rotated over the board
+		Quoridor q = QuoridorApplication.getQuoridor();
+		assertEquals(string, q.getCurrentGame().getBlackPlayer().getWall(11).getMove().getWallDirection());	
+	}
 }
