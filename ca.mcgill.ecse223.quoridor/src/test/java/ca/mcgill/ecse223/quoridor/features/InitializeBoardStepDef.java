@@ -1,3 +1,4 @@
+
 package ca.mcgill.ecse223.quoridor.features;
 
 import static org.junit.Assert.assertEquals;
@@ -129,4 +130,3 @@ public class InitializeBoardStepDef {
 		throw new PendingException();
 	}
 }
-
