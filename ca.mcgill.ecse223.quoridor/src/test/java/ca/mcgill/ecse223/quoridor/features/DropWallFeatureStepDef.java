@@ -180,5 +180,11 @@ Quoridor q = QuoridorApplication.getQuoridor();
 		
 
 	}
+	@Then("I shall not have a wall in my hand")
+	public void i_shall_not_have_a_wall_in_my_hand() {
+		Quoridor q = QuoridorApplication.getQuoridor();
+		assertNotEquals(q.getCurrentGame().getBlackPlayer().getWalls().size(), 0);
+	    
+	}
 
 }
