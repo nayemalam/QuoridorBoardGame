@@ -15,10 +15,11 @@ public class QuoridorController {
 	 * @author Ousmane Baricisse
 	 * @return Current Player
 	 */
-	
+
 	public static Player getPlayer(Quoridor quoridorApp) throws Exception {
 		throw new UnsupportedOperationException();
 	}
+
 	/**
 	 * Method to capture the time at which the clock was started
 	 * 
@@ -78,6 +79,11 @@ public class QuoridorController {
 	public static boolean numberOfWallsInStock() {
 		throw new UnsupportedOperationException();
 	}
+
+	/**
+	 * @author Ousmane Baricisse
+	 * @return
+	 */
 	public static void grabWall() {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException();
