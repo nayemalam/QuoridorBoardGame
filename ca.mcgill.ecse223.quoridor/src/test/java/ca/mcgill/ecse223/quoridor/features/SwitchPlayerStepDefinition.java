@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.sql.Time;
 
+import javax.swing.text.Position;
+
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
 import ca.mcgill.ecse223.quoridor.utilities.TimerUtilities;
@@ -79,14 +81,14 @@ public class SwitchPlayerStepDefinition {
 	/**
 	 * calls controller method to complete the move controller method is a void
 	 * method
-	 * 
+	 * Pass in as parameter a given destination and the state of game, as well as the current player
 	 * @param string
 	 * @author ousmanebaricisse
 	 */
 	@When("Player {string} completes his move")
 	public void player_completes_his_move(String string) {
 		// Write code here that turns the phrase above into concrete actions
-		QuoridorController.completeMove();
+		QuoridorController.completeMove(QuoridorApplication.getQuoridor(), new Destination(3, Direction.Horizontal, this.currentPlayer));
 	}
 
 	/**
@@ -97,6 +99,7 @@ public class SwitchPlayerStepDefinition {
 	@Then("The user interface shall be showing it is {string} turn")
 	public void the_user_interface_shall_be_showing_it_is_turn(String string) {
 		// Write code here that turns the phrase above into concrete actions
+		
 		Player playerToMove = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getPlayerToMove();
 		assertEquals(this.nextPlayer, playerToMove);
 	}

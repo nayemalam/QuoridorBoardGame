@@ -11,21 +11,11 @@ import java.sql.Time;
 
 public class QuoridorController {
 
-	/**
-	 * Method used to get the current Player
-	 * 
-	 * @param Quoridor game
-	 * @author Ousmane Baricisse
-	 * @return Current Player
-	 */
 
-	public static Player getPlayer(Quoridor quoridorApp) throws Exception {
-		throw new UnsupportedOperationException();
-	}
 
 	/**
 	 * Method to capture the time at which the clock is stopped
-	 * 
+	 * Used as a helper method
 	 * @param
 	 * @author Ousmane Baricisse
 	 * @return time in seconds
@@ -40,10 +30,17 @@ public class QuoridorController {
 	}
 
 	/**
+	 * This method, according to the Gherkin definition, should Complete 
+	 * a player move from the given position to the next tile.
+	 * returns true if the move was completed successfully.
+	 * @param quoridor, destination
 	 * @author Ousmane Baricisse
-	 * @return
+	 * @param quoridor
+	 * @param destination
+	 * @return boolean
+	 * @throws
 	 */
-	public static boolean completeMove() {
+	public static boolean completeMove(Quoridor quoridor, Destination destination) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -55,24 +52,17 @@ public class QuoridorController {
 		throw new UnsupportedOperationException();
 	}
 
+
+
 	/**
+	 * This method, according to the Gherkin definition, should grab wall
+	 * from the stock and add it to the board
+	 * Need to know the player and the board as parameters
+	 * @param board, player
 	 * @author Ousmane Baricisse
 	 * @return
 	 */
-
-	public static void setNextPlayer() {
-		throw new UnsupportedOperationException();
-	}
-
-	public static boolean numberOfWallsInStock() {
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * @author Ousmane Baricisse
-	 * @return
-	 */
-	public static void grabWall() {
+	public static void grabWall(Board board, Player player) {
 		// TODO Auto-generated method stub
 	}
 	/**

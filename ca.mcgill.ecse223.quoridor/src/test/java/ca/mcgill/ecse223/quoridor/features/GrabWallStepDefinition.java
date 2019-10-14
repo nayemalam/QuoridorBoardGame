@@ -65,14 +65,11 @@ public class GrabWallStepDefinition {
 	 * @author Ousmane Baricisse
 	 * @throws Exception
 	 */
+	
 	@When("I try to grab a wall from my stock")
-	public void i_try_to_grab_a_wall_from_my_stock() throws Exception {
+	public void i_try_to_grab_a_wall_from_my_stock(){
 		// Write code here that turns the phrase above into concrete actions
-		try {
-			QuoridorController.grabWall();
-		} catch (Exception e) {
-			throw new Exception("You have no walls remaining in stock");
-		}
+		QuoridorController.grabWall(QuoridorApplication.getQuoridor().getBoard(), this.currentPlayer);
 
 	}
 
@@ -103,7 +100,7 @@ public class GrabWallStepDefinition {
 	/**
 	 * Make sure the number of walls for current player is zero
 	 * 
-	 * @author ousmanebaricisse
+	 * @author Ousmane Baricisse
 	 */
 
 	@Given("I have no more walls on stock")
@@ -117,9 +114,14 @@ public class GrabWallStepDefinition {
 		if (this.curPlayerWallCount != 0) {
 			// remove all walls in stock
 			if (this.currentPlayer.toString().equalsIgnoreCase("white")) {
-				this.game.getCurrentPosition().getBlackWallsInStock().clear();
+				if(this.game.getCurrentPosition().getBlackWallsInStock() != null) {
+					this.game.getCurrentPosition().getBlackWallsInStock().clear();
+				}
+				
 			} else {
-				this.game.getCurrentPosition().getWhiteWallsInStock().clear();
+				if(this.game.getCurrentPosition().getBlackWallsInStock() != null) {
+					this.game.getCurrentPosition().getWhiteWallsInStock().clear();
+				}
 			}
 
 		}
