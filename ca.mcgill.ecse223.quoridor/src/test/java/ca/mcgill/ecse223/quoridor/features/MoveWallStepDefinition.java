@@ -87,10 +87,9 @@ public class MoveWallStepDefinition {
 	public void the_wall_shall_be_moved_over_the_board_to_position(int int1, int int2) {
 		Quoridor q = QuoridorApplication.getQuoridor();	
 
-		Integer row = new Integer(q.getCurrentGame().getBlackPlayer().getWall(11).getMove().getTargetTile().getRow());
-		Integer col = new Integer(q.getCurrentGame().getBlackPlayer().getWall(11).getMove().getTargetTile().getColumn());
-		assertEquals(int1, q.getCurrentGame().getBlackPlayer().getWall(11).getMove().getTargetTile().getRow());
-		assertEquals(int2, q.getCurrentGame().getBlackPlayer().getWall(11).getMove().getTargetTile().getColumn());
+		
+		assertEquals(int1, q.getCurrentGame().getBlackPlayer().getWall(0).getMove().getTargetTile().getRow());
+		assertEquals(int2, q.getCurrentGame().getBlackPlayer().getWall(0).getMove().getTargetTile().getColumn());
 		
 	}
 	/**

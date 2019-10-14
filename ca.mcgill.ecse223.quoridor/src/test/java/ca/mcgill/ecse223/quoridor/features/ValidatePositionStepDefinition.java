@@ -15,7 +15,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class ValidatePositionStepDefinition {
 
-	private String Validity = new String();
+	
 	
 	private int providedRow;
 	private int providedColumn;
@@ -30,10 +30,6 @@ public class ValidatePositionStepDefinition {
 	 */
 	@Given("A game position is supplied with pawn coordinate {int}:{int}")
 	public void a_game_position_is_supplied_with_pawn_coordinate(int int1, int int2) {
-
-		// Access the system
-		Quoridor q = QuoridorApplication.getQuoridor();
-		
 		providedRow = int1;
 		providedColumn = int2;
 	}
@@ -63,7 +59,6 @@ public class ValidatePositionStepDefinition {
 	 */
 	@Then("The result is {string}")
 	public void validatePositionResult(String result) {
-		Quoridor q = QuoridorApplication.getQuoridor();
 		assertEquals(result, QuoridorController.ValidatePawnPosition(providedRow, providedColumn));
 	}
 
@@ -73,8 +68,8 @@ public class ValidatePositionStepDefinition {
 	 */
 	@Given("A game position is supplied with wall coordinate {int}:{int}-{string}")
 	public void aGamePositionIsSuppliedWithWallCoordinateAndDir(Integer row, Integer col, String dir) {
-		// Access the system
-		Quoridor q = QuoridorApplication.getQuoridor();
+		
+		
 
 		//Assign the position and direction to the wall
 		providedRow = row;
@@ -128,7 +123,6 @@ public class ValidatePositionStepDefinition {
 	 */
 	@Then("The position shall be valid")
 	public void ThePositionShallBeValid() {
-		Quoridor q = QuoridorApplication.getQuoridor();
 		assertEquals(true,QuoridorController.CheckWallValid(providedRow,providedColumn, providedDirection));
 	}
 	
@@ -138,7 +132,7 @@ public class ValidatePositionStepDefinition {
 	 */
 	@Then("The position shall be invalid")
 	public void ThePositionShallBeInvalid2() {
-		Quoridor q = QuoridorApplication.getQuoridor();
+		
 		assertEquals(false,QuoridorController.CheckWallValid(providedRow,providedColumn, providedDirection));	
 		}
 

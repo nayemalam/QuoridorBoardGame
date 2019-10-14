@@ -1,4 +1,5 @@
 
+
 package ca.mcgill.ecse223.quoridor.controller;
 
 import java.sql.Time;
@@ -416,3 +417,4 @@ public class QuoridorController {
 		throw new UnsupportedOperationException();
 	}
 }
+
