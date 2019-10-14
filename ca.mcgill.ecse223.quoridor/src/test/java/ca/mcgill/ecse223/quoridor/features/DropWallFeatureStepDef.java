@@ -81,14 +81,7 @@ public class DropWallFeatureStepDef {
 	public void i_release_the_wall_in_my_hand() {
 		QuoridorController.dropWall();
 	}
-	/**
-     * Method to assert if I still have walls in my hand
-     * @param 
-     */
-	@Then("I shall not have a wall in my hand")
-	public void i_shall_not_have_a_wall_in_my_hand() {
-		// Step definition already exist in another feature (Grab wall)
-	}
+
 	/**
      * Method to assert if my moves are completed
      * @param 
