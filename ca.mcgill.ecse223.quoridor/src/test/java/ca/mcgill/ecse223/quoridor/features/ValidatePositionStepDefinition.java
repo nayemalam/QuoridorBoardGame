@@ -63,7 +63,6 @@ public class ValidatePositionStepDefinition {
 	 */
 	@Then("The result is {string}")
 	public void validatePositionResult(String result) {
-		Quoridor q = QuoridorApplication.getQuoridor();
 		assertEquals(result, QuoridorController.ValidatePawnPosition(providedRow, providedColumn));
 	}
 
@@ -73,8 +72,8 @@ public class ValidatePositionStepDefinition {
 	 */
 	@Given("A game position is supplied with wall coordinate {int}:{int}-{string}")
 	public void aGamePositionIsSuppliedWithWallCoordinateAndDir(Integer row, Integer col, String dir) {
-		// Access the system
-		Quoridor q = QuoridorApplication.getQuoridor();
+		
+		
 
 		//Assign the position and direction to the wall
 		providedRow = row;
@@ -128,7 +127,6 @@ public class ValidatePositionStepDefinition {
 	 */
 	@Then("The position shall be valid")
 	public void ThePositionShallBeValid() {
-		Quoridor q = QuoridorApplication.getQuoridor();
 		assertEquals(true,QuoridorController.CheckWallValid(providedRow,providedColumn, providedDirection));
 	}
 	
@@ -138,7 +136,7 @@ public class ValidatePositionStepDefinition {
 	 */
 	@Then("The position shall be invalid")
 	public void ThePositionShallBeInvalid2() {
-		Quoridor q = QuoridorApplication.getQuoridor();
+		
 		assertEquals(false,QuoridorController.CheckWallValid(providedRow,providedColumn, providedDirection));	
 		}
 
