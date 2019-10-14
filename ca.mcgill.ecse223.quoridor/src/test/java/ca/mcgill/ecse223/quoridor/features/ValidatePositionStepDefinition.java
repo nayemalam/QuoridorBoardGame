@@ -15,7 +15,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class ValidatePositionStepDefinition {
 
-	private String Validity = new String();
+	
 	
 	private int providedRow;
 	private int providedColumn;
@@ -30,10 +30,6 @@ public class ValidatePositionStepDefinition {
 	 */
 	@Given("A game position is supplied with pawn coordinate {int}:{int}")
 	public void a_game_position_is_supplied_with_pawn_coordinate(int int1, int int2) {
-
-		// Access the system
-		Quoridor q = QuoridorApplication.getQuoridor();
-		
 		providedRow = int1;
 		providedColumn = int2;
 	}

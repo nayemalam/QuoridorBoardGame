@@ -6,9 +6,19 @@ import java.util.List;
 import java.util.Map;
 
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
-import ca.mcgill.ecse223.quoridor.model.*;
+import ca.mcgill.ecse223.quoridor.model.Board;
+import ca.mcgill.ecse223.quoridor.model.Direction;
+import ca.mcgill.ecse223.quoridor.model.Game;
 import ca.mcgill.ecse223.quoridor.model.Game.GameStatus;
 import ca.mcgill.ecse223.quoridor.model.Game.MoveMode;
+import ca.mcgill.ecse223.quoridor.model.GamePosition;
+import ca.mcgill.ecse223.quoridor.model.Player;
+import ca.mcgill.ecse223.quoridor.model.PlayerPosition;
+import ca.mcgill.ecse223.quoridor.model.Quoridor;
+import ca.mcgill.ecse223.quoridor.model.Tile;
+import ca.mcgill.ecse223.quoridor.model.User;
+import ca.mcgill.ecse223.quoridor.model.Wall;
+import ca.mcgill.ecse223.quoridor.model.WallMove;
 import cucumber.api.PendingException;
 import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
 import io.cucumber.java.After;
@@ -21,6 +31,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.fail;
 
 public class CucumberStepDefinitions {
+	private Player currentPlayer;
 	// ***********************************************
 	// Background step definitions
 	// ***********************************************
@@ -106,7 +117,7 @@ public class CucumberStepDefinitions {
 		ArrayList<Player> players = createUsersAndPlayers("user1", "user2");
 		new Game(GameStatus.Initializing, MoveMode.PlayerMove, players.get(0), players.get(1), QuoridorApplication.getQuoridor());
 	}
-
+	
 	// ***********************************************
 	// Scenario and scenario outline step definitions
 	// ***********************************************
@@ -227,3 +238,4 @@ public class CucumberStepDefinitions {
 	}
 
 }
+
