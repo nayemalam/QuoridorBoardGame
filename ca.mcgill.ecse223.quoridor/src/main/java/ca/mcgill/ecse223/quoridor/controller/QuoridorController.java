@@ -60,11 +60,12 @@ public class QuoridorController {
 	 * This method, according to the Gherkin definition, should set the total
 	 * thinking time for both players in the game, before the game begins
 	 *
-	 * @param min - int sets the number of minutes
-	 * @param sec - int sets the number of seconds
+	 * @param min - Integer sets the number of minutes
+	 * @param sec - Integer sets the number of seconds
+	 * @throws Exception (UnsupportedOperationException) todo for later
 	 * @author Nayem Alam
 	 */
-	public static void setThinkingTime(int min, int sec) throws Exception {
+	public static void setThinkingTime(Integer min, Integer sec) throws Exception {
 		// convert min and sec to long and add it to new Time(add it here)
 		throw new UnsupportedOperationException();
 	}
@@ -75,6 +76,7 @@ public class QuoridorController {
 	 * starting the game to select an existing username
 	 *
 	 * @param username - String username exists within the list of users
+	 * @throws Exception (UnsupportedOperationException) todo for later
 	 * @author Nayem Alam
 	 */
 	public static void selectExistingUserName(String username) throws Exception {
@@ -88,11 +90,13 @@ public class QuoridorController {
 	 * starting the game to select a new username
 	 *
 	 * @param username - String username is new and does not exist in list of users yet
+	 * @throws Exception (UnsupportedOperationException) todo for later
 	 * @author Nayem Alam
 	 */
 	public static void selectNewUserName(String username) throws Exception {
 		throw new UnsupportedOperationException();
 	}
+
 
 	/**
 	 * Modifier method used to set the name of the white player
@@ -246,6 +250,164 @@ public class QuoridorController {
 				.getBlackPosition();
 		return blackPos;
 	}
+
+
+	
+	/**
+	 * Method that initializes the Validation of the position, 
+	 * @param PawnPosition
+	 * @throws UnsupportedOperationException
+	 * @returns true/false
+	 * @author Alexander Legouverneur
+	 */
+	public static boolean InitializeValidatePosition(int row, int col) throws UnsupportedOperationException {
+		throw new UnsupportedOperationException();
+	}
+	
+	/**
+	 * Method that returns if the position is valid by calling InitializeVaidatePostion()
+	 * @param pawn position
+	 * @throws UnsupportedOperationException
+	 * @returns ok/error strings
+	 * @author Alexander Legouverneur
+	 */
+	public static String ValidatePawnPosition(int row, int col) throws UnsupportedOperationException {
+		throw new UnsupportedOperationException();
+	}
+	/**
+	 * Method that initiates the validation of the position
+	 * @param wallPosition
+	 * @param Walldir
+	 * @return true/false true for initialized validation
+	 * @throws UnsupportedOperationException
+	 * @author Alexander Legouverneur
+	 */
+	public static boolean InitiatePosValidation(int row, int col, String Walldir) throws UnsupportedOperationException{
+		throw new UnsupportedOperationException();
+	}
+	
+	/**
+	 * Method that returns the direction of the wall after validation
+	 * @param WallPosition
+	 * @param Wall Direction
+	 * @return direction -of the wall
+	 * @throws UnsupportedOperationException
+	 * @author Alexander Legouverneur
+	 */
+	public static String ValidateWall(int row, int col, String dir ) throws UnsupportedOperationException{
+		throw new UnsupportedOperationException();
+	}
+	
+	/**
+	 * Method that checks if wall Position is valid
+	 * @param WallPosition
+	 * @param Wall Direction
+	 * @return true/false
+	 * @throws UnsupportedOperationException
+	 * @author Alexander Legouverneur
+	 */
+	public static boolean CheckWallValid(int row, int col, String dir) throws UnsupportedOperationException{
+		throw new UnsupportedOperationException();
+	}
+	
+//end of validate position
+	/**
+	 * Checks if the wall is on the side edge of the board
+	 * @param aWall
+	 * @return true/false -true if on side edge
+	 * @throws UnsupportedOperationException
+	 * @author Alexander Legouverneur
+	 */
+	public static boolean CheckWallSideEdge(Wall aWall) throws UnsupportedOperationException{
+		throw new UnsupportedOperationException();
+	}
+	
+	/**
+	 * Methods that checks if the move on the specified side is possible, with if statements to see if the move is 
+	 * legal, if yes proceed to the move otherwise, call the method IlllegalWallMove()
+	 * @param aWall
+	 * @param side
+	 * @throws UnsupportedOperationException
+	 * @author Alexander Legouverneur
+	 */
+	public static void VerifyMoveWallOnSide(Wall aWall, String side) throws UnsupportedOperationException{
+		throw new UnsupportedOperationException();
+	}
+	
+	/**
+	 * This method is called by VerifyMoveWallOnSide if the move is illegal. Returns a string "illegal", and makes
+	 * sure the coordinates of the wall remain the same as before
+	 * @param aWall
+	 * @return String
+	 * @throws UnsupportedOperationException
+	 *@author Alexander Legouverneur
+	 */
+	public static String IllegalWallMove(Wall aWall) throws UnsupportedOperationException{
+		throw new UnsupportedOperationException();
+	}
+  	/**
+	 * Method - saveGameFile(String filename, Game game)
+	 * 
+	 * Controller method used to save the game as a text file
+	 * This file can later be loaded to keep playing 
+	 * this instance of the game
+	 * 
+	 * @param filename - String name of file
+	 * @return String - contents of the file
+	 * @author Nicolas Buisson
+	 * 
+	 */
+	public static String saveGameFile(String filename) {
+		
+		throw new UnsupportedOperationException();
+	}
+	/**
+	 * Method - overWriteFile()
+	 * 
+	 * Controller method used to overwrite a saved game file
+	 * with the current game
+	 * 
+	 * @param filename - String name of file
+	 * @return String - contains the content of the overwritten file
+	 * @author Nicolas Buisson
+	 * 
+	 */
+	public static String overWriteFile(String filename) {
+		
+		throw new UnsupportedOperationException();
+	}
+	
+	/**
+	 * Method - cancelOverWriteFile()
+	 * 
+	 * Controller method used to cancel overwriting a file
+	 * 
+	 * @return String - content of file
+	 * @author Nicolas Buisson
+	 * 
+	 */
+	public static String cancelOverWriteFile() {
+		throw new UnsupportedOperationException();
+		//if user cancels overwriting the file
+		//then nothing happens, file and model are unchanged
+		//only change is in UI
+		//might not have to be a controller method
+	}
+	/**
+	 * Method - loadSavedGame()
+	 * 
+	 * Controller method used to load a file containing the game state
+	 * of a previous game that the user wishes to continue playing
+	 * 
+	 * @param filename - name of file
+	 * @return Game - the game to be continued is returned
+	 * @author Nicolas Buisson
+	 * 
+	 */
+	public static Game loadSavedGame(String filename) {
+		throw new UnsupportedOperationException();
+	}
+	
 	/**
 	 * Method used to rotate a wall
 	 * @author Iyatan Atchoro
@@ -263,5 +425,6 @@ public class QuoridorController {
 	public static void dropWall() {	
 		throw new UnsupportedOperationException();
 	}
-
 }
+
+

@@ -39,7 +39,7 @@ public class ProvideSelectUserNameStepDef {
      * @author Nayem Alam
      */
     @Given("Next player to set user name is {string}")
-    public void NextPlayerToSetUserNameIsColor(String color) {
+    public void next_player_to_set_user_name_is(String color) {
         Game g = QuoridorApplication.getQuoridor().getCurrentGame();
 //		Player currentPlayer = color.equals("white") ? g.getBlackPlayer() : g.getWhitePlayer();
         if(color.equals("white")) {
@@ -63,7 +63,7 @@ public class ProvideSelectUserNameStepDef {
      * @author Nayem Alam
      */
     @And("There is existing user {string}")
-    public void ThereIsExistingUserName(String username) {
+    public void there_is_existing_user(String username) {
         // populate empty list with existing user
         QuoridorApplication.getQuoridor().getUsers().add(new User(username, QuoridorApplication.getQuoridor()));
     }
@@ -76,7 +76,7 @@ public class ProvideSelectUserNameStepDef {
      * @author Nayem Alam
      */
     @When("The player selects existing {string}")
-    public void ThePlayerSelectsExistingUser(String username) throws Exception{
+    public void the_player_selects_existing(String username) throws Exception{
         QuoridorController.selectExistingUserName(username);
     }
 
@@ -88,7 +88,7 @@ public class ProvideSelectUserNameStepDef {
      * @author Nayem Alam
      */
     @Then("The name of player {string} in the new game shall be {string}")
-    public void TheNameOfPlayerColorInTheNewGameShallBeUser(String color, String username) {
+    public void the_name_of_player_in_the_new_game_shall_be(String color, String username) {
         if(color.equals("white")){
             assertEquals(username, QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer().getUser().getName());
         }
@@ -116,7 +116,7 @@ public class ProvideSelectUserNameStepDef {
      * @author Nayem Alam
      */
     @And("There is no existing user {string}")
-    public void ThereIsNoExistingUserName(String username) {
+    public void there_is_no_existing_user(String username) {
         QuoridorApplication.getQuoridor().getUsers().remove(new User(username, QuoridorApplication.getQuoridor()));
     }
 
@@ -128,7 +128,7 @@ public class ProvideSelectUserNameStepDef {
      * @author Nayem Alam
      */
     @When("The player provides new user name: {string}")
-    public void ThePlayerProvidesNewUserName(String username) throws Exception {
+    public void the_player_provides_new_user_name(String username) throws Exception {
         QuoridorController.selectNewUserName(username);
     }
 
@@ -156,7 +156,7 @@ public class ProvideSelectUserNameStepDef {
      * @author Nayem Alam
      */
     @Then("The player shall be warned that {string} already exists")
-    public void ThePlayerShallBeWarnedThatUserNameAlreadyExists(String username) {
+    public void the_player_shall_be_warned_that_already_exists(String username) {
         if(isExisting(username)){
             assertEquals("user name exists", username,QuoridorApplication.getQuoridor().getUsers().get(0).toString() );
         } else {
@@ -170,7 +170,7 @@ public class ProvideSelectUserNameStepDef {
      * @author Nayem Alam
      */
     @And("Next player to set user name shall be {string}")
-    public void NextPlayerToSetUserNameShallBeColor(String color) {
+    public void next_player_to_set_user_name_shall_be(String color) {
         // if this color is white then next player is white??
         // I need to verify between the input color and the player's color but
         // not sure how to check what color the player currently has
