@@ -78,4 +78,8 @@ public class QuoridorController {
 	public static boolean numberOfWallsInStock() {
 		throw new UnsupportedOperationException();
 	}
+	public static void grabWall() {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
+	}
 }
