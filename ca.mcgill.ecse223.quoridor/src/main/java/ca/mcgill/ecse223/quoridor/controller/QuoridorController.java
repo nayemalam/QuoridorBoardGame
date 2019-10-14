@@ -1,5 +1,3 @@
-
-
 package ca.mcgill.ecse223.quoridor.controller;
 
 import java.sql.Time;
@@ -409,5 +407,24 @@ public class QuoridorController {
 	public static Game loadSavedGame(String filename) {
 		throw new UnsupportedOperationException();
 	}
+	
+	/**
+	 * Method used to rotate a wall
+	 * @author Iyatan Atchoro
+	 */
+	public static void rotateWall() throws Exception{
+		
+		throw new UnsupportedOperationException();
+		
+	}
+	/**
+	 * Method used to drop a wall
+	 * @author Iyatan Atchoro
+	 */
+
+	public static void dropWall() {	
+		throw new UnsupportedOperationException();
+	}
 }
+
 

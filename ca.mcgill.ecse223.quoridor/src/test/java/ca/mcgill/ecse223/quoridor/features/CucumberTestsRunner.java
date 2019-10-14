@@ -23,5 +23,4 @@ import io.cucumber.junit.CucumberOptions;
 		features = "src/test/resources",
 		glue = "ca.mcgill.ecse223.quoridor.features")
 public class CucumberTestsRunner {
-
 }
