@@ -28,7 +28,6 @@ import io.cucumber.java.en.When;
 
 
 public class CucumberStepDefinitions {
-	private Player currentPlayer;
 	// ***********************************************
 	// Background step definitions
 	// ***********************************************
