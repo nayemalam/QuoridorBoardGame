@@ -257,9 +257,9 @@ public class QuoridorController {
 	
 	/**
 	 * Method that initializes the Validation of the position, 
-	 * @param PawnPosition/WallPosition
-	 * @param Direction (if wall)
+	 * @param PawnPosition
 	 * @throws UnsupportedOperationException
+	 * @returns true/false
 	 * @author Alexander Legouverneur
 	 */
 	public static boolean InitializeValidatePosition(int row, int col) throws UnsupportedOperationException {
@@ -268,9 +268,9 @@ public class QuoridorController {
 	
 	/**
 	 * Method that returns if the position is valid by calling InitializeVaidatePostion()
-	 * @param newPos
+	 * @param pawn position
 	 * @throws UnsupportedOperationException
-	 * @returns ok/error
+	 * @returns ok/error strings
 	 * @author Alexander Legouverneur
 	 */
 	public static String ValidatePawnPosition(int row, int col) throws UnsupportedOperationException {
@@ -278,7 +278,7 @@ public class QuoridorController {
 	}
 	/**
 	 * Method that initiates the validation of the position
-	 * @param wallPos
+	 * @param wallPosition
 	 * @param Walldir
 	 * @return true/false true for initialized validation
 	 * @throws UnsupportedOperationException
@@ -290,27 +290,20 @@ public class QuoridorController {
 	
 	/**
 	 * Method that returns the direction of the wall after validation
-	 * @param aWall
+	 * @param WallPosition
+	 * @param Wall Direction
 	 * @return direction -of the wall
 	 * @throws UnsupportedOperationException
 	 * @author Alexander Legouverneur
 	 */
-	public static Direction ValidateWall(int row, int col, String dir ) throws UnsupportedOperationException{
+	public static String ValidateWall(int row, int col, String dir ) throws UnsupportedOperationException{
 		throw new UnsupportedOperationException();
 	}
 	
 	/**
-	 * Returns the Tile of reference of the wall after the position is validated
-	 * @param aWall
-	 * @return Tile -where the wall starts
-	 * @throws UnsupportedOperationException
-	 */
-	public static Tile ValidateWallTile(int row, int col ) throws UnsupportedOperationException{
-		throw new UnsupportedOperationException();
-	}
-	/**
 	 * Method that checks if wall Position is valid
-	 * @param aWall
+	 * @param WallPosition
+	 * @param Wall Direction
 	 * @return true/false
 	 * @throws UnsupportedOperationException
 	 * @author Alexander Legouverneur
@@ -347,9 +340,9 @@ public class QuoridorController {
 	 * This method is called by VerifyMoveWallOnSide if the move is illegal. Returns a string "illegal", and makes
 	 * sure the coordinates of the wall remain the same as before
 	 * @param aWall
-	 * @return
+	 * @return String
 	 * @throws UnsupportedOperationException
-   *@author Alexander Legouverneur
+	 *@author Alexander Legouverneur
 	 */
 	public static String IllegalWallMove(Wall aWall) throws UnsupportedOperationException{
 		throw new UnsupportedOperationException();
