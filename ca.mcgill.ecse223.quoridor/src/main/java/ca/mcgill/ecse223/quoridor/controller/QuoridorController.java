@@ -33,14 +33,14 @@ public class QuoridorController {
 	 * This method, according to the Gherkin definition, should Complete 
 	 * a player move from the given position to the next tile.
 	 * returns true if the move was completed successfully.
-	 * @param quoridor, destination
+	 * @param quoridor
 	 * @author Ousmane Baricisse
 	 * @param quoridor
 	 * @param destination
 	 * @return boolean
 	 * @throws
 	 */
-	public static boolean completeMove(Quoridor quoridor, Destination destination) {
+	public static boolean completeMove(Quoridor quoridor) {
 		throw new UnsupportedOperationException();
 	}
 
