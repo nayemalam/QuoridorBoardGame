@@ -93,7 +93,7 @@ public class SavePositionStepDef {
 	@Given ("File {string} exists in the filesystem")
 	public void FileExistsInTheFileSystem(String filename) {
 
-		String pathName = "C:\\Users\\nbuis\\git\\ecse223-project--group-04\\ca.mcgill.ecse223.quoridor\\src\\main\\" + filename + ".txt";
+		String pathName = "C:\\Users\\Alexander\\iteration2\\ecse223-project--group-04\\ca.mcgill.ecse223.quoridor\\src\\main\\" + filename + ".txt";
 		file = new File(pathName);
 		if(file.exists()) {
 			//if it exists do nothing
@@ -126,7 +126,7 @@ public class SavePositionStepDef {
 	@Then ("File with {string} shall be updated in the filesystem")
 	public void FileShallBeUpdatedInTheFileSystem(String filename) {
 		
-		String pathName = "C:\\Users\\nbuis\\git\\ecse223-project--group-04\\ca.mcgill.ecse223.quoridor\\src\\main\\" + filename + ".txt";
+		String pathName = "C:\\Users\\Alexander\\iteration2\\ecse223-project--group-04\\ca.mcgill.ecse223.quoridor\\src\\main\\" + filename + ".txt";
 		file = new File(pathName);
 		FileReader reader = null;
 		try{
