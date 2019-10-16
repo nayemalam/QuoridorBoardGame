@@ -37,7 +37,7 @@ public class SavePositionStepDef {
 
 	@Given ("No file {string} exists in the filesystem")
 	public void NoFileExistsInTheFileSystem(String filename) {
-		String pathName = "C:\\Users\\nbuis\\git\\ecse223-project--group-04\\ca.mcgill.ecse223.quoridor\\src\\main\\" + filename + ".txt";
+		String pathName = "C:\\Users\\Alexander\\iteration2\\ecse223-project--group-04\\ca.mcgill.ecse223.quoridor\\src\\main\\" + filename + ".txt";
 		// new File creates a pointer to the file
 		//createNewFile actually creates it
 		
@@ -173,7 +173,7 @@ public class SavePositionStepDef {
 	@Then ("File {string} shall not be changed in the filesystem")
 	public void FileShallNotBeChangedInTheFileSystem(String filename) {
 		
-		String pathName = "C:\\Users\\nbuis\\git\\ecse223-project--group-04\\ca.mcgill.ecse223.quoridor\\src\\main\\" + filename + ".txt";
+		String pathName = "C:\\Users\\Alexander\\iteration2\\ecse223-project--group-04\\ca.mcgill.ecse223.quoridor\\src\\main\\" + filename + ".txt";
 		file = new File(pathName);
 		FileReader reader = null;
 		try{
