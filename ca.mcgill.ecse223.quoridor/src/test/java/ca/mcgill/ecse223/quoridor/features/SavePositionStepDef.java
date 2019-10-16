@@ -67,7 +67,7 @@ public class SavePositionStepDef {
 	@Then ("A file with {string} shall be created in the filesystem")
 	public void AFileShallBeCreatedInTheFileSystem(String filename) {
 		
-		String pathName = "C:\\Users\\nbuis\\git\\ecse223-project--group-04\\ca.mcgill.ecse223.quoridor\\src\\main\\" + filename + ".txt";
+		String pathName = "C:\\Users\\Alexander\\iteration2\\ecse223-project--group-04\\ca.mcgill.ecse223.quoridor\\src\\main\\" + filename + ".txt";
 		file = new File(pathName);
 		boolean FileExists = false;
 		try {
