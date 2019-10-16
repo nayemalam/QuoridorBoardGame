@@ -1,14 +1,70 @@
-
-
 package ca.mcgill.ecse223.quoridor.controller;
 
-import java.sql.Time;
+
+import javax.swing.text.Utilities;
 
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.model.*;
+import ca.mcgill.ecse223.quoridor.utilities.*;
+
+import java.sql.Time;
 
 public class QuoridorController {
 
+
+
+	/**
+	 * Method to capture the time at which the clock is stopped
+	 * Used as a helper method
+	 * @param
+	 * @author Ousmane Baricisse
+	 * @return time in seconds
+	 */
+	public static long stopClock() throws Exception {
+		try {
+			return TimerUtilities.getCurrentTime();
+		} catch (Exception e) {
+			throw new UnsupportedOperationException();
+		}
+
+	}
+
+	/**
+	 * This method, according to the Gherkin definition, should Complete 
+	 * a player move from the given position to the next tile.
+	 * returns true if the move was completed successfully.
+	 * @param quoridor
+	 * @author Ousmane Baricisse
+	 * @param quoridor
+	 * @param destination
+	 * @return boolean
+	 * @throws
+	 */
+	public static boolean completeMove(Quoridor quoridor) {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * @author Ousmane Baricisse
+	 * @return
+	 */
+	public static String showPlayerTurn() {
+		throw new UnsupportedOperationException();
+	}
+
+
+
+	/**
+	 * This method, according to the Gherkin definition, should grab wall
+	 * from the stock and add it to the board
+	 * Need to know the player and the board as parameters
+	 * @param board, player
+	 * @author Ousmane Baricisse
+	 * @return
+	 */
+	public static void grabWall(Board board, Player player) {
+		// TODO Auto-generated method stub
+	}
 	/**
 	 * Method - initializeNewGame()
 	 * 
@@ -257,9 +313,9 @@ public class QuoridorController {
 	
 	/**
 	 * Method that initializes the Validation of the position, 
-	 * @param PawnPosition/WallPosition
-	 * @param Direction (if wall)
+	 * @param PawnPosition
 	 * @throws UnsupportedOperationException
+	 * @returns true/false
 	 * @author Alexander Legouverneur
 	 */
 	public static boolean InitializeValidatePosition(int row, int col) throws UnsupportedOperationException {
@@ -268,9 +324,9 @@ public class QuoridorController {
 	
 	/**
 	 * Method that returns if the position is valid by calling InitializeVaidatePostion()
-	 * @param newPos
+	 * @param pawn position
 	 * @throws UnsupportedOperationException
-	 * @returns ok/error
+	 * @returns ok/error strings
 	 * @author Alexander Legouverneur
 	 */
 	public static String ValidatePawnPosition(int row, int col) throws UnsupportedOperationException {
@@ -278,7 +334,7 @@ public class QuoridorController {
 	}
 	/**
 	 * Method that initiates the validation of the position
-	 * @param wallPos
+	 * @param wallPosition
 	 * @param Walldir
 	 * @return true/false true for initialized validation
 	 * @throws UnsupportedOperationException
@@ -290,27 +346,20 @@ public class QuoridorController {
 	
 	/**
 	 * Method that returns the direction of the wall after validation
-	 * @param aWall
+	 * @param WallPosition
+	 * @param Wall Direction
 	 * @return direction -of the wall
 	 * @throws UnsupportedOperationException
 	 * @author Alexander Legouverneur
 	 */
-	public static Direction ValidateWall(int row, int col, String dir ) throws UnsupportedOperationException{
+	public static String ValidateWall(int row, int col, String dir ) throws UnsupportedOperationException{
 		throw new UnsupportedOperationException();
 	}
 	
 	/**
-	 * Returns the Tile of reference of the wall after the position is validated
-	 * @param aWall
-	 * @return Tile -where the wall starts
-	 * @throws UnsupportedOperationException
-	 */
-	public static Tile ValidateWallTile(int row, int col ) throws UnsupportedOperationException{
-		throw new UnsupportedOperationException();
-	}
-	/**
 	 * Method that checks if wall Position is valid
-	 * @param aWall
+	 * @param WallPosition
+	 * @param Wall Direction
 	 * @return true/false
 	 * @throws UnsupportedOperationException
 	 * @author Alexander Legouverneur
@@ -347,9 +396,9 @@ public class QuoridorController {
 	 * This method is called by VerifyMoveWallOnSide if the move is illegal. Returns a string "illegal", and makes
 	 * sure the coordinates of the wall remain the same as before
 	 * @param aWall
-	 * @return
+	 * @return String
 	 * @throws UnsupportedOperationException
-   *@author Alexander Legouverneur
+	 *@author Alexander Legouverneur
 	 */
 	public static String IllegalWallMove(Wall aWall) throws UnsupportedOperationException{
 		throw new UnsupportedOperationException();
@@ -416,5 +465,24 @@ public class QuoridorController {
 	public static Game loadSavedGame(String filename) {
 		throw new UnsupportedOperationException();
 	}
+	
+	/**
+	 * Method used to rotate a wall
+	 * @author Iyatan Atchoro
+	 */
+	public static void rotateWall() throws Exception{
+		
+		throw new UnsupportedOperationException();
+		
+	}
+	/**
+	 * Method used to drop a wall
+	 * @author Iyatan Atchoro
+	 */
+
+	public static void dropWall() {	
+		throw new UnsupportedOperationException();
+	}
 }
+
 

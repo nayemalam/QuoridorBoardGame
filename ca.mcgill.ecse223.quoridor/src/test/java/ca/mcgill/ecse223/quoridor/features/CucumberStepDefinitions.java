@@ -20,16 +20,20 @@ import ca.mcgill.ecse223.quoridor.model.Tile;
 import ca.mcgill.ecse223.quoridor.model.User;
 import ca.mcgill.ecse223.quoridor.model.Wall;
 import ca.mcgill.ecse223.quoridor.model.WallMove;
+
 import cucumber.api.PendingException;
+
 import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.fail;
+
 
 public class CucumberStepDefinitions {
 	private Player currentPlayer;
@@ -130,6 +134,10 @@ public class CucumberStepDefinitions {
 	 * are implemented
 	 * 
 	 */
+
+	// ***********************************************
+	// END OF CODE - Ousmane Baricisse
+	// ***********************************************
 
 	// ***********************************************
 	// Clean up
