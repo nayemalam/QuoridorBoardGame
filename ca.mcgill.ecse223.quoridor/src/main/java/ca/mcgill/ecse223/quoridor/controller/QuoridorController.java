@@ -3,6 +3,8 @@ package ca.mcgill.ecse223.quoridor.controller;
 
 import javax.swing.text.Utilities;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.utilities.*;
@@ -310,7 +312,7 @@ public class QuoridorController {
 	}
 
 
-	
+
 	/**
 	 * Method that initializes the Validation of the position, 
 	 * @param PawnPosition
@@ -318,19 +320,25 @@ public class QuoridorController {
 	 * @returns true/false
 	 * @author Alexander Legouverneur
 	 */
-	public static boolean InitializeValidatePosition(int row, int col) throws UnsupportedOperationException {
-		throw new UnsupportedOperationException();
+	public static boolean InitializeValidatePosition(int row, int col) {
+		if(row>=1 && row<=9 && col>=1 && col<=9) {
+			return true;
+		}
+		else return false;
 	}
-	
+
 	/**
 	 * Method that returns if the position is valid by calling InitializeVaidatePostion()
-	 * @param pawn position
+	 * @param true/false from the method above
 	 * @throws UnsupportedOperationException
 	 * @returns ok/error strings
 	 * @author Alexander Legouverneur
 	 */
-	public static String ValidatePawnPosition(int row, int col) throws UnsupportedOperationException {
-		throw new UnsupportedOperationException();
+	public static String ValidatePawnPosition(int row, int col) {
+		if(InitializeValidatePosition(row, col) == true) {
+			return "ok";
+		}
+		else return "error";
 	}
 	/**
 	 * Method that initiates the validation of the position
@@ -340,10 +348,73 @@ public class QuoridorController {
 	 * @throws UnsupportedOperationException
 	 * @author Alexander Legouverneur
 	 */
-	public static boolean InitiatePosValidation(int row, int col, String Walldir) throws UnsupportedOperationException{
-		throw new UnsupportedOperationException();
+	public static boolean InitiatePosValidation(int row, int col, String Walldir, @Nullable Wall wall) {
+		Quoridor q = QuoridorApplication.getQuoridor();
+		if(row>=1 && row<=9 && col>=1 && col<=9) {
+			if(wall != null) {
+				Direction dir1;
+				int col1;
+				int row1;
+				for(int i = 0; i<=q.getCurrentGame().getCurrentPosition().numberOfBlackWallsOnBoard()+q.getCurrentGame().getCurrentPosition().numberOfWhiteWallsOnBoard(); i++){
+					if(wall.getId() != i) {
+					if(i<=9) {
+						row1 = q.getCurrentGame().getBlackPlayer().getWall(i).getMove().getTargetTile().getRow();
+						col1 = q.getCurrentGame().getBlackPlayer().getWall(i).getMove().getTargetTile().getColumn();
+						dir1 = q.getCurrentGame().getBlackPlayer().getWall(i).getMove().getWallDirection();
+					}
+					else {
+						row1 = q.getCurrentGame().getWhitePlayer().getWall(i).getMove().getTargetTile().getRow();
+						col1 = q.getCurrentGame().getWhitePlayer().getWall(i).getMove().getTargetTile().getColumn();
+						dir1 = q.getCurrentGame().getWhitePlayer().getWall(i).getMove().getWallDirection();
+					}
+					
+
+					if(dir1 == Direction.Horizontal) {
+						if(Walldir == "horizontal") {
+							if(col1 == col && row1 == row) {
+								break;
+							}
+							if(col1 ==col+1 && row1 == row) {
+								break;
+							}
+							if(col1 == col-1 && row1 == row) {
+								break;
+							}
+						}
+						else {
+							if(col1 == col+1 && row1 == row-1) {
+								break;
+							}
+						}
+					}
+					else {
+						if(Walldir == "horizontal") {
+							if(row1 == row+1 && col1 == col) {
+								break;
+							}
+							if( row1 == row-1 && col1 == col) {
+								break;
+							}
+							if(col1==col && row1 == row) {
+								break;
+							}
+						}
+						else {
+							if(col1 == col-1 && row1 == row+1) {
+								break;
+							}
+						}
+					}
+				}
+				}
+				return true;
+			
+			}
+			else return true;
+		}
+		else return false;
 	}
-	
+
 	/**
 	 * Method that returns the direction of the wall after validation
 	 * @param WallPosition
@@ -352,10 +423,13 @@ public class QuoridorController {
 	 * @throws UnsupportedOperationException
 	 * @author Alexander Legouverneur
 	 */
-	public static String ValidateWall(int row, int col, String dir ) throws UnsupportedOperationException{
-		throw new UnsupportedOperationException();
+	public static String ValidateWall(int row, int col, String dir) {
+		if(InitiatePosValidation(row, col, dir, null) == true) {
+			return "ok";
+		}
+		else return "error";
 	}
-	
+
 	/**
 	 * Method that checks if wall Position is valid
 	 * @param WallPosition
@@ -364,11 +438,11 @@ public class QuoridorController {
 	 * @throws UnsupportedOperationException
 	 * @author Alexander Legouverneur
 	 */
-	public static boolean CheckWallValid(int row, int col, String dir) throws UnsupportedOperationException{
+	public static boolean CheckWallValid(int row, int col, String dir, Wall wall) throws UnsupportedOperationException{
 		throw new UnsupportedOperationException();
 	}
-	
-//end of validate position
+
+	//end of validate position
 	/**
 	 * Checks if the wall is on the side edge of the board
 	 * @param aWall
@@ -379,7 +453,7 @@ public class QuoridorController {
 	public static boolean CheckWallSideEdge(Wall aWall) throws UnsupportedOperationException{
 		throw new UnsupportedOperationException();
 	}
-	
+
 	/**
 	 * Methods that checks if the move on the specified side is possible, with if statements to see if the move is 
 	 * legal, if yes proceed to the move otherwise, call the method IlllegalWallMove()
@@ -391,7 +465,7 @@ public class QuoridorController {
 	public static void VerifyMoveWallOnSide(Wall aWall, String side) throws UnsupportedOperationException{
 		throw new UnsupportedOperationException();
 	}
-	
+
 	/**
 	 * This method is called by VerifyMoveWallOnSide if the move is illegal. Returns a string "illegal", and makes
 	 * sure the coordinates of the wall remain the same as before
@@ -403,7 +477,7 @@ public class QuoridorController {
 	public static String IllegalWallMove(Wall aWall) throws UnsupportedOperationException{
 		throw new UnsupportedOperationException();
 	}
-  	/**
+	/**
 	 * Method - saveGameFile(String filename, Game game)
 	 * 
 	 * Controller method used to save the game as a text file
@@ -416,7 +490,7 @@ public class QuoridorController {
 	 * 
 	 */
 	public static String saveGameFile(String filename) {
-		
+
 		throw new UnsupportedOperationException();
 	}
 	/**
@@ -431,10 +505,10 @@ public class QuoridorController {
 	 * 
 	 */
 	public static String overWriteFile(String filename) {
-		
+
 		throw new UnsupportedOperationException();
 	}
-	
+
 	/**
 	 * Method - cancelOverWriteFile()
 	 * 
@@ -465,15 +539,15 @@ public class QuoridorController {
 	public static Game loadSavedGame(String filename) {
 		throw new UnsupportedOperationException();
 	}
-	
+
 	/**
 	 * Method used to rotate a wall
 	 * @author Iyatan Atchoro
 	 */
 	public static void rotateWall() throws Exception{
-		
+
 		throw new UnsupportedOperationException();
-		
+
 	}
 	/**
 	 * Method used to drop a wall
