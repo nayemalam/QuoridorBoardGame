@@ -39,7 +39,7 @@ public class User
     {
       throw new RuntimeException("Unable to create user due to quoridor");
     }
-  }
+  } 
 
   //------------------------
   // INTERFACE

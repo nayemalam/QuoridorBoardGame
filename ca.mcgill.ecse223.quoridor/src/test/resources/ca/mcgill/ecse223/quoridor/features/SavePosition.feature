@@ -3,7 +3,7 @@ Feature: Save Position
 
   Background: 
     Given The game is running
-@SavePosition1
+
   Scenario Outline: Save position
   	Given No file "<filename>" exists in the filesystem
     When The user initiates to save the game with name "<filename>"
@@ -12,7 +12,7 @@ Feature: Save Position
     Examples: 
       | filename           |
       | save_game_test.dat |
-@SavePosition2
+
   Scenario Outline: Save position with existing file name
   	Given File "<filename>" exists in the filesystem
     When The user initiates to save the game with name "<filename>"
@@ -22,7 +22,7 @@ Feature: Save Position
     Examples: 
       | filename           |
       | save_game_test.dat |
-@SavePosition3
+
   Scenario Outline: Save position cancelled due to existing file name
   	Given File "<filename>" exists in the filesystem
     When The user initiates to save the game with name "<filename>"
