@@ -372,36 +372,36 @@ public class QuoridorController {
 					if(dir1 == Direction.Horizontal) {
 						if(Walldir == "horizontal") {
 							if(col1 == col && row1 == row) {
-								break;
+								return false;
 							}
 							if(col1 ==col+1 && row1 == row) {
-								break;
+								return false;
 							}
 							if(col1 == col-1 && row1 == row) {
-								break;
+								return false;
 							}
 						}
 						else {
 							if(col1 == col+1 && row1 == row-1) {
-								break;
+								return false;
 							}
 						}
 					}
 					else {
 						if(Walldir == "horizontal") {
 							if(row1 == row+1 && col1 == col) {
-								break;
+								return false;
 							}
 							if( row1 == row-1 && col1 == col) {
-								break;
+								return false;
 							}
 							if(col1==col && row1 == row) {
-								break;
+								return false;
 							}
 						}
 						else {
 							if(col1 == col-1 && row1 == row+1) {
-								break;
+								return false;
 							}
 						}
 					}
@@ -438,8 +438,11 @@ public class QuoridorController {
 	 * @throws UnsupportedOperationException
 	 * @author Alexander Legouverneur
 	 */
-	public static boolean CheckWallValid(int row, int col, String dir, Wall wall) throws UnsupportedOperationException{
-		throw new UnsupportedOperationException();
+	public static boolean CheckWallValid(int row, int col, String dir, Wall wall) {
+		if(InitiatePosValidation(row, col, dir, wall) == true) {
+			return true;
+		}
+		else return false;
 	}
 
 	//end of validate position
@@ -450,8 +453,36 @@ public class QuoridorController {
 	 * @throws UnsupportedOperationException
 	 * @author Alexander Legouverneur
 	 */
-	public static boolean CheckWallSideEdge(Wall aWall) throws UnsupportedOperationException{
-		throw new UnsupportedOperationException();
+	public static boolean CheckWallSideEdge(Wall aWall, String side) {
+		int row = aWall.getMove().getTargetTile().getRow();
+		int col = aWall.getMove().getTargetTile().getColumn();
+		Direction dir = aWall.getMove().getWallDirection();
+		
+		if(col == 1 && side == "left" && dir == Direction.Vertical) {
+			return true;
+		}
+		if(col == 8 && side == "right" && dir == Direction.Horizontal) {
+			return true;
+		}
+		if(col == 1 && side == "left" && dir == Direction.Horizontal) {
+			return true;
+		}
+		if(col == 8 && side == "right"&& dir == Direction.Vertical) {
+			return true;
+		}
+		if(row == 8 && side == "down" && dir == Direction.Vertical) {
+			return true;
+		}
+		if(row == 1 && side == "up" && dir == Direction.Vertical) {
+			return true;
+		}
+		if (row == 1 && side == "up" && dir == Direction.Horizontal) {
+			return true;
+		}
+		if(row == 8 && side == "down"&& dir == Direction.Horizontal) {
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -462,8 +493,38 @@ public class QuoridorController {
 	 * @throws UnsupportedOperationException
 	 * @author Alexander Legouverneur
 	 */
-	public static void VerifyMoveWallOnSide(Wall aWall, String side) throws UnsupportedOperationException{
-		throw new UnsupportedOperationException();
+	public static void VerifyMoveWallOnSide(Wall aWall, String side){
+		Quoridor q = QuoridorApplication.getQuoridor();
+		
+		int row = aWall.getMove().getTargetTile().getRow();
+		int col = aWall.getMove().getTargetTile().getColumn();
+		Direction dir = aWall.getMove().getWallDirection();
+		
+		if(CheckWallSideEdge(aWall,side) == true) {
+			IllegalWallMove();
+		}
+		else {
+			if(side == "left") {
+				Tile aTile = new Tile(row, col-1,q.getBoard());
+				WallMove aMove = new WallMove(1,1,q.getCurrentGame().getBlackPlayer(), aTile, q.getCurrentGame(), dir, aWall);
+				aWall.setMove(aMove);
+			}
+			if(side == "right") {
+				Tile aTile = new Tile(row, col+1,q.getBoard());
+				WallMove aMove = new WallMove(1,1,q.getCurrentGame().getBlackPlayer(), aTile, q.getCurrentGame(), dir, aWall);
+				aWall.setMove(aMove);
+			}
+			if(side == "up") {
+				Tile aTile = new Tile(row-1, col,q.getBoard());
+				WallMove aMove = new WallMove(1,1,q.getCurrentGame().getBlackPlayer(), aTile, q.getCurrentGame(), dir, aWall);
+				aWall.setMove(aMove);
+			}
+			if(side == "down") {
+				Tile aTile = new Tile(row+1, col,q.getBoard());
+				WallMove aMove = new WallMove(1,1,q.getCurrentGame().getBlackPlayer(), aTile, q.getCurrentGame(), dir, aWall);
+				aWall.setMove(aMove);
+			}
+		}
 	}
 
 	/**
@@ -474,8 +535,8 @@ public class QuoridorController {
 	 * @throws UnsupportedOperationException
 	 *@author Alexander Legouverneur
 	 */
-	public static String IllegalWallMove(Wall aWall) throws UnsupportedOperationException{
-		throw new UnsupportedOperationException();
+	public static String IllegalWallMove() {
+		return "Illegal";
 	}
 	/**
 	 * Method - saveGameFile(String filename, Game game)

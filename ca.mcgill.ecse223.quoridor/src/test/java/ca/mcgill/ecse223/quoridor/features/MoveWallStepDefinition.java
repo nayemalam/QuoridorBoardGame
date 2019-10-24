@@ -60,10 +60,10 @@ public class MoveWallStepDefinition {
 	 * @author Alexander Legouverneur
 	 */
 	@And("The wall candidate is not at the {string} edge of the board")
-	public void TheWallCandidateIsNotAtTheSideEdgeOfTheBoard(String direction) {
+	public void TheWallCandidateIsNotAtTheSideEdgeOfTheBoard(String side) {
 		//access the system
 		Quoridor q = QuoridorApplication.getQuoridor();	
-		QuoridorController.CheckWallSideEdge(q.getCurrentGame().getBlackPlayer().getWall(0));
+		QuoridorController.CheckWallSideEdge(q.getCurrentGame().getBlackPlayer().getWall(0), side);
 	}
 	
 	/**
@@ -113,7 +113,7 @@ public class MoveWallStepDefinition {
 	@And("The wall candidate is at the {string} edge of the board")
 	public void TheWallCandidateIsAtTheEdge1(String side) {
 		Quoridor q = QuoridorApplication.getQuoridor();	
-		QuoridorController.CheckWallSideEdge(q.getCurrentGame().getBlackPlayer().getWall(0));
+		QuoridorController.CheckWallSideEdge(q.getCurrentGame().getBlackPlayer().getWall(0), side);
 	}
 	
 	/**
@@ -125,6 +125,6 @@ public class MoveWallStepDefinition {
 		//access system
 		String aString = new String("Illegal");
 		Quoridor q = QuoridorApplication.getQuoridor();
-		assertEquals(aString, QuoridorController.IllegalWallMove(q.getCurrentGame().getBlackPlayer().getWall(0)));			
+		assertEquals(aString, QuoridorController.IllegalWallMove());			
 	}
 }
