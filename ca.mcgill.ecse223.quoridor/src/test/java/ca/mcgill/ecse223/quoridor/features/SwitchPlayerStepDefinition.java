@@ -88,7 +88,7 @@ public class SwitchPlayerStepDefinition {
 	@When("Player {string} completes his move")
 	public void player_completes_his_move(String string) {
 		// Write code here that turns the phrase above into concrete actions
-		QuoridorController.completeMove(QuoridorApplication.getQuoridor(), new Destination(3, Direction.Horizontal, this.currentPlayer));
+		QuoridorController.completeMove(QuoridorApplication.getQuoridor());
 	}
 
 	/**
