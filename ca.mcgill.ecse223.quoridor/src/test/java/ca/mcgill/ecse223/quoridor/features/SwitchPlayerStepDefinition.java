@@ -25,6 +25,7 @@ import io.cucumber.java.en.When;
  */
 
 public class SwitchPlayerStepDefinition {
+	
 	private static Player nextPlayer; // keeps track of next Player
 	private static Player currentPlayer; // keeps track of current Player
 
