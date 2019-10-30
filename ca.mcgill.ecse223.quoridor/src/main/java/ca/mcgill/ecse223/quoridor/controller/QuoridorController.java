@@ -454,9 +454,7 @@ public class QuoridorController {
 		}
 		else return false;
 	}
- public static void testMethod(String string) {
-	 System.out.println(string);
- }
+ 
 	//end of validate position
 	/**
 	 * Checks if the wall is on the side edge of the board
@@ -507,20 +505,20 @@ public class QuoridorController {
 	 * @throws UnsupportedOperationException
 	 * @author Alexander Legouverneur
 	 */
-	public static void verifyMoveWallOnSide(Wall aWall, String side){
+	public static void verifyMoveWallOnSide(Wall aWall, String side, int index){
 		Quoridor q = QuoridorApplication.getQuoridor();
 		
 		try {
-			aWall.getOwner().getWall(0).getMove().getTargetTile().getRow();
-			aWall.getOwner().getWall(0).getMove().getTargetTile().getColumn();
-			aWall.getOwner().getWall(0).getMove().getWallDirection();
+			aWall.getOwner().getWall(index).getMove().getTargetTile().getRow();
+			aWall.getOwner().getWall(index).getMove().getTargetTile().getColumn();
+			aWall.getOwner().getWall(index).getMove().getWallDirection();
 		} catch(Exception e) {
 			System.out.println("THE WALL IS NOT PLACED: ");
 		}
 		
-		int row =aWall.getOwner().getWall(0).getMove().getTargetTile().getRow();
-		int col = aWall.getOwner().getWall(0).getMove().getTargetTile().getColumn();
-		Direction dir = aWall.getOwner().getWall(0).getMove().getWallDirection();
+		int row =aWall.getOwner().getWall(index).getMove().getTargetTile().getRow();
+		int col = aWall.getOwner().getWall(index).getMove().getTargetTile().getColumn();
+		Direction dir = aWall.getOwner().getWall(index).getMove().getWallDirection();
 
 		if(checkWallSideEdge(aWall,side) == true) {
 			illegalWallMove();
@@ -561,6 +559,43 @@ public class QuoridorController {
 	 */
 	public static String illegalWallMove() {
 		return "Illegal";
+	}
+	
+	/**
+	 * This method generalizes the wall move. It will go through all the possible errors by calling other methods.
+	 * To be sure that the wall move is possible, and if yes, execute the wall move. 
+	 * 
+	 * @param row  		row of the target tile for the move
+	 * @param col  		column of the target tile for the move
+	 * @param dir  		direction of the move
+	 * @param aWall 	wall to be moved 
+	 * @param player	player to whom the wall belongs
+	 */
+	public static void WallMove(int row, int col, Direction dir, Wall aWall,Player player) {
+		
+		Quoridor q = QuoridorApplication.getQuoridor();
+		boolean pos;
+		Tile aTile = new Tile(row, col, q.getBoard());
+		
+		if(dir.equals(Direction.Vertical)) {
+			pos = initiatePosValidation(row, col, "vertical",aWall, aWall.getId());
+		}
+		else {
+			pos = initiatePosValidation(row, col, "horizontal",aWall, aWall.getId());
+		}
+		if(pos == false) {
+			illegalWallMove();
+		}
+		if(aWall.hasMove() == false && pos == true) {
+			
+			new WallMove(1,1,player,aTile,q.getCurrentGame(), dir, aWall);	
+		}
+		else if(aWall.hasMove() == true && pos == true) {
+			
+			aWall.getMove().setTargetTile(aTile);
+			aWall.getMove().setWallDirection(dir);
+		}
+		
 	}
 	/**
 	 * Method - saveGameFile(String filename, Game game)
