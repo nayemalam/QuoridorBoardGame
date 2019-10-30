@@ -121,7 +121,7 @@ public class CucumberStepDefinitions {
 		initQuoridorAndBoard();
 		ArrayList<Player> players = createUsersAndPlayers("user1", "user2");
 		// TODO: Fix this
-		new Game(GameStatus.Initializing, MoveMode.PlayerMove, currentPlayer, currentPlayer, QuoridorApplication.getQuoridor());
+		new Game(GameStatus.Initializing, MoveMode.PlayerMove, QuoridorApplication.getQuoridor());
 	}
 	
 	// ***********************************************
@@ -228,7 +228,7 @@ public class CucumberStepDefinitions {
 		Tile player2StartPos = quoridor.getBoard().getTile(44);
 		
 		// TODO: Fix this
-		Game game = new Game(GameStatus.Running, MoveMode.PlayerMove, currentPlayer, currentPlayer, quoridor);
+		Game game = new Game(GameStatus.Running, MoveMode.PlayerMove, quoridor);
 		game.setWhitePlayer(players.get(0));
 		game.setBlackPlayer(players.get(1));
 
