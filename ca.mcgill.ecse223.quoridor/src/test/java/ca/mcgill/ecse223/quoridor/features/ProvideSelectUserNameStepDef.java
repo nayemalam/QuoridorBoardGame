@@ -92,7 +92,7 @@ public class ProvideSelectUserNameStepDef {
         Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
 
         if(color.equals("white")){
-            assertEquals(username, blackPlayer.getUser().getName());
+            assertEquals(username, whitePlayer.getUser().getName());
         }
         else if (color.equals("black")) {
             assertEquals(username,"Marton");

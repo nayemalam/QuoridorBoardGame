@@ -20,20 +20,9 @@ import ca.mcgill.ecse223.quoridor.model.Tile;
 import ca.mcgill.ecse223.quoridor.model.User;
 import ca.mcgill.ecse223.quoridor.model.Wall;
 import ca.mcgill.ecse223.quoridor.model.WallMove;
-
-import cucumber.api.PendingException;
-
-import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.fail;
-
 
 public class CucumberStepDefinitions {
 
@@ -120,11 +109,9 @@ public class CucumberStepDefinitions {
 	public void aNewGameIsInitializing() throws Throwable {
 		initQuoridorAndBoard();
 		ArrayList<Player> players = createUsersAndPlayers("user1", "user2");
-		// TODO: Fix this -- I think we fixed it (Nayem)
-		Player whitePlayer = players.get(0);
-		Player blackPlayer = players.get(1);
-		new Game(GameStatus.Initializing, MoveMode.PlayerMove, whitePlayer, blackPlayer, QuoridorApplication.getQuoridor());
-
+		Game game = new Game(GameStatus.Initializing, MoveMode.PlayerMove, QuoridorApplication.getQuoridor());
+		game.setWhitePlayer(players.get(0));
+		game.setBlackPlayer(players.get(1));
 	}
 
 	// ***********************************************
@@ -231,7 +218,7 @@ public class CucumberStepDefinitions {
 		Tile player2StartPos = quoridor.getBoard().getTile(44);
 		
 		// TODO: Fix this
-		Game game = new Game(GameStatus.Running, MoveMode.PlayerMove, null, null, quoridor);
+		Game game = new Game(GameStatus.Running, MoveMode.PlayerMove, quoridor);
 		game.setWhitePlayer(players.get(0));
 		game.setBlackPlayer(players.get(1));
 

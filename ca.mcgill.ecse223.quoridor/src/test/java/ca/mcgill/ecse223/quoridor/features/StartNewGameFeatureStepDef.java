@@ -49,7 +49,6 @@ public class StartNewGameFeatureStepDef {
 	 */
 	@And("White player chooses a username")
 	public void whitePlayerChoosesUserName() {
-
 		Boolean nameSetCorrectly = QuoridorController.setWhitePlayerUserName(TestingUtilities.WHITE_PLAYER_NAME);
 		if (!nameSetCorrectly) {
 			fail();

@@ -4,8 +4,10 @@ import javax.swing.text.Utilities;
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.utilities.*;
+import sun.util.resources.ext.CurrencyNames_da_DK;
 
 import java.sql.Time;
+import java.util.List;
 
 public class QuoridorController {
 
@@ -139,15 +141,21 @@ public class QuoridorController {
 	 * @throws Exception - throws exception if users list is empty
 	 * @author Nayem Alam
 	 */
-	public static void selectExistingUserName(String username) throws Exception {
+	public static List<User> selectExistingUserName(String username) throws Exception {
 		Player blackPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
 		Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
-		if(!QuoridorApplication.getQuoridor().getUsers().isEmpty()) {
-			blackPlayer.getUser().setName(username);
-			whitePlayer.getUser().setName(username);
-		} else {
-			throw new Exception("There are no existing users in the list.");
+		for(int i=0; i<QuoridorApplication.getQuoridor().getUsers().size(); i++) {
+			User user = QuoridorApplication.getQuoridor().getUsers().get(i);
+			user.setName(username);
 		}
+		return QuoridorApplication.getQuoridor().getUsers();
+
+//		if(!QuoridorApplication.getQuoridor().getUsers().isEmpty()) {
+//			blackPlayer.getUser().setName(username);
+//			whitePlayer.getUser().setName(username);
+//		} else {
+//			throw new Exception("There are no existing users in the list.");
+//		}
 	}
 
 	/**
