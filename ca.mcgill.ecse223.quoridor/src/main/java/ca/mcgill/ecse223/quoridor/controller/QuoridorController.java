@@ -78,8 +78,7 @@ public class QuoridorController {
 	 * @throws RuntimeException - If the amount of users is insufficient
 	 */
 	public static Boolean initializeNewGame(Quoridor quoridor) throws Exception {
-		//throw new UnsupportedOperationException();
-		Boolean quoridorIsValid = !quoridor.equals(null) && !quoridor.hasCurrentGame();
+		Boolean quoridorIsValid = !quoridor.equals(null);
 		
 		if(!quoridorIsValid) {
 			throw new IllegalArgumentException("This Quoridor already contains a game, or the Quoridor is null");
@@ -117,7 +116,6 @@ public class QuoridorController {
 	 * @author Tristan Bouchard
 	 */
 	public static Boolean startClock() throws Exception {
-		//throw new UnsupportedOperationException();
 		Quoridor currentQuor = QuoridorApplication.getQuoridor();
 		if(!currentQuor.hasCurrentGame()) {
 			throw new RuntimeException("There is no current game to start! Please create a game first.");
@@ -130,7 +128,7 @@ public class QuoridorController {
 		Player currentBlackPlayer = currentGame.getBlackPlayer();
 		Player currentPlayer = currentBlackPlayer.hasNextPlayer() ? currentBlackPlayer: currentGame.getWhitePlayer(); 
 		
-		Time remianingTime = currentPlayer.getRemainingTime();
+		Time remainingTime = currentPlayer.getRemainingTime();
 		// TODO: WTF how do I start the time???
 		
 		return true;
