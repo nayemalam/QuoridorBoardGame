@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 public class LoadPositionStepDef {
 
+	
 	private QuoridorController QC = new QuoridorController();
 	private Game game;	
 	private Exception thrownException;
