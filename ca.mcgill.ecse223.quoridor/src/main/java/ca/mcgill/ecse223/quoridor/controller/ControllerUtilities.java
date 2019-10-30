@@ -16,6 +16,7 @@ public class ControllerUtilities {
 	public static final int WHITE_TILE_INDEX = 36;
 	public static final int BLACK_TILE_INDEX = 44;
 	public static final int TOTAL_WALL_STOCK_AT_START = 10;
+	
 	// ***************************************
 	
 	// ***************************************

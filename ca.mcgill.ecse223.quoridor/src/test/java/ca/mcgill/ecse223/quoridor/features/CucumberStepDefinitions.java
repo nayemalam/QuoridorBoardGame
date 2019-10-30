@@ -1,3 +1,4 @@
+
 package ca.mcgill.ecse223.quoridor.features;
 
 import java.sql.Time;
@@ -19,19 +20,23 @@ import ca.mcgill.ecse223.quoridor.model.Tile;
 import ca.mcgill.ecse223.quoridor.model.User;
 import ca.mcgill.ecse223.quoridor.model.Wall;
 import ca.mcgill.ecse223.quoridor.model.WallMove;
+
 import cucumber.api.PendingException;
+
 import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.fail;
 
+
 public class CucumberStepDefinitions {
-	private Player currentPlayer;
+
 	// ***********************************************
 	// Background step definitions
 	// ***********************************************
@@ -117,7 +122,7 @@ public class CucumberStepDefinitions {
 		ArrayList<Player> players = createUsersAndPlayers("user1", "user2");
 		new Game(GameStatus.Initializing, MoveMode.PlayerMove, players.get(0), players.get(1), QuoridorApplication.getQuoridor());
 	}
-	
+
 	// ***********************************************
 	// Scenario and scenario outline step definitions
 	// ***********************************************
@@ -129,6 +134,10 @@ public class CucumberStepDefinitions {
 	 * are implemented
 	 * 
 	 */
+
+	// ***********************************************
+	// END OF CODE - Ousmane Baricisse
+	// ***********************************************
 
 	// ***********************************************
 	// Clean up
@@ -156,7 +165,7 @@ public class CucumberStepDefinitions {
 	// ***********************************************
 
 	// Place your extracted methods below
-	
+
 	private void initQuoridorAndBoard() {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
 		Board board = new Board(quoridor);
