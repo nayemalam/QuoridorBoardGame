@@ -4,6 +4,7 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import java.awt.Panel;
 
 public class QuoridorPage {
 
@@ -40,9 +41,5 @@ public class QuoridorPage {
 		frame.setBounds(100, 100, 1165, 693);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-		
-		JLabel lblItWorked = new JLabel("IT WORKED");
-		lblItWorked.setBounds(280, 95, 303, 36);
-		frame.getContentPane().add(lblItWorked);
 	}
 }

@@ -518,7 +518,6 @@ public class QuoridorController {
 		
 		int row =aWall.getOwner().getWall(index).getMove().getTargetTile().getRow();
 		int col = aWall.getOwner().getWall(index).getMove().getTargetTile().getColumn();
-		Direction dir = aWall.getOwner().getWall(index).getMove().getWallDirection();
 
 		if(checkWallSideEdge(aWall,side) == true) {
 			illegalWallMove();
