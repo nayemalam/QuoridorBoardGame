@@ -9,7 +9,10 @@ import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.utilities.*;
 
+import java.io.*;
+
 import java.sql.Time;
+import java.util.List;
 
 public class QuoridorController {
 
@@ -609,9 +612,86 @@ public class QuoridorController {
 	 * @author Nicolas Buisson
 	 * 
 	 */
-	public static String saveGameFile(String filename) {
+	public static String saveGamePosition(String filename) throws IOException {
+		
+		String gameData = "";
+		String whiteData = "W: ";
+		String blackData = "B: ";
+		String seperator = ", ";
+		String [] columnArray = new String [] {"no 0 column","a","b","c","d","e","f","g","h","i"};
+		int whitePawnColumn = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getColumn();
+		int whitePawnRow = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getRow();
+		int blackPawnColumn = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getColumn();
+		int blackPawnRow = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getRow();
+		
+		whiteData = whiteData + columnArray[whitePawnColumn] + String.valueOf(whitePawnRow);
+		blackData = blackData + columnArray[blackPawnColumn] + String.valueOf(blackPawnRow);
+		
+		List<Wall> whiteWallsOnBoard = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getWhiteWallsOnBoard();
+		List<Wall> blackWallsOnBoard = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getBlackWallsOnBoard();
+	
+		for(int i = 0; i < whiteWallsOnBoard.size(); i++) {
+			int wallColumn = whiteWallsOnBoard.get(i).getMove().getTargetTile().getColumn();
+			int wallRow = whiteWallsOnBoard.get(i).getMove().getTargetTile().getRow();
+			String wallOrientation = whiteWallsOnBoard.get(i).getMove().getWallDirection().name();
+			if (wallOrientation.equals("Vertical")) {
+				wallOrientation = "v";
+			}
+			else {
+				wallOrientation = "h";
+			}
+			whiteData = whiteData + seperator + columnArray[wallColumn] + String.valueOf(wallRow) + wallOrientation;
+		}
+		
+		for(int i = 0; i < blackWallsOnBoard.size(); i++) {
+			int wallColumn = blackWallsOnBoard.get(i).getMove().getTargetTile().getColumn();
+			int wallRow = blackWallsOnBoard.get(i).getMove().getTargetTile().getRow();
+			String wallOrientation = blackWallsOnBoard.get(i).getMove().getWallDirection().name();
+			if (wallOrientation.equals("Vertical")) {
+				wallOrientation = "v";
+			}
+			else {
+				wallOrientation = "h";
+			}
+			blackData = blackData + seperator + columnArray[wallColumn] + String.valueOf(wallRow) + wallOrientation;
+		}
+		
+		//need to figure out whose turn it is
+		//to find order of data saved
+		boolean playerToPlay = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer().hasNextPlayer();
+		//true for white
+		//false for black
+		if( playerToPlay = true) {
+			gameData = whiteData + "\n" + blackData;
+		}
+		else {
+			gameData = blackData + "\n" + whiteData;
+		}
+		
+		File file = new File(filename);
+		boolean fileExists = file.exists();
+		
+		//this if statement takes care of overwriting
+		//if file exists, delete it
+		//to recreate it with new content
+		//if it doesn't exist, just create it
+		if(fileExists = true) {
+			file.delete();
+		}
 
-		throw new UnsupportedOperationException();
+		fileExists = file.createNewFile();
+		BufferedWriter bW = null;
+		
+		if(fileExists = true) {
+
+			bW = new BufferedWriter(new FileWriter(file));
+			bW.write(gameData);
+
+			if(bW != null) {
+				bW.close();
+			} 
+		}
+		return gameData;
 	}
 	/**
 	 * Method - overWriteFile()
@@ -624,9 +704,11 @@ public class QuoridorController {
 	 * @author Nicolas Buisson
 	 * 
 	 */
-	public static String overWriteFile(String filename) {
 
-		throw new UnsupportedOperationException();
+	public static String overWriteFile(String filename) throws IOException {
+		//overwriting taken care of by saveGamePosition method
+		return saveGamePosition(filename);
+
 	}
 
 	/**
@@ -638,8 +720,8 @@ public class QuoridorController {
 	 * @author Nicolas Buisson
 	 * 
 	 */
-	public static String cancelOverWriteFile() {
-		throw new UnsupportedOperationException();
+	public static void cancelOverWriteFile() {
+		
 		//if user cancels overwriting the file
 		//then nothing happens, file and model are unchanged
 		//only change is in UI
@@ -656,8 +738,124 @@ public class QuoridorController {
 	 * @author Nicolas Buisson
 	 * 
 	 */
-	public static Game loadSavedGame(String filename) {
-		throw new UnsupportedOperationException();
+	public static GamePosition loadSavedPosition(String filename) throws IOException {
+		
+		GamePosition gamePositionToLoad = null;
+		
+		
+		File file = new File(filename);
+		String content = "";
+		FileReader reader = new FileReader(file);
+		BufferedReader BF = new BufferedReader(reader); 
+		String line = BF.readLine();
+		while(line != null) {
+			content = content + line + "\n";
+			line = BF.readLine();
+		}	
+		if( BF != null) {
+			BF.close();
+		}
+		//data of game saved in string content
+		//need to decompose it to access all the individual positions
+		//of the pawns and the walls
+		//separates white data and black data
+		String whiteData = "";
+		String blackData = "";
+		String positions[] = content.split("\n");
+		if(positions[0].startsWith("W")) {
+			whiteData = positions[0];
+			blackData = positions[1];
+			gamePositionToLoad.setPlayerToMove(QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer());
+			//white player's turn to play
+		}
+		else {
+			blackData = positions[0];
+			whiteData = positions[1];
+			gamePositionToLoad.setPlayerToMove(QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer());
+			//black player's turn to play
+		}
+		String whitePositions[] = whiteData.split(" ");
+		String blackPositions[] = blackData.split(" ");
+		String whitePositionsFinal[] = null;
+		String blackPositionsFinal[] = null;
+		
+		for(int i = 0; i < whitePositions.length; i++) {
+			whitePositionsFinal = whitePositions[i].split(",");		
+		}
+		
+		for(int i = 0; i < blackPositions.length; i++) {
+			blackPositionsFinal = blackPositions[i].split(",");
+		}
+		int whitePawnColumn = ((int)whitePositionsFinal[1].charAt(0)) - '`'; 
+		//this will decrease the unicode value by 96
+		//unicode value of 'a' is 97, will correspond to the column numbers
+		//BIG PROBLEM NO? ALL THIS SHIT HAPPENS INSIDE LOOP WILL IT'S CHANGES HAPPEN OUTSIDE OF LOOP
+		int whitePawnRow = whitePositionsFinal[1].charAt(1);
+		Tile whitePawnTile = new Tile(whitePawnRow, whitePawnColumn, QuoridorApplication.getQuoridor().getBoard());
+		PlayerPosition whitePosition = new PlayerPosition(QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer(), whitePawnTile);
+		gamePositionToLoad.setWhitePosition(whitePosition);
+		int blackPawnColumn = ((int)blackPositionsFinal[1].charAt(0)) - '`'; 
+		int blackPawnRow = blackPositionsFinal[1].charAt(1);
+		Tile blackPawnTile = new Tile(blackPawnRow, blackPawnColumn, QuoridorApplication.getQuoridor().getBoard());
+		PlayerPosition blackPosition = new PlayerPosition(QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer(), blackPawnTile);
+		gamePositionToLoad.setWhitePosition(blackPosition);
+		//PAWNS TAKEN CARE OF
+		//LET'S DO THE WALLS
+		List<Wall> whiteWallsOnBoard = null;
+		List<Wall> blackWallsOnBoard = null;
+		List<WallMove> whiteWallsOnBoardMoves = null;
+		List<WallMove> blackWallsOnBoardMoves = null;
+		
+		for(int i = 2; i < whitePositionsFinal.length ; i++) {
+			
+			int whiteWallColumn = whitePositionsFinal[i].charAt(0);
+			int whiteWallRow = whitePositionsFinal[i].charAt(1);
+			char whiteWallO = whitePositionsFinal[i].charAt(2);
+			Direction whiteWallOrientation;
+			if (whiteWallO == 'v') {
+				whiteWallOrientation = Direction.Vertical;
+			}
+			else {
+				whiteWallOrientation = Direction.Horizontal;
+			}
+			
+			Tile whiteWallTile = new Tile(whiteWallColumn, whiteWallRow, QuoridorApplication.getQuoridor().getBoard());
+			Wall whiteWall = new Wall(i-1, getWhitePlayer());
+			whiteWallsOnBoard.add(whiteWall);
+			WallMove whiteWallMove = new WallMove(i-1, 1, getWhitePlayer(), whiteWallTile, QuoridorApplication.getQuoridor().getCurrentGame(), whiteWallOrientation, whiteWall);
+			whiteWallsOnBoardMoves.add(whiteWallMove);
+			gamePositionToLoad.addWhiteWallsOnBoard(whiteWall);
+		}
+		
+		for(int i = 2; i < blackPositionsFinal.length ; i++) {
+			
+			int blackWallColumn = blackPositionsFinal[i].charAt(0);
+			int blackWallRow = blackPositionsFinal[i].charAt(1);
+			char blackWallO = blackPositionsFinal[i].charAt(2);
+			Direction blackWallOrientation;
+			if (blackWallO == 'v') {
+				blackWallOrientation = Direction.Vertical;
+			}
+			else {
+				blackWallOrientation = Direction.Horizontal;
+			}
+			
+			Tile blackWallTile = new Tile(blackWallColumn, blackWallRow, QuoridorApplication.getQuoridor().getBoard());
+			Wall blackWall = new Wall(10 + i-1, getBlackPlayer());
+			blackWallsOnBoard.add(blackWall);
+			WallMove blackWallMove = new WallMove(i-1, 1, getBlackPlayer(), blackWallTile, QuoridorApplication.getQuoridor().getCurrentGame(), blackWallOrientation, blackWall);
+			blackWallsOnBoardMoves.add(blackWallMove);
+			gamePositionToLoad.addBlackWallsOnBoard(blackWall);
+			//make walls or make wall moves?
+		}
+		
+		
+		//use character unicode for the columns
+		//can just get number for rows
+		//know walls appear only after "W:" , "e1", ... starting from index 2
+			
+		
+		return gamePositionToLoad;
 	}
 
 	/**

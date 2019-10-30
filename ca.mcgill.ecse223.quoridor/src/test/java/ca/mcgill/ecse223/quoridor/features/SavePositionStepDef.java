@@ -38,12 +38,15 @@ public class SavePositionStepDef {
 	@Given ("No file {string} exists in the filesystem")
 	public void NoFileExistsInTheFileSystem(String filename) {
 		String pathName = filename;
+
+		File file = new File (filename);
+
 		// new File creates a pointer to the file
 		//createNewFile actually creates it
 		
-		if(new File(pathName).exists()) {
+		if(file.exists()) {
 			//if file exists, delete it
-			new File(pathName).delete();
+			file.delete();
 		}
 		else 
 		{
@@ -55,8 +58,8 @@ public class SavePositionStepDef {
 	 * @author Nicolas Buisson
 	 */
 	@When ("The user initiates to save the game with name {string}")
-	public void TheUserInitiatesToSaveTheGameWithName(String filename) {
-		content = QC.saveGameFile(filename);
+	public void TheUserInitiatesToSaveTheGameWithName(String filename) throws IOException {
+		content = QC.saveGamePosition(filename);
 		
 	}
 
@@ -65,17 +68,13 @@ public class SavePositionStepDef {
 	 * @author Nicolas Buisson
 	 */
 	@Then ("A file with {string} shall be created in the filesystem")
-	public void AFileShallBeCreatedInTheFileSystem(String filename) {
+	public void AFileShallBeCreatedInTheFileSystem(String filename) throws IOException {
 		
 		String pathName = filename;
-		file = new File(pathName);
-		boolean FileExists = false;
-		try {
-			FileExists = file.createNewFile();
-		} catch (IOException e) {
-			
-			e.printStackTrace();
-		}
+		File file = new File(pathName);
+		//boolean FileExists = false;
+		boolean FileExists = file.exists();
+
 		assertEquals(true, FileExists);
 		assertEquals(filename, file.getName());
 		//check if file exists
@@ -94,7 +93,9 @@ public class SavePositionStepDef {
 	public void FileExistsInTheFileSystem(String filename) {
 
 		String pathName = filename;
-		file = new File(pathName);
+
+		File file = new File(pathName);
+
 		if(file.exists()) {
 			//if it exists do nothing
 		}
@@ -115,9 +116,9 @@ public class SavePositionStepDef {
 	 * @author Nicolas Buisson
 	 */
 	@And ("The user confirms to overwrite existing file")
-	public void TheUserConfirmsToOverwriteExistingFile(String filename) {
-		content = QC.overWriteFile(filename);
+	public void TheUserConfirmsToOverwriteExistingFile() throws IOException {
 		
+		//UI METHOD?!?!!?
 	}
 
 	/**  
@@ -127,7 +128,9 @@ public class SavePositionStepDef {
 	public void FileShallBeUpdatedInTheFileSystem(String filename) {
 		
 		String pathName = filename;
-		file = new File(pathName);
+
+		File file = new File(pathName);
+
 		FileReader reader = null;
 		try{
 			reader = new FileReader(file);
@@ -163,7 +166,7 @@ public class SavePositionStepDef {
 	 */
 	@And ("The user cancels to overwrite existing file")
 	public void TheUserCancelsToOverwriteExistingFile() {
-		content = QC.cancelOverWriteFile();
+		QC.cancelOverWriteFile();
 		
 	}
 
@@ -174,7 +177,9 @@ public class SavePositionStepDef {
 	public void FileShallNotBeChangedInTheFileSystem(String filename) {
 		
 		String pathName = filename;
-		file = new File(pathName);
+
+		File file = new File(pathName);
+
 		FileReader reader = null;
 		try{
 			reader = new FileReader(file);
