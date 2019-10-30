@@ -71,38 +71,19 @@ public class QuoridorController {
 	}
 
 	/**
-	 * Method - initializeNewGame()
-	 * 
-	 * This method, according to the Gherkin definition, should initialize a new
-	 * game in the Quoridor object It should perform the following: 1. Set a name to
-	 * White and Black Players 2. Set the total thinking time to both players
-	 * 
-	 * @param quoridor - Quoridor object within to start the new game
-	 * @param userNameBlackPlayer - String describing the userName of the black player
-	 * @param userNameWhitePlayer - String describing the userName of the white player
-	 * @param thinkingTime - Thinking time to set to the players
-	 * @return
-	 * @throws Exception
-	 * @author Tristan Bouchard
+	 * Method: initializeNewGame(Quoridor quoridor)
+	 * @param quoridor - Quoridor object within which to create new game
+	 * @return {true} if game correctly initialized, an exception otherwise
+	 * @throws IllegalArgumentException - If the supplied quoridor is null or already has a game
+	 * @throws RuntimeException - If the amount of users is insufficient
 	 */
 	public static Boolean initializeNewGame(Quoridor quoridor) throws Exception {
 		//throw new UnsupportedOperationException();
 		Boolean quoridorIsValid = !quoridor.equals(null) && !quoridor.hasCurrentGame();
-//		Boolean blackPlayerNameIsValid = ControllerUtilities.isUserNameValid(userNameBlackPlayer);
-//		Boolean whitePlayerNameIsValid = ControllerUtilities.isUserNameValid(userNameWhitePlayer); 
-//		Boolean totalThinkingTimeIsValid = !thinkingTime.equals(null) && thinkingTime.getTime() > 0;
+		
 		if(!quoridorIsValid) {
 			throw new IllegalArgumentException("This Quoridor already contains a game, or the Quoridor is null");
 		}
-//		if(!blackPlayerNameIsValid) {
-//			throw new IllegalArgumentException("The userName for the black player is invalid.");
-//		}
-//		if(!whitePlayerNameIsValid) {
-//			throw new IllegalArgumentException("The userName for the white player is invalid.");
-//		}
-//		if(!totalThinkingTimeIsValid) {
-//			throw new IllegalArgumentException("The specified time is invalid.");
-//		}
 		Game newGame = new Game(GameStatus.Initializing, MoveMode.PlayerMove, quoridor);
 		
 		// Verify that there are at least 2 users for this game
@@ -121,27 +102,6 @@ public class QuoridorController {
 		// Set the game to the quoridor object
 		quoridor.setCurrentGame(newGame);
 		
-		// TODO: Set the variables to start the game --> Should I be doing this?
-//		Boolean blackNameSet = setBlackPlayerUserName(userNameBlackPlayer);
-//		Boolean whiteNameSet = setWhitePlayerUserName(userNameWhitePlayer);
-//		Boolean blackTimeSet = setBlackPlayerThinkingTime(thinkingTime.getTime());
-//		Boolean whiteTimeSet = setWhitePlayerThinkingTime(thinkingTime.getTime());		
-//		if(!blackNameSet) {
-//			throw new RuntimeException("Could not set the black player name.");
-//		}
-//		if(!whiteNameSet) {
-//			throw new RuntimeException("Could not set the white player name.");
-//		}
-//		if(!blackTimeSet) {
-//			throw new RuntimeException("Could not set the black player time.");
-//		}
-//		if(!whiteTimeSet) {
-//			throw new RuntimeException("Could not set the white player time.");
-//		}
-		
-		// Technically not tho, this should be when a thinking time has been set and the each 
-		// person has selected a username...
-		quoridor.getCurrentGame().setGameStatus(GameStatus.ReadyToStart);
 		return true;
 	}
 
@@ -158,6 +118,11 @@ public class QuoridorController {
 	 */
 	public static void startClock() throws Exception {
 		throw new UnsupportedOperationException();
+		Quoridor quor = QuoridorApplication.getQuoridor();
+		if(!quor.hasCurrentGame()) {
+			throw new RuntimeException("There is no current game to start! Please create a game first")
+		}
+		
 	}
 
 	/**
