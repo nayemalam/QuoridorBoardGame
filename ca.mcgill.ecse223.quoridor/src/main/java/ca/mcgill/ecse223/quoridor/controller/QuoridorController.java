@@ -86,18 +86,20 @@ public class QuoridorController {
 		Game newGame = new Game(GameStatus.Initializing, MoveMode.PlayerMove, quoridor);
 		
 		// Verify that there are at least 2 users for this game
-		if(!(quoridor.getUsers().size() > 2)) {
+		if(quoridor.getUsers().size() < 2) {
 			throw new RuntimeException("Not enough users to start a game! There must be at least 2 users.");
 		}
 		
 		// TODO: Talk to Imad about this?
 		// Logic behind this is that the white player wants to get to the black players' tile
 		// and vice versa
-		Player blackPlayer = new Player(new Time(0), quoridor.getUser(0), ControllerUtilities.WHITE_TILE_INDEX, Direction.Horizontal);
-		Player whitePlayer = new Player(new Time(0), quoridor.getUser(1), ControllerUtilities.BLACK_TILE_INDEX, Direction.Horizontal);
-
-		newGame.setBlackPlayer(blackPlayer);
+		Player whitePlayer = new Player(new Time(0), quoridor.getUser(0), ControllerUtilities.BLACK_TILE_INDEX, Direction.Horizontal);
+		Player blackPlayer = new Player(new Time(0), quoridor.getUser(1), ControllerUtilities.WHITE_TILE_INDEX, Direction.Horizontal);
+		whitePlayer.setGameAsWhite(newGame);
+		blackPlayer.setGameAsBlack(newGame);
+		
 		newGame.setWhitePlayer(whitePlayer);
+		newGame.setBlackPlayer(blackPlayer);
 		// Set the game to the quoridor object
 		quoridor.setCurrentGame(newGame);
 		
@@ -112,24 +114,28 @@ public class QuoridorController {
 	 * 2. Initialize the board
 	 * 
 	 * @param No parameters - The current player's clock will start counting down
-	 * @throws Exception
+	 * @throws RuntimeException
 	 * @author Tristan Bouchard
 	 */
-	public static Boolean startClock() throws Exception {
+	public static Boolean startClock() throws RuntimeException {
 		Quoridor currentQuor = QuoridorApplication.getQuoridor();
 		if(!currentQuor.hasCurrentGame()) {
 			throw new RuntimeException("There is no current game to start! Please create a game first.");
 		}
 		Game currentGame = currentQuor.getCurrentGame();
 
-		if(currentGame.hasBlackPlayer() || currentGame.hasWhitePlayer()) {
+		if(!currentGame.hasBlackPlayer() || !currentGame.hasWhitePlayer()) {
 			throw new RuntimeException("Game has incorrect amount of players. Please verify the players.");
 		}
 		Player currentBlackPlayer = currentGame.getBlackPlayer();
-		Player currentPlayer = currentBlackPlayer.hasNextPlayer() ? currentBlackPlayer: currentGame.getWhitePlayer(); 
+		Player currentPlayer = (currentBlackPlayer.hasNextPlayer() && !currentBlackPlayer.getNextPlayer().equals(null)) 
+							 ? currentBlackPlayer: currentGame.getWhitePlayer(); 
 		
 		Time remainingTime = currentPlayer.getRemainingTime();
 		// TODO: WTF how do I start the time???
+		
+		// Set game status to running
+		currentGame.setGameStatus(GameStatus.Running);
 		
 		return true;
 	}
@@ -147,9 +153,83 @@ public class QuoridorController {
 	 * @throws Exception
 	 * @author Tristan Bouchard
 	 */
+	public static void initializeBoard(Quoridor quoridor) throws Exception {
+		
+		Boolean quoridorIsValid = !quoridor.equals(null);
+		Boolean gameIsValid = quoridor.hasCurrentGame() && !quoridor.getCurrentGame().equals(null);
+		
+		if(!quoridorIsValid) {
+			throw new IllegalArgumentException("This Quoridor already contains a game, or the Quoridor is null");
+		}
+		if(!gameIsValid) {
+			throw new RuntimeException("Game is not properly initialized");
+		}
+		// This method will only create a board if no board has been previously created
+		if(!quoridor.hasBoard()) {
+			Board newBoard = new Board(quoridor);
+			ControllerUtilities.initTilesForNewBoard(newBoard);
+			quoridor.setBoard(newBoard);
+		}
+		
+		// Set white player to be current player
+		Game currentGame = quoridor.getCurrentGame();
+		Player currentWhitePlayer = currentGame.hasWhitePlayer() ? currentGame.getWhitePlayer() : null;
+		Player currentBlackPlayer = currentGame.hasBlackPlayer() ? currentGame.getBlackPlayer() : null;
+		if(currentWhitePlayer.equals(null) || currentBlackPlayer.equals(null)) {
+			throw new RuntimeException("Players of the current game are invalid");
+		}
+		
+		setNextPlayer(currentWhitePlayer, currentBlackPlayer);
+		
+		// Clear existing positions and moves in the Game
+		ControllerUtilities.clearExistingPositions(currentGame);
+		ControllerUtilities.clearExistingMoves(currentGame);
+		
+		// Set white + black pawn to their initial positions
+		setInitialGamePosition(currentGame, quoridor.getBoard(), currentWhitePlayer, currentBlackPlayer);
+		
+		
+	}
 
-	public static void initializeBoard() throws Exception {
-		throw new UnsupportedOperationException();
+	
+	/**
+	 * Method used to set the initial game position and walls in the new game object
+	 * @param currentGame - Current game in which to set the initial position
+	 * @param quoridor - Current instance of the board
+	 * @param currentWhitePlayer - Current white player to initiate position
+	 * @param currentBlackPlayer - Current black player to initiate position
+	 */
+	private static void setInitialGamePosition(Game currentGame, Board board, Player currentWhitePlayer, Player currentBlackPlayer) {
+		// Get initial tiles
+		Tile whitePlayerInitialTile = board.getTile(ControllerUtilities.WHITE_TILE_INDEX);
+		Tile blackPlayerInitialTile = board.getTile(ControllerUtilities.BLACK_TILE_INDEX);
+		// Set initial player positions
+		PlayerPosition whitePlayerPosition = new PlayerPosition(currentWhitePlayer, whitePlayerInitialTile);
+		PlayerPosition blackPlayerPosition = new PlayerPosition(currentBlackPlayer, blackPlayerInitialTile);
+		// Create game position
+		GamePosition initialGamePosition = new GamePosition(0, whitePlayerPosition, blackPlayerPosition,
+				currentWhitePlayer, currentGame);
+		currentGame.addPosition(initialGamePosition);
+		currentGame.setCurrentPosition(initialGamePosition);
+		// Clear potential existing walls on board, moves and game positions
+		ControllerUtilities.emptyWallsOnBoard(initialGamePosition);
+
+		// initialize walls in stock
+		ControllerUtilities.initializeWallsInStock(initialGamePosition, currentWhitePlayer, currentBlackPlayer);
+
+	}
+
+	/**
+	 * Method used to set the next player to play. Requires currentPlayer and next player 
+	 * @param currentPlayer - Player to set nextPlayer in
+	 * @param nextPlayer - Player to be set as next player
+	 */
+	private static void setNextPlayer(Player currentPlayer, Player nextPlayer) {
+		// TODO: Is this valid?
+		// Set white players' next player to be the black player and set
+		// black players next player to null
+		currentPlayer.setNextPlayer(nextPlayer);
+		nextPlayer.setNextPlayer(null);
 	}
 
 	/**
@@ -311,10 +391,10 @@ public class QuoridorController {
 
 		// Verify the indices of the tiles only if the total size is correct
 		Boolean correctTileIndexing = true;
-		for (int row = 0; row < ControllerUtilities.TOTAL_NUMBER_OF_ROWS; row++) {
-			for (int col = 0; col < ControllerUtilities.TOTAL_NUMBER_OF_COLS; col++) {
+		for (int row = 1; row <= ControllerUtilities.TOTAL_NUMBER_OF_ROWS; row++) {
+			for (int col = 1; col <= ControllerUtilities.TOTAL_NUMBER_OF_COLS; col++) {
 				// Obtain tile in the list and verify that the indices are correct
-				int index = ((ControllerUtilities.TOTAL_NUMBER_OF_COLS) * (row) + (col));
+				int index = ((ControllerUtilities.TOTAL_NUMBER_OF_COLS) * (row-1) + (col-1));
 				Tile currentTile = board.getTile(index);
 				correctTileIndexing = correctTileIndexing && (row == currentTile.getRow());
 				correctTileIndexing = correctTileIndexing && (col == currentTile.getColumn());

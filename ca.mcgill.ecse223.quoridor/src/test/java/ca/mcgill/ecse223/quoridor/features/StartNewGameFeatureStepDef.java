@@ -11,6 +11,7 @@ import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
 import ca.mcgill.ecse223.quoridor.model.Board;
 import ca.mcgill.ecse223.quoridor.model.Game;
 import ca.mcgill.ecse223.quoridor.model.Player;
+import ca.mcgill.ecse223.quoridor.model.Quoridor;
 import ca.mcgill.ecse223.quoridor.model.Tile;
 import ca.mcgill.ecse223.quoridor.model.User;
 import ca.mcgill.ecse223.quoridor.utilities.ControllerUtilities;
@@ -86,7 +87,7 @@ public class StartNewGameFeatureStepDef {
 	 */
 	@Then("The game shall become ready to start")
 	public void theGameShallBecomeReadyToStart() {
-		assertEquals(Game.GameStatus.ReadyToStart, QuoridorApplication.getQuoridor().getCurrentGame().getGameStatus());
+		assertEquals(Game.GameStatus.Initializing, QuoridorApplication.getQuoridor().getCurrentGame().getGameStatus());
 	}
 
 	// *********************************************
@@ -104,7 +105,10 @@ public class StartNewGameFeatureStepDef {
 	public void theGameIsReadyToStart() throws Exception {
 		// Here, I would call my controller method to start a game and put it in a
 		// known state where the clock is ready to be started, such as:
-		QuoridorController.initializeNewGame(QuoridorApplication.getQuoridor());
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		quoridor.addUser("TestUser1");
+		quoridor.addUser("TestUser2");
+		QuoridorController.initializeNewGame(quoridor);
 		// Maybe other steps, dunno?
 	}
 
