@@ -136,11 +136,18 @@ public class QuoridorController {
 	 * starting the game to select an existing username
 	 *
 	 * @param username - String username exists within the list of users
-	 * @throws Exception (UnsupportedOperationException) todo for later
+	 * @throws Exception - throws exception if users list is empty
 	 * @author Nayem Alam
 	 */
 	public static void selectExistingUserName(String username) throws Exception {
-		throw new UnsupportedOperationException();
+		Player blackPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
+		Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
+		if(!QuoridorApplication.getQuoridor().getUsers().isEmpty()) {
+			blackPlayer.getUser().setName(username);
+			whitePlayer.getUser().setName(username);
+		} else {
+			throw new Exception("There are no existing users in the list.");
+		}
 	}
 
 	/**
@@ -154,7 +161,10 @@ public class QuoridorController {
 	 * @author Nayem Alam
 	 */
 	public static void selectNewUserName(String username) throws Exception {
-		throw new UnsupportedOperationException();
+		Player blackPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
+		Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
+		blackPlayer.getUser().setName(username);
+		whitePlayer.getUser().setName(username);
 	}
 
 

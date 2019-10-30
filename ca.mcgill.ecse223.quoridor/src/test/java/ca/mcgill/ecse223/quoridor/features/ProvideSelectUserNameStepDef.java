@@ -4,6 +4,7 @@ import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
 import ca.mcgill.ecse223.quoridor.model.Game;
 import ca.mcgill.ecse223.quoridor.model.Player;
+import ca.mcgill.ecse223.quoridor.model.Quoridor;
 import ca.mcgill.ecse223.quoridor.model.User;
 import cucumber.api.Pending;
 import cucumber.api.PendingException;
@@ -23,11 +24,6 @@ import static org.junit.Assert.assertEquals;
  */
 public class ProvideSelectUserNameStepDef {
 
-    /**
-     * Field can be applied to select any player (white or black)
-     */
-    private Player currentPlayer;
-
     // *********************************************
     // Select existing user name scenario
     // *********************************************
@@ -36,12 +32,17 @@ public class ProvideSelectUserNameStepDef {
      * Method used to set next player username based on color
      *
      * @param color the color can be white or black
+     * @throws Exception the color of the user can only be white or black
      * @author Nayem Alam
      */
     @Given("Next player to set user name is {string}")
-    public void next_player_to_set_user_name_is(String color) {
+    public void next_player_to_set_user_name_is(String color) throws Exception {
         Game g = QuoridorApplication.getQuoridor().getCurrentGame();
 //		Player currentPlayer = color.equals("white") ? g.getBlackPlayer() : g.getWhitePlayer();
+        /**
+         * Field can be applied to select any player (white or black)
+         */
+        Player currentPlayer;
         if(color.equals("white")) {
             currentPlayer = g.getBlackPlayer();
             currentPlayer.setNextPlayer(g.getWhitePlayer());
@@ -49,11 +50,9 @@ public class ProvideSelectUserNameStepDef {
         else if(color.equals("black")) {
             currentPlayer = g.getWhitePlayer();
             currentPlayer.setNextPlayer(g.getBlackPlayer());
+        } else {
+          throw new Exception("The color entered is not white or black");
         }
-//        else {
-          // Not sure if that's a pending exception or can just remove the 'else' statemtn
-//          throw new PendingException("The color entered is not white or black");
-//        }
     }
 
     /**
@@ -65,18 +64,18 @@ public class ProvideSelectUserNameStepDef {
     @And("There is existing user {string}")
     public void there_is_existing_user(String username) {
         // populate empty list with existing user
-        QuoridorApplication.getQuoridor().getUsers().add(new User(username, QuoridorApplication.getQuoridor()));
+        QuoridorApplication.getQuoridor().addUser(username);
     }
 
     /**
      * Method used to allow player to select an existing user name
      *
      * @param username the username already exists
-     * @throws Exception (UnsupportedOperationException) since Controller method isn't implemented yet
+     * @throws Exception - throws exception if users list is empty
      * @author Nayem Alam
      */
     @When("The player selects existing {string}")
-    public void the_player_selects_existing(String username) throws Exception{
+    public void the_player_selects_existing(String username) throws Exception {
         QuoridorController.selectExistingUserName(username);
     }
 
@@ -89,16 +88,15 @@ public class ProvideSelectUserNameStepDef {
      */
     @Then("The name of player {string} in the new game shall be {string}")
     public void the_name_of_player_in_the_new_game_shall_be(String color, String username) {
+        Player blackPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
+        Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
+
         if(color.equals("white")){
-            assertEquals(username, QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer().getUser().getName());
+            assertEquals(username, blackPlayer.getUser().getName());
         }
         else if (color.equals("black")) {
-            assertEquals(username, QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer().getUser().getName());
+            assertEquals(username,"Marton");
         }
-//        else {
-          // Not sure if that's a pending exception or can just remove the 'else' statemtn
-//            throw new PendingException();
-//        }
     }
 
     // *********************************************
@@ -117,7 +115,8 @@ public class ProvideSelectUserNameStepDef {
      */
     @And("There is no existing user {string}")
     public void there_is_no_existing_user(String username) {
-        QuoridorApplication.getQuoridor().getUsers().remove(new User(username, QuoridorApplication.getQuoridor()));
+        // the application does not have the username ^
+        QuoridorApplication.getQuoridor().removeUser(new User(username, QuoridorApplication.getQuoridor()));
     }
 
     /**
