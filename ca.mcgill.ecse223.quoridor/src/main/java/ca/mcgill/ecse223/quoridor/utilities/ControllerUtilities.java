@@ -1,4 +1,4 @@
-package ca.mcgill.ecse223.quoridor.controller;
+package ca.mcgill.ecse223.quoridor.utilities;
 
 /**
  * Class used to group together common utilities and constants used by the application controller methods.
