@@ -116,13 +116,24 @@ public class QuoridorController {
 	 * @throws Exception
 	 * @author Tristan Bouchard
 	 */
-	public static void startClock() throws Exception {
-		throw new UnsupportedOperationException();
-		Quoridor quor = QuoridorApplication.getQuoridor();
-		if(!quor.hasCurrentGame()) {
-			throw new RuntimeException("There is no current game to start! Please create a game first")
+	public static Boolean startClock() throws Exception {
+		//throw new UnsupportedOperationException();
+		Quoridor currentQuor = QuoridorApplication.getQuoridor();
+		if(!currentQuor.hasCurrentGame()) {
+			throw new RuntimeException("There is no current game to start! Please create a game first.");
 		}
+		Game currentGame = currentQuor.getCurrentGame();
+
+		if(currentGame.hasBlackPlayer() || currentGame.hasWhitePlayer()) {
+			throw new RuntimeException("Game has incorrect amount of players. Please verify the players.");
+		}
+		Player currentBlackPlayer = currentGame.getBlackPlayer();
+		Player currentPlayer = currentBlackPlayer.hasNextPlayer() ? currentBlackPlayer: currentGame.getWhitePlayer(); 
 		
+		Time remianingTime = currentPlayer.getRemainingTime();
+		// TODO: WTF how do I start the time???
+		
+		return true;
 	}
 
 	/**
