@@ -35,7 +35,7 @@ public class MoveWallStepDefinition {
 	 */
 	@Given("A wall move candidate exists with {string} at position \\({int}, {int})")
 	public void a_wall_move_candidate_exists_with_at_position(String string, int int1, int int2) {
-		QuoridorController.testMethod(string);
+		
 		//access the system
 		Quoridor q = QuoridorApplication.getQuoridor();
 
@@ -84,7 +84,7 @@ public class MoveWallStepDefinition {
 	@When("I try to move the wall {string}")
 	public void iTryToMoveTheWallSide(String side) {
 		//access system
-		QuoridorController.verifyMoveWallOnSide(aWall, side);
+		QuoridorController.verifyMoveWallOnSide(aWall, side, 0);
 	}
 
 	/**
