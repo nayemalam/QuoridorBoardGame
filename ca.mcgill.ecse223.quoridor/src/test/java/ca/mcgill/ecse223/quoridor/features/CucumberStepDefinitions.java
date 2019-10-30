@@ -120,8 +120,11 @@ public class CucumberStepDefinitions {
 	public void aNewGameIsInitializing() throws Throwable {
 		initQuoridorAndBoard();
 		ArrayList<Player> players = createUsersAndPlayers("user1", "user2");
-		// TODO: Fix this
-		new Game(GameStatus.Initializing, MoveMode.PlayerMove, null, null, QuoridorApplication.getQuoridor());
+		// TODO: Fix this -- I think we fixed it (Nayem)
+		Player whitePlayer = players.get(0);
+		Player blackPlayer = players.get(1);
+		new Game(GameStatus.Initializing, MoveMode.PlayerMove, whitePlayer, blackPlayer, QuoridorApplication.getQuoridor());
+
 	}
 
 	// ***********************************************

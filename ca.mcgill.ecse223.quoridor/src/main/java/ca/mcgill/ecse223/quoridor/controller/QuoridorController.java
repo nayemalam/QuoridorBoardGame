@@ -118,12 +118,16 @@ public class QuoridorController {
 	 *
 	 * @param min - Integer sets the number of minutes
 	 * @param sec - Integer sets the number of seconds
-	 * @throws Exception (UnsupportedOperationException) todo for later
 	 * @author Nayem Alam
 	 */
-	public static void setThinkingTime(Integer min, Integer sec) throws Exception {
-		// convert min and sec to long and add it to new Time(add it here)
-		throw new UnsupportedOperationException();
+	public static void setThinkingTime(Integer min, Integer sec) {
+		Player bPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
+		Player wPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
+		// converts min and sec to long type (unix epoch time)
+		Time thinkingTime = new Time(min* 60L *1000 + sec* 1000L);
+		// set same thinking time for both players
+		bPlayer.setRemainingTime(thinkingTime);
+		wPlayer.setRemainingTime(thinkingTime);
 	}
 	/**
 	 * Method - selectExistingUserName(String username)
