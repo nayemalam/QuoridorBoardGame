@@ -24,48 +24,59 @@ import io.cucumber.java.en.When;
  */
 public class MoveWallStepDefinition {
 
-	
+	private int Prow;
+	private int Pcol;
+	private String Pdir;
+	private WallMove aMove;
+	private Wall aWall;
 	/**
 	 * Method that verifies if a wall candidate exists with direction and coordinates
 	 * @author Alexander Legouverneur
 	 */
 	@Given("A wall move candidate exists with {string} at position \\({int}, {int})")
 	public void a_wall_move_candidate_exists_with_at_position(String string, int int1, int int2) {
-		
+		QuoridorController.testMethod(string);
 		//access the system
 		Quoridor q = QuoridorApplication.getQuoridor();
-		
+
 		// Find tile at position
 		Tile aTile = null;
 		for(Tile t : q.getBoard().getTiles()){
 			if(t.getRow() == int1 && t.getColumn() == int2) aTile = t;
+			else continue;
 		}
-		if(aTile==null) fail("Error initializing board. No tile found with coordinates.");
-		
+		if(aTile==null) fail("ERROR NO TILE WITH THESE COORDINATES");
+
 		// Get some wall for the black player.
-		Wall aWall = q.getCurrentGame().getBlackPlayer().getWall(0);
-		
-		if(string == "vertical") {
-			WallMove aMove = new WallMove( 1, 1, q.getCurrentGame().getBlackPlayer(), aTile, q.getCurrentGame(), Direction.Vertical, aWall);
-			aWall.setMove(aMove);
+		aWall = q.getCurrentGame().getWhitePlayer().getWall(0);
+
+		if(string.equals("vertical")) {
+			aMove = new WallMove( 1, 1, q.getCurrentGame().getWhitePlayer(), aTile, q.getCurrentGame(), Direction.Vertical, aWall);
 		}
-		if(string == "horizontal") {
-			WallMove aMove = new WallMove( 2, 1, q.getCurrentGame().getBlackPlayer(), aTile, q.getCurrentGame(), Direction.Horizontal, aWall);
-			aWall.setMove(aMove);
+		if(string.equals("horizontal")) {
+			aMove = new WallMove( 1, 1, q.getCurrentGame().getWhitePlayer(), aTile, q.getCurrentGame(), Direction.Horizontal, aWall);
 		}
+		Prow = aTile.getRow();
+		Pcol = aTile.getColumn();
+		Pdir = string;
 	}
-	
+
 	/**
 	 * Method that verifies that the wall is not at the side edge of the board
 	 * @author Alexander Legouverneur
 	 */
 	@And("The wall candidate is not at the {string} edge of the board")
-	public void TheWallCandidateIsNotAtTheSideEdgeOfTheBoard(String direction) {
+	public void theWallCandidateIsNotAtTheSideEdgeOfTheBoard(String side) {
 		//access the system
 		Quoridor q = QuoridorApplication.getQuoridor();	
-		QuoridorController.CheckWallSideEdge(q.getCurrentGame().getBlackPlayer().getWall(0));
+
+		assertEquals(false,QuoridorController.checkWallSideEdge( q.getCurrentGame().getWhitePlayer().getWall(0), side));
+
+
+
+
 	}
-	
+
 	/**
 	 * Method that initiates the trial for the move of the wall on the side
 	 * @author Alexander Legouverneur
@@ -73,10 +84,9 @@ public class MoveWallStepDefinition {
 	@When("I try to move the wall {string}")
 	public void iTryToMoveTheWallSide(String side) {
 		//access system
-		Quoridor q = QuoridorApplication.getQuoridor();	
-		QuoridorController.VerifyMoveWallOnSide(q.getCurrentGame().getBlackPlayer().getWall(0), side);
+		QuoridorController.verifyMoveWallOnSide(aWall, side);
 	}
-	
+
 	/**
 	 * Method that initiates the movement of the wall to the new position
 	 * @param row
@@ -87,10 +97,9 @@ public class MoveWallStepDefinition {
 	public void the_wall_shall_be_moved_over_the_board_to_position(int int1, int int2) {
 		Quoridor q = QuoridorApplication.getQuoridor();	
 
-		
-		assertEquals(int1, q.getCurrentGame().getBlackPlayer().getWall(0).getMove().getTargetTile().getRow());
-		assertEquals(int2, q.getCurrentGame().getBlackPlayer().getWall(0).getMove().getTargetTile().getColumn());
-		
+		assertEquals(int1, q.getCurrentGame().getWhitePlayer().getWall(0).getMove().getTargetTile().getRow());
+		assertEquals(int2, q.getCurrentGame().getWhitePlayer().getWall(0).getMove().getTargetTile().getColumn());
+
 	}
 	/**
 	 * Method that checks if the wall was correctly moved over the board position by
@@ -99,23 +108,33 @@ public class MoveWallStepDefinition {
 	 */
 	@And("A wall move candidate shall exist with {string} at position \\({int}, {int})")
 	public void a_wall_move_candidate_shall_exist_with_at_position(String string, int int1, int int2) {
-		
+
 		Quoridor q = QuoridorApplication.getQuoridor();	
-		assertEquals(int1,q.getCurrentGame().getBlackPlayer().getWall(0).getMove().getTargetTile().getRow());
-		assertEquals(int2, q.getCurrentGame().getBlackPlayer().getWall(0).getMove().getTargetTile().getColumn());
-		assertEquals(string, q.getCurrentGame().getBlackPlayer().getWall(0).getMove().getWallDirection());
+		assertEquals(int1,q.getCurrentGame().getWallMoveCandidate().getWallPlaced().getMove().getTargetTile().getRow());
+		assertEquals(int2, q.getCurrentGame().getWallMoveCandidate().getWallPlaced().getMove().getTargetTile().getColumn());
+		if(string.equals("vertical")) {
+			assertEquals(Direction.Vertical, q.getCurrentGame().getWallMoveCandidate().getWallPlaced().getMove().getWallDirection());
+		}
+		else {
+			assertEquals(Direction.Horizontal, q.getCurrentGame().getWallMoveCandidate().getWallPlaced().getMove().getWallDirection());
+		}
 	}
-	
+
 	/**
 	 * Method that verifies that the wall is at the side edge of the board
 	 * @author Alexander Legouverneur
 	 */
 	@And("The wall candidate is at the {string} edge of the board")
-	public void TheWallCandidateIsAtTheEdge1(String side) {
+	public void theWallCandidateIsAtTheEdge1(String side) {
 		Quoridor q = QuoridorApplication.getQuoridor();	
-		QuoridorController.CheckWallSideEdge(q.getCurrentGame().getBlackPlayer().getWall(0));
+
+		QuoridorController.checkWallSideEdge(q.getCurrentGame().getWhitePlayer().getWall(0), side);
+
+
+
+
 	}
-	
+
 	/**
 	 * Method that verifies if user is notified when trying to do an illegal move
 	 * @author Alexander Legouverneur
@@ -124,7 +143,6 @@ public class MoveWallStepDefinition {
 	public void iShallBeNotifiedThatMyMoveIsIllegal() {
 		//access system
 		String aString = new String("Illegal");
-		Quoridor q = QuoridorApplication.getQuoridor();
-		assertEquals(aString, QuoridorController.IllegalWallMove(q.getCurrentGame().getBlackPlayer().getWall(0)));			
+		assertEquals(aString, QuoridorController.illegalWallMove());			
 	}
 }

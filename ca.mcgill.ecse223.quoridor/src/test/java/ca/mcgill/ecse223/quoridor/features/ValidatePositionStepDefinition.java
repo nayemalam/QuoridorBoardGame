@@ -1,12 +1,20 @@
 package ca.mcgill.ecse223.quoridor.features;
 
+import static org.junit.Assert.assertEquals;
+
+import java.util.List;
+
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
-import ca.mcgill.ecse223.quoridor.model.*;
-import ca.mcgill.ecse223.quoridor.controller.*;
+import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
+import ca.mcgill.ecse223.quoridor.model.Direction;
+import ca.mcgill.ecse223.quoridor.model.Quoridor;
+import ca.mcgill.ecse223.quoridor.model.Tile;
+import ca.mcgill.ecse223.quoridor.model.Wall;
+import ca.mcgill.ecse223.quoridor.model.WallMove;
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import static org.junit.Assert.assertEquals;
 
 /**
  * Class that encapsulates the ValidatePosition Gherkin feature
@@ -15,17 +23,20 @@ import static org.junit.Assert.assertEquals;
  */
 public class ValidatePositionStepDefinition {
 
-	
-	
+
+
 	private int providedRow;
 	private int providedColumn;
 	private String providedDirection;
+	private int providedRow1;
+	private int providedColumn1;
+	private String providedDirection1;
 
 
 	/**
 	 * Methods that assigns the values of the position to the black player
-	 * @param row
-	 * @param col
+	 * @param row row of the tile where the pawn is
+	 * @param col Column of the tile where the pawn is
 	 * @author Alexander Legouverneur
 	 */
 	@Given("A game position is supplied with pawn coordinate {int}:{int}")
@@ -43,23 +54,31 @@ public class ValidatePositionStepDefinition {
 		Quoridor q = QuoridorApplication.getQuoridor();
 		//if there are no walls placed on the board then call the  method initialize validation for pawns
 		//else call the method initialize validation for wall
+
 		if(q.getCurrentGame().getCurrentPosition().getBlackPosition()== null) {
-			QuoridorController.InitiatePosValidation(providedRow,providedColumn, providedDirection);
+			if(q.getCurrentGame().getCurrentPosition().numberOfWhiteWallsOnBoard()>1) {
+				QuoridorController.initiatePosValidation(providedRow,providedColumn, providedDirection, q.getCurrentGame().getBlackPlayer().getWall(0),0);
+				QuoridorController.initiatePosValidation(providedRow1,providedColumn1, providedDirection1, q.getCurrentGame().getBlackPlayer().getWall(1),1);
+			}
+			else {
+				QuoridorController.initiatePosValidation(providedRow,providedColumn, providedDirection, null,0);
+			}
+
 		}
 		else {
-			
-			QuoridorController.InitializeValidatePosition(providedRow,providedColumn);
+
+			QuoridorController.initializeValidatePosition(providedRow,providedColumn);
 		}
-		 
+
 	}
 
 	/**
 	 * Verifies if the result is equal to what it should be
-	 * @param result
+	 * @param result  string to compare to the result of the method called
 	 */
 	@Then("The result is {string}")
 	public void validatePositionResult(String result) {
-		assertEquals(result, QuoridorController.ValidatePawnPosition(providedRow, providedColumn));
+		assertEquals(result, QuoridorController.validatePawnPosition(providedRow, providedColumn));
 	}
 
 	/**
@@ -68,8 +87,8 @@ public class ValidatePositionStepDefinition {
 	 */
 	@Given("A game position is supplied with wall coordinate {int}:{int}-{string}")
 	public void aGamePositionIsSuppliedWithWallCoordinateAndDir(Integer row, Integer col, String dir) {
-		
-		
+
+
 
 		//Assign the position and direction to the wall
 		providedRow = row;
@@ -85,55 +104,64 @@ public class ValidatePositionStepDefinition {
 	public void TheWallPositionShallBeResult(String result) {
 		Quoridor q = QuoridorApplication.getQuoridor();
 		if(q.getCurrentGame().getCurrentPosition().getBlackPosition()== null) {
-		assertEquals(result,QuoridorController.ValidateWall(providedRow, providedColumn, providedDirection));
+			assertEquals(result,QuoridorController.validateWall(providedRow, providedColumn, providedDirection));
 		}
-		
+
 	}
-	
-	/**
-	 * This methld gets the information from the walls existing
-	 * @author Alexander Legouverneur
-	 */
-	@Given("The following walls exist")
-	public void The_following_walls_Exist() {
-		Quoridor q = QuoridorApplication.getQuoridor();
-		//first wall existing
-		providedRow = q.getCurrentGame().getBlackPlayer().getWall(0).getMove().getTargetTile().getRow(); 
-		providedColumn = q.getCurrentGame().getBlackPlayer().getWall(0).getMove().getTargetTile().getColumn();
-		if(q.getCurrentGame().getBlackPlayer().getWall(0).getMove().getWallDirection() == Direction.Horizontal) {
-		providedDirection = "horizontal";
-		}
-		if(q.getCurrentGame().getBlackPlayer().getWall(0).getMove().getWallDirection() == Direction.Vertical) {
-			providedDirection = "vertical";
-		}
-		//second wall existing
-		providedRow = q.getCurrentGame().getBlackPlayer().getWall(1).getMove().getTargetTile().getRow(); //first wall existing
-		providedColumn = q.getCurrentGame().getBlackPlayer().getWall(1).getMove().getTargetTile().getColumn();
-		if(q.getCurrentGame().getBlackPlayer().getWall(1).getMove().getWallDirection() == Direction.Horizontal) {
-		providedDirection = "horizontal";
-		}
-		if(q.getCurrentGame().getBlackPlayer().getWall(1).getMove().getWallDirection() == Direction.Vertical) {
-			providedDirection = "vertical";
-		}
-	}
-	
+
 	/**
 	 * Method that verifies if the position of the wall is valid
 	 * @author Alexander Legouverneur
 	 */
 	@Then("The position shall be valid")
 	public void ThePositionShallBeValid() {
-		assertEquals(true,QuoridorController.CheckWallValid(providedRow,providedColumn, providedDirection));
+
+		Quoridor q = QuoridorApplication.getQuoridor();
+		providedRow = q.getCurrentGame().getWhitePlayer().getWall(0).getMove().getTargetTile().getRow();
+		providedColumn = q.getCurrentGame().getWhitePlayer().getWall(0).getMove().getTargetTile().getColumn();
+		if(q.getCurrentGame().getWhitePlayer().getWall(0).getMove().getWallDirection() == Direction.Horizontal) {
+			providedDirection = "horizontal";
+		}
+		if(q.getCurrentGame().getWhitePlayer().getWall(0).getMove().getWallDirection() == Direction.Vertical) {
+			providedDirection = "vertical";
+		}
+		providedRow1 = q.getCurrentGame().getBlackPlayer().getWall(0).getMove().getTargetTile().getRow();
+		providedColumn1 = q.getCurrentGame().getBlackPlayer().getWall(0).getMove().getTargetTile().getColumn();
+		if(q.getCurrentGame().getBlackPlayer().getWall(0).getMove().getWallDirection() == Direction.Horizontal) {
+			providedDirection1 = "horizontal";
+		}
+		if(q.getCurrentGame().getBlackPlayer().getWall(0).getMove().getWallDirection() == Direction.Vertical) {
+			providedDirection1 = "vertical";
+		}
+		assertEquals(true,QuoridorController.checkWallValid(providedRow,providedColumn, providedDirection,q.getCurrentGame().getWhitePlayer().getWall(0)));
+		assertEquals(true,QuoridorController.checkWallValid(providedRow1,providedColumn1, providedDirection1,q.getCurrentGame().getBlackPlayer().getWall(0)));
 	}
-	
+
 	/**
 	 * Method that verifies if the position is invalid
 	 * @author Alexander Legouverneur
 	 */
 	@Then("The position shall be invalid")
 	public void ThePositionShallBeInvalid2() {
-		
-		assertEquals(false,QuoridorController.CheckWallValid(providedRow,providedColumn, providedDirection));	
+		Quoridor q = QuoridorApplication.getQuoridor();
+		providedRow = q.getCurrentGame().getWhitePlayer().getWall(0).getMove().getTargetTile().getRow();
+		providedColumn = q.getCurrentGame().getWhitePlayer().getWall(0).getMove().getTargetTile().getColumn();
+		if(q.getCurrentGame().getWhitePlayer().getWall(0).getMove().getWallDirection() == Direction.Horizontal) {
+			providedDirection = "horizontal";
 		}
+		if(q.getCurrentGame().getWhitePlayer().getWall(0).getMove().getWallDirection() == Direction.Vertical) {
+			providedDirection = "vertical";
+		}
+		providedRow1 = q.getCurrentGame().getBlackPlayer().getWall(0).getMove().getTargetTile().getRow();
+		providedColumn1 = q.getCurrentGame().getBlackPlayer().getWall(0).getMove().getTargetTile().getColumn();
+		if(q.getCurrentGame().getBlackPlayer().getWall(0).getMove().getWallDirection() == Direction.Horizontal) {
+			providedDirection1 = "horizontal";
+		}
+		if(q.getCurrentGame().getBlackPlayer().getWall(0).getMove().getWallDirection() == Direction.Vertical) {
+			providedDirection1 = "vertical";
+		}
+		assertEquals(false,QuoridorController.checkWallValid(providedRow,providedColumn, providedDirection,q.getCurrentGame().getBlackPlayer().getWall(0)));
+		assertEquals(false,QuoridorController.checkWallValid(providedRow1,providedColumn1, providedDirection1,q.getCurrentGame().getBlackPlayer().getWall(1)));
+	}
 
 }
