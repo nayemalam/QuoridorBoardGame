@@ -7,6 +7,8 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.model.*;
+import ca.mcgill.ecse223.quoridor.model.Game.GameStatus;
+import ca.mcgill.ecse223.quoridor.model.Game.MoveMode;
 import ca.mcgill.ecse223.quoridor.utilities.*;
 
 import java.sql.Time;
@@ -67,6 +69,7 @@ public class QuoridorController {
 	public static void grabWall(Board board, Player player) {
 		// TODO Auto-generated method stub
 	}
+
 	/**
 	 * Method - initializeNewGame()
 	 * 
@@ -74,11 +77,72 @@ public class QuoridorController {
 	 * game in the Quoridor object It should perform the following: 1. Set a name to
 	 * White and Black Players 2. Set the total thinking time to both players
 	 * 
-	 * @param quoridor - Quoridor in which to start new game
+	 * @param quoridor - Quoridor object within to start the new game
+	 * @param userNameBlackPlayer - String describing the userName of the black player
+	 * @param userNameWhitePlayer - String describing the userName of the white player
+	 * @param thinkingTime - Thinking time to set to the players
+	 * @return
+	 * @throws Exception
 	 * @author Tristan Bouchard
 	 */
-	public static void initializeNewGame(Quoridor quoridor) throws Exception {
-		throw new UnsupportedOperationException();
+	public static Boolean initializeNewGame(Quoridor quoridor) throws Exception {
+		//throw new UnsupportedOperationException();
+		Boolean quoridorIsValid = !quoridor.equals(null) && !quoridor.hasCurrentGame();
+//		Boolean blackPlayerNameIsValid = ControllerUtilities.isUserNameValid(userNameBlackPlayer);
+//		Boolean whitePlayerNameIsValid = ControllerUtilities.isUserNameValid(userNameWhitePlayer); 
+//		Boolean totalThinkingTimeIsValid = !thinkingTime.equals(null) && thinkingTime.getTime() > 0;
+		if(!quoridorIsValid) {
+			throw new IllegalArgumentException("This Quoridor already contains a game, or the Quoridor is null");
+		}
+//		if(!blackPlayerNameIsValid) {
+//			throw new IllegalArgumentException("The userName for the black player is invalid.");
+//		}
+//		if(!whitePlayerNameIsValid) {
+//			throw new IllegalArgumentException("The userName for the white player is invalid.");
+//		}
+//		if(!totalThinkingTimeIsValid) {
+//			throw new IllegalArgumentException("The specified time is invalid.");
+//		}
+		Game newGame = new Game(GameStatus.Initializing, MoveMode.PlayerMove, quoridor);
+		
+		// Verify that there are at least 2 users for this game
+		if(!(quoridor.getUsers().size() > 2)) {
+			throw new RuntimeException("Not enough users to start a game! There must be at least 2 users.");
+		}
+		
+		// TODO: Talk to Imad about this?
+		// Logic behind this is that the white player wants to get to the black players' tile
+		// and vice versa
+		Player blackPlayer = new Player(new Time(0), quoridor.getUser(0), ControllerUtilities.WHITE_TILE_INDEX, Direction.Horizontal);
+		Player whitePlayer = new Player(new Time(0), quoridor.getUser(1), ControllerUtilities.BLACK_TILE_INDEX, Direction.Horizontal);
+
+		newGame.setBlackPlayer(blackPlayer);
+		newGame.setWhitePlayer(whitePlayer);
+		// Set the game to the quoridor object
+		quoridor.setCurrentGame(newGame);
+		
+		// TODO: Set the variables to start the game --> Should I be doing this?
+//		Boolean blackNameSet = setBlackPlayerUserName(userNameBlackPlayer);
+//		Boolean whiteNameSet = setWhitePlayerUserName(userNameWhitePlayer);
+//		Boolean blackTimeSet = setBlackPlayerThinkingTime(thinkingTime.getTime());
+//		Boolean whiteTimeSet = setWhitePlayerThinkingTime(thinkingTime.getTime());		
+//		if(!blackNameSet) {
+//			throw new RuntimeException("Could not set the black player name.");
+//		}
+//		if(!whiteNameSet) {
+//			throw new RuntimeException("Could not set the white player name.");
+//		}
+//		if(!blackTimeSet) {
+//			throw new RuntimeException("Could not set the black player time.");
+//		}
+//		if(!whiteTimeSet) {
+//			throw new RuntimeException("Could not set the white player time.");
+//		}
+		
+		// Technically not tho, this should be when a thinking time has been set and the each 
+		// person has selected a username...
+		quoridor.getCurrentGame().setGameStatus(GameStatus.ReadyToStart);
+		return true;
 	}
 
 	/**
