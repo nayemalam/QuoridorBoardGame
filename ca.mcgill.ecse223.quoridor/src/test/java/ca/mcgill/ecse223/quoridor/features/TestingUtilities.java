@@ -65,13 +65,14 @@ class TestingUtilities {
 	}
     /**
      * Method to return the next player's color; this method actually sets the next players color.
-     * Example, if the currentPlayer = whitePlayer, then the nextPlayer's color = black, and vice versa
+     * Example, if the currentPlayer = whitePlayer, then it's nextPlayer's color = black, and vice versa
      *
      * @param currentPlayer - Player can either be whitePlayer or blackPlayer
-     * @param color - String color can either be white or black
      * @author Nayem Alam
      */
-	public static String getNextPlayerColor(Player currentPlayer, String color) {
+	public static String getNextPlayerColor(Player currentPlayer) {
+	    // color will be set based on corresponding player
+	    String color = null;
 		Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
 		Player blackPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
 		// if the currentPlayer is white

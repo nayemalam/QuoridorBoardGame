@@ -4,7 +4,6 @@ import javax.swing.text.Utilities;
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.utilities.*;
-import sun.util.resources.ext.CurrencyNames_da_DK;
 
 import java.sql.Time;
 import java.util.ArrayList;

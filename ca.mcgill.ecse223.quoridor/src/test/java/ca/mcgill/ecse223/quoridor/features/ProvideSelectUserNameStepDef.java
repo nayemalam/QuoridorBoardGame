@@ -148,6 +148,7 @@ public class ProvideSelectUserNameStepDef {
      */
     @Then("The player shall be warned that {string} already exists")
     public void the_player_shall_be_warned_that_already_exists(String username) {
+        // definitely something to do in the GUI
         assertEquals("user name exists", username, currentPlayer.getUser().getName());
     }
     /**
@@ -158,7 +159,7 @@ public class ProvideSelectUserNameStepDef {
      */
     @And("Next player to set user name shall be {string}")
     public void next_player_to_set_user_name_shall_be(String color) {
-        assertEquals(color, getNextPlayerColor(currentPlayer, color));
+        assertEquals(color, getNextPlayerColor(currentPlayer));
     }
 
 }
