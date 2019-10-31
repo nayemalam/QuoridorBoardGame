@@ -3,8 +3,6 @@ package ca.mcgill.ecse223.quoridor.controller;
 
 import javax.swing.text.Utilities;
 
-import org.eclipse.jdt.annotation.Nullable;
-
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.model.Game.GameStatus;
@@ -12,6 +10,7 @@ import ca.mcgill.ecse223.quoridor.model.Game.MoveMode;
 import ca.mcgill.ecse223.quoridor.utilities.*;
 
 import java.sql.Time;
+import java.util.Timer;
 
 public class QuoridorController {
 
@@ -132,8 +131,10 @@ public class QuoridorController {
 							 ? currentBlackPlayer: currentGame.getWhitePlayer(); 
 		
 		Time remainingTime = currentPlayer.getRemainingTime();
-		// TODO: WTF how do I start the time???
 		
+		// TODO: WTF how do I start the time???
+		Timer timer = new Timer("MyTimer");
+        timer.schedule(new ThreadTimer(currentPlayer), 0, 1000);
 		// Set game status to running
 		currentGame.setGameStatus(GameStatus.Running);
 		
@@ -473,7 +474,7 @@ public class QuoridorController {
 	 * @return true/false true for valid position, false for invalid
 	 * @author Alexander Legouverneur
 	 */
-	public static boolean initiatePosValidation(int row, int col, String Walldir, @Nullable Wall wall, int id) {
+	public static boolean initiatePosValidation(int row, int col, String Walldir, Wall wall, int id) {
 		Quoridor q = QuoridorApplication.getQuoridor();
 		if(row>=1 && row<=8 && col>=1 && col<=8) {
 			if(wall == null) {
