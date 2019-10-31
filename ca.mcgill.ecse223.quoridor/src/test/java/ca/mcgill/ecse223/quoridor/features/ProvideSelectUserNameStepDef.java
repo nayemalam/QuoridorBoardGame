@@ -159,7 +159,7 @@ public class ProvideSelectUserNameStepDef {
      */
     @And("Next player to set user name shall be {string}")
     public void next_player_to_set_user_name_shall_be(String color) {
-        assertEquals(color, getNextPlayerColor(currentPlayer));
+        assertEquals(color, getPlayerColor(currentPlayer.getNextPlayer()));
     }
 
 }
