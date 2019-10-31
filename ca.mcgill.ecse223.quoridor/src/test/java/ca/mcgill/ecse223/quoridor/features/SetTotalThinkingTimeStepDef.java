@@ -32,7 +32,7 @@ public class SetTotalThinkingTimeStepDef {
      */
     @When("{int}:{int} is set as the thinking time")
     public void is_set_as_the_thinking_time(Integer min, Integer sec) {
-        // controller method should set same thinking time for both p1&p2
+        // controller method should set same thinking time for both player1 & player2
         QuoridorController.setThinkingTime(min, sec);
     }
     /**
