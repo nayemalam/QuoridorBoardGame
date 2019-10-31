@@ -28,6 +28,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
+import javax.swing.JComboBox;
 
 public class StartGameWindow {
 
@@ -35,16 +36,16 @@ public class StartGameWindow {
 	private JTextField txtStartNewGame;
 	private JTextField txtPlayerName;
 	private JTextField txtPlayerName_1;
-	private JTextField textField_Player2Name;
 	private JTextField txtTotalThinkingTime;
 	private JTextField textField_Minutes;
 	private JTextField txtMinutes;
 	private JTextField textField_Seconds;
 	private JTextField txtSeconds;
-	private JTextField textField_Player1Name;
 	private JPanel panel_3;
 	private JButton btnNewButton;
 	private JTextField textField_errors;
+	private JComboBox comboBox;
+	private JComboBox comboBox_1;
 
 	/**
 	 * Launch the application.
@@ -137,10 +138,9 @@ public class StartGameWindow {
 		panel_1.add(txtPlayerName, "2, 2, fill, fill");
 		txtPlayerName.setColumns(10);
 		
-		textField_Player1Name = new JTextField();
-		textField_Player1Name.setToolTipText("Please enter a name for player 1");
-		panel_1.add(textField_Player1Name, "4, 2, fill, default");
-		textField_Player1Name.setColumns(10);
+		comboBox = new JComboBox();
+		comboBox.setEditable(true);
+		panel_1.add(comboBox, "4, 2, fill, default");
 		
 		txtPlayerName_1 = new JTextField();
 		txtPlayerName_1.setFont(new Font("Tahoma", Font.BOLD, 13));
@@ -151,10 +151,9 @@ public class StartGameWindow {
 		panel_1.add(txtPlayerName_1, "2, 4, fill, fill");
 		txtPlayerName_1.setColumns(10);
 		
-		textField_Player2Name = new JTextField();
-		textField_Player2Name.setToolTipText("Please enter a name for player 2");
-		panel_1.add(textField_Player2Name, "4, 4, fill, default");
-		textField_Player2Name.setColumns(10);
+		comboBox_1 = new JComboBox();
+		comboBox_1.setEditable(true);
+		panel_1.add(comboBox_1, "4, 4, fill, default");
 		
 		txtTotalThinkingTime = new JTextField();
 		txtTotalThinkingTime.setFont(new Font("Tahoma", Font.BOLD, 13));
