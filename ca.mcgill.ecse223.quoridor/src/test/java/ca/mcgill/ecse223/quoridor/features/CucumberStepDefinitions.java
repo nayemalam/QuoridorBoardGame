@@ -1,4 +1,3 @@
-
 package ca.mcgill.ecse223.quoridor.features;
 
 import java.sql.Time;
@@ -7,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
+import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
 import ca.mcgill.ecse223.quoridor.model.Board;
 import ca.mcgill.ecse223.quoridor.model.Direction;
 import ca.mcgill.ecse223.quoridor.model.Game;
@@ -25,9 +25,22 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 
 public class CucumberStepDefinitions {
+	// ***********************************************
+	// Scenario and scenario outline step definitions
+	// ***********************************************
+
+	/*
+	 * TODO Insert your missing step definitions here
+	 * 
+	 * Call the methods of the controller that will manipulate the model once they
+	 * are implemented
+	 * 
+	 */
 
 	// ***********************************************
-	// Background step definitions
+	// Clean up
+	// ***********************************************
+
 	// ***********************************************
 
 	@Given("^The game is not running$")
@@ -109,11 +122,11 @@ public class CucumberStepDefinitions {
 	public void aNewGameIsInitializing() throws Throwable {
 		initQuoridorAndBoard();
 		ArrayList<Player> players = createUsersAndPlayers("user1", "user2");
-		Game game = new Game(GameStatus.Initializing, MoveMode.PlayerMove, QuoridorApplication.getQuoridor());
-		game.setWhitePlayer(players.get(0));
-		game.setBlackPlayer(players.get(1));
+		// TODO: Fix this
+		QuoridorController.initializeNewGame(QuoridorApplication.getQuoridor());
+		//new Game(GameStatus.Initializing, MoveMode.PlayerMove, QuoridorApplication.getQuoridor());
 	}
-
+	
 	// ***********************************************
 	// Scenario and scenario outline step definitions
 	// ***********************************************

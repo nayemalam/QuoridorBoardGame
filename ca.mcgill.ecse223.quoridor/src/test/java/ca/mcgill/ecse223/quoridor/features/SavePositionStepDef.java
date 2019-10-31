@@ -37,7 +37,7 @@ public class SavePositionStepDef {
 
 	@Given ("No file {string} exists in the filesystem")
 	public void NoFileExistsInTheFileSystem(String filename) {
-		String pathName = "C:\\Users\\nbuis\\git\\ecse223-project--group-04\\ca.mcgill.ecse223.quoridor\\src\\main\\" + filename + ".txt";
+		String pathName = filename;
 		// new File creates a pointer to the file
 		//createNewFile actually creates it
 		
@@ -67,7 +67,7 @@ public class SavePositionStepDef {
 	@Then ("A file with {string} shall be created in the filesystem")
 	public void AFileShallBeCreatedInTheFileSystem(String filename) {
 		
-		String pathName = "C:\\Users\\nbuis\\git\\ecse223-project--group-04\\ca.mcgill.ecse223.quoridor\\src\\main\\" + filename + ".txt";
+		String pathName = filename;
 		file = new File(pathName);
 		boolean FileExists = false;
 		try {
@@ -93,7 +93,7 @@ public class SavePositionStepDef {
 	@Given ("File {string} exists in the filesystem")
 	public void FileExistsInTheFileSystem(String filename) {
 
-		String pathName = "C:\\Users\\nbuis\\git\\ecse223-project--group-04\\ca.mcgill.ecse223.quoridor\\src\\main\\" + filename + ".txt";
+		String pathName = filename;
 		file = new File(pathName);
 		if(file.exists()) {
 			//if it exists do nothing
@@ -126,7 +126,7 @@ public class SavePositionStepDef {
 	@Then ("File with {string} shall be updated in the filesystem")
 	public void FileShallBeUpdatedInTheFileSystem(String filename) {
 		
-		String pathName = "C:\\Users\\nbuis\\git\\ecse223-project--group-04\\ca.mcgill.ecse223.quoridor\\src\\main\\" + filename + ".txt";
+		String pathName = filename;
 		file = new File(pathName);
 		FileReader reader = null;
 		try{
@@ -173,7 +173,7 @@ public class SavePositionStepDef {
 	@Then ("File {string} shall not be changed in the filesystem")
 	public void FileShallNotBeChangedInTheFileSystem(String filename) {
 		
-		String pathName = "C:\\Users\\nbuis\\git\\ecse223-project--group-04\\ca.mcgill.ecse223.quoridor\\src\\main\\" + filename + ".txt";
+		String pathName = filename;
 		file = new File(pathName);
 		FileReader reader = null;
 		try{

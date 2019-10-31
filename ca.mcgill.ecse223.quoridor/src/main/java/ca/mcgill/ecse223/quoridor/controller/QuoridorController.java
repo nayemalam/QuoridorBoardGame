@@ -3,11 +3,14 @@ import javax.swing.text.Utilities;
 
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.model.*;
+import ca.mcgill.ecse223.quoridor.model.Game.GameStatus;
+import ca.mcgill.ecse223.quoridor.model.Game.MoveMode;
 import ca.mcgill.ecse223.quoridor.utilities.*;
 
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
 
 public class QuoridorController {
 
@@ -65,18 +68,41 @@ public class QuoridorController {
 	public static void grabWall(Board board, Player player) {
 		// TODO Auto-generated method stub
 	}
+
 	/**
-	 * Method - initializeNewGame()
-	 * 
-	 * This method, according to the Gherkin definition, should initialize a new
-	 * game in the Quoridor object It should perform the following: 1. Set a name to
-	 * White and Black Players 2. Set the total thinking time to both players
-	 * 
-	 * @param quoridor - Quoridor in which to start new game
-	 * @author Tristan Bouchard
+	 * Method: initializeNewGame(Quoridor quoridor)
+	 * @param quoridor - Quoridor object within which to create new game
+	 * @return {true} if game correctly initialized, an exception otherwise
+	 * @throws IllegalArgumentException - If the supplied quoridor is null or already has a game
+	 * @throws RuntimeException - If the amount of users is insufficient
 	 */
-	public static void initializeNewGame(Quoridor quoridor) throws Exception {
-		throw new UnsupportedOperationException();
+	public static Boolean initializeNewGame(Quoridor quoridor) throws Exception {
+		Boolean quoridorIsValid = !quoridor.equals(null);
+		
+		if(!quoridorIsValid) {
+			throw new IllegalArgumentException("This Quoridor already contains a game, or the Quoridor is null");
+		}
+		Game newGame = new Game(GameStatus.Initializing, MoveMode.PlayerMove, quoridor);
+		
+		// Verify that there are at least 2 users for this game
+		if(quoridor.getUsers().size() < 2) {
+			throw new RuntimeException("Not enough users to start a game! There must be at least 2 users.");
+		}
+		
+		// TODO: Talk to Imad about this?
+		// Logic behind this is that the white player wants to get to the black players' tile
+		// and vice versa
+		Player whitePlayer = new Player(new Time(0), quoridor.getUser(0), ControllerUtilities.BLACK_TILE_INDEX, Direction.Horizontal);
+		Player blackPlayer = new Player(new Time(0), quoridor.getUser(1), ControllerUtilities.WHITE_TILE_INDEX, Direction.Horizontal);
+		whitePlayer.setGameAsWhite(newGame);
+		blackPlayer.setGameAsBlack(newGame);
+		
+		newGame.setWhitePlayer(whitePlayer);
+		newGame.setBlackPlayer(blackPlayer);
+		// Set the game to the quoridor object
+		quoridor.setCurrentGame(newGame);
+		
+		return true;
 	}
 
 	/**
@@ -87,11 +113,32 @@ public class QuoridorController {
 	 * 2. Initialize the board
 	 * 
 	 * @param No parameters - The current player's clock will start counting down
-	 * @throws Exception
+	 * @throws RuntimeException
 	 * @author Tristan Bouchard
 	 */
-	public static void startClock() throws Exception {
-		throw new UnsupportedOperationException();
+	public static Boolean startClock() throws RuntimeException {
+		Quoridor currentQuor = QuoridorApplication.getQuoridor();
+		if(!currentQuor.hasCurrentGame()) {
+			throw new RuntimeException("There is no current game to start! Please create a game first.");
+		}
+		Game currentGame = currentQuor.getCurrentGame();
+
+		if(!currentGame.hasBlackPlayer() || !currentGame.hasWhitePlayer()) {
+			throw new RuntimeException("Game has incorrect amount of players. Please verify the players.");
+		}
+		Player currentBlackPlayer = currentGame.getBlackPlayer();
+		Player currentPlayer = (currentBlackPlayer.hasNextPlayer() && !currentBlackPlayer.getNextPlayer().equals(null)) 
+							 ? currentBlackPlayer: currentGame.getWhitePlayer(); 
+		
+		Time remainingTime = currentPlayer.getRemainingTime();
+		
+		// TODO: WTF how do I start the time???
+		Timer timer = new Timer("MyTimer");
+        timer.schedule(new ThreadTimer(currentPlayer), 0, 1000);
+		// Set game status to running
+		currentGame.setGameStatus(GameStatus.Running);
+		
+		return true;
 	}
 
 	/**
@@ -107,9 +154,83 @@ public class QuoridorController {
 	 * @throws Exception
 	 * @author Tristan Bouchard
 	 */
+	public static void initializeBoard(Quoridor quoridor) throws Exception {
+		
+		Boolean quoridorIsValid = !quoridor.equals(null);
+		Boolean gameIsValid = quoridor.hasCurrentGame() && !quoridor.getCurrentGame().equals(null);
+		
+		if(!quoridorIsValid) {
+			throw new IllegalArgumentException("This Quoridor already contains a game, or the Quoridor is null");
+		}
+		if(!gameIsValid) {
+			throw new RuntimeException("Game is not properly initialized");
+		}
+		// This method will only create a board if no board has been previously created
+		if(!quoridor.hasBoard()) {
+			Board newBoard = new Board(quoridor);
+			ControllerUtilities.initTilesForNewBoard(newBoard);
+			quoridor.setBoard(newBoard);
+		}
+		
+		// Set white player to be current player
+		Game currentGame = quoridor.getCurrentGame();
+		Player currentWhitePlayer = currentGame.hasWhitePlayer() ? currentGame.getWhitePlayer() : null;
+		Player currentBlackPlayer = currentGame.hasBlackPlayer() ? currentGame.getBlackPlayer() : null;
+		if(currentWhitePlayer.equals(null) || currentBlackPlayer.equals(null)) {
+			throw new RuntimeException("Players of the current game are invalid");
+		}
+		
+		setNextPlayer(currentWhitePlayer, currentBlackPlayer);
+		
+		// Clear existing positions and moves in the Game
+		ControllerUtilities.clearExistingPositions(currentGame);
+		ControllerUtilities.clearExistingMoves(currentGame);
+		
+		// Set white + black pawn to their initial positions
+		setInitialGamePosition(currentGame, quoridor.getBoard(), currentWhitePlayer, currentBlackPlayer);
+		
+		
+	}
 
-	public static void initializeBoard() throws Exception {
-		throw new UnsupportedOperationException();
+	
+	/**
+	 * Method used to set the initial game position and walls in the new game object
+	 * @param currentGame - Current game in which to set the initial position
+	 * @param quoridor - Current instance of the board
+	 * @param currentWhitePlayer - Current white player to initiate position
+	 * @param currentBlackPlayer - Current black player to initiate position
+	 */
+	private static void setInitialGamePosition(Game currentGame, Board board, Player currentWhitePlayer, Player currentBlackPlayer) {
+		// Get initial tiles
+		Tile whitePlayerInitialTile = board.getTile(ControllerUtilities.WHITE_TILE_INDEX);
+		Tile blackPlayerInitialTile = board.getTile(ControllerUtilities.BLACK_TILE_INDEX);
+		// Set initial player positions
+		PlayerPosition whitePlayerPosition = new PlayerPosition(currentWhitePlayer, whitePlayerInitialTile);
+		PlayerPosition blackPlayerPosition = new PlayerPosition(currentBlackPlayer, blackPlayerInitialTile);
+		// Create game position
+		GamePosition initialGamePosition = new GamePosition(0, whitePlayerPosition, blackPlayerPosition,
+				currentWhitePlayer, currentGame);
+		currentGame.addPosition(initialGamePosition);
+		currentGame.setCurrentPosition(initialGamePosition);
+		// Clear potential existing walls on board, moves and game positions
+		ControllerUtilities.emptyWallsOnBoard(initialGamePosition);
+
+		// initialize walls in stock
+		ControllerUtilities.initializeWallsInStock(initialGamePosition, currentWhitePlayer, currentBlackPlayer);
+
+	}
+
+	/**
+	 * Method used to set the next player to play. Requires currentPlayer and next player 
+	 * @param currentPlayer - Player to set nextPlayer in
+	 * @param nextPlayer - Player to be set as next player
+	 */
+	private static void setNextPlayer(Player currentPlayer, Player nextPlayer) {
+		// TODO: Is this valid?
+		// Set white players' next player to be the black player and set
+		// black players next player to null
+		currentPlayer.setNextPlayer(nextPlayer);
+		nextPlayer.setNextPlayer(null);
 	}
 
 	/**
@@ -130,6 +251,10 @@ public class QuoridorController {
 		// set same thinking time for both players
 		bPlayer.setRemainingTime(thinkingTime);
 		wPlayer.setRemainingTime(thinkingTime);
+	}
+	
+	public static String testMethod() {
+		return "Hello world!";
 	}
 	/**
 	 * Method - selectExistingUserName(String username)
@@ -293,10 +418,10 @@ public class QuoridorController {
 
 		// Verify the indices of the tiles only if the total size is correct
 		Boolean correctTileIndexing = true;
-		for (int row = 0; row < ControllerUtilities.TOTAL_NUMBER_OF_ROWS; row++) {
-			for (int col = 0; col < ControllerUtilities.TOTAL_NUMBER_OF_COLS; col++) {
+		for (int row = 1; row <= ControllerUtilities.TOTAL_NUMBER_OF_ROWS; row++) {
+			for (int col = 1; col <= ControllerUtilities.TOTAL_NUMBER_OF_COLS; col++) {
 				// Obtain tile in the list and verify that the indices are correct
-				int index = ((ControllerUtilities.TOTAL_NUMBER_OF_COLS) * (row) + (col));
+				int index = ((ControllerUtilities.TOTAL_NUMBER_OF_COLS) * (row-1) + (col-1));
 				Tile currentTile = board.getTile(index);
 				correctTileIndexing = correctTileIndexing && (row == currentTile.getRow());
 				correctTileIndexing = correctTileIndexing && (col == currentTile.getColumn());
@@ -332,65 +457,150 @@ public class QuoridorController {
 	}
 
 
-	
+
 	/**
 	 * Method that initializes the Validation of the position, 
-	 * @param PawnPosition
-	 * @throws UnsupportedOperationException
-	 * @returns true/false
+	 * @param row , the row of the position of the pawn 
+	 * @param col , the column of the pawn
+	 * @returns true/false , true if the position is valid else false
 	 * @author Alexander Legouverneur
 	 */
-	public static boolean InitializeValidatePosition(int row, int col) throws UnsupportedOperationException {
-		throw new UnsupportedOperationException();
+	public static boolean initializeValidatePosition(int row, int col) {
+		if(row>=1 && row<=9 && col>=1 && col<=9) {
+			return true;
+		}
+		else return false;
 	}
-	
+
 	/**
 	 * Method that returns if the position is valid by calling InitializeVaidatePostion()
-	 * @param pawn position
-	 * @throws UnsupportedOperationException
+	 * @param row of the pawn position
+	 * @param col of th pawn position
 	 * @returns ok/error strings
 	 * @author Alexander Legouverneur
 	 */
-	public static String ValidatePawnPosition(int row, int col) throws UnsupportedOperationException {
-		throw new UnsupportedOperationException();
+	public static String validatePawnPosition(int row, int col) {
+		if(initializeValidatePosition(row, col) == true) {
+			return "ok";
+		}
+		else return "error";
 	}
 	/**
-	 * Method that initiates the validation of the position
-	 * @param wallPosition
-	 * @param Walldir
-	 * @return true/false true for initialized validation
-	 * @throws UnsupportedOperationException
+	 * Method that initiates the validation of the position by checking all cases of incorrect position 
+	 * for all placed walls.
+	 * @param row , is the row of the target tile of the WallMove associated to the wall
+	 * @param col , the column of the target tile of the wall move associated to the wall
+	 * @param Walldir , the direction of the WallMove associated with the wall
+	 * @param wall , the wall currently checked for validity
+	 * @param id , the id of the wall currently checked for validity
+	 * @return true/false true for valid position, false for invalid
 	 * @author Alexander Legouverneur
 	 */
-	public static boolean InitiatePosValidation(int row, int col, String Walldir) throws UnsupportedOperationException{
-		throw new UnsupportedOperationException();
+	public static boolean initiatePosValidation(int row, int col, String Walldir, Wall wall, int id) {
+		Quoridor q = QuoridorApplication.getQuoridor();
+		if(row>=1 && row<=8 && col>=1 && col<=8) {
+			if(wall == null) {
+				return true;
+			}
+			Direction dir1;
+			int col1;
+			int row1;
+			for(int i = 0; i<=q.getCurrentGame().getCurrentPosition().numberOfBlackWallsOnBoard()+q.getCurrentGame().getCurrentPosition().numberOfWhiteWallsOnBoard()-1; i++){
+				if(id == i) {
+					continue;
+				}
+				if(i>9) {
+					if(q.getCurrentGame().getBlackPlayer().getWall(i).hasMove() == false) {
+						continue;
+					}
+					row1 = q.getCurrentGame().getBlackPlayer().getWall(i).getMove().getTargetTile().getRow();
+					col1 = q.getCurrentGame().getBlackPlayer().getWall(i).getMove().getTargetTile().getColumn();
+					dir1 = q.getCurrentGame().getBlackPlayer().getWall(i).getMove().getWallDirection();
+				}
+				else {
+					if(q.getCurrentGame().getWhitePlayer().getWall(i).hasMove() == false) {
+						continue;
+					}
+					row1 = q.getCurrentGame().getWhitePlayer().getWall(i).getMove().getTargetTile().getRow();
+					col1 = q.getCurrentGame().getWhitePlayer().getWall(i).getMove().getTargetTile().getColumn();
+					dir1 = q.getCurrentGame().getWhitePlayer().getWall(i).getMove().getWallDirection();
+				}
+
+
+				if(dir1 == Direction.Horizontal) {
+					if(Walldir.equals("horizontal")) {
+						if(col1 == col && row1 == row) {
+							return false;
+						}
+						if(col1 ==col+1 && row1 == row) {
+							return false;
+						}
+						if(col1 == col-1 && row1 == row) {
+							return false;
+						}
+					}
+					else {
+						if(col1 == col && row1 == row) {
+							return false;
+						}
+					}
+				}
+				else {
+					if(Walldir.equals("vertical")) {
+						if(row1 == row+1 && col1 == col) {
+							return false;
+						}
+						if( row1 == row-1 && col1 == col) {
+							return false;
+						}
+						if(col1==col && row1 == row) {
+							return false;
+						}
+					}
+					else {
+						if(col1 == col && row1 == row) {
+							return false;
+						}
+					}
+				}
+			}
+			return true;
+		}
+		else return false;
 	}
-	
+
 	/**
-	 * Method that returns the direction of the wall after validation
-	 * @param WallPosition
-	 * @param Wall Direction
-	 * @return direction -of the wall
-	 * @throws UnsupportedOperationException
+	 * Method that returns if the wall can be placed at the indicated position by calling InitiatePosValidation()
+	 * @param row , the row of the tile of the WallMove associated with to the wall
+	 * @param dir , direction of the wall
+	 * @param col , column of the tile of the WallMove associated to the wall
+	 * @return ok/error , strings, ok if wall can be placed, else error.
 	 * @author Alexander Legouverneur
 	 */
-	public static String ValidateWall(int row, int col, String dir ) throws UnsupportedOperationException{
-		throw new UnsupportedOperationException();
+	public static String validateWall(int row, int col, String dir) {
+		if(initiatePosValidation(row, col, dir, null, 0) == true) {
+			return "ok";
+		}
+		else return "error";
 	}
-	
+
 	/**
 	 * Method that checks if wall Position is valid
-	 * @param WallPosition
-	 * @param Wall Direction
-	 * @return true/false
-	 * @throws UnsupportedOperationException
+	 * @param row , row of the tile of the WallMove associated with the wall
+	 * @param col , column of the tile of the WallMove associated with the wall
+	 * @param dir , direction of the wall
+	 * @param wall , the wall which the position is checked
+	 * @return true/false , true if position is valid, false if it is not
 	 * @author Alexander Legouverneur
 	 */
-	public static boolean CheckWallValid(int row, int col, String dir) throws UnsupportedOperationException{
-		throw new UnsupportedOperationException();
+	public static boolean checkWallValid(int row, int col, String dir, Wall wall) {
+		if(initiatePosValidation(row, col, dir, wall, wall.getId()) == true) {
+			return true;
+		}
+		else return false;
 	}
-	
-//end of validate position
+ 
+	//end of validate position
 	/**
 	 * Checks if the wall is on the side edge of the board
 	 * @param aWall
@@ -398,10 +608,40 @@ public class QuoridorController {
 	 * @throws UnsupportedOperationException
 	 * @author Alexander Legouverneur
 	 */
-	public static boolean CheckWallSideEdge(Wall aWall) throws UnsupportedOperationException{
-		throw new UnsupportedOperationException();
+	public static boolean checkWallSideEdge(Wall aWall, String side) {
+		
+		int row = aWall.getMove().getTargetTile().getRow();
+		int col = aWall.getMove().getTargetTile().getColumn();
+		Direction dir = aWall.getMove().getWallDirection();
+		//System.out.println("Coordinates: "+row+","+col);
+
+		if(col == 1 && side.equals("left") && dir == Direction.Vertical) {
+			return true;
+		}
+		if(col == 8 && side.equals("right") && dir == Direction.Horizontal) {
+			return true;
+		}
+		if(col == 1 && side.equals("left") && dir == Direction.Horizontal) {
+			return true;
+		}
+		if(col == 8 && side.equals("right") && dir == Direction.Vertical) {
+			return true;
+		}
+		if(row == 8 && side.equals("down") && dir == Direction.Vertical) {
+			return true;
+		}
+		if(row == 1 && side.equals("up") && dir == Direction.Vertical) {
+			return true;
+		}
+		if (row == 1 && side.equals("up") && dir == Direction.Horizontal) {
+			return true;
+		}
+		if(row == 8 && side.equals("down") && dir == Direction.Horizontal) {
+			return true;
+		}
+		return false;
 	}
-	
+
 	/**
 	 * Methods that checks if the move on the specified side is possible, with if statements to see if the move is 
 	 * legal, if yes proceed to the move otherwise, call the method IlllegalWallMove()
@@ -410,10 +650,50 @@ public class QuoridorController {
 	 * @throws UnsupportedOperationException
 	 * @author Alexander Legouverneur
 	 */
-	public static void VerifyMoveWallOnSide(Wall aWall, String side) throws UnsupportedOperationException{
-		throw new UnsupportedOperationException();
+	public static void verifyMoveWallOnSide(Wall aWall, String side, int index){
+		Quoridor q = QuoridorApplication.getQuoridor();
+		
+		try {
+			aWall.getOwner().getWall(index).getMove().getTargetTile().getRow();
+			aWall.getOwner().getWall(index).getMove().getTargetTile().getColumn();
+			aWall.getOwner().getWall(index).getMove().getWallDirection();
+		} catch(Exception e) {
+			System.out.println("THE WALL IS NOT PLACED: ");
+		}
+		
+		int row =aWall.getOwner().getWall(index).getMove().getTargetTile().getRow();
+		int col = aWall.getOwner().getWall(index).getMove().getTargetTile().getColumn();
+		Direction dir = aWall.getOwner().getWall(index).getMove().getWallDirection();
+
+		if(checkWallSideEdge(aWall,side) == true) {
+			illegalWallMove();
+		}
+		
+		if(checkWallSideEdge(aWall,side) == false) {
+			
+			
+			
+			if(side.equals("left")) {
+				Tile aTile = new Tile(row, col-1,q.getBoard());
+				aWall.getMove().setTargetTile(aTile);
+			}
+			if(side.equals("right")) {
+				Tile aTile = new Tile(row, col+1,q.getBoard());
+				aWall.getMove().setTargetTile(aTile);
+				
+			}
+			if(side.equals("up")) {
+				Tile aTile = new Tile(row-1, col,q.getBoard());
+				aWall.getMove().setTargetTile(aTile);
+			}
+			if(side.equals("down")) {
+				Tile aTile = new Tile(row+1, col,q.getBoard());
+				aWall.getMove().setTargetTile(aTile);
+			}
+		}
+
 	}
-	
+
 	/**
 	 * This method is called by VerifyMoveWallOnSide if the move is illegal. Returns a string "illegal", and makes
 	 * sure the coordinates of the wall remain the same as before
@@ -422,10 +702,47 @@ public class QuoridorController {
 	 * @throws UnsupportedOperationException
 	 *@author Alexander Legouverneur
 	 */
-	public static String IllegalWallMove(Wall aWall) throws UnsupportedOperationException{
-		throw new UnsupportedOperationException();
+	public static String illegalWallMove() {
+		return "Illegal";
 	}
-  	/**
+	
+	/**
+	 * This method generalizes the wall move. It will go through all the possible errors by calling other methods.
+	 * To be sure that the wall move is possible, and if yes, execute the wall move. 
+	 * 
+	 * @param row  		row of the target tile for the move
+	 * @param col  		column of the target tile for the move
+	 * @param dir  		direction of the move
+	 * @param aWall 	wall to be moved 
+	 * @param player	player to whom the wall belongs
+	 */
+	public static void WallMove(int row, int col, Direction dir, Wall aWall,Player player) {
+		
+		Quoridor q = QuoridorApplication.getQuoridor();
+		boolean pos;
+		Tile aTile = new Tile(row, col, q.getBoard());
+		
+		if(dir.equals(Direction.Vertical)) {
+			pos = initiatePosValidation(row, col, "vertical",aWall, aWall.getId());
+		}
+		else {
+			pos = initiatePosValidation(row, col, "horizontal",aWall, aWall.getId());
+		}
+		if(pos == false) {
+			illegalWallMove();
+		}
+		if(aWall.hasMove() == false && pos == true) {
+			
+			new WallMove(1,1,player,aTile,q.getCurrentGame(), dir, aWall);	
+		}
+		else if(aWall.hasMove() == true && pos == true) {
+			
+			aWall.getMove().setTargetTile(aTile);
+			aWall.getMove().setWallDirection(dir);
+		}
+		
+	}
+	/**
 	 * Method - saveGameFile(String filename, Game game)
 	 * 
 	 * Controller method used to save the game as a text file
@@ -438,7 +755,7 @@ public class QuoridorController {
 	 * 
 	 */
 	public static String saveGameFile(String filename) {
-		
+
 		throw new UnsupportedOperationException();
 	}
 	/**
@@ -453,10 +770,10 @@ public class QuoridorController {
 	 * 
 	 */
 	public static String overWriteFile(String filename) {
-		
+
 		throw new UnsupportedOperationException();
 	}
-	
+
 	/**
 	 * Method - cancelOverWriteFile()
 	 * 
@@ -487,15 +804,15 @@ public class QuoridorController {
 	public static Game loadSavedGame(String filename) {
 		throw new UnsupportedOperationException();
 	}
-	
+
 	/**
 	 * Method used to rotate a wall
 	 * @author Iyatan Atchoro
 	 */
 	public static void rotateWall() throws Exception{
-		
+
 		throw new UnsupportedOperationException();
-		
+
 	}
 	/**
 	 * Method used to drop a wall
@@ -504,5 +821,17 @@ public class QuoridorController {
 
 	public static void dropWall() {	
 		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * Method used to get currentPlayer
+	 * @return
+	 */
+	public static Player getCurrentPlayer() {
+		Player playerWhite = QuoridorController.getWhitePlayer();
+		if(playerWhite.hasNextPlayer()){
+			return playerWhite;
+		}
+		return QuoridorController.getBlackPlayer();
 	}
 }
