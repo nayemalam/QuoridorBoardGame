@@ -71,7 +71,7 @@ public class LoadPositionStepDef {
 	@And ("{string} shall be at {int}:{int}")
 	public void PlayerShallBeAtRowCol(String player, int p_row, int p_col) {
 
-		if(player == "black") {
+		if(player.equals("black")) {
 			assertEquals(p_row, gamePosition.getBlackPosition().getTile().getRow());
 			
 			assertEquals(p_col, gamePosition.getBlackPosition().getTile().getColumn());
@@ -89,7 +89,7 @@ public class LoadPositionStepDef {
 	@And ("{string} shall have a vertical wall at {int}:{int}")
 	public void PlayerShallHaveAVerticalWallAtRowCol(String player, int pw_row, int pw_col) {
 
-		if(player == "black") {
+		if(player.equals("black")) {
 
 			assertEquals(Direction.Vertical, gamePosition.getBlackWallsOnBoard(0).getMove().getWallDirection());
 
@@ -112,7 +112,7 @@ public class LoadPositionStepDef {
 	@And ("{string} shall have a horizontal wall at {int}:{int}")
 	public void PlayerShallHaveAHorizontalWallAtRowCol(String player, int pw_row, int pw_col) {
 
-		if(player == "black") {
+		if(player.equals("black")) {
 
 			assertEquals(Direction.Horizontal, gamePosition.getBlackWallsOnBoard(0).getMove().getWallDirection());
 

@@ -3,6 +3,7 @@ package ca.mcgill.ecse223.quoridor;
 
 import ca.mcgill.ecse223.quoridor.model.Quoridor;
 import ca.mcgill.ecse223.quoridor.view.QuoridorPage;
+import ca.mcgill.ecse223.quoridor.view.SaveGamePage;
 
 public class QuoridorApplication {
 
@@ -12,7 +13,7 @@ public class QuoridorApplication {
 		// start UI
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                QuoridorPage.main(args);
+                SaveGamePage.main(args);
             }
         });
 	}

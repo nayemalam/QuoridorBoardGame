@@ -41,7 +41,7 @@ public class QuoridorPage {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		JLabel lblItWorked = new JLabel("IT WORKED");
+		JLabel lblItWorked = new JLabel("crazy");
 		lblItWorked.setBounds(280, 95, 303, 36);
 		frame.getContentPane().add(lblItWorked);
 	}
