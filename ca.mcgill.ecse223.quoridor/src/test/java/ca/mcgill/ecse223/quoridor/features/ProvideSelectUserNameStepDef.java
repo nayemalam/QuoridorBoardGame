@@ -13,7 +13,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-import static ca.mcgill.ecse223.quoridor.features.TestingUtilities.isExisting;
+import static ca.mcgill.ecse223.quoridor.features.TestingUtilities.*;
 import static org.junit.Assert.assertEquals;
 /**
  * Class used to encapsulate the step definitions related to the ProvideSelectUserName
@@ -24,6 +24,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class ProvideSelectUserNameStepDef {
 
+    private Player currentPlayer;
     // *********************************************
     // Select existing user name scenario
     // *********************************************
@@ -39,10 +40,6 @@ public class ProvideSelectUserNameStepDef {
     public void next_player_to_set_user_name_is(String color) throws Exception {
         Game g = QuoridorApplication.getQuoridor().getCurrentGame();
 //		Player currentPlayer = color.equals("white") ? g.getBlackPlayer() : g.getWhitePlayer();
-        /**
-         * Field can be applied to select any player (white or black)
-         */
-        Player currentPlayer;
         if(color.equals("white")) {
             currentPlayer = g.getBlackPlayer();
             currentPlayer.setNextPlayer(g.getWhitePlayer());
@@ -76,7 +73,7 @@ public class ProvideSelectUserNameStepDef {
      */
     @When("The player selects existing {string}")
     public void the_player_selects_existing(String username) throws Exception {
-        QuoridorController.selectExistingUserName(username);
+        QuoridorController.selectExistingUserName(username, currentPlayer, QuoridorApplication.getQuoridor());
     }
 
     /**
@@ -88,14 +85,15 @@ public class ProvideSelectUserNameStepDef {
      */
     @Then("The name of player {string} in the new game shall be {string}")
     public void the_name_of_player_in_the_new_game_shall_be(String color, String username) {
-        Player blackPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
-        Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
-
+//        Player blackPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
+//        Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
+//        String whiteUserName = whitePlayer.getUser().getName();
+//        String blackUserName = blackPlayer.getUser().getName();
         if(color.equals("white")){
-            assertEquals(username, whitePlayer.getUser().getName());
+            assertEquals(username, currentPlayer.getUser().getName());
         }
         else if (color.equals("black")) {
-            assertEquals(username,"Marton");
+            assertEquals(username, currentPlayer.getUser().getName());
         }
     }
 
@@ -128,7 +126,7 @@ public class ProvideSelectUserNameStepDef {
      */
     @When("The player provides new user name: {string}")
     public void the_player_provides_new_user_name(String username) throws Exception {
-        QuoridorController.selectNewUserName(username);
+        QuoridorController.selectNewUserName(username, currentPlayer, QuoridorApplication.getQuoridor());
     }
 
     /* DONE during first scenario
@@ -156,11 +154,7 @@ public class ProvideSelectUserNameStepDef {
      */
     @Then("The player shall be warned that {string} already exists")
     public void the_player_shall_be_warned_that_already_exists(String username) {
-        if(isExisting(username)){
-            assertEquals("user name exists", username,QuoridorApplication.getQuoridor().getUsers().get(0).toString() );
-        } else {
-            throw new PendingException(); // GUI maybe -- TODO
-        }
+        assertEquals("user name exists", username, currentPlayer.getUser().getName());
     }
     /**
      * Method used to verify the next player's username given the corresponding color
@@ -170,10 +164,7 @@ public class ProvideSelectUserNameStepDef {
      */
     @And("Next player to set user name shall be {string}")
     public void next_player_to_set_user_name_shall_be(String color) {
-        // if this color is white then next player is white??
-        // I need to verify between the input color and the player's color but
-        // not sure how to check what color the player currently has
-        throw new PendingException(); // GUI maybe -- TODO
+        assertEquals(color, getNextPlayerColor(currentPlayer, color));
     }
 
 }

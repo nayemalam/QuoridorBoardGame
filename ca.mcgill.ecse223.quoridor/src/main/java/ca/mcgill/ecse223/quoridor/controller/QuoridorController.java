@@ -7,6 +7,7 @@ import ca.mcgill.ecse223.quoridor.utilities.*;
 import sun.util.resources.ext.CurrencyNames_da_DK;
 
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.List;
 
 public class QuoridorController {
@@ -141,21 +142,18 @@ public class QuoridorController {
 	 * @throws Exception - throws exception if users list is empty
 	 * @author Nayem Alam
 	 */
-	public static List<User> selectExistingUserName(String username) throws Exception {
-		Player blackPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
-		Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
-		for(int i=0; i<QuoridorApplication.getQuoridor().getUsers().size(); i++) {
-			User user = QuoridorApplication.getQuoridor().getUsers().get(i);
-			user.setName(username);
+	public static void selectExistingUserName(String username, Player currentPlayer, Quoridor quoridor) throws Exception {
+		List<User> users = quoridor.getUsers();
+		if(!users.isEmpty()) {
+			for (int i = 0; i < users.size(); i++) {
+				if (users.get(i).getName().equals(username)) {
+					// currentPlayer's User would contain the existing username
+					currentPlayer.setUser(users.get(i));
+				}
+			}
+		} else {
+			throw new Exception("There are no existing users in the list.");
 		}
-		return QuoridorApplication.getQuoridor().getUsers();
-
-//		if(!QuoridorApplication.getQuoridor().getUsers().isEmpty()) {
-//			blackPlayer.getUser().setName(username);
-//			whitePlayer.getUser().setName(username);
-//		} else {
-//			throw new Exception("There are no existing users in the list.");
-//		}
 	}
 
 	/**
@@ -165,14 +163,16 @@ public class QuoridorController {
 	 * starting the game to select a new username
 	 *
 	 * @param username - String username is new and does not exist in list of users yet
-	 * @throws Exception (UnsupportedOperationException) todo for later
+	 * @throws Exception - throws exception if the username is within the list
 	 * @author Nayem Alam
 	 */
-	public static void selectNewUserName(String username) throws Exception {
-		Player blackPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
-		Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
-		blackPlayer.getUser().setName(username);
-		whitePlayer.getUser().setName(username);
+	public static void selectNewUserName(String username, Player currentPlayer, Quoridor quoridor) throws Exception {
+		List<User> users = quoridor.getUsers();
+		for (int i = 0; i < users.size(); i++) {
+			// currentPlayer would be able to set a new username
+			users.get(i).setName(username);
+			currentPlayer.setUser(users.get(i));
+		}
 	}
 
 

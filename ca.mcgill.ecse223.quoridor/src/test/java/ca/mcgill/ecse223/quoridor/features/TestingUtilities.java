@@ -5,6 +5,7 @@ import static org.junit.Assert.fail;
 import java.sql.Time;
 
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
+import ca.mcgill.ecse223.quoridor.model.Player;
 import ca.mcgill.ecse223.quoridor.model.User;
 
 class TestingUtilities {
@@ -61,5 +62,20 @@ class TestingUtilities {
 			return true;
 		}
 		return false;
+	}
+	public static String getNextPlayerColor(Player currentPlayer, String color) {
+		Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
+		Player blackPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
+		// if the currentPlayer is white
+		if(currentPlayer.equals(whitePlayer)) {
+			// next player's color is black
+			color = "black";
+			currentPlayer.setNextPlayer(blackPlayer);
+		} else if(currentPlayer.equals(blackPlayer)) {
+			// next player's color
+			color = "white";
+			currentPlayer.setNextPlayer(whitePlayer);
+		}
+		return color;
 	}
 }
