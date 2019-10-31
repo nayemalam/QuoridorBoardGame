@@ -52,7 +52,7 @@ class TestingUtilities {
 	/**
 	 * Method to check if username already exists
 	 *
-	 * @param username - username to check
+	 * @param username - String username to check
 	 * @author Nayem Alam
 	 */
 	public static boolean isExisting(String username) {
@@ -63,6 +63,14 @@ class TestingUtilities {
 		}
 		return false;
 	}
+    /**
+     * Method to return the next player's color; this method actually sets the next players color.
+     * Example, if the currentPlayer = whitePlayer, then the nextPlayer's color = black, and vice versa
+     *
+     * @param currentPlayer - Player can either be whitePlayer or blackPlayer
+     * @param color - String color can either be white or black
+     * @author Nayem Alam
+     */
 	public static String getNextPlayerColor(Player currentPlayer, String color) {
 		Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
 		Player blackPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();

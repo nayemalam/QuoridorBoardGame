@@ -32,7 +32,7 @@ public class ProvideSelectUserNameStepDef {
     /**
      * Method used to set next player username based on color
      *
-     * @param color the color can be white or black
+     * @param color - String color can be white or black
      * @throws Exception the color of the user can only be white or black
      * @author Nayem Alam
      */
@@ -48,14 +48,14 @@ public class ProvideSelectUserNameStepDef {
             currentPlayer = g.getWhitePlayer();
             currentPlayer.setNextPlayer(g.getBlackPlayer());
         } else {
-          throw new Exception("The color entered is not white or black");
+          throw new Exception("The color entered is not white or black.");
         }
     }
 
     /**
      * Method used to show that there is an existing user
      *
-     * @param username the username exists within the list of users
+     * @param username - String username exists within the list of users
      * @author Nayem Alam
      */
     @And("There is existing user {string}")
@@ -67,7 +67,7 @@ public class ProvideSelectUserNameStepDef {
     /**
      * Method used to allow player to select an existing user name
      *
-     * @param username the username already exists
+     * @param username - String username already exists
      * @throws Exception - throws exception if users list is empty
      * @author Nayem Alam
      */
@@ -79,16 +79,12 @@ public class ProvideSelectUserNameStepDef {
     /**
      * Method used to verify the username given the corresponding color
      *
-     * @param color the color can be white or black
-     * @param username the username of player in new game
+     * @param color - String color can be white or black
+     * @param username - String username of player in new game
      * @author Nayem Alam
      */
     @Then("The name of player {string} in the new game shall be {string}")
     public void the_name_of_player_in_the_new_game_shall_be(String color, String username) {
-//        Player blackPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
-//        Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
-//        String whiteUserName = whitePlayer.getUser().getName();
-//        String blackUserName = blackPlayer.getUser().getName();
         if(color.equals("white")){
             assertEquals(username, currentPlayer.getUser().getName());
         }
@@ -108,7 +104,7 @@ public class ProvideSelectUserNameStepDef {
     /**
      * Method used to show that there is no existing user
      *
-     * @param username the username does not exist within the list of users
+     * @param username - String username does not exist within the list of users
      * @author Nayem Alam
      */
     @And("There is no existing user {string}")
@@ -120,12 +116,11 @@ public class ProvideSelectUserNameStepDef {
     /**
      * Method used to allow player to provide a new username
      *
-     * @param username new username provided by player
-     * @throws Exception (UnsupportedOperationException) since Controller method isn't implemented yet
+     * @param username - String new username  provided by player
      * @author Nayem Alam
      */
     @When("The player provides new user name: {string}")
-    public void the_player_provides_new_user_name(String username) throws Exception {
+    public void the_player_provides_new_user_name(String username) {
         QuoridorController.selectNewUserName(username, currentPlayer, QuoridorApplication.getQuoridor());
     }
 
@@ -148,8 +143,7 @@ public class ProvideSelectUserNameStepDef {
     /**
      * Method used to warn player if the username already exists
      *
-     * @param username the username of player in new game
-     * @throws PendingException bc I believe warning user can be done on (GUI) but not sure
+     * @param username - String username of player in new game
      * @author Nayem Alam
      */
     @Then("The player shall be warned that {string} already exists")
@@ -159,7 +153,7 @@ public class ProvideSelectUserNameStepDef {
     /**
      * Method used to verify the next player's username given the corresponding color
      *
-     * @param color color determines the corresponding username of the next player in new game
+     * @param color - String color determines the corresponding username of the next player in new game
      * @author Nayem Alam
      */
     @And("Next player to set user name shall be {string}")

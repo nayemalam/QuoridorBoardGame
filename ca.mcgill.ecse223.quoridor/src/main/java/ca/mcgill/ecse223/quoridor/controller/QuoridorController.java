@@ -139,6 +139,8 @@ public class QuoridorController {
 	 * starting the game to select an existing username
 	 *
 	 * @param username - String username exists within the list of users
+	 * @param currentPlayer - Player can either be whitePlayer or blackPlayer
+	 * @param quoridor - Quoridor contains given list of users (if any)
 	 * @throws Exception - throws exception if users list is empty
 	 * @author Nayem Alam
 	 */
@@ -163,10 +165,11 @@ public class QuoridorController {
 	 * starting the game to select a new username
 	 *
 	 * @param username - String username is new and does not exist in list of users yet
-	 * @throws Exception - throws exception if the username is within the list
+	 * @param currentPlayer - Player can either be whitePlayer or blackPlayer
+	 * @param quoridor - Quoridor contains given list of users (if any)
 	 * @author Nayem Alam
 	 */
-	public static void selectNewUserName(String username, Player currentPlayer, Quoridor quoridor) throws Exception {
+	public static void selectNewUserName(String username, Player currentPlayer, Quoridor quoridor) {
 		List<User> users = quoridor.getUsers();
 		for (int i = 0; i < users.size(); i++) {
 			// currentPlayer would be able to set a new username
