@@ -202,8 +202,8 @@ public class StartGameWindow {
 		btnNewButton.setToolTipText("Start New Game with above information");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//String msg = QuoridorController.testMethod();
-				textField_errors.setText("WTF");
+				String msg = QuoridorController.testMethod();
+				textField_errors.setText(msg);
 			}
 		});
 		panel_3.setLayout(new GridLayout(0, 1, 0, 0));
