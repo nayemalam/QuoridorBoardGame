@@ -13,9 +13,6 @@ import javax.swing.JTextPane;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
-
-import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
-
 import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.border.BevelBorder;
 import javax.swing.Box;
@@ -29,6 +26,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
+import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
 
 public class StartGameWindow {
 
