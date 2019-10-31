@@ -256,6 +256,12 @@ public class QuoridorController {
 	public static String testMethod() {
 		return "Hello world!";
 	}
+	
+	public static String[] listOfUsers() {
+		String[] users = {"Bird", "Cat", "Dog", "Rabbit", "Pig"};
+
+		return users;
+	}
 	/**
 	 * Method - selectExistingUserName(String username)
 	 *

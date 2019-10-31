@@ -75,7 +75,6 @@ public class StartGameWindow {
 	 */
 	private void initialize() {
 		frmStartGame = new JFrame();
-		frmStartGame.setResizable(false);
 		frmStartGame.setTitle("Quoridor - Start New Game");
 		frmStartGame.getContentPane().setBackground(SystemColor.textHighlightText);
 		frmStartGame.setBounds(100, 100, 566, 380);
@@ -137,8 +136,7 @@ public class StartGameWindow {
 		txtPlayerName.setText("Player 1 Name:");
 		panel_1.add(txtPlayerName, "2, 2, fill, fill");
 		txtPlayerName.setColumns(10);
-		
-		comboBox = new JComboBox();
+		comboBox = new JComboBox(QuoridorController.listOfUsers());		
 		comboBox.setEditable(true);
 		panel_1.add(comboBox, "4, 2, fill, default");
 		
