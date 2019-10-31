@@ -247,6 +247,10 @@ public class QuoridorController {
 		// convert min and sec to long and add it to new Time(add it here)
 		throw new UnsupportedOperationException();
 	}
+	
+	public static String testMethod() {
+		return "Hello world!";
+	}
 	/**
 	 * Method - selectExistingUserName(String username)
 	 *
@@ -794,6 +798,18 @@ public class QuoridorController {
 
 	public static void dropWall() {	
 		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * Method used to get currentPlayer
+	 * @return
+	 */
+	public static Player getCurrentPlayer() {
+		Player playerWhite = QuoridorController.getWhitePlayer();
+		if(playerWhite.hasNextPlayer()){
+			return playerWhite;
+		}
+		return QuoridorController.getBlackPlayer();
 	}
 }
 

@@ -13,6 +13,9 @@ import javax.swing.JTextPane;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
+
+import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
+
 import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.border.BevelBorder;
 import javax.swing.Box;
@@ -200,6 +203,8 @@ public class StartGameWindow {
 		btnNewButton.setToolTipText("Start New Game with above information");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//String msg = QuoridorController.testMethod();
+				textField_errors.setText("WTF");
 			}
 		});
 		panel_3.setLayout(new GridLayout(0, 1, 0, 0));
