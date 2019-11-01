@@ -47,9 +47,8 @@ public class QuoridorPage {
 	 */
 	public QuoridorPage() {
 		initialize();
-		initializeBoard();
-		PlaceWall();
-		movePawn();
+		placeWall();
+		validatePawnPosition();
 	}
 
 	/**
@@ -95,12 +94,9 @@ public class QuoridorPage {
 		
 	}
 	
-	private void initializeBoard() {
-		
-		
-	}
 	
-	private void PlaceWall() {
+	
+	private void placeWall() {
 		
 		
 		
@@ -134,42 +130,13 @@ public class QuoridorPage {
 		
 		
 	}
-	private void movePawn() {
+	private void validatePawnPosition() {
 		
 		JButton btnMovePawn = new JButton("Move Pawn");
 		btnMovePawn.setBounds(970, 118, 133, 62);
 		frame.getContentPane().add(btnMovePawn);
 		
 		
-		btnMovePawn.addMouseListener(new java.awt.event.MouseAdapter()
-	    {
-	        public void mousePressed(java.awt.event.MouseEvent evt)
-	        {
-
-	    		JButton btnright = new JButton("right");
-	    		btnright.setBounds(970, 250, 66, 31);
-	    		frame.getContentPane().add(btnright);
-	    		btnright.setVisible(true);
-	    		
-	    		JButton btnleft = new JButton("left");
-	    		btnleft.setBounds(1036, 250, 66, 31);
-	    		frame.getContentPane().add(btnleft);
-	    		btnleft.setVisible(true);
-	    		
-	    		JButton btnup = new JButton("up");
-	    		btnup.setBounds(1001, 217, 66, 31);
-	    		frame.getContentPane().add(btnup);
-	    		btnup.setVisible(true);
-	    		
-	    		JButton btndown = new JButton("down");
-	    		btndown.setBounds(1001, 284, 66, 31);
-	    		frame.getContentPane().add(btndown);
-	    		btndown.setVisible(true);
-	    		
-	    		SwingUtilities.updateComponentTreeUI(frame);
-	    		
-	        }
-	    });
 		
 	}
 }

@@ -13,7 +13,7 @@ import java.sql.Time;
 
 public class QuoridorController {
 
-
+	private static int moveNumber;
 
 	/**
 	 * Method to capture the time at which the clock is stopped
@@ -586,8 +586,8 @@ public class QuoridorController {
 			illegalWallMove();
 		}
 		if(aWall.hasMove() == false && pos == true) {
-			
-			new WallMove(1,1,player,aTile,q.getCurrentGame(), dir, aWall);	
+			moveNumber++;
+			new WallMove(moveNumber,1,player,aTile,q.getCurrentGame(), dir, aWall);	
 		}
 		else if(aWall.hasMove() == true && pos == true) {
 			
