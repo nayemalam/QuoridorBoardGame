@@ -93,7 +93,9 @@ public class SavePositionStepDef {
 	@Given ("File {string} exists in the filesystem")
 	public void FileExistsInTheFileSystem(String filename) {
 
+
 		String pathName = filename;
+
 		file = new File(pathName);
 		if(file.exists()) {
 			//if it exists do nothing
