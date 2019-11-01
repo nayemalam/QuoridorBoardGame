@@ -257,11 +257,6 @@ public class QuoridorController {
 		return "Hello world!";
 	}
 	
-	public static String[] listOfUsers() {
-		String[] users = {"Bird", "Cat", "Dog", "Rabbit", "Pig"};
-
-		return users;
-	}
 	/**
 	 * Method - selectExistingUserName(String username)
 	 *
@@ -286,6 +281,13 @@ public class QuoridorController {
 		} else {
 			throw new Exception("There are no existing users in the list.");
 		}
+	}
+	
+	
+	public static String[] listOfUsers() {
+		String[] users = {"Bird", "Cat", "Dog", "Rabbit", "Pig"};
+
+		return users;
 	}
 
 	/**

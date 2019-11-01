@@ -29,6 +29,7 @@ import java.awt.event.ActionEvent;
 
 import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 
 public class StartGameWindow {
 
@@ -44,8 +45,8 @@ public class StartGameWindow {
 	private JPanel panel_3;
 	private JButton btnNewButton;
 	private JTextField textField_errors;
-	private JComboBox comboBox;
-	private JComboBox comboBox_1;
+	private JTextField textField;
+	private JTextField textField_1;
 
 	/**
 	 * Launch the application.
@@ -136,9 +137,10 @@ public class StartGameWindow {
 		txtPlayerName.setText("Player 1 Name:");
 		panel_1.add(txtPlayerName, "2, 2, fill, fill");
 		txtPlayerName.setColumns(10);
-		comboBox = new JComboBox(QuoridorController.listOfUsers());		
-		comboBox.setEditable(true);
-		panel_1.add(comboBox, "4, 2, fill, default");
+		
+		textField = new JTextField();
+		panel_1.add(textField, "4, 2");
+		textField.setColumns(10);
 		
 		txtPlayerName_1 = new JTextField();
 		txtPlayerName_1.setFont(new Font("Tahoma", Font.BOLD, 13));
@@ -149,9 +151,9 @@ public class StartGameWindow {
 		panel_1.add(txtPlayerName_1, "2, 4, fill, fill");
 		txtPlayerName_1.setColumns(10);
 		
-		comboBox_1 = new JComboBox();
-		comboBox_1.setEditable(true);
-		panel_1.add(comboBox_1, "4, 4, fill, default");
+		textField_1 = new JTextField();
+		panel_1.add(textField_1, "4, 4, fill, default");
+		textField_1.setColumns(10);
 		
 		txtTotalThinkingTime = new JTextField();
 		txtTotalThinkingTime.setFont(new Font("Tahoma", Font.BOLD, 13));
