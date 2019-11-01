@@ -17,15 +17,9 @@ public class ThreadTimer extends TimerTask{
     @Override
     public void run() {
         // TODO Auto-generated method stub
-    	Long timeLeft = player.getRemainingTime().getTime();
-    	if(!(timeLeft > 0)) {
-    		throw new RuntimeException("Time is up!");
-    	}
+    	long timeLeft = player.getRemainingTime().getTime();
     	Time newTime = new Time(timeLeft - SECOND_IN_MS);
-    	QuoridorController.getCurrentPlayer().setRemainingTime(newTime);
-    	
-        System.out.println("Time Left for current player:" + TimerUtilities.clockToString(newTime.getTime()));
-        
+    	player.setRemainingTime(newTime);
    }
 
 }

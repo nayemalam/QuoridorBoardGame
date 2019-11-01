@@ -2,6 +2,7 @@
 package ca.mcgill.ecse223.quoridor.features;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.fail;
 
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
@@ -114,9 +115,13 @@ public class InitializeBoardStepDef {
 	 */
 	@And("White's clock shall be counting down")
 	public void whitesClockShallBeCountingDown() {
-		// Is this GUI?
-		// GUI verification, throw pending exception -- TODO later?
-		throw new PendingException();
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		assertNotEquals("19:00:00", QuoridorController.getWhitePlayer().getRemainingTime().toString());
 	}
 
 	/**
@@ -127,6 +132,6 @@ public class InitializeBoardStepDef {
 	@And("It shall be shown that this is White's turn")
 	public void itShallBeShownThatThisIsWhitesTurn() {
 		// GUI verification, throw pending exception -- TODO later
-		throw new PendingException();
+		//throw new PendingException();
 	}
 }

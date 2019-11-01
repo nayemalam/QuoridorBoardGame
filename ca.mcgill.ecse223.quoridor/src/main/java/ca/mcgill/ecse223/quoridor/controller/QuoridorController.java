@@ -126,13 +126,9 @@ public class QuoridorController {
 		if(!currentGame.hasBlackPlayer() || !currentGame.hasWhitePlayer()) {
 			throw new RuntimeException("Game has incorrect amount of players. Please verify the players.");
 		}
-		Player currentBlackPlayer = currentGame.getBlackPlayer();
-		Player currentPlayer = (currentBlackPlayer.hasNextPlayer() && !currentBlackPlayer.getNextPlayer().equals(null)) 
-							 ? currentBlackPlayer: currentGame.getWhitePlayer(); 
+		Player currentPlayer = getCurrentPlayer();
 		
-		Time remainingTime = currentPlayer.getRemainingTime();
-		
-		// TODO: WTF how do I start the time???
+		// TODO: how do I start the time???
 		Timer timer = new Timer("MyTimer");
         timer.schedule(new ThreadTimer(currentPlayer), 0, 1000);
 		// Set game status to running
@@ -189,6 +185,7 @@ public class QuoridorController {
 		// Set white + black pawn to their initial positions
 		setInitialGamePosition(currentGame, quoridor.getBoard(), currentWhitePlayer, currentBlackPlayer);
 		
+		startClock();
 		
 	}
 
