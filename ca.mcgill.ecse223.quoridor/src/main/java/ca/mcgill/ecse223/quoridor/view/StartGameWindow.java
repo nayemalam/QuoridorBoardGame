@@ -2,34 +2,25 @@ package ca.mcgill.ecse223.quoridor.view;
 
 import java.awt.EventQueue;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.awt.BorderLayout;
-import javax.swing.JTextField;
-import javax.swing.JTextArea;
 import java.awt.SystemColor;
 import java.awt.Font;
-import javax.swing.JTextPane;
+
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.border.BevelBorder;
-import javax.swing.Box;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
-import javax.swing.JFormattedTextField;
-import javax.swing.SwingConstants;
 import java.awt.GridLayout;
-import javax.swing.JSplitPane;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
+
+import java.awt.Component;
 
 public class StartGameWindow {
 
@@ -46,7 +37,8 @@ public class StartGameWindow {
 	private JButton btnNewButton;
 	private JTextField textField_errors;
 	private JTextField textField;
-	private JTextField textField_1;
+	private JComboBox comboBox;
+	private JComboBox comboBox_1;
 
 	/**
 	 * Launch the application.
@@ -111,23 +103,18 @@ public class StartGameWindow {
 		
 		JPanel panel_1 = new JPanel();
 		panel.add(panel_1, BorderLayout.CENTER);
-		FormLayout fl_panel_1 = new FormLayout(new ColumnSpec[] {
+		panel_1.setLayout(new FormLayout(new ColumnSpec[] {
 				FormSpecs.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("default:grow"),
+				ColumnSpec.decode("112px"),
 				FormSpecs.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("default:grow"),},
+				ColumnSpec.decode("446px:grow"),},
 			new RowSpec[] {
 				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
+				RowSpec.decode("26px"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
+				RowSpec.decode("26px"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
-				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
-				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,});
-		panel_1.setLayout(fl_panel_1);
+				RowSpec.decode("26px"),}));
 		
 		txtPlayerName = new JTextField();
 		txtPlayerName.setFont(new Font("Tahoma", Font.BOLD, 13));
@@ -135,12 +122,12 @@ public class StartGameWindow {
 		txtPlayerName.setEditable(false);
 		txtPlayerName.setHorizontalAlignment(SwingConstants.CENTER);
 		txtPlayerName.setText("Player 1 Name:");
-		panel_1.add(txtPlayerName, "2, 2, fill, fill");
+		panel_1.add(txtPlayerName, "2, 2, fill, top");
 		txtPlayerName.setColumns(10);
 		
-		textField = new JTextField();
-		panel_1.add(textField, "4, 2");
-		textField.setColumns(10);
+		comboBox = new JComboBox(QuoridorController.myUsers().toArray());
+		comboBox.setEditable(true);
+		panel_1.add(comboBox, "4, 2, fill, default");
 		
 		txtPlayerName_1 = new JTextField();
 		txtPlayerName_1.setFont(new Font("Tahoma", Font.BOLD, 13));
@@ -148,12 +135,12 @@ public class StartGameWindow {
 		txtPlayerName_1.setEditable(false);
 		txtPlayerName_1.setHorizontalAlignment(SwingConstants.CENTER);
 		txtPlayerName_1.setText("Player 2 Name:");
-		panel_1.add(txtPlayerName_1, "2, 4, fill, fill");
+		panel_1.add(txtPlayerName_1, "2, 4, fill, top");
 		txtPlayerName_1.setColumns(10);
 		
-		textField_1 = new JTextField();
-		panel_1.add(textField_1, "4, 4, fill, default");
-		textField_1.setColumns(10);
+		comboBox_1 = new JComboBox();
+		comboBox_1.setEditable(true);
+		panel_1.add(comboBox_1, "4, 4, fill, default");
 		
 		txtTotalThinkingTime = new JTextField();
 		txtTotalThinkingTime.setFont(new Font("Tahoma", Font.BOLD, 13));
@@ -203,11 +190,14 @@ public class StartGameWindow {
 			public void actionPerformed(ActionEvent e) {
 				String msg = QuoridorController.testMethod();
 				textField_errors.setText(msg);
+
+				comboBox.addItem(comboBox.getSelectedItem());
 			}
+			
 		});
 		panel_3.setLayout(new GridLayout(0, 1, 0, 0));
 		panel_3.add(btnNewButton);
-		
+
 		textField_errors = new JTextField();
 		textField_errors.setEnabled(false);
 		textField_errors.setEditable(false);

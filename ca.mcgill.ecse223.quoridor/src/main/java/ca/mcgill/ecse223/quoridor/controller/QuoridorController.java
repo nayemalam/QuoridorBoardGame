@@ -10,6 +10,7 @@ import ca.mcgill.ecse223.quoridor.model.Game.MoveMode;
 import ca.mcgill.ecse223.quoridor.utilities.*;
 
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 
@@ -280,7 +281,16 @@ public class QuoridorController {
 		}
 	}
 	
-	
+	public static List<String> myUsers() {
+		List<String> userList = new ArrayList<>();
+		userList.add("hello");
+		userList.add("my");
+		userList.add("name");
+		userList.add("is");
+		
+		return userList;
+		
+	}
 	public static String[] listOfUsers() {
 		String[] users = {"Bird", "Cat", "Dog", "Rabbit", "Pig"};
 
