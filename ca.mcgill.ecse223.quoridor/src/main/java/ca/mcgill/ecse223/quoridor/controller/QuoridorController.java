@@ -1,4 +1,6 @@
 package ca.mcgill.ecse223.quoridor.controller;
+
+
 import javax.swing.text.Utilities;
 
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
@@ -8,7 +10,6 @@ import ca.mcgill.ecse223.quoridor.model.Game.MoveMode;
 import ca.mcgill.ecse223.quoridor.utilities.*;
 
 import java.sql.Time;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 
@@ -126,13 +127,9 @@ public class QuoridorController {
 		if(!currentGame.hasBlackPlayer() || !currentGame.hasWhitePlayer()) {
 			throw new RuntimeException("Game has incorrect amount of players. Please verify the players.");
 		}
-		Player currentBlackPlayer = currentGame.getBlackPlayer();
-		Player currentPlayer = (currentBlackPlayer.hasNextPlayer() && !currentBlackPlayer.getNextPlayer().equals(null)) 
-							 ? currentBlackPlayer: currentGame.getWhitePlayer(); 
+		Player currentPlayer = getCurrentPlayer();
 		
-		Time remainingTime = currentPlayer.getRemainingTime();
-		
-		// TODO: WTF how do I start the time???
+		// TODO: how do I start the time???
 		Timer timer = new Timer("MyTimer");
         timer.schedule(new ThreadTimer(currentPlayer), 0, 1000);
 		// Set game status to running
@@ -189,7 +186,8 @@ public class QuoridorController {
 		// Set white + black pawn to their initial positions
 		setInitialGamePosition(currentGame, quoridor.getBoard(), currentWhitePlayer, currentBlackPlayer);
 		
-		
+		startClock();
+
 	}
 
 	
@@ -256,7 +254,6 @@ public class QuoridorController {
 	public static String testMethod() {
 		return "Hello world!";
 	}
-	
 	/**
 	 * Method - selectExistingUserName(String username)
 	 *
@@ -843,3 +840,5 @@ public class QuoridorController {
 		return QuoridorController.getBlackPlayer();
 	}
 }
+
+
