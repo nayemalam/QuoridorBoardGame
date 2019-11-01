@@ -22,8 +22,9 @@ import java.awt.event.MouseMotionAdapter;
 
 public class QuoridorPage {
 
-	private boolean event;
-	
+	JButton[] btnArray = new JButton[81];
+
+
 	private JFrame frame;
 
 	/**
@@ -58,18 +59,18 @@ public class QuoridorPage {
 		frame = new JFrame("Quoridor");
 		frame.setBounds(100, 100, 1165, 693);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+
 		JButton btnWall = new JButton("Wall");
 		btnWall.setBounds(993, 399, 89, 9);
 		btnWall.addMouseListener(new MouseAdapter() {
-			
+
 			public void mouseClicked(MouseEvent e) {
-				
+
 				btnWall.setBackground(Color.RED);;
 				frame.addMouseListener(new MouseAdapter(){
-					
+
 					public void mouseClicked(MouseEvent ev) {
-						
+
 						btnWall.setLocation(ev.getXOnScreen(), ev.getYOnScreen());
 						btnWall.setBackground(Color.black);
 					}
@@ -77,66 +78,97 @@ public class QuoridorPage {
 			}
 		});
 		frame.getContentPane().setLayout(null);
-		
-			
-//			public void mouseDragged(MouseEvent e) {
-//				btnWall.setLocation(e.getXOnScreen(), e.getYOnScreen());
-//				SwingUtilities.updateComponentTreeUI(frame);
-//						}
 
-		
+
+		//			public void mouseDragged(MouseEvent e) {
+		//				btnWall.setLocation(e.getXOnScreen(), e.getYOnScreen());
+		//				SwingUtilities.updateComponentTreeUI(frame);
+		//						}
+
+
 		frame.getContentPane().add(btnWall);
 		SwingUtilities.updateComponentTreeUI(frame);
-		
-		
-	
-		
-		
+
+
+
+
+
 	}
-	
-	
-	
+
+
+
 	private void placeWall() {
-		
-		
-		
+
+
+
 		JButton btnMoveWall = new JButton("Place new Wall");
 		btnMoveWall.setBounds(970, 29, 133, 62);
 		frame.getContentPane().add(btnMoveWall);
-		
+
 		btnMoveWall.addMouseListener(new MouseAdapter() {
-			
+
 			public void mouseClicked(MouseEvent e) {
-				
+
 				JButton btnWall = new JButton("Wall");
 				btnWall.setBounds(993, 399, 89, 9);
 				frame.getContentPane().add(btnWall);
 				SwingUtilities.updateComponentTreeUI(frame);
-				btnWall.addMouseMotionListener(new MouseMotionAdapter() {
-	
-					public void mouseDragged(MouseEvent e) {
+				
+				for(int i = 0; i<= btnArray.length; i++) {
+					
+					btnArray[i].addMouseListener(new MouseAdapter() {
 						
-						btnWall.setAlignmentX(e.getX());
-						btnWall.setAlignmentY(e.getY());
-						SwingUtilities.updateComponentTreeUI(frame);
-					}
-				});
-				
-				
+						public void mouseClicked(MouseEvent e) {
+							
+							
+						}
+					});
+				}
+
+
 			}
 		});
-		
 
-		
-		
+
+
+
 	}
 	private void validatePawnPosition() {
-		
-		JButton btnMovePawn = new JButton("Move Pawn");
-		btnMovePawn.setBounds(970, 118, 133, 62);
-		frame.getContentPane().add(btnMovePawn);
-		
-		
-		
+
+		int Player = QuoridorController.getCurrentPlayer();
+		if(Player == 1) {
+
+			int row = QuoridorController.getBlackPlayerPlayerPosition().getTile().getRow();
+			int col = QuoridorController.getBlackPlayerPlayerPosition().getTile().getColumn();
+
+
+			if(QuoridorController.initializeValidatePosition(row-1 , col) == true) {
+
+				int indexOfTile = (row-2)*9+ col;
+				btnArray[indexOfTile].setBackground(Color.GREEN);
+
+			}
+			if(QuoridorController.initializeValidatePosition(row+1 , col) == true) {
+
+				int indexOfTile = (row)*9+ col;
+				btnArray[indexOfTile].setBackground(Color.GREEN);
+
+			}
+			if(QuoridorController.initializeValidatePosition(row , col-1) == true) {
+
+				int indexOfTile = (row-1)*9+ col-1;
+				btnArray[indexOfTile].setBackground(Color.GREEN);
+
+			}
+			if(QuoridorController.initializeValidatePosition(row , col+1) == true) {
+
+				int indexOfTile = (row-1)*9+ col+1;
+				btnArray[indexOfTile].setBackground(Color.GREEN);
+
+			}
+		}
+
+
+
 	}
 }
