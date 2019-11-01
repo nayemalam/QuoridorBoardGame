@@ -68,11 +68,10 @@ public class ProvideSelectUserNameStepDef {
      * Method used to allow player to select an existing user name
      *
      * @param username - String username already exists
-     * @throws Exception - throws exception if users list is empty
      * @author Nayem Alam
      */
     @When("The player selects existing {string}")
-    public void the_player_selects_existing(String username) throws Exception {
+    public void the_player_selects_existing(String username) {
         QuoridorController.selectExistingUserName(username, currentPlayer, QuoridorApplication.getQuoridor());
     }
 

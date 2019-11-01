@@ -243,8 +243,8 @@ public class QuoridorController {
 	 * @author Nayem Alam
 	 */
 	public static void setThinkingTime(Integer min, Integer sec) {
-		Player bPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
-		Player wPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
+		Player bPlayer = getBlackPlayer();
+		Player wPlayer = getWhitePlayer();
 		// converts min and sec to long type (unix epoch time)
 		Time thinkingTime = new Time(min* 60L *1000 + sec* 1000L);
 		// set same thinking time for both players
@@ -264,10 +264,9 @@ public class QuoridorController {
 	 * @param username - String username exists within the list of users
 	 * @param currentPlayer - Player can either be whitePlayer or blackPlayer
 	 * @param quoridor - Quoridor contains given list of users (if any)
-	 * @throws Exception - throws exception if users list is empty
 	 * @author Nayem Alam
 	 */
-	public static void selectExistingUserName(String username, Player currentPlayer, Quoridor quoridor) throws Exception {
+	public static void selectExistingUserName(String username, Player currentPlayer, Quoridor quoridor) {
 		List<User> users = quoridor.getUsers();
 		if(!users.isEmpty()) {
 			for (int i = 0; i < users.size(); i++) {
@@ -276,21 +275,36 @@ public class QuoridorController {
 					currentPlayer.setUser(users.get(i));
 				}
 			}
-		} else {
-			throw new Exception("There are no existing users in the list.");
 		}
 	}
-	
-	public static List<String> myUsers() {
-		List<String> userList = new ArrayList<>();
-		userList.add("hello");
-		userList.add("my");
-		userList.add("name");
-		userList.add("is");
-		
+
+	/**
+	 * Method - selectExistingUserName(String username)
+	 *
+	 * This method interacts with the GUI, it checks for specific conditions and then runs
+	 * the corresponding controller
+	 *
+	 * @param username - String username can either exist in the list or can create new username
+	 * @author Nayem Alam
+	 */
+	public static List<User> getUsers(String username) {
+		List<User> userList = QuoridorApplication.getQuoridor().getUsers();
+		for (User user : userList) {
+			if (user.getName().indexOf(username) == -1) {
+				selectNewUserName(username, getCurrentPlayer(), QuoridorApplication.getQuoridor());
+			} else {
+				selectExistingUserName(username, getCurrentPlayer(), QuoridorApplication.getQuoridor());
+			}
+		}
 		return userList;
-		
 	}
+
+//	public static List<String> myUsers() {
+//		List<String> userList = new ArrayList<>();
+//		userList.add("Daniel");
+//		userList.add("Hyacinth");
+//		return userList;
+//	}
 	public static String[] listOfUsers() {
 		String[] users = {"Bird", "Cat", "Dog", "Rabbit", "Pig"};
 

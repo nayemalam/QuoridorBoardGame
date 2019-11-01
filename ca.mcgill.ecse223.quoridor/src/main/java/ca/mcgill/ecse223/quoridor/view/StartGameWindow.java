@@ -7,6 +7,9 @@ import java.awt.BorderLayout;
 import java.awt.SystemColor;
 import java.awt.Font;
 
+import ca.mcgill.ecse223.quoridor.QuoridorApplication;
+import ca.mcgill.ecse223.quoridor.model.Player;
+import ca.mcgill.ecse223.quoridor.model.Quoridor;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
@@ -21,6 +24,9 @@ import java.awt.event.ActionEvent;
 import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
 
 import java.awt.Component;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.sql.Time;
 
 public class StartGameWindow {
 
@@ -124,8 +130,9 @@ public class StartGameWindow {
 		txtPlayerName.setText("Player 1 Name:");
 		panel_1.add(txtPlayerName, "2, 2, fill, top");
 		txtPlayerName.setColumns(10);
-		
-		comboBox = new JComboBox(QuoridorController.myUsers().toArray());
+
+		DefaultComboBoxModel model = new DefaultComboBoxModel(QuoridorController.getUsers("").toArray());
+		comboBox = new JComboBox(model);
 		comboBox.setEditable(true);
 		panel_1.add(comboBox, "4, 2, fill, default");
 		
@@ -137,8 +144,9 @@ public class StartGameWindow {
 		txtPlayerName_1.setText("Player 2 Name:");
 		panel_1.add(txtPlayerName_1, "2, 4, fill, top");
 		txtPlayerName_1.setColumns(10);
-		
-		comboBox_1 = new JComboBox();
+
+		DefaultComboBoxModel model_1 = new DefaultComboBoxModel(QuoridorController.getUsers("").toArray());
+		comboBox_1 = new JComboBox(model_1);
 		comboBox_1.setEditable(true);
 		panel_1.add(comboBox_1, "4, 4, fill, default");
 		
@@ -190,8 +198,32 @@ public class StartGameWindow {
 			public void actionPerformed(ActionEvent e) {
 				String msg = QuoridorController.testMethod();
 				textField_errors.setText(msg);
-
-				comboBox.addItem(comboBox.getSelectedItem());
+				// ProvideSelectUserName feature
+				if(String.valueOf(comboBox.getSelectedItem()).equals(String.valueOf(comboBox_1.getSelectedItem()))) {
+					textField_errors.setText("Both players cannot have the same username.");
+					if(String.valueOf(comboBox.getSelectedItem()).equals("") && String.valueOf(comboBox_1.getSelectedItem()).equals("")) {
+						textField_errors.setText("Both players cannot be empty.");
+					}
+				} else {
+					if (String.valueOf(comboBox.getSelectedItem()).isEmpty() || String.valueOf(comboBox_1.getSelectedItem()).isEmpty()) {
+						textField_errors.setText("Please enter a username.");
+					} else {
+						// if the username does not exist within the list
+						if (model.getIndexOf(comboBox.getSelectedItem()) == -1) {
+							model.addElement(comboBox.getSelectedItem());
+							model_1.addElement(comboBox.getSelectedItem());
+						}
+						if (model_1.getIndexOf(comboBox_1.getSelectedItem()) == -1) {
+							model.addElement(comboBox_1.getSelectedItem());
+							model_1.addElement(comboBox_1.getSelectedItem());
+						}
+					}
+				}
+                //setTotalThinkingTime feature
+//                Integer min = Integer.parseInt(textField_Minutes.getText());
+//				Integer sec = Integer.parseInt(textField_Seconds.getText());
+                // converts min and sec to long type (unix epoch time)
+                QuoridorController.setThinkingTime(5, 13);
 			}
 			
 		});
@@ -199,6 +231,7 @@ public class StartGameWindow {
 		panel_3.add(btnNewButton);
 
 		textField_errors = new JTextField();
+		textField_errors.setForeground(Color.RED);
 		textField_errors.setEnabled(false);
 		textField_errors.setEditable(false);
 		panel_3.add(textField_errors);
