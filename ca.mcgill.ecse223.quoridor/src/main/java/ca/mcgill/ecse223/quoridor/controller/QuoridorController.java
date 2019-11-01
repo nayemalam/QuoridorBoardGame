@@ -251,6 +251,14 @@ public class QuoridorController {
 		bPlayer.setRemainingTime(thinkingTime);
 		wPlayer.setRemainingTime(thinkingTime);
 	}
+
+//	public static void setThinkingTimeForPlayers(Player bPlayer, Player wPlayer, Integer min, Integer sec) {
+//		// converts min and sec to long type (unix epoch time)
+//		Time thinkingTime = new Time(min* 60L *1000 + sec* 1000L);
+//		// set same thinking time for both players
+//		bPlayer.setRemainingTime(thinkingTime);
+//		wPlayer.setRemainingTime(thinkingTime);
+//	}
 	
 	public static String testMethod() {
 		return "Hello world!";
@@ -279,10 +287,10 @@ public class QuoridorController {
 	}
 
 	/**
-	 * Method - selectExistingUserName(String username)
+	 * GUI related Method - selectExistingUserName(String username)
 	 *
 	 * This method interacts with the GUI, it checks for specific conditions and then runs
-	 * the corresponding controller
+	 * the corresponding controller class
 	 *
 	 * @param username - String username can either exist in the list or can create new username
 	 * @author Nayem Alam
@@ -305,11 +313,6 @@ public class QuoridorController {
 //		userList.add("Hyacinth");
 //		return userList;
 //	}
-	public static String[] listOfUsers() {
-		String[] users = {"Bird", "Cat", "Dog", "Rabbit", "Pig"};
-
-		return users;
-	}
 
 	/**
 	 * Method - selectNewUserName(String username)

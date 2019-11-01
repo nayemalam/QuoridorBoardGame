@@ -219,11 +219,12 @@ public class StartGameWindow {
 						}
 					}
 				}
-                //setTotalThinkingTime feature
+//                //setTotalThinkingTime feature
 //                Integer min = Integer.parseInt(textField_Minutes.getText());
 //				Integer sec = Integer.parseInt(textField_Seconds.getText());
-                // converts min and sec to long type (unix epoch time)
-                QuoridorController.setThinkingTime(5, 13);
+//
+//                QuoridorController.setThinkingTime(min, sec);
+
 			}
 			
 		});
