@@ -827,4 +827,3 @@ public class QuoridorController {
 	}
 }
 
-

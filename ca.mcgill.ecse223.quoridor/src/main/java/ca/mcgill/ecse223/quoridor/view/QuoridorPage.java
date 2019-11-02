@@ -135,6 +135,7 @@ public class QuoridorPage {
 	}
 	private void validatePawnPosition() {
 
+
 		int Player = QuoridorController.currentPlayerInt();
 		if(Player == 1) {
 
