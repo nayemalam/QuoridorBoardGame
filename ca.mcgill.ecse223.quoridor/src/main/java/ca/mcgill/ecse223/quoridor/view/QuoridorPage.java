@@ -135,7 +135,7 @@ public class QuoridorPage {
 	}
 	private void validatePawnPosition() {
 
-		int Player = QuoridorController.getCurrentPlayer();
+		int Player = QuoridorController.currentPlayerInt();
 		if(Player == 1) {
 
 			int row = QuoridorController.getBlackPlayerPlayerPosition().getTile().getRow();

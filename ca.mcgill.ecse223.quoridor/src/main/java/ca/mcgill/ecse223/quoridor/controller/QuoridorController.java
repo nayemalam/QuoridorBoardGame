@@ -808,6 +808,23 @@ public class QuoridorController {
 		}
 		return QuoridorController.getBlackPlayer();
 	}
+	
+	/**
+	 * This method uses getCurrentPlayer method to transform the current player into an int
+	 * so that it can be used into the view
+	 * @return 0/1 where 0 is white player and 1 is dark player
+	 * @author Alexander Legouverneur
+	 */
+	public static int currentPlayerInt() {
+		
+		Quoridor q = QuoridorApplication.getQuoridor();
+		if(getCurrentPlayer().equals(q.getCurrentGame().getWhitePlayer())) {
+			
+			return 0;
+			
+		}
+		else return 1;
+	}
 }
 
 
