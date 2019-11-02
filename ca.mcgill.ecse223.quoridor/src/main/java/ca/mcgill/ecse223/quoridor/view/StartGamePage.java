@@ -1,8 +1,6 @@
 package ca.mcgill.ecse223.quoridor.view;
 
-import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
-import ca.mcgill.ecse223.quoridor.model.Player;
 
 import java.awt.*;
 
@@ -12,7 +10,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class SelectUsernameAndThinkingTime {
+public class StartGamePage {
 
 	// UI elements
 	private JFrame frame;
@@ -49,7 +47,7 @@ public class SelectUsernameAndThinkingTime {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					SelectUsernameAndThinkingTime window = new SelectUsernameAndThinkingTime();
+					StartGamePage window = new StartGamePage();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -61,7 +59,7 @@ public class SelectUsernameAndThinkingTime {
 	/**
 	 * Create the application.
 	 */
-	public SelectUsernameAndThinkingTime() throws Exception {
+	public StartGamePage() throws Exception {
 		initialize();
 	}
 
@@ -293,7 +291,7 @@ public class SelectUsernameAndThinkingTime {
 			error = e.getMessage();
 			errorMessage.setForeground(Color.RED);
 			errorMessage.setText("Invalid time input. Please enter integers.");
-			System.out.println("Not calling controller method ... ");
+			System.err.println("Not calling controller method ... ");
 		}
 	}
 }
