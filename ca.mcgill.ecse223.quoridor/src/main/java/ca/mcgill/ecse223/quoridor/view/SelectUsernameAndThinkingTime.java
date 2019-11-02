@@ -4,22 +4,19 @@ import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
 import ca.mcgill.ecse223.quoridor.model.Player;
 
-import java.awt.EventQueue;
+import java.awt.*;
 
 import javax.swing.*;
-import java.awt.GridBagLayout;
-import java.awt.FlowLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.Font;
 
 public class SelectUsernameAndThinkingTime {
 
 	// UI elements
 	private JFrame frame;
+	private JTextPane QuoridorTitleField;
 	private JLabel errorMessage;
 	// player 1
 	private JLabel PlayerLabel_1;
@@ -76,6 +73,16 @@ public class SelectUsernameAndThinkingTime {
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+		// Content title
+		QuoridorTitleField = new JTextPane();
+		QuoridorTitleField.setEditable(false);
+		QuoridorTitleField.setForeground(Color.BLACK);
+		QuoridorTitleField.setBackground(SystemColor.activeCaption);
+		QuoridorTitleField.setEditable(false);
+		QuoridorTitleField.setFont(new Font("Monospaced", Font.BOLD, 30));
+		QuoridorTitleField.setAlignmentX(SwingConstants.CENTER);
+		QuoridorTitleField.setText("Quoridor");
+
 		// elements for Player1
 		PlayerLabel_1 = new JLabel("Player 1 Name:");
 		PlayerLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
@@ -114,18 +121,18 @@ public class SelectUsernameAndThinkingTime {
 
 		// global settings
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		frame.setTitle("Quoridor Game");
+		frame.setTitle("Quoridor - Start New Game");
 
 		// listeners for player1
 		btnAddPlayer_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				addPlayerOneUsername(evt);
+				addPlayerOneUsernameActionPerformed(evt);
 			}
 		});
 		// listeners for player2
 		btnAddPlayer_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				addPlayerTwoUsername(evt);
+				addPlayerTwoUsernameActionPerformed(evt);
 			}
 		});
 		// listeners for setting time
@@ -134,11 +141,17 @@ public class SelectUsernameAndThinkingTime {
 				setTotalThinkingTimeActionPerformed(evt);
 			}
 		});
+		// listeners for starting game
+		btnStartGame.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				startGameActionPerformed(evt);
+			}
+		});
 
 		// layout
 		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
 		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
+			groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(18)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
@@ -179,11 +192,16 @@ public class SelectUsernameAndThinkingTime {
 					.addContainerGap()
 					.addComponent(errorMessage, GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE)
 					.addContainerGap())
+				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(QuoridorTitleField, GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE)
+					.addContainerGap())
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(32)
+					.addComponent(QuoridorTitleField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addGap(16)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(PlayerLabel_1)
 						.addComponent(PlayerSelect_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -203,7 +221,7 @@ public class SelectUsernameAndThinkingTime {
 						.addComponent(Seconds_TextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(btnSetTime))
 					.addGap(18)
-					.addComponent(errorMessage, GroupLayout.DEFAULT_SIZE, 18, Short.MAX_VALUE)
+					.addComponent(errorMessage, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 					.addGap(18)
 					.addComponent(btnStartGame)
 					.addGap(24))
@@ -211,8 +229,19 @@ public class SelectUsernameAndThinkingTime {
 		frame.getContentPane().setLayout(groupLayout);
 
 	}
-	// methods
-	private void addPlayerOneUsername(ActionEvent evt) {
+	// Methods
+	private void startGameActionPerformed(ActionEvent evt) {
+		// clears error message
+		error = null;
+		try {
+			errorMessage.setForeground(Color.BLACK);
+			errorMessage.setText(QuoridorController.testMethod());
+		} catch (Exception e) {
+			errorMessage.setText(e.getMessage());
+			System.out.println(e.getMessage());
+		}
+	}
+	private void addPlayerOneUsernameActionPerformed(ActionEvent evt) {
 		// NOTE: The model_1 and model_2 calls the controller methods that use the ProvideSelectUsername Features
 		if(String.valueOf(PlayerSelect_1.getSelectedItem()).equals(String.valueOf(PlayerSelect_2.getSelectedItem()))) {
 			errorMessage.setText("Both players cannot have the same username.");
@@ -230,7 +259,7 @@ public class SelectUsernameAndThinkingTime {
 		}
 	}
 
-	private void addPlayerTwoUsername(ActionEvent evt) {
+	private void addPlayerTwoUsernameActionPerformed(ActionEvent evt) {
 		// NOTE: The model_1 and model_2 calls the controller methods that use the ProvideSelectUsername Features
 		if(String.valueOf(PlayerSelect_1.getSelectedItem()).equals(String.valueOf(PlayerSelect_2.getSelectedItem()))) {
 			errorMessage.setText("Both players cannot have the same username.");
@@ -262,6 +291,7 @@ public class SelectUsernameAndThinkingTime {
 			errorMessage.setText("Time set to: " + min +" minutes and " +sec+ " seconds.");
 		} catch (Exception e) {
 			error = e.getMessage();
+			errorMessage.setForeground(Color.RED);
 			errorMessage.setText("Invalid time input. Please enter integers.");
 			System.out.println("Not calling controller method ... ");
 		}
