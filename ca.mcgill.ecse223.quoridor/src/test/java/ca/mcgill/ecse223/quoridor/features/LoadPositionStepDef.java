@@ -157,3 +157,4 @@ public class LoadPositionStepDef {
 		assertNotNull(thrownException);
 	}
 }
+

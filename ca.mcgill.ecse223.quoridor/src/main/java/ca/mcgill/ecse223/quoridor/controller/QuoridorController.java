@@ -10,6 +10,8 @@ import ca.mcgill.ecse223.quoridor.model.Game.MoveMode;
 import ca.mcgill.ecse223.quoridor.utilities.*;
 
 import java.sql.Time;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 
 public class QuoridorController {
@@ -186,7 +188,7 @@ public class QuoridorController {
 		setInitialGamePosition(currentGame, quoridor.getBoard(), currentWhitePlayer, currentBlackPlayer);
 		
 		startClock();
-		
+
 	}
 
 	
@@ -238,12 +240,16 @@ public class QuoridorController {
 	 *
 	 * @param min - Integer sets the number of minutes
 	 * @param sec - Integer sets the number of seconds
-	 * @throws Exception (UnsupportedOperationException) todo for later
 	 * @author Nayem Alam
 	 */
-	public static void setThinkingTime(Integer min, Integer sec) throws Exception {
-		// convert min and sec to long and add it to new Time(add it here)
-		throw new UnsupportedOperationException();
+	public static void setThinkingTime(Integer min, Integer sec) {
+		Player bPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
+		Player wPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
+		// converts min and sec to long type (unix epoch time)
+		Time thinkingTime = new Time(min* 60L *1000 + sec* 1000L);
+		// set same thinking time for both players
+		bPlayer.setRemainingTime(thinkingTime);
+		wPlayer.setRemainingTime(thinkingTime);
 	}
 	
 	public static String testMethod() {
@@ -256,12 +262,49 @@ public class QuoridorController {
 	 * starting the game to select an existing username
 	 *
 	 * @param username - String username exists within the list of users
-	 * @throws Exception (UnsupportedOperationException) todo for later
+	 * @param currentPlayer - Player can either be whitePlayer or blackPlayer
+	 * @param quoridor - Quoridor contains given list of users (if any)
 	 * @author Nayem Alam
 	 */
-	public static void selectExistingUserName(String username) throws Exception {
-		throw new UnsupportedOperationException();
+	public static void selectExistingUserName(String username, Player currentPlayer, Quoridor quoridor) {
+		List<User> users = quoridor.getUsers();
+		if(!users.isEmpty()) {
+			for (int i = 0; i < users.size(); i++) {
+				if (users.get(i).getName().equals(username)) {
+					// currentPlayer's User would contain the existing username
+					currentPlayer.setUser(users.get(i));
+				}
+			}
+		}
 	}
+
+	/**
+	 * GUI related Method - selectExistingUserName(String username)
+	 *
+	 * This method interacts with the GUI, it checks for specific conditions and then runs
+	 * the corresponding controller class
+	 *
+	 * @param username - String username can either exist in the list or can create new username
+	 * @author Nayem Alam
+	 */
+	public static List<User> getUsers(String username) {
+		List<User> userList = QuoridorApplication.getQuoridor().getUsers();
+		for (User user : userList) {
+			if (!user.getName().contains(username)) {
+				selectNewUserName(username, getCurrentPlayer(), QuoridorApplication.getQuoridor());
+			} else {
+				selectExistingUserName(username, getCurrentPlayer(), QuoridorApplication.getQuoridor());
+			}
+		}
+		return userList;
+	}
+
+//	public static List<String> myUsers() {
+//		List<String> userList = new ArrayList<>();
+//		userList.add("Daniel");
+//		userList.add("Hyacinth");
+//		return userList;
+//	}
 
 	/**
 	 * Method - selectNewUserName(String username)
@@ -270,13 +313,18 @@ public class QuoridorController {
 	 * starting the game to select a new username
 	 *
 	 * @param username - String username is new and does not exist in list of users yet
-	 * @throws Exception (UnsupportedOperationException) todo for later
+	 * @param currentPlayer - Player can either be whitePlayer or blackPlayer
+	 * @param quoridor - Quoridor contains given list of users (if any)
 	 * @author Nayem Alam
 	 */
-	public static void selectNewUserName(String username) throws Exception {
-		throw new UnsupportedOperationException();
+	public static void selectNewUserName(String username, Player currentPlayer, Quoridor quoridor) {
+		List<User> users = quoridor.getUsers();
+		for (int i = 0; i < users.size(); i++) {
+			// currentPlayer would be able to set a new username
+			users.get(i).setName(username);
+			currentPlayer.setUser(users.get(i));
+		}
 	}
-
 
 	/**
 	 * Modifier method used to set the name of the white player
@@ -638,6 +686,7 @@ public class QuoridorController {
 		
 		int row =aWall.getOwner().getWall(index).getMove().getTargetTile().getRow();
 		int col = aWall.getOwner().getWall(index).getMove().getTargetTile().getColumn();
+		Direction dir = aWall.getOwner().getWall(index).getMove().getWallDirection();
 
 		if(checkWallSideEdge(aWall,side) == true) {
 			illegalWallMove();
@@ -707,7 +756,7 @@ public class QuoridorController {
 		}
 		if(aWall.hasMove() == false && pos == true) {
 			moveNumber++;
-			new WallMove(moveNumber,1,player,aTile,q.getCurrentGame(), dir, aWall);	
+			new WallMove(moveNumber,1,player,aTile,q.getCurrentGame(), dir, aWall);
 		}
 		else if(aWall.hasMove() == true && pos == true) {
 			
@@ -809,5 +858,3 @@ public class QuoridorController {
 		return QuoridorController.getBlackPlayer();
 	}
 }
-
-
