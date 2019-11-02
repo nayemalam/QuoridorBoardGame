@@ -8,6 +8,7 @@ import java.awt.SystemColor;
 import java.awt.Font;
 
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
+import ca.mcgill.ecse223.quoridor.model.Game;
 import ca.mcgill.ecse223.quoridor.model.Player;
 import ca.mcgill.ecse223.quoridor.model.Quoridor;
 import com.jgoodies.forms.layout.FormLayout;
@@ -65,7 +66,7 @@ public class StartGameWindow {
 	/**
 	 * Create the application.
 	 */
-	public StartGameWindow() {
+	public StartGameWindow() throws Exception {
 		initialize();
 	}
 
@@ -219,10 +220,9 @@ public class StartGameWindow {
 						}
 					}
 				}
-//                //setTotalThinkingTime feature
+                //setTotalThinkingTime feature
 //                Integer min = Integer.parseInt(textField_Minutes.getText());
 //				Integer sec = Integer.parseInt(textField_Seconds.getText());
-//
 //                QuoridorController.setThinkingTime(min, sec);
 
 			}

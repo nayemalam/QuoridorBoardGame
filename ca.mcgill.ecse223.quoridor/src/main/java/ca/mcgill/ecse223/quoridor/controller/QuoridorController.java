@@ -243,22 +243,14 @@ public class QuoridorController {
 	 * @author Nayem Alam
 	 */
 	public static void setThinkingTime(Integer min, Integer sec) {
-		Player bPlayer = getBlackPlayer();
-		Player wPlayer = getWhitePlayer();
+		Player bPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
+		Player wPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
 		// converts min and sec to long type (unix epoch time)
 		Time thinkingTime = new Time(min* 60L *1000 + sec* 1000L);
 		// set same thinking time for both players
 		bPlayer.setRemainingTime(thinkingTime);
 		wPlayer.setRemainingTime(thinkingTime);
 	}
-
-//	public static void setThinkingTimeForPlayers(Player bPlayer, Player wPlayer, Integer min, Integer sec) {
-//		// converts min and sec to long type (unix epoch time)
-//		Time thinkingTime = new Time(min* 60L *1000 + sec* 1000L);
-//		// set same thinking time for both players
-//		bPlayer.setRemainingTime(thinkingTime);
-//		wPlayer.setRemainingTime(thinkingTime);
-//	}
 	
 	public static String testMethod() {
 		return "Hello world!";
@@ -298,7 +290,7 @@ public class QuoridorController {
 	public static List<User> getUsers(String username) {
 		List<User> userList = QuoridorApplication.getQuoridor().getUsers();
 		for (User user : userList) {
-			if (user.getName().indexOf(username) == -1) {
+			if (!user.getName().contains(username)) {
 				selectNewUserName(username, getCurrentPlayer(), QuoridorApplication.getQuoridor());
 			} else {
 				selectExistingUserName(username, getCurrentPlayer(), QuoridorApplication.getQuoridor());
@@ -333,7 +325,6 @@ public class QuoridorController {
 			currentPlayer.setUser(users.get(i));
 		}
 	}
-
 
 	/**
 	 * Modifier method used to set the name of the white player
