@@ -858,5 +858,3 @@ public class QuoridorController {
 		return QuoridorController.getBlackPlayer();
 	}
 }
-
-
