@@ -57,11 +57,11 @@ public class ValidatePositionStepDefinition {
 
 		if(q.getCurrentGame().getCurrentPosition().getBlackPosition()== null) {
 			if(q.getCurrentGame().getCurrentPosition().numberOfWhiteWallsOnBoard()>1) {
-				QuoridorController.initiatePosValidation(providedRow,providedColumn, providedDirection, q.getCurrentGame().getBlackPlayer().getWall(0),0);
-				QuoridorController.initiatePosValidation(providedRow1,providedColumn1, providedDirection1, q.getCurrentGame().getBlackPlayer().getWall(1),1);
+				QuoridorController.initiatePosValidation(providedRow,providedColumn, providedDirection,0);
+				QuoridorController.initiatePosValidation(providedRow1,providedColumn1, providedDirection1,1);
 			}
 			else {
-				QuoridorController.initiatePosValidation(providedRow,providedColumn, providedDirection, null,0);
+				QuoridorController.initiatePosValidation(providedRow,providedColumn, providedDirection,0);
 			}
 
 		}
