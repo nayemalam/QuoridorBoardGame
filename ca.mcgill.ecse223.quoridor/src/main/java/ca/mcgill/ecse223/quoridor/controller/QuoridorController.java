@@ -736,7 +736,7 @@ public class QuoridorController {
 	 * @param aWall 	wall to be moved 
 	 * @param player	player to whom the wall belongs
 	 */
-	public static void WallMove(int row, int col, Direction dir, Wall aWall,Player player) {
+	public static void wallMove(int row, int col, Direction dir, Wall aWall,Player player) {
 
 		Quoridor q = QuoridorApplication.getQuoridor();
 		boolean pos;
@@ -755,12 +755,6 @@ public class QuoridorController {
 			moveNumber++;
 			new WallMove(moveNumber,1,player,aTile,q.getCurrentGame(), dir, aWall);
 		}
-		else if(aWall.hasMove() == true && pos == true) {
-
-			aWall.getMove().setTargetTile(aTile);
-			aWall.getMove().setWallDirection(dir);
-		}
-
 	}
 	/**
 	 * Method - saveGameFile(String filename, Game game)
