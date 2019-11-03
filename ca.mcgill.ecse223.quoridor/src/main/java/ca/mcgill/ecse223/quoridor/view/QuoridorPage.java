@@ -67,12 +67,12 @@ public class QuoridorPage {
 		frame.setBounds(100, 100, 1165, 693);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-		
+
 		JButton btnWall = new JButton("Wall");
 		btnWall.setBounds(993, 399, 89, 9);
 		frame.getContentPane().add(btnWall);
-		
-		
+
+
 		btnWall.addMouseListener(new MouseAdapter() {
 
 			public void mouseClicked(MouseEvent e) {
@@ -88,8 +88,8 @@ public class QuoridorPage {
 				});
 			}
 		});
-		
-		
+
+
 	}
 
 
@@ -127,25 +127,25 @@ public class QuoridorPage {
 
 			if(QuoridorController.initializeValidatePosition(row-1 , col) == true) {
 
-				
+
 				btnArray[row-1][col].setBackground(Color.GREEN);
 
 			}
 			if(QuoridorController.initializeValidatePosition(row+1 , col) == true) {
 
-				
+
 				btnArray[row+1][col].setBackground(Color.GREEN);
 
 			}
 			if(QuoridorController.initializeValidatePosition(row , col-1) == true) {
 
-				
+
 				btnArray[row][col-1].setBackground(Color.GREEN);
 
 			}
 			if(QuoridorController.initializeValidatePosition(row , col+1) == true) {
 
-			
+
 				btnArray[row][col+1].setBackground(Color.GREEN);
 
 			}
@@ -158,25 +158,25 @@ public class QuoridorPage {
 
 			if(QuoridorController.initializeValidatePosition(row-1 , col) == true) {
 
-				
+
 				btnArray[row-1][col].setBackground(Color.GREEN);
 
 			}
 			if(QuoridorController.initializeValidatePosition(row+1 , col) == true) {
 
-				
+
 				btnArray[row+1][col].setBackground(Color.GREEN);
 
 			}
 			if(QuoridorController.initializeValidatePosition(row , col-1) == true) {
 
-				
+
 				btnArray[row][col-1].setBackground(Color.GREEN);
 
 			}
 			if(QuoridorController.initializeValidatePosition(row , col+1) == true) {
 
-				
+
 				btnArray[row][col+1].setBackground(Color.GREEN);
 
 			}
@@ -211,14 +211,14 @@ public class QuoridorPage {
 			SwingUtilities.updateComponentTreeUI(frame);
 		}
 
-		
 
-		
+
+
 
 	}
-	
+
 	private void BoardListener() {
-		
+
 		for(int i = 0; i<= btnArray.length; i++) {
 			index = i;
 			btnArray[i][i].addMouseListener(new MouseAdapter() {
@@ -234,7 +234,7 @@ public class QuoridorPage {
 					int row = (index/9)+1;
 					if(CurrPlayer == 0) {
 						if(QuoridorController.initiatePosValidation(row, col, "horizontal", idWhite) == true && QuoridorController.initiatePosValidation(row, col, "vertical", idWhite) == true ) {
-							
+
 							horizontal.setBounds(btnArray[index][index].getX(),btnArray[index][index].getY(), 89, 9);
 							frame.getContentPane().add(horizontal);
 							horizontal.setVisible(true);

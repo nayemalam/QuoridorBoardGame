@@ -150,15 +150,15 @@ public class MainGameWindow {
 			for(int col = 0; col < TOTAL_COLS; col ++) {
 
 			btnArray[row][col] = new JButton();
-			
+
 				btnArray[row][col].addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseReleased(MouseEvent arg0) {
 						// TODO: Add correct mouse listener for this tile, aka the right method call
-						//textField_1.setText("SUP");	
+						//textField_1.setText("SUP");
 					}
 				});
-			
+
 			centerPanel.add(btnArray[row][col]);
 			}
 		}
