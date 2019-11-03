@@ -2,7 +2,7 @@ package ca.mcgill.ecse223.quoridor.controller;
 
 
 import javax.swing.text.Utilities;
-
+import java.io.*;
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.model.Game.GameStatus;
@@ -769,21 +769,20 @@ public class QuoridorController {
 	 * @author Nicolas Buisson
 	 * 
 	 */
-	public static String saveGamePosition(String filename) throws IllegalArgumentException, IOException {
+	public static boolean saveGamePosition(String filename) throws IllegalArgumentException, IOException {
 		File file = new File(filename);
 
-		//this if statement takes care of overwriting
-		//if file exists, delete it
-		//to recreate it with new content
-		//if it doesn't exist, just create it
-
 		boolean fileExists = file.createNewFile();
+		//false if it already exists
+		//true if it doesn't, gets created
 
-		if(!fileExists) {
-			throw new IllegalArgumentException("File already exists!");
+//		if(!fileExists) {
+//			throw new IllegalArgumentException("File already exists!");
+//		}
+		if (fileExists = true) {
+			overwriteGamePosition(filename);
 		}
-
-		return overwriteGamePosition(filename);
+		return fileExists;
 
 	}
 
@@ -1034,11 +1033,11 @@ public class QuoridorController {
 			}
 		}
 		//NEED TO ADD THE WALLS ON STOCK, means need to create all of them
-		while(j < 10) {
-			Wall whiteWall = new Wall( j, getWhitePlayer());
-			gamePositionToLoad.addWhiteWallsInStock(whiteWall);
-			j++;
-		}
+//		while(j < 10) {
+//			Wall whiteWall = new Wall( j, getWhitePlayer());
+//			gamePositionToLoad.addWhiteWallsInStock(whiteWall);
+//			j++;
+//		}
 
 		for (int i = 2; i < blackPositions.length; i++) {
 
@@ -1066,17 +1065,16 @@ public class QuoridorController {
 				k++;
 			}
 		}
-		while(k < 10) {
-			Wall blackWall = new Wall( k + 10, getBlackPlayer());
-			gamePositionToLoad.addBlackWallsInStock(blackWall);
-			k++;
-		}
+//		while(k < 10) {
+//			Wall blackWall = new Wall( k + 10, getBlackPlayer());
+//			gamePositionToLoad.addBlackWallsInStock(blackWall);
+//			k++;
+//		}
 		validPosition = whitePawnValid & blackPawnValid & whiteWallsValid & blackWallsValid;
-		if(validPosition  = false) {
-			throw new IOException("invalid position") ;
+		if(validPosition  = true) {
+			QuoridorApplication.getQuoridor().getCurrentGame().setCurrentPosition(gamePositionToLoad);
 		}
 		
-		QuoridorApplication.getQuoridor().getCurrentGame().setCurrentPosition(gamePositionToLoad);
 		return validPosition;
 	}
 
