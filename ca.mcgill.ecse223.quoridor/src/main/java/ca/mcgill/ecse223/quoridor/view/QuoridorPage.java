@@ -22,7 +22,7 @@ import java.awt.event.MouseMotionAdapter;
 
 public class QuoridorPage {
 
-	JButton[] btnArray = new JButton[81];
+	JButton[][] btnArray = new JButton[9][9];
 	JButton[] WallArray = new JButton[20];
 	JButton horizontal = new JButton();
 	JButton vertical = new JButton();
@@ -127,26 +127,26 @@ public class QuoridorPage {
 
 			if(QuoridorController.initializeValidatePosition(row-1 , col) == true) {
 
-				int indexOfTile = (row-2)*9+ col;
-				btnArray[indexOfTile].setBackground(Color.GREEN);
+				
+				btnArray[row-1][col].setBackground(Color.GREEN);
 
 			}
 			if(QuoridorController.initializeValidatePosition(row+1 , col) == true) {
 
-				int indexOfTile = (row)*9+ col;
-				btnArray[indexOfTile].setBackground(Color.GREEN);
+				
+				btnArray[row+1][col].setBackground(Color.GREEN);
 
 			}
 			if(QuoridorController.initializeValidatePosition(row , col-1) == true) {
 
-				int indexOfTile = (row-1)*9+ col-1;
-				btnArray[indexOfTile].setBackground(Color.GREEN);
+				
+				btnArray[row][col-1].setBackground(Color.GREEN);
 
 			}
 			if(QuoridorController.initializeValidatePosition(row , col+1) == true) {
 
-				int indexOfTile = (row-1)*9+ col+1;
-				btnArray[indexOfTile].setBackground(Color.GREEN);
+			
+				btnArray[row][col+1].setBackground(Color.GREEN);
 
 			}
 		}
@@ -158,26 +158,26 @@ public class QuoridorPage {
 
 			if(QuoridorController.initializeValidatePosition(row-1 , col) == true) {
 
-				int indexOfTile = (row-2)*9+ col;
-				btnArray[indexOfTile].setBackground(Color.GREEN);
+				
+				btnArray[row-1][col].setBackground(Color.GREEN);
 
 			}
 			if(QuoridorController.initializeValidatePosition(row+1 , col) == true) {
 
-				int indexOfTile = (row)*9+ col;
-				btnArray[indexOfTile].setBackground(Color.GREEN);
+				
+				btnArray[row+1][col].setBackground(Color.GREEN);
 
 			}
 			if(QuoridorController.initializeValidatePosition(row , col-1) == true) {
 
-				int indexOfTile = (row-1)*9+ col-1;
-				btnArray[indexOfTile].setBackground(Color.GREEN);
+				
+				btnArray[row][col-1].setBackground(Color.GREEN);
 
 			}
 			if(QuoridorController.initializeValidatePosition(row , col+1) == true) {
 
-				int indexOfTile = (row-1)*9+ col+1;
-				btnArray[indexOfTile].setBackground(Color.GREEN);
+				
+				btnArray[row][col+1].setBackground(Color.GREEN);
 
 			}
 		}
@@ -216,32 +216,12 @@ public class QuoridorPage {
 		
 
 	}
-	private void wallTreatement(int index) {
-		
-		for(int i = 0; i<= WallArray.length;i++) {
-			
-			if(WallArray[i].equals(null)) {//if there are no walls yet created with this index just pass
-				continue;
-			}
-			
-			btnArray[i].addMouseListener(new MouseAdapter() {
-
-				public void mouseClicked(MouseEvent e) {
-					
-					WallArray[index]
-					
-					
-				}
-			});
-			
-		}
-		
-	}
+	
 	private void BoardListener() {
 		
 		for(int i = 0; i<= btnArray.length; i++) {
 			index = i;
-			btnArray[i].addMouseListener(new MouseAdapter() {
+			btnArray[i][i].addMouseListener(new MouseAdapter() {
 
 				public void mouseClicked(MouseEvent e) {
 
@@ -255,7 +235,7 @@ public class QuoridorPage {
 					if(CurrPlayer == 0) {
 						if(QuoridorController.initiatePosValidation(row, col, "horizontal", idWhite) == true && QuoridorController.initiatePosValidation(row, col, "vertical", idWhite) == true ) {
 							
-							horizontal.setBounds(btnArray[index].getX(),btnArray[index].getY(), 89, 9);
+							horizontal.setBounds(btnArray[index][index].getX(),btnArray[index][index].getY(), 89, 9);
 							frame.getContentPane().add(horizontal);
 							horizontal.setVisible(true);
 							vertical.setBounds(993, 399, 89, 9);
