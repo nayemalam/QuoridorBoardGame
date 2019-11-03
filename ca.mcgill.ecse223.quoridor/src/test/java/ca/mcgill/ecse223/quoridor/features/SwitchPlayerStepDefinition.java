@@ -67,7 +67,7 @@ public class SwitchPlayerStepDefinition {
 	public void the_clock_of_is_running(String string) {
 		// Write code here that turns the phrase above into concrete actions
 		Time  time = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getPlayerToMove().getRemainingTime();
-		QuoridorController.startClock(time);
+		QuoridorController.startClock();
 		currentPlayer.setRemainingTime(new Time(180000));
 	}
 
