@@ -115,11 +115,11 @@ public class SavePositionPage {
 		saveGameFileButton.setBounds(977, 151, 165, 68);
 		frame.getContentPane().add(saveGameFileButton);
 		
-		JLabel lblNewLabel = new JLabel("Quoridor");
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 40));
-		lblNewLabel.setBounds(327, 10, 498, 131);
-		frame.getContentPane().add(lblNewLabel);
+		JLabel TitleLabel = new JLabel("Quoridor");
+		TitleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		TitleLabel.setFont(new Font("Tahoma", Font.PLAIN, 40));
+		TitleLabel.setBounds(327, 10, 498, 111);
+		frame.getContentPane().add(TitleLabel);
 		
 		JLabel OverwriteLabel = new JLabel("File already exists, Overwrite file?");
 		OverwriteLabel.setHorizontalAlignment(SwingConstants.CENTER);

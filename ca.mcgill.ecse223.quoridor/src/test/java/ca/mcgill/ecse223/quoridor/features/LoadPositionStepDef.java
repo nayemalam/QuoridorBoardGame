@@ -27,6 +27,7 @@ public class LoadPositionStepDef {
 	private QuoridorController QC = new QuoridorController();
 	private GamePosition gamePosition;	
 	private Exception thrownException;
+	private boolean valid;
 	
 	//false if invalid position
 	//true if valid position
@@ -43,7 +44,7 @@ public class LoadPositionStepDef {
 	public void IInitiateToLoadASavedGame(String filename) throws IOException {
 		thrownException = null;
 		try {
-			gamePosition = QC.loadSavedPosition(filename);
+			valid = QC.loadSavedPosition(filename);
 		} catch (IllegalArgumentException e) {
 			thrownException = e;
 		}
@@ -56,6 +57,7 @@ public class LoadPositionStepDef {
 	@And ("The position to load is valid")
 	public void ThePositionToLoadIsValid() {
 		assertEquals(null, thrownException);
+		//assertEquals(true, valid);
 	}
 
 	/**  
@@ -94,6 +96,7 @@ public class LoadPositionStepDef {
 	public void PlayerShallHaveAVerticalWallAtRowCol(String player, int pw_row, int pw_col) {
 
 		//if(gamePosition.getGame().getBlackPlayer().equals(gamePosition.getPlayerToMove()))
+		
 		if(player.equals("black")) {
 
 			assertEquals(Direction.Vertical, gamePosition.getBlackWallsOnBoard(0).getMove().getWallDirection());
@@ -155,6 +158,7 @@ public class LoadPositionStepDef {
 	@And ("The position to load is invalid")
 	public void ThePositionToLoadIsInvalid() {
 		assertNotNull(thrownException);
+		//assertEquals(false, valid);
 	}
 
 	/**  

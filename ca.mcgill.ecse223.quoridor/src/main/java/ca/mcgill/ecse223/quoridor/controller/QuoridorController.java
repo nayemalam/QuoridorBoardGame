@@ -370,7 +370,7 @@ public class QuoridorController {
 	public static boolean initiatePosValidation(int row, int col, String Walldir, int id) {
 		Quoridor q = QuoridorApplication.getQuoridor();
 		if (row >= 1 && row <= 8 && col >= 1 && col <= 8) {
-			
+
 			Direction dir1;
 			int col1;
 			int row1;
@@ -622,7 +622,6 @@ public class QuoridorController {
 			aWall.getMove().setTargetTile(aTile);
 			aWall.getMove().setWallDirection(dir);
 		}
-
 	}
 	/**
 	 * Method - saveGamePosition(String filename, Game game)
@@ -783,12 +782,12 @@ public class QuoridorController {
 	 * @author Nicolas Buisson
 	 * 
 	 */
-	public static GamePosition loadSavedPosition(String filename) throws IOException {
+	public static boolean loadSavedPosition(String filename) throws IOException {
 
 		boolean validPosition = true;
 		int j = 0; //iterator value used to save how many white walls were placed on board
 		int k = 0; //iterator value used to save how many black walls were placed on board
-		//will later be used to determine how many should be placed in the stock of each player
+		//will later be used to determine how many walls should be placed in the stock of each player
 
 		//NEED TO CREATE A GAME
 		Quoridor quoridor =  QuoridorApplication.getQuoridor();
@@ -891,7 +890,7 @@ public class QuoridorController {
 				whiteWallDirection = Direction.Horizontal;
 			}
 
-			whiteWallsValid = initiatePosValidation(whiteWallRow, whiteWallColumn, wallOrientation, i - 2);
+			whiteWallsValid = whiteWallsValid & initiatePosValidation(whiteWallRow, whiteWallColumn, wallOrientation, i - 2);
 			if (whiteWallsValid = true) {
 				Wall whiteWall = new Wall(i - 2, getWhitePlayer());
 				gamePositionToLoad.addWhiteWallsOnBoard(whiteWall);
@@ -901,7 +900,7 @@ public class QuoridorController {
 				j++;
 			}
 		}
-//NEED TO ADD THE WALLS ON STOCK, means need to create all of them
+		//NEED TO ADD THE WALLS ON STOCK, means need to create all of them
 		while(j < 10) {
 			Wall whiteWall = new Wall( j, getWhitePlayer());
 			gamePositionToLoad.addWhiteWallsInStock(whiteWall);
@@ -924,7 +923,7 @@ public class QuoridorController {
 			}
 
 
-			blackWallsValid = initiatePosValidation(blackWallRow, blackWallColumn, wallOrientation, 10 + i - 2 );
+			blackWallsValid = blackWallsValid & initiatePosValidation(blackWallRow, blackWallColumn, wallOrientation, 10 + i - 2 );
 			if (blackWallsValid = true) {
 				Tile blackWallTile = new Tile(blackWallColumn, blackWallRow, QuoridorApplication.getQuoridor().getBoard());
 				Wall blackWall = new Wall(10 + i - 2, getBlackPlayer());
@@ -940,8 +939,12 @@ public class QuoridorController {
 			k++;
 		}
 		validPosition = whitePawnValid & blackPawnValid & whiteWallsValid & blackWallsValid;
+		if(validPosition  = false) {
+			throw new IOException("invalid position") ;
+		}
+		
 		QuoridorApplication.getQuoridor().getCurrentGame().setCurrentPosition(gamePositionToLoad);
-		return gamePositionToLoad;
+		return validPosition;
 	}
 
 	/**
