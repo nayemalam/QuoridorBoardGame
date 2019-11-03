@@ -1,5 +1,5 @@
 package ca.mcgill.ecse223.quoridor.controller;
-
+import java.util.*;
 
 import javax.swing.text.Utilities;
 
@@ -67,8 +67,43 @@ public class QuoridorController {
 	 * @author Ousmane Baricisse
 	 * @return
 	 */
-	public static void grabWall(Board board, Player player) {
+	public static boolean grabWall(Quoridor quoridor) {
 		// TODO Auto-generated method stub
+		
+		Player playerToMove = quoridor.getCurrentGame().getCurrentPosition().getPlayerToMove();
+		
+		List<Wall> list = playerToMove.getWalls();
+		
+		
+		boolean wasRemoved = false;
+		System.out.println("sizeee: " + list.size());
+		if(list.size() != 0) {
+//			System.out.println("Do uuuuuu?  " + playerToMove.equals(quoridor.getCurrentGame().getWhitePlayer()));
+			Wall wall = list.get(list.size()-1);
+			System.out.println("CHECKKKK: " + playerToMove.equals(quoridor.getCurrentGame().getWhitePlayer()));
+			if(playerToMove.equals(quoridor.getCurrentGame().getBlackPlayer())) {
+				wasRemoved = quoridor.getCurrentGame().getCurrentPosition().removeBlackWallsInStock(wall);
+			} else {
+				wasRemoved = quoridor.getCurrentGame().getCurrentPosition().removeWhiteWallsInStock(wall);
+			}
+			
+			Tile tile = new Tile(1, 1, quoridor.getBoard());
+			List<Move> listOfMoves = quoridor.getCurrentGame().getMoves();
+			WallMove wallMove;
+			if(listOfMoves.size()==0) {
+				wallMove = new WallMove(1, 1, playerToMove, tile, quoridor.getCurrentGame(), Direction.Horizontal, wall);
+			} else {
+				Move move = listOfMoves.get(listOfMoves.size()-1);
+				wallMove = new WallMove(move.getMoveNumber(), move.getRoundNumber(), playerToMove, tile, quoridor.getCurrentGame(), Direction.Horizontal, wall);
+			}
+			
+			quoridor.getCurrentGame().setWallMoveCandidate(wallMove);
+			
+		}
+		
+		return wasRemoved;
+		
+		
 	}
 
 	/**
@@ -853,6 +888,7 @@ public class QuoridorController {
 		}
 		return QuoridorController.getBlackPlayer();
 	}
+<<<<<<< HEAD
 
 	/**
 	 * This method uses getCurrentPlayer method to transform the current player into an int
@@ -900,3 +936,13 @@ public class QuoridorController {
 	}
 }
 
+=======
+	/**
+	 * @author ousmanebaricisse
+	 * 
+	 */
+	public static boolean isWhitePlayer(Quoridor quoridor, Player player) {
+		return player.equals(quoridor.getCurrentGame().getWhitePlayer());
+	}
+}
+>>>>>>> Implementation of grab wall method. and correction of step definition assertions
