@@ -68,6 +68,7 @@ public class QuoridorPage {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
+
 		JButton btnWall = new JButton("Wall");
 		btnWall.setBounds(993, 399, 89, 9);
 		frame.getContentPane().add(btnWall);
