@@ -105,6 +105,7 @@ public class MainGameWindow {
 		txtWhitePlayer.setEditable(false);
 		txtWhitePlayer.setFont(new Font("Tahoma", Font.BOLD, 13));
 		txtWhitePlayer.setHorizontalAlignment(SwingConstants.CENTER);
+		
 		txtWhitePlayer.setText("White Player - Wall Stock");
 		txtWhitePlayer.setToolTipText("");
 		panel_3.add(txtWhitePlayer);
