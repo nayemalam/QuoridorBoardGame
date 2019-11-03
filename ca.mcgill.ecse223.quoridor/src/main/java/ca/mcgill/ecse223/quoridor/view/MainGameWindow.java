@@ -28,7 +28,7 @@ import java.awt.event.MouseEvent;
 
 public class MainGameWindow {
 
-	private JFrame frmQuoridorPlay;
+	public JFrame frmQuoridorPlay;
 	private JTextField txtCurrentPlayer;
 	private JTextField textField_1;
 	private JTextField txtTimeRemaining;

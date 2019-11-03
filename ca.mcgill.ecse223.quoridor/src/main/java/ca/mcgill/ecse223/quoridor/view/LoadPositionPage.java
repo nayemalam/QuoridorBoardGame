@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.MouseListener;
-import java.io.IOException;
+import java.io.*;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -17,9 +17,10 @@ import java.awt.event.MouseEvent;
 import ca.mcgill.ecse223.quoridor.controller.*;
 
 public class LoadPositionPage {
-	private JFrame frame;
+	public JFrame frame;
 	private QuoridorController QC;
 	private boolean valid;
+	private JTextField LoadFileNameTextField;
 
 	/**
 	 * Launch the application.
@@ -49,18 +50,25 @@ public class LoadPositionPage {
 	 */
 	private void initialize() {
 		
-		JLabel InvalidLoadLabel = new JLabel("Invalid file, Please select another file");
-		InvalidLoadLabel.setForeground(Color.RED);
-		InvalidLoadLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		InvalidLoadLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		InvalidLoadLabel.setBounds(401, 121, 349, 20);
-		frame.getContentPane().add(InvalidLoadLabel);
-		InvalidLoadLabel.setVisible(false);
-		
 		frame = new JFrame();
 		frame.setBounds(100, 100, 1165, 693);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
+		
+		LoadFileNameTextField = new JTextField();
+		LoadFileNameTextField.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		LoadFileNameTextField.setHorizontalAlignment(SwingConstants.CENTER);
+		LoadFileNameTextField.setBounds(312, 151, 521, 68);
+		frame.getContentPane().add(LoadFileNameTextField);
+		LoadFileNameTextField.setColumns(10);
+		
+		JLabel InvalidLoadFileLabel = new JLabel("Invalid file, Please select a valid file to load");
+		InvalidLoadFileLabel.setForeground(Color.RED);
+		InvalidLoadFileLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		InvalidLoadFileLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		InvalidLoadFileLabel.setBounds(399, 121, 354, 20);
+		frame.getContentPane().add(InvalidLoadFileLabel);
+		InvalidLoadFileLabel.setVisible(false);
 		
 		JLabel LoadPositionFileLabel = new JLabel("Select File to Load:");
 		LoadPositionFileLabel.setBackground(Color.WHITE);
@@ -69,16 +77,32 @@ public class LoadPositionPage {
 		LoadPositionFileLabel.setBounds(10, 151, 332, 68);
 		frame.getContentPane().add(LoadPositionFileLabel);
 		
+		JLabel InvalidFileNameLabel = new JLabel("Please enter a file name");
+		InvalidFileNameLabel.setForeground(Color.RED);
+		InvalidFileNameLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		InvalidFileNameLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		InvalidFileNameLabel.setBounds(399, 229, 354, 26);
+		frame.getContentPane().add(InvalidFileNameLabel);
+		InvalidFileNameLabel.setVisible(false);
+		
 		JButton loadPositionFileButton = new JButton("Load File\r\n");
 		loadPositionFileButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
+				if(LoadFileNameTextField.getText().isEmpty()) {
+					InvalidFileNameLabel.setVisible(true);
+					return;
+				}
 				try {
-					valid = QC.loadSavedPosition("");
+					valid = QC.loadSavedPosition(LoadFileNameTextField.getText());
+					frame.dispose();
+					MainGameWindow main = new MainGameWindow();
+					main.frmQuoridorPlay.setVisible(true);
 				} catch (IOException e1) {
 					
-					InvalidLoadLabel.setVisible(true);
-					
+				}
+				if(valid = false) {
+					InvalidLoadFileLabel.setVisible(true);
 				}
 			}
 		});
@@ -86,17 +110,10 @@ public class LoadPositionPage {
 		loadPositionFileButton.setBounds(904, 151, 238, 68);
 		frame.getContentPane().add(loadPositionFileButton);
 		
-		//MouseListener mouseListenerLoadGameFileButton = new MouseListener();
-		
-		JComboBox LoadFileComboBox = new JComboBox();
-		LoadFileComboBox.setBounds(283, 151, 586, 68);
-		frame.getContentPane().add(LoadFileComboBox);
-		
 		JLabel TitleLabel = new JLabel("Quoridor\r\n");
 		TitleLabel.setFont(new Font("Tahoma", Font.PLAIN, 40));
 		TitleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		TitleLabel.setBounds(283, 10, 586, 101);
 		frame.getContentPane().add(TitleLabel);
-		
 	}
 }

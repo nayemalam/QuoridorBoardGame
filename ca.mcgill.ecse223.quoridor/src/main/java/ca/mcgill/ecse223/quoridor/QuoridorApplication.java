@@ -13,8 +13,7 @@ public class QuoridorApplication {
 		// start UI
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                QuoridorPage.main(args);
-
+                LoadPositionPage.main(args);
             }
         });
 	}
