@@ -466,17 +466,14 @@ public class QuoridorController {
 	 * @param row , is the row of the target tile of the WallMove associated to the wall
 	 * @param col , the column of the target tile of the wall move associated to the wall
 	 * @param Walldir , the direction of the WallMove associated with the wall
-	 * @param wall , the wall currently checked for validity
 	 * @param id , the id of the wall currently checked for validity
 	 * @return true/false true for valid position, false for invalid
 	 * @author Alexander Legouverneur
 	 */
-	public static boolean initiatePosValidation(int row, int col, String Walldir, Wall wall, int id) {
+	public static boolean initiatePosValidation(int row, int col, String Walldir, int id) {
 		Quoridor q = QuoridorApplication.getQuoridor();
 		if(row>=1 && row<=8 && col>=1 && col<=8) {
-			if(wall == null) {
-				return true;
-			}
+			
 			Direction dir1;
 			int col1;
 			int row1;
@@ -553,7 +550,7 @@ public class QuoridorController {
 	 * @author Alexander Legouverneur
 	 */
 	public static String validateWall(int row, int col, String dir) {
-		if(initiatePosValidation(row, col, dir, null, 0) == true) {
+		if(initiatePosValidation(row, col, dir, 0) == true) {
 			return "ok";
 		}
 		else return "error";
@@ -569,7 +566,7 @@ public class QuoridorController {
 	 * @author Alexander Legouverneur
 	 */
 	public static boolean checkWallValid(int row, int col, String dir, Wall wall) {
-		if(initiatePosValidation(row, col, dir, wall, wall.getId()) == true) {
+		if(initiatePosValidation(row, col, dir, wall.getId()) == true) {
 			return true;
 		}
 		else return false;
@@ -697,10 +694,10 @@ public class QuoridorController {
 		Tile aTile = new Tile(row, col, q.getBoard());
 		
 		if(dir.equals(Direction.Vertical)) {
-			pos = initiatePosValidation(row, col, "vertical",aWall, aWall.getId());
+			pos = initiatePosValidation(row, col, "vertical", aWall.getId());
 		}
 		else {
-			pos = initiatePosValidation(row, col, "horizontal",aWall, aWall.getId());
+			pos = initiatePosValidation(row, col, "horizontal", aWall.getId());
 		}
 		if(pos == false) {
 			illegalWallMove();
