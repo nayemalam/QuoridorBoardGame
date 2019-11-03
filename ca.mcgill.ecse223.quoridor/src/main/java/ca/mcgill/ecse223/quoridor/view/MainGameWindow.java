@@ -23,8 +23,16 @@ import javax.swing.JButton;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
+import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
+import ca.mcgill.ecse223.quoridor.view.QuoridorPage;
+import java.awt.CardLayout;
+import java.awt.GridBagLayout;
+import net.miginfocom.swing.MigLayout;
 
 public class MainGameWindow {
 
@@ -33,11 +41,9 @@ public class MainGameWindow {
 	private JTextField textField_1;
 	private JTextField txtTimeRemaining;
 	private JTextField textField_2;
-	private JTextField textField;
 	private JTextField txtWhitePlayer;
 	private JTextField txtWallsInStock;
 	private JTextField wallsInStockWhitePlayer;
-	private JTextField textField_3;
 	private JTextField txtBlackPlayer;
 	private JTextField txtWallsOnBoard_1;
 	private JTextField wallsOnBoardWhitePlayer;
@@ -49,6 +55,12 @@ public class MainGameWindow {
 	private static final int TOTAL_ROWS = 9;
 	private static final int TOTAL_COLS = 9;
 	private JButton[][] btnArray = new JButton[TOTAL_ROWS][TOTAL_COLS];
+	private JButton[] wallArray = new JButton[20];
+	private JButton btnPlaceNewWall;
+	private JButton btnNewButton;
+	private JButton button;
+	private int wallWidth = 160;
+	private int wallHeight = 10;
 
 	/**
 	 * Launch the application.
@@ -92,15 +104,11 @@ public class MainGameWindow {
 		leftPanel.add(panel_2);
 		panel_2.setLayout(new GridLayout(2, 1, 0, 0));
 		
-		textField = new JTextField();
-		textField.setBackground(SystemColor.control);
-		panel_2.add(textField);
-		textField.setColumns(10);
-		
 		JPanel panel_3 = new JPanel();
 		panel_2.add(panel_3);
 		panel_3.setLayout(new BoxLayout(panel_3, BoxLayout.Y_AXIS));
 		
+			
 		txtWhitePlayer = new JTextField();
 		txtWhitePlayer.setEditable(false);
 		txtWhitePlayer.setFont(new Font("Tahoma", Font.BOLD, 13));
@@ -142,6 +150,10 @@ public class MainGameWindow {
 		panel_5.add(wallsOnBoardWhitePlayer);
 		wallsOnBoardWhitePlayer.setColumns(10);
 		
+		JPanel panel_10 = new JPanel();
+		panel_2.add(panel_10);
+		panel_10.setLayout(null);
+		
 		JPanel centerPanel = new JPanel();
 		frmQuoridorPlay.getContentPane().add(centerPanel, BorderLayout.CENTER);
 		centerPanel.setLayout(new GridLayout(9, 9, 10, 10));
@@ -162,6 +174,9 @@ public class MainGameWindow {
 			centerPanel.add(btnArray[row][col]);
 			}
 		}
+		
+		
+		
 		
 		JPanel northPanel = new JPanel();
 		northPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -208,6 +223,8 @@ public class MainGameWindow {
 		panel_1.add(textField_2);
 		textField_2.setColumns(10);
 		
+		
+		
 		JPanel southPanel = new JPanel();
 		frmQuoridorPlay.getContentPane().add(southPanel, BorderLayout.SOUTH);
 		
@@ -219,12 +236,6 @@ public class MainGameWindow {
 		JPanel panel_6 = new JPanel();
 		rightPanel.add(panel_6);
 		panel_6.setLayout(new GridLayout(2, 1, 0, 0));
-		
-		textField_3 = new JTextField();
-		textField_3.setEnabled(false);
-		textField_3.setEditable(false);
-		panel_6.add(textField_3);
-		textField_3.setColumns(10);
 		
 		JPanel panel_7 = new JPanel();
 		panel_6.add(panel_7);
@@ -241,6 +252,9 @@ public class MainGameWindow {
 		JPanel panel_8 = new JPanel();
 		panel_7.add(panel_8);
 		
+		
+		
+
 		txtWallsInStock_1 = new JTextField();
 		txtWallsInStock_1.setEditable(false);
 		txtWallsInStock_1.setText("Walls in Stock:");
@@ -265,5 +279,118 @@ public class MainGameWindow {
 		wallsOnBoardBlackPlayer.setEditable(false);
 		panel_9.add(wallsOnBoardBlackPlayer);
 		wallsOnBoardBlackPlayer.setColumns(10);
+		
+		JPanel panel_11 = new JPanel();
+		panel_6.add(panel_11);
+		panel_11.setLayout(null);
+		
+for(int i = 0; i< wallArray.length; i++) { //Initializing the walls for both players
+			
+			if(i<=9) {
+				
+				wallArray[i] = new JButton("Wall"+i);
+				wallArray[i].addMouseListener(new MouseAdapter() {
+					
+					public void mouseReleased(MouseEvent e) {
+						
+						// TODO call the method for grab wall in here
+						// TODO call the method for rotate wall in here
+						
+					}
+					
+				});
+				
+				panel_10.add(wallArray[i]);
+				wallArray[i].setBounds(10, 11+i*(wallHeight+5),wallWidth , wallHeight);
+			}
+			else {
+				int bId = i-10;
+				wallArray[i] = new JButton("Wall"+bId);
+				wallArray[i].addMouseListener(new MouseAdapter() {
+					
+					public void mouseReleased(MouseEvent e) {
+						
+						// TODO call the method for grab wall in here
+						// TODO call the method for rotate wall in here
+						
+					}
+					
+				});
+				panel_11.add(wallArray[i]);
+				wallArray[i].setBounds(10, 11+(i-10)*(wallHeight+5),wallWidth , wallHeight);
+			}
+			
+		}
+		
+	}
+	
+	private void validatePawnPosition() {
+
+		int Player = QuoridorController.currentPlayerInt();
+		if(Player == 1) {
+
+			int row = QuoridorController.getBlackPlayerPlayerPosition().getTile().getRow();
+			int col = QuoridorController.getBlackPlayerPlayerPosition().getTile().getColumn();
+
+
+			if(QuoridorController.initializeValidatePosition(row-1 , col) == true) {
+
+
+				btnArray[row-1][col].setBackground(Color.GREEN);
+
+			}
+			if(QuoridorController.initializeValidatePosition(row+1 , col) == true) {
+
+
+				btnArray[row+1][col].setBackground(Color.GREEN);
+
+			}
+			if(QuoridorController.initializeValidatePosition(row , col-1) == true) {
+
+
+				btnArray[row][col-1].setBackground(Color.GREEN);
+
+			}
+			if(QuoridorController.initializeValidatePosition(row , col+1) == true) {
+
+
+				btnArray[row][col+1].setBackground(Color.GREEN);
+
+			}
+		}
+		if(Player == 0) {
+
+			int row = QuoridorController.getWhitePlayerPosition().getTile().getRow();
+			int col = QuoridorController.getWhitePlayerPosition().getTile().getColumn();
+
+
+			if(QuoridorController.initializeValidatePosition(row-1 , col) == true) {
+
+
+				btnArray[row-1][col].setBackground(Color.GREEN);
+
+			}
+			if(QuoridorController.initializeValidatePosition(row+1 , col) == true) {
+
+
+				btnArray[row+1][col].setBackground(Color.GREEN);
+
+			}
+			if(QuoridorController.initializeValidatePosition(row , col-1) == true) {
+
+
+				btnArray[row][col-1].setBackground(Color.GREEN);
+
+			}
+			if(QuoridorController.initializeValidatePosition(row , col+1) == true) {
+
+
+				btnArray[row][col+1].setBackground(Color.GREEN);
+
+			}
+		}
+
+
+
 	}
 }
