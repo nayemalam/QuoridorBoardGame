@@ -22,8 +22,15 @@ import java.awt.event.MouseMotionAdapter;
 
 public class QuoridorPage {
 
-	JButton[] btnArray = new JButton[81];
+	JButton[][] btnArray = new JButton[9][9];
+	JButton[] WallArray = new JButton[20];
+	JButton horizontal = new JButton();
+	JButton vertical = new JButton();
 
+	private int idWhite = -1;
+	private int idBlack = 8;
+	private int CurrPlayer = 0;
+	private int index;
 
 	private JFrame frame;
 
@@ -59,9 +66,13 @@ public class QuoridorPage {
 		frame = new JFrame("Quoridor");
 		frame.setBounds(100, 100, 1165, 693);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+		frame.getContentPane().setLayout(null);
+		
 		JButton btnWall = new JButton("Wall");
 		btnWall.setBounds(993, 399, 89, 9);
+		frame.getContentPane().add(btnWall);
+		
+		
 		btnWall.addMouseListener(new MouseAdapter() {
 
 			public void mouseClicked(MouseEvent e) {
@@ -77,22 +88,8 @@ public class QuoridorPage {
 				});
 			}
 		});
-		frame.getContentPane().setLayout(null);
-
-
-		//			public void mouseDragged(MouseEvent e) {
-		//				btnWall.setLocation(e.getXOnScreen(), e.getYOnScreen());
-		//				SwingUtilities.updateComponentTreeUI(frame);
-		//						}
-
-
-		frame.getContentPane().add(btnWall);
-		SwingUtilities.updateComponentTreeUI(frame);
-
-
-
-
-
+		
+		
 	}
 
 
@@ -109,22 +106,8 @@ public class QuoridorPage {
 
 			public void mouseClicked(MouseEvent e) {
 
-				JButton btnWall = new JButton("Wall");
-				btnWall.setBounds(993, 399, 89, 9);
-				frame.getContentPane().add(btnWall);
-				SwingUtilities.updateComponentTreeUI(frame);
-				
-				for(int i = 0; i<= btnArray.length; i++) {
-					
-					btnArray[i].addMouseListener(new MouseAdapter() {
-						
-						public void mouseClicked(MouseEvent e) {
-							
-							
-						}
-					});
-				}
 
+				creatingNewWall();
 
 			}
 		});
@@ -135,7 +118,6 @@ public class QuoridorPage {
 	}
 	private void validatePawnPosition() {
 
-
 		int Player = QuoridorController.currentPlayerInt();
 		if(Player == 1) {
 
@@ -145,31 +127,167 @@ public class QuoridorPage {
 
 			if(QuoridorController.initializeValidatePosition(row-1 , col) == true) {
 
-				int indexOfTile = (row-2)*9+ col;
-				btnArray[indexOfTile].setBackground(Color.GREEN);
+				
+				btnArray[row-1][col].setBackground(Color.GREEN);
 
 			}
 			if(QuoridorController.initializeValidatePosition(row+1 , col) == true) {
 
-				int indexOfTile = (row)*9+ col;
-				btnArray[indexOfTile].setBackground(Color.GREEN);
+				
+				btnArray[row+1][col].setBackground(Color.GREEN);
 
 			}
 			if(QuoridorController.initializeValidatePosition(row , col-1) == true) {
 
-				int indexOfTile = (row-1)*9+ col-1;
-				btnArray[indexOfTile].setBackground(Color.GREEN);
+				
+				btnArray[row][col-1].setBackground(Color.GREEN);
 
 			}
 			if(QuoridorController.initializeValidatePosition(row , col+1) == true) {
 
-				int indexOfTile = (row-1)*9+ col+1;
-				btnArray[indexOfTile].setBackground(Color.GREEN);
+			
+				btnArray[row][col+1].setBackground(Color.GREEN);
+
+			}
+		}
+		if(Player == 0) {
+
+			int row = QuoridorController.getWhitePlayerPosition().getTile().getRow();
+			int col = QuoridorController.getWhitePlayerPosition().getTile().getColumn();
+
+
+			if(QuoridorController.initializeValidatePosition(row-1 , col) == true) {
+
+				
+				btnArray[row-1][col].setBackground(Color.GREEN);
+
+			}
+			if(QuoridorController.initializeValidatePosition(row+1 , col) == true) {
+
+				
+				btnArray[row+1][col].setBackground(Color.GREEN);
+
+			}
+			if(QuoridorController.initializeValidatePosition(row , col-1) == true) {
+
+				
+				btnArray[row][col-1].setBackground(Color.GREEN);
+
+			}
+			if(QuoridorController.initializeValidatePosition(row , col+1) == true) {
+
+				
+				btnArray[row][col+1].setBackground(Color.GREEN);
 
 			}
 		}
 
 
 
+	}
+
+	private void creatingNewWall() {
+
+		if(QuoridorController.currentPlayerInt() == 0) {
+			idWhite++;
+			if(idWhite > 9) {
+				// TODO create a text zone to say there are no more walls
+			}
+			CurrPlayer = 0;
+			WallArray[idWhite] = new JButton("Wall"+ idWhite );
+			WallArray[idWhite].setBounds(993, 399, 89, 9);
+			frame.getContentPane().add(WallArray[idWhite]);
+			SwingUtilities.updateComponentTreeUI(frame);
+		}
+		if(QuoridorController.currentPlayerInt() == 1) {
+			idBlack++;
+			if(idBlack>19) {
+				// TODO Create a text zone to say there are no more walls
+			}
+			CurrPlayer = 1;
+			WallArray[idBlack] = new JButton("Wall"+ idBlack);
+			WallArray[idBlack].setBounds(993, 399, 89, 9);
+			frame.getContentPane().add(WallArray[idBlack]);
+			SwingUtilities.updateComponentTreeUI(frame);
+		}
+
+		
+
+		
+
+	}
+	
+	private void BoardListener() {
+		
+		for(int i = 0; i<= btnArray.length; i++) {
+			index = i;
+			btnArray[i][i].addMouseListener(new MouseAdapter() {
+
+				public void mouseClicked(MouseEvent e) {
+
+					int col = 0;
+					while(index%9 != 0) {
+						col++;
+						index--;
+					}
+
+					int row = (index/9)+1;
+					if(CurrPlayer == 0) {
+						if(QuoridorController.initiatePosValidation(row, col, "horizontal", idWhite) == true && QuoridorController.initiatePosValidation(row, col, "vertical", idWhite) == true ) {
+							
+							horizontal.setBounds(btnArray[index][index].getX(),btnArray[index][index].getY(), 89, 9);
+							frame.getContentPane().add(horizontal);
+							horizontal.setVisible(true);
+							vertical.setBounds(993, 399, 89, 9);
+							frame.getContentPane().add(vertical);
+							vertical.setVisible(true);
+							// :TODO try implementing wall move here and add the button for position
+
+						}
+						if(QuoridorController.initiatePosValidation(row, col, "horizontal", idWhite) == true && QuoridorController.initiatePosValidation(row, col, "vertical", idWhite) == false ) {
+
+							// :TODO try implementing wall move here and add the button for position
+
+						}
+						if(QuoridorController.initiatePosValidation(row, col, "horizontal", idWhite) == false && QuoridorController.initiatePosValidation(row, col, "vertical", idWhite) == true ) {
+
+							// :TODO try implementing wall move here and add the button for position
+
+						}
+						if(QuoridorController.initiatePosValidation(row, col, "horizontal", idWhite) == false && QuoridorController.initiatePosValidation(row, col, "vertical", idWhite) == false) {
+
+							// :TODO try implementing wall move here and add the button for position
+
+						}
+
+					}
+					else {
+
+						if(QuoridorController.initiatePosValidation(row, col, "horizontal", idBlack) == true && QuoridorController.initiatePosValidation(row, col, "vertical", idWhite) == true ) {
+
+							// :TODO try implementing wall move here and add the button for position
+
+						}
+						if(QuoridorController.initiatePosValidation(row, col, "horizontal", idBlack) == true && QuoridorController.initiatePosValidation(row, col, "vertical", idWhite) == false ) {
+
+							// :TODO try implementing wall move here and add the button for position
+
+						}
+						if(QuoridorController.initiatePosValidation(row, col, "horizontal", idBlack) == false && QuoridorController.initiatePosValidation(row, col, "vertical", idWhite) == true ) {
+
+							// :TODO try implementing wall move here and add the button for position
+
+						}
+						if(QuoridorController.initiatePosValidation(row, col, "horizontal", idBlack) == false && QuoridorController.initiatePosValidation(row, col, "vertical", idWhite) == false) {
+
+							// :TODO try implementing wall move here and add the button for position
+
+						}
+					}
+
+
+				}
+			});
+		}
 	}
 }
