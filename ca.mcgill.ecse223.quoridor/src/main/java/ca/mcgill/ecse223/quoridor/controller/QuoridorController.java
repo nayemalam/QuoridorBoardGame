@@ -251,7 +251,7 @@ public class QuoridorController {
 		bPlayer.setRemainingTime(thinkingTime);
 		wPlayer.setRemainingTime(thinkingTime);
 	}
-	
+
 	public static String testMethod() {
 		return "Hello world!";
 	}
@@ -299,12 +299,12 @@ public class QuoridorController {
 		return userList;
 	}
 
-//	public static List<String> myUsers() {
-//		List<String> userList = new ArrayList<>();
-//		userList.add("Daniel");
-//		userList.add("Hyacinth");
-//		return userList;
-//	}
+	//	public static List<String> myUsers() {
+	//		List<String> userList = new ArrayList<>();
+	//		userList.add("Daniel");
+	//		userList.add("Hyacinth");
+	//		return userList;
+	//	}
 
 	/**
 	 * Method - selectNewUserName(String username)
@@ -525,17 +525,18 @@ public class QuoridorController {
 			Direction dir1;
 			int col1;
 			int row1;
-			for(int i = 0; i<=q.getCurrentGame().getCurrentPosition().numberOfBlackWallsOnBoard()+q.getCurrentGame().getCurrentPosition().numberOfWhiteWallsOnBoard()-1; i++){
+			for(int i = 0; i<=19; i++){
 				if(id == i) {
-					continue;
+					continue; //don t want to compare the wall with itself
 				}
+				
 				if(i>9) {
-					if(q.getCurrentGame().getBlackPlayer().getWall(i).hasMove() == false) {
+					if(q.getCurrentGame().getBlackPlayer().getWall(i-10).hasMove() == false) {
 						continue;
 					}
-					row1 = q.getCurrentGame().getBlackPlayer().getWall(i).getMove().getTargetTile().getRow();
-					col1 = q.getCurrentGame().getBlackPlayer().getWall(i).getMove().getTargetTile().getColumn();
-					dir1 = q.getCurrentGame().getBlackPlayer().getWall(i).getMove().getWallDirection();
+					row1 = q.getCurrentGame().getBlackPlayer().getWall(i-10).getMove().getTargetTile().getRow();
+					col1 = q.getCurrentGame().getBlackPlayer().getWall(i-10).getMove().getTargetTile().getColumn();
+					dir1 = q.getCurrentGame().getBlackPlayer().getWall(i-10).getMove().getWallDirection();
 				}
 				else {
 					if(q.getCurrentGame().getWhitePlayer().getWall(i).hasMove() == false) {
@@ -735,7 +736,7 @@ public class QuoridorController {
 	 * @param aWall 	wall to be moved 
 	 * @param player	player to whom the wall belongs
 	 */
-	public static void WallMove(int row, int col, Direction dir, Wall aWall,Player player) {
+	public static void wallMove(int row, int col, Direction dir, Wall aWall,Player player) {
 
 		Quoridor q = QuoridorApplication.getQuoridor();
 		boolean pos;
@@ -754,12 +755,6 @@ public class QuoridorController {
 			moveNumber++;
 			new WallMove(moveNumber,1,player,aTile,q.getCurrentGame(), dir, aWall);
 		}
-		else if(aWall.hasMove() == true && pos == true) {
-
-			aWall.getMove().setTargetTile(aTile);
-			aWall.getMove().setWallDirection(dir);
-		}
-
 	}
 	/**
 	 * Method - saveGamePosition(String filename, Game game)
