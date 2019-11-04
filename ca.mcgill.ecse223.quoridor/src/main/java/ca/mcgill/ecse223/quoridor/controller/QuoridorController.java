@@ -1215,8 +1215,7 @@ public class QuoridorController {
 	public static boolean isWhitePlayer(Quoridor quoridor, Player player) {
 		return player.equals(quoridor.getCurrentGame().getWhitePlayer());
 	}
-	
-	
+
 	public static Wall getWall(int id) {
 		Quoridor q = QuoridorApplication.getQuoridor();
 		if(id>9) {
