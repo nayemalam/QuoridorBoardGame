@@ -210,7 +210,7 @@ public class MainGameWindow {
 						//textField_1.setText("SUP");
 //						int nrow = (btnArray[row][col].getX())/(tileLength+11);
 //						int ncol = (btnArray[row][col].getY())/(tileWidth+11);
-						tileListener(arg0, ncol, ncol);
+						//tileListener(arg0, ncol, ncol);
 					}
 				});
 
@@ -369,6 +369,7 @@ public class MainGameWindow {
 							if(wallArray[j].isVisible() == false && bId != j) {
 
 								wallArray[j].setVisible(true);
+								
 							}
 
 						}
