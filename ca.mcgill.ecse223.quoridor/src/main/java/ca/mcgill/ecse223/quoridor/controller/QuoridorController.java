@@ -17,6 +17,8 @@ import java.util.Timer;
 public class QuoridorController {
 
 	private static int moveNumber;
+	 Quoridor quoridor;
+	
 
 	/**
 	 * Method to capture the time at which the clock is stopped
@@ -25,6 +27,7 @@ public class QuoridorController {
 	 * @author Ousmane Baricisse
 	 * @return time in seconds
 	 */
+	public quori
 	public static long stopClock() throws Exception {
 		try {
 			return TimerUtilities.getCurrentTime();
@@ -118,7 +121,7 @@ public class QuoridorController {
 	 */
 	public static Boolean initializeNewGame(Quoridor quoridor) throws Exception {
 		Boolean quoridorIsValid = !quoridor.equals(null);
-
+		
 		if(!quoridorIsValid) {
 			throw new IllegalArgumentException("This Quoridor already contains a game, or the Quoridor is null");
 		}
