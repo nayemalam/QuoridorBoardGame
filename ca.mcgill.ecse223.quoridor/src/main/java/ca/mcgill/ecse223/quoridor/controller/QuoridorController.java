@@ -17,6 +17,8 @@ import java.util.Timer;
 public class QuoridorController {
 
 	private static int moveNumber;
+	 Quoridor quoridor;
+	
 
 	/**
 	 * Method to capture the time at which the clock is stopped
@@ -24,7 +26,7 @@ public class QuoridorController {
 	 * @param
 	 * @author Ousmane Baricisse
 	 * @return time in seconds
-	 */
+	 */ 
 	public static long stopClock() throws Exception {
 		try {
 			return TimerUtilities.getCurrentTime();
@@ -118,7 +120,7 @@ public class QuoridorController {
 	 */
 	public static Boolean initializeNewGame(Quoridor quoridor) throws Exception {
 		Boolean quoridorIsValid = !quoridor.equals(null);
-
+		
 		if(!quoridorIsValid) {
 			throw new IllegalArgumentException("This Quoridor already contains a game, or the Quoridor is null");
 		}
@@ -986,15 +988,21 @@ public class QuoridorController {
 		Tile player1StartPos = quoridor.getBoard().getTile(36);
 		Tile player2StartPos = quoridor.getBoard().getTile(44);
 
-		Game game = new Game(GameStatus.Running, MoveMode.PlayerMove, quoridor);
-
+		try {
+			QuoridorController.initializeNewGame(quoridor);
+			QuoridorController.initializeBoard(quoridor);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Game game = QuoridorApplication.getQuoridor().getCurrentGame();
 		game.setWhitePlayer(players[0]);
 		game.setBlackPlayer(players[1]);
 
 		PlayerPosition player1Position = new PlayerPosition(quoridor.getCurrentGame().getWhitePlayer(), player1StartPos);
 		PlayerPosition player2Position = new PlayerPosition(quoridor.getCurrentGame().getBlackPlayer(), player2StartPos);
 
-		GamePosition gamePosition = new GamePosition(0, player1Position, player2Position, players[0], game);
+		GamePosition gamePosition = new GamePosition(1, player1Position, player2Position, players[0], game);
 		game.setCurrentPosition(gamePosition);
 		//take initial position and modify it to match the file specifications
 		GamePosition gamePositionToLoad = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition();
@@ -1024,11 +1032,13 @@ public class QuoridorController {
 			whiteData = positions[0];
 			blackData = positions[1];
 			gamePositionToLoad.setPlayerToMove(QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer());
+			getWhitePlayer().setNextPlayer(getBlackPlayer());
 			// white player's turn to play
 		} else {
 			blackData = positions[0];
 			whiteData = positions[1];
 			gamePositionToLoad.setPlayerToMove(QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer());
+			getBlackPlayer().setNextPlayer(getWhitePlayer());
 			// black player's turn to play
 		}
 		String whitePositions[] = whiteData.split(" ");
@@ -1076,7 +1086,8 @@ public class QuoridorController {
 
 			whiteWallsValid = whiteWallsValid & initiatePosValidation(whiteWallRow, whiteWallColumn, wallOrientation, i - 2);
 			if (whiteWallsValid = true) {
-				Wall whiteWall = new Wall(i - 2, getWhitePlayer());
+//				Wall whiteWall = new Wall(i - 2, getWhitePlayer());
+				Wall whiteWall = getWhitePlayer().getWall(i-2);
 				gamePositionToLoad.addWhiteWallsOnBoard(whiteWall);
 				Tile whiteWallTile = new Tile(whiteWallColumn, whiteWallRow, QuoridorApplication.getQuoridor().getBoard());
 				WallMove whiteWallMove = new WallMove(0, 0, getWhitePlayer(), whiteWallTile, game, whiteWallDirection, whiteWall);
@@ -1090,7 +1101,7 @@ public class QuoridorController {
 //			gamePositionToLoad.addWhiteWallsInStock(whiteWall);
 //			j++;
 //		}
-
+		
 		for (int i = 2; i < blackPositions.length; i++) {
 
 			int blackWallColumn = blackPositions[i].charAt(0) - 96;
@@ -1106,11 +1117,11 @@ public class QuoridorController {
 				blackWallDirection = Direction.Horizontal;
 			}
 
-
 			blackWallsValid = blackWallsValid & initiatePosValidation(blackWallRow, blackWallColumn, wallOrientation, 10 + i - 2 );
 			if (blackWallsValid = true) {
 				Tile blackWallTile = new Tile(blackWallColumn, blackWallRow, QuoridorApplication.getQuoridor().getBoard());
-				Wall blackWall = new Wall(10 + i - 2, getBlackPlayer());
+				//Wall blackWall = new Wall(10 + i - 2, getBlackPlayer());
+				Wall blackWall = getBlackPlayer().getWall(i-2);
 				gamePositionToLoad.addBlackWallsOnBoard(blackWall);
 				WallMove blackWallMove = new WallMove(0, 0, getBlackPlayer(), blackWallTile, game, blackWallDirection, blackWall);
 				gamePositionToLoad.getBlackWallsOnBoard(k).setMove(blackWallMove);

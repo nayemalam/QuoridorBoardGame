@@ -11,6 +11,8 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class StartGamePage {
 
@@ -41,6 +43,10 @@ public class StartGamePage {
 
 	// data elements
 	private String error = null;
+
+	private JPanel panel;
+	private JButton btnReturntoMainMenu;
+
 
 	/**
 	 * Launch the application.
@@ -135,6 +141,7 @@ public class StartGamePage {
 		Seconds_label = new JLabel("Seconds");
 		Seconds_label.setHorizontalAlignment(SwingConstants.CENTER);
 		Seconds_TextField = new JTextArea();
+
 
 		// elements for starting new game
 		btnStartGame = new JButton("START GAME");
@@ -250,12 +257,13 @@ public class StartGamePage {
 		frame.dispose();
 		try {
 			
-			Quoridor quoridor = QuoridorApplication.getQuoridor();
-			// TODO: Set the correct names!
-			quoridor.addUser("TestUser1");
-			quoridor.addUser("TestUser2");
+			
+//			// TODO: Set the correct names!
+//			quoridor.addUser("TestUser1");
+//			quoridor.addUser("TestUser2");
 //			QuoridorController.setWhitePlayerUserName(PlayerLabel_1.getText());
 //			QuoridorController.setBlackPlayerUserName(PlayerLabel_2.getText());
+			Quoridor quoridor = QuoridorApplication.getQuoridor();
 			QuoridorController.initializeNewGame(quoridor);
 			QuoridorController.initializeBoard(quoridor);
 			
