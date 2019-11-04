@@ -1,6 +1,7 @@
 package ca.mcgill.ecse223.quoridor.view;
 
 import java.awt.EventQueue;
+import ca.mcgill.ecse223.quoridor.*;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -34,6 +35,8 @@ import java.awt.event.MouseEvent;
 import java.util.*;
 
 import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
+import ca.mcgill.ecse223.quoridor.model.Quoridor;
+import ca.mcgill.ecse223.quoridor.model.Wall;
 import ca.mcgill.ecse223.quoridor.view.QuoridorPage;
 import java.awt.CardLayout;
 import java.awt.GridBagLayout;
@@ -75,6 +78,7 @@ public class MainGameWindow {
 	private static int CurrRow;
 	private int CurrCol;
 
+	
 	/**
 	 * Launch the application.
 	 */
@@ -96,6 +100,7 @@ public class MainGameWindow {
 	 */
 	public MainGameWindow() {
 		try {
+			
 			initialize();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -105,7 +110,7 @@ public class MainGameWindow {
 
 	/**
 	 * Initialize the contents of the frame.
-	 */
+	 */ 
 	private void initialize() throws InterruptedException {
 		frmQuoridorPlay = new JFrame();
 		frmQuoridorPlay.setTitle("Quoridor - Play Game");
@@ -257,13 +262,16 @@ public class MainGameWindow {
 		txtCurrentPlayer = new JTextField();
 		txtCurrentPlayer.setEditable(false);
 		txtCurrentPlayer.setFont(new Font("Tahoma", Font.BOLD, 13));
-		txtCurrentPlayer.setText("Current Player:");
+		txtCurrentPlayer.setText("Current Player: ");
 		txtCurrentPlayer.setHorizontalAlignment(SwingConstants.LEFT);
+		
 		panel.add(txtCurrentPlayer);
 		txtCurrentPlayer.setColumns(10);
-
+		
 		textField_1 = new JTextField();
 		textField_1.setEditable(false);
+		String currentPlayer = QuoridorApplication.getQuoridor().getCurrentGame() != null ? QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getPlayerToMove().getUser().getName() : "White";
+		textField_1.setText(currentPlayer);
 		panel.add(textField_1);
 		textField_1.setColumns(10);
 
@@ -276,8 +284,9 @@ public class MainGameWindow {
 		txtTimeRemaining.setText("Time Remaining:");
 		txtTimeRemaining.setEditable(false);
 		panel_1.add(txtTimeRemaining);
+		
 		txtTimeRemaining.setColumns(10);
-
+		
 		textField_2 = new JTextField();
 		textField_2.setEditable(false);
 		panel_1.add(textField_2);
@@ -342,7 +351,11 @@ public class MainGameWindow {
 		panel_10.setLayout(new GridLayout(10, 1));
 		panel_11.setSize(new Dimension(100, 100));
 		panel_11.setLayout(new GridLayout(10, 1));
+		
 		JButton btnWall = new JButton("Wall");
+//		List<Wall> whiteWalls = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getWhiteWallsInStock();
+//		List<Wall> blackWalls = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getBlackWallsInStock();
+//		
 		for (int i = 0; i < wallArray.length; i++) {
 			JButton btn = new JButton("Wall" + i);
 			btn.setBackground(Color.black);
@@ -355,53 +368,51 @@ public class MainGameWindow {
 				panel_11.add(btn);
 			}
 		}
-
+		// WALLS DETAILS 
+		
 		int num = 0;
-		this.grabedWalls = 0;
 		for (JButton btn : wallArray) {
 			if (num <= 9) {
-				
-					btn.setAction(new AbstractAction("Wall " + num++) {
 
-					
+				btn.setAction(new AbstractAction("Wall " + num++) {
 
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							if( !set.contains(e.getSource()) && set.size() != 0) {
-								JButton btn2 = set.remove(set.size()-1);
-								btn2.setVisible(true);
-								
-							}
-								
-							btn.setVisible(false);
-							panel_10.revalidate();
-							panel_10.repaint();
-							set.add(btn);
-							
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						if (!set.contains(e.getSource()) && set.size() != 0) {
+							JButton btn2 = set.remove(set.size() - 1);
+							btn2.setVisible(true);
+
 						}
-					});
-				
+						
+						btn.setVisible(false);
+						panel_10.revalidate();
+						panel_10.repaint();
+						set.add(btn);
+
+					}
+				});
+
 			} else {
 				btn.setAction(new AbstractAction("Wall " + num++) {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						if( !set2.contains(e.getSource()) && set2.size() != 0) {
-							JButton btn2 = set2.remove(set2.size()-1);
+						if (!set2.contains(e.getSource()) && set2.size() != 0) {
+							JButton btn2 = set2.remove(set2.size() - 1);
 							btn2.setVisible(true);
-							
+
 						}
-							
+
 						btn.setVisible(false);
 						panel_11.revalidate();
 						panel_11.repaint();
 						set2.add(btn);
-						
+
 					}
 				});
 			}
 
 		}
-
+		
 //		for(int i = 0; i< wallArray.length; i++) { //Initializing the walls for both players
 //
 //			if(i<=9) {
@@ -444,7 +455,10 @@ public class MainGameWindow {
 //
 //		}
 	}
-
+	
+	private static int grabWallFromGui() {
+		return 0;
+	}
 	private JPanel getWallPanel() {
 
 		JPanel panel = new JPanel();
@@ -473,7 +487,7 @@ public class MainGameWindow {
 
 		return panel;
 	}
-
+	
 	private void validatePawnPosition() {
 
 		int Player = QuoridorController.currentPlayerInt();
