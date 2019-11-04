@@ -9,6 +9,8 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class StartGamePage {
 
@@ -40,6 +42,7 @@ public class StartGamePage {
 	// data elements
 	private String error = null;
 	private JPanel panel;
+	private JButton btnReturntoMainMenu;
 
 	/**
 	 * Launch the application.
@@ -255,6 +258,22 @@ public class StartGamePage {
 						gbc_errorMessage.gridx = 0;
 						gbc_errorMessage.gridy = 5;
 						frame.getContentPane().add(errorMessage, gbc_errorMessage);
+				
+				btnReturntoMainMenu = new JButton("Return to Main Menu");
+				btnReturntoMainMenu.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mousePressed(MouseEvent e) {
+						frame.dispose();
+						MainMenu main = new MainMenu();
+						main.frame.setVisible(true);
+					}
+				});
+				GridBagConstraints gbc_btnReturntoMainMenu = new GridBagConstraints();
+				gbc_btnReturntoMainMenu.anchor = GridBagConstraints.NORTH;
+				gbc_btnReturntoMainMenu.insets = new Insets(0, 0, 0, 5);
+				gbc_btnReturntoMainMenu.gridx = 0;
+				gbc_btnReturntoMainMenu.gridy = 6;
+				frame.getContentPane().add(btnReturntoMainMenu, gbc_btnReturntoMainMenu);
 				GridBagConstraints gbc_btnStartGame = new GridBagConstraints();
 				gbc_btnStartGame.anchor = GridBagConstraints.NORTH;
 				gbc_btnStartGame.insets = new Insets(0, 0, 0, 5);
