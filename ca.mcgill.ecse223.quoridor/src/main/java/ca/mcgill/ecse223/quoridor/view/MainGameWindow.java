@@ -60,7 +60,8 @@ public class MainGameWindow {
 	private JButton btnPlaceNewWall;
 	private JButton btnNewButton;
 	private JButton button;
-	private static int wallWidth = 160;
+	private static int wallWidth = 185;
+	private static int wallWidthV = 101;
 	private static int wallHeight = 10;
 	private static boolean WallGrabbed = false;
 	private static int CurrRow;
@@ -357,20 +358,21 @@ public class MainGameWindow {
 			}
 			else {
 				int bId = i-10;
+				int Aid = i;
 				wallArray[i] = new JButton("Wall"+bId);
 				wallArray[i].addMouseListener(new MouseAdapter() {
 
 					public void mouseReleased(MouseEvent e) {
 
 						for(int j = 0; j<wallArray.length; j++) {
-							if(wallArray[j].isVisible() == false && bId != j) {
+							if(wallArray[j].isVisible() == false && Aid != j) {
 
 								wallArray[j].setVisible(true);
 								
 							}
 
 						}
-						wallArray[bId].setVisible(false);
+						wallArray[Aid].setVisible(false);
 						lblPleaseSelectMove.setVisible(false);
 						// TODO call the method that specifies what happens to the wall once it is grabbed
 						// TODO call the method for rotate wall in here
@@ -529,10 +531,14 @@ public class MainGameWindow {
 
 				}
 				else {
-					wallArray[wallIndex].setBounds(btnArray[row][col].getX(), btnArray[row][col].getY(), wallHeight-42, wallWidth);
+					wallArray[wallIndex].setBounds(btnArray[row-1][col-1].getX()+tileLength, btnArray[row-1][col-1].getY(), wallHeight, wallWidthV  );
 					wallArray[wallIndex].setVisible(true);
 					SwingUtilities.updateComponentTreeUI(frmQuoridorPlay);
 				}
+
+			}
+			else {
+				lblPleaseSelectMove.setVisible(true);
 
 			}
 			
@@ -550,7 +556,7 @@ public class MainGameWindow {
 
 				}
 				else {
-					wallArray[wallIndex].setBounds(btnArray[row-1][col-1].getX(), btnArray[row-1][col-1].getY(), wallHeight-42, wallWidth);
+					wallArray[wallIndex].setBounds(btnArray[row-1][col-1].getX()-11, btnArray[row-1][col-1].getY(), wallHeight, wallWidthV);
 					wallArray[wallIndex].setVisible(true);
 					SwingUtilities.updateComponentTreeUI(frmQuoridorPlay);
 				}
