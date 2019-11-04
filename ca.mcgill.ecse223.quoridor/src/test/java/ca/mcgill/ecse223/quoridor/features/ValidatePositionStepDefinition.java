@@ -163,5 +163,4 @@ public class ValidatePositionStepDefinition {
 		assertEquals(false,QuoridorController.checkWallValid(providedRow,providedColumn, providedDirection,q.getCurrentGame().getBlackPlayer().getWall(0)));
 		assertEquals(false,QuoridorController.checkWallValid(providedRow1,providedColumn1, providedDirection1,q.getCurrentGame().getBlackPlayer().getWall(1)));
 	}
-
 }
