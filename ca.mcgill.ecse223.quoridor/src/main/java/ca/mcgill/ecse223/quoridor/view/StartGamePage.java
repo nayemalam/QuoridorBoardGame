@@ -13,7 +13,7 @@ import java.awt.event.ActionEvent;
 public class StartGamePage {
 
 	// UI elements
-	private JFrame frame;
+	public JFrame frame;
 	private JTextPane QuoridorTitleField;
 	private JLabel errorMessage;
 	// player 1

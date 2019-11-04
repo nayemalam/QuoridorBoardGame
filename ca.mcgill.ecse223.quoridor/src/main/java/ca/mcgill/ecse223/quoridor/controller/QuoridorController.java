@@ -2,7 +2,7 @@ package ca.mcgill.ecse223.quoridor.controller;
 import java.util.*;
 
 import javax.swing.text.Utilities;
-
+import java.io.*;
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.model.Game.GameStatus;
@@ -286,7 +286,7 @@ public class QuoridorController {
 		bPlayer.setRemainingTime(thinkingTime);
 		wPlayer.setRemainingTime(thinkingTime);
 	}
-	
+
 	public static String testMethod() {
 		return "Hello world!";
 	}
@@ -334,12 +334,12 @@ public class QuoridorController {
 		return userList;
 	}
 
-//	public static List<String> myUsers() {
-//		List<String> userList = new ArrayList<>();
-//		userList.add("Daniel");
-//		userList.add("Hyacinth");
-//		return userList;
-//	}
+	//	public static List<String> myUsers() {
+	//		List<String> userList = new ArrayList<>();
+	//		userList.add("Daniel");
+	//		userList.add("Hyacinth");
+	//		return userList;
+	//	}
 
 	/**
 	 * Method - selectNewUserName(String username)
@@ -560,17 +560,18 @@ public class QuoridorController {
 			Direction dir1;
 			int col1;
 			int row1;
-			for(int i = 0; i<=q.getCurrentGame().getCurrentPosition().numberOfBlackWallsOnBoard()+q.getCurrentGame().getCurrentPosition().numberOfWhiteWallsOnBoard()-1; i++){
+			for(int i = 0; i<=19; i++){
 				if(id == i) {
-					continue;
+					continue; //don t want to compare the wall with itself
 				}
+				
 				if(i>9) {
-					if(q.getCurrentGame().getBlackPlayer().getWall(i).hasMove() == false) {
+					if(q.getCurrentGame().getBlackPlayer().getWall(i-10).hasMove() == false) {
 						continue;
 					}
-					row1 = q.getCurrentGame().getBlackPlayer().getWall(i).getMove().getTargetTile().getRow();
-					col1 = q.getCurrentGame().getBlackPlayer().getWall(i).getMove().getTargetTile().getColumn();
-					dir1 = q.getCurrentGame().getBlackPlayer().getWall(i).getMove().getWallDirection();
+					row1 = q.getCurrentGame().getBlackPlayer().getWall(i-10).getMove().getTargetTile().getRow();
+					col1 = q.getCurrentGame().getBlackPlayer().getWall(i-10).getMove().getTargetTile().getColumn();
+					dir1 = q.getCurrentGame().getBlackPlayer().getWall(i-10).getMove().getWallDirection();
 				}
 				else {
 					if(q.getCurrentGame().getWhitePlayer().getWall(i).hasMove() == false) {
@@ -770,7 +771,7 @@ public class QuoridorController {
 	 * @param aWall 	wall to be moved 
 	 * @param player	player to whom the wall belongs
 	 */
-	public static void WallMove(int row, int col, Direction dir, Wall aWall,Player player) {
+	public static void wallMove(int row, int col, Direction dir, Wall aWall,Player player) {
 
 		Quoridor q = QuoridorApplication.getQuoridor();
 		boolean pos;
@@ -789,43 +790,135 @@ public class QuoridorController {
 			moveNumber++;
 			new WallMove(moveNumber,1,player,aTile,q.getCurrentGame(), dir, aWall);
 		}
-		else if(aWall.hasMove() == true && pos == true) {
-
-			aWall.getMove().setTargetTile(aTile);
-			aWall.getMove().setWallDirection(dir);
-		}
-
 	}
 	/**
-	 * Method - saveGameFile(String filename, Game game)
+	 * Method - saveGamePosition(String filename, Game game)
 	 * 
-	 * Controller method used to save the game as a text file
-	 * This file can later be loaded to keep playing 
-	 * this instance of the game
+	 * Controller method used to save the game as a text file 
+	 * This file can later be
+	 * loaded to keep playing this instance of the game
+	 * first checks if the file exists or not
 	 * 
 	 * @param filename - String name of file
-	 * @return String - contents of the file
+	 * @return String - contents of the file that was just written by calling overwriteGamePosition
 	 * @author Nicolas Buisson
 	 * 
 	 */
-	public static String saveGameFile(String filename) {
+	public static boolean saveGamePosition(String filename) throws IllegalArgumentException, IOException {
+		File file = new File(filename);
 
-		throw new UnsupportedOperationException();
+		boolean fileExists = file.createNewFile();
+		//false if it already exists
+		//true if it doesn't, gets created
+
+//		if(!fileExists) {
+//			throw new IllegalArgumentException("File already exists!");
+//		}
+		if (fileExists = true) {
+			overwriteGamePosition(filename);
+		}
+		return fileExists;
+
 	}
+
+	/**
+	 * Method - overwriteGameFile(String filename, Game game)
+	 * 
+	 * Controller method used to save the game as a text file 
+	 * This file can later be
+	 * loaded to keep playing this instance of the game
+	 * 
+	 * @param filename - String name of file
+	 * @return String - contents of the file that was just written
+	 * @author Nicolas Buisson
+	 * 
+	 */
+	public static String overwriteGamePosition(String filename) throws IOException {
+
+		String gameData = "";
+		String whiteData = "W: ";
+		String blackData = "B: ";
+		String seperator = ", ";
+		String[] columnArray = new String[] { "no 0 column", "a", "b", "c", "d", "e", "f", "g", "h", "i" };
+		int whitePawnColumn = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getWhitePosition()
+				.getTile().getColumn();
+		int whitePawnRow = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getWhitePosition()
+				.getTile().getRow();
+		int blackPawnColumn = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getBlackPosition()
+				.getTile().getColumn();
+		int blackPawnRow = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getBlackPosition()
+				.getTile().getRow();
+
+		whiteData = whiteData + columnArray[whitePawnColumn] + String.valueOf(whitePawnRow);
+		blackData = blackData + columnArray[blackPawnColumn] + String.valueOf(blackPawnRow);
+
+		List<Wall> whiteWallsOnBoard = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition()
+				.getWhiteWallsOnBoard();
+		List<Wall> blackWallsOnBoard = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition()
+				.getBlackWallsOnBoard();
+
+		for (int i = 0; i < whiteWallsOnBoard.size(); i++) {
+			int wallColumn = whiteWallsOnBoard.get(i).getMove().getTargetTile().getColumn();
+			int wallRow = whiteWallsOnBoard.get(i).getMove().getTargetTile().getRow();
+			String wallOrientation = whiteWallsOnBoard.get(i).getMove().getWallDirection().name();
+			if (wallOrientation.equals("Vertical")) {
+				wallOrientation = "v";
+			} else {
+				wallOrientation = "h";
+			}
+			whiteData = whiteData + seperator + columnArray[wallColumn] + String.valueOf(wallRow) + wallOrientation;
+		}
+
+		for (int i = 0; i < blackWallsOnBoard.size(); i++) {
+			int wallColumn = blackWallsOnBoard.get(i).getMove().getTargetTile().getColumn();
+			int wallRow = blackWallsOnBoard.get(i).getMove().getTargetTile().getRow();
+			String wallOrientation = blackWallsOnBoard.get(i).getMove().getWallDirection().name();
+			if (wallOrientation.equals("Vertical")) {
+				wallOrientation = "v";
+			} else {
+				wallOrientation = "h";
+			}
+			blackData = blackData + seperator + columnArray[wallColumn] + String.valueOf(wallRow) + wallOrientation;
+		}
+
+		// need to figure out whose turn it is
+		// to find order of data saved
+		boolean playerToPlay = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer().hasNextPlayer();
+		// true for white
+		// false for black
+		if (playerToPlay = true) {
+			gameData = whiteData + "\n" + blackData;
+		} else {
+			gameData = blackData + "\n" + whiteData;
+		}
+
+		File file = new File(filename);
+		BufferedWriter bW = new BufferedWriter(new FileWriter(file));
+
+		bW.write(gameData);
+
+		if (bW != null) {
+			bW.close();
+		}
+
+		return gameData;
+
+	}
+
 	/**
 	 * Method - overWriteFile()
 	 * 
-	 * Controller method used to overwrite a saved game file
-	 * with the current game
+	 * Controller method used to overwrite a saved game file with the current game
 	 * 
 	 * @param filename - String name of file
 	 * @return String - contains the content of the overwritten file
 	 * @author Nicolas Buisson
 	 * 
 	 */
-	public static String overWriteFile(String filename) {
 
-		throw new UnsupportedOperationException();
+	public static String overWriteFile(String filename) throws IOException {
+		// overwriting taken care of by saveGamePosition method
+		return overwriteGamePosition(filename);
 	}
 
 	/**
@@ -833,30 +926,191 @@ public class QuoridorController {
 	 * 
 	 * Controller method used to cancel overwriting a file
 	 * 
-	 * @return String - content of file
+	 * @return void
 	 * @author Nicolas Buisson
 	 * 
 	 */
-	public static String cancelOverWriteFile() {
-		throw new UnsupportedOperationException();
-		//if user cancels overwriting the file
-		//then nothing happens, file and model are unchanged
-		//only change is in UI
-		//might not have to be a controller method
+	public static void cancelOverWriteFile() {
+
+		// if user cancels overwriting the file
+		// then nothing happens, file and model are unchanged
+		// only change is in UI
+		// might not have to be a controller method
 	}
+
 	/**
-	 * Method - loadSavedGame()
+	 * Method - loadSavedPosition()
 	 * 
-	 * Controller method used to load a file containing the game state
-	 * of a previous game that the user wishes to continue playing
+	 * Controller method used to load a file containing the game state of a previous
+	 * game that the user wishes to continue playing
 	 * 
 	 * @param filename - name of file
-	 * @return Game - the game to be continued is returned
+	 * @return GamePosition - the game position is returned
 	 * @author Nicolas Buisson
 	 * 
 	 */
-	public static Game loadSavedGame(String filename) {
-		throw new UnsupportedOperationException();
+	public static boolean loadSavedPosition(String filename) throws IOException {
+
+		boolean validPosition = true;
+		int j = 0; //iterator value used to save how many white walls were placed on board
+		int k = 0; //iterator value used to save how many black walls were placed on board
+		//will later be used to determine how many walls should be placed in the stock of each player
+
+		//NEED TO CREATE A GAME
+		Quoridor quoridor =  QuoridorApplication.getQuoridor();
+		int thinkingTime = 180;
+		User user1 = quoridor.getUser(0);
+		User user2 = quoridor.getUser(1);
+		Player player1 = new Player(new Time(thinkingTime), user1, 9, Direction.Horizontal);
+		Player player2 = new Player(new Time(thinkingTime), user2, 1, Direction.Horizontal);
+
+		Player[] players = { player1, player2 };
+
+		Tile player1StartPos = quoridor.getBoard().getTile(36);
+		Tile player2StartPos = quoridor.getBoard().getTile(44);
+
+		Game game = new Game(GameStatus.Running, MoveMode.PlayerMove, quoridor);
+
+		game.setWhitePlayer(players[0]);
+		game.setBlackPlayer(players[1]);
+
+		PlayerPosition player1Position = new PlayerPosition(quoridor.getCurrentGame().getWhitePlayer(), player1StartPos);
+		PlayerPosition player2Position = new PlayerPosition(quoridor.getCurrentGame().getBlackPlayer(), player2StartPos);
+
+		GamePosition gamePosition = new GamePosition(0, player1Position, player2Position, players[0], game);
+		game.setCurrentPosition(gamePosition);
+		//take initial position and modify it to match the file specifications
+		GamePosition gamePositionToLoad = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition();
+
+		//PERHAPS USE THE STRINGBUILDER FROM SAVEPOSITIONSTEPDEF
+		File file = new File(filename);
+		String content = "";
+		FileReader reader = new FileReader(file);
+		BufferedReader BF = new BufferedReader(reader);
+		String line = BF.readLine();
+		while (line != null) {
+			content = content + line + "\n";
+			line = BF.readLine();
+		}
+
+		if (BF != null) {
+			BF.close();
+		}
+		// data of game saved in string content
+		// need to decompose it to access all the individual positions
+		// of the pawns and the walls
+		// separates white data and black data
+		String whiteData = "";
+		String blackData = "";
+		String positions[] = content.split("\n");
+		if (positions[0].startsWith("W")) {
+			whiteData = positions[0];
+			blackData = positions[1];
+			gamePositionToLoad.setPlayerToMove(QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer());
+			// white player's turn to play
+		} else {
+			blackData = positions[0];
+			whiteData = positions[1];
+			gamePositionToLoad.setPlayerToMove(QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer());
+			// black player's turn to play
+		}
+		String whitePositions[] = whiteData.split(" ");
+		String blackPositions[] = blackData.split(" ");
+
+		// use unicode values
+		// 'a' = 97, will correspond to the column numbers
+		int whitePawnColumn = ((int) whitePositions[1].charAt(0)) - 96;
+		int whitePawnRow = whitePositions[1].charAt(1) - 48;
+		boolean whitePawnValid = initializeValidatePosition(whitePawnRow, whitePawnColumn);
+		if (whitePawnValid = true) {
+			Tile whitePawnTile = new Tile(whitePawnRow, whitePawnColumn, QuoridorApplication.getQuoridor().getBoard());
+			PlayerPosition whitePosition = new PlayerPosition(
+					QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer(), whitePawnTile);
+			gamePositionToLoad.setWhitePosition(whitePosition);
+		}
+		int blackPawnColumn = ((int) blackPositions[1].charAt(0)) - 96;
+		int blackPawnRow = blackPositions[1].charAt(1) - 48;
+
+		boolean blackPawnValid = initializeValidatePosition(blackPawnRow, blackPawnColumn);
+		if (blackPawnValid = true) {
+			Tile blackPawnTile = new Tile(blackPawnRow, blackPawnColumn, QuoridorApplication.getQuoridor().getBoard());
+			PlayerPosition blackPosition = new PlayerPosition(QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer(), blackPawnTile);
+			gamePositionToLoad.setBlackPosition(blackPosition);
+		}
+
+		boolean whiteWallsValid = true;
+		boolean blackWallsValid = true;
+
+		for (int i = 2; i < whitePositions.length; i++) {
+
+			int whiteWallColumn = whitePositions[i].charAt(0) - 96;
+			int whiteWallRow = whitePositions[i].charAt(1) - 48; //unicode value of char representing row, not actual row number
+			// '0' = 48
+			char whiteWallO = whitePositions[i].charAt(2);
+			Direction whiteWallDirection;
+			String wallOrientation = "";
+			if (whiteWallO == 'v') {
+				wallOrientation = "vertical";
+				whiteWallDirection = Direction.Vertical;
+			} else {
+				wallOrientation = "horizontal";
+				whiteWallDirection = Direction.Horizontal;
+			}
+
+			whiteWallsValid = whiteWallsValid & initiatePosValidation(whiteWallRow, whiteWallColumn, wallOrientation, i - 2);
+			if (whiteWallsValid = true) {
+				Wall whiteWall = new Wall(i - 2, getWhitePlayer());
+				gamePositionToLoad.addWhiteWallsOnBoard(whiteWall);
+				Tile whiteWallTile = new Tile(whiteWallColumn, whiteWallRow, QuoridorApplication.getQuoridor().getBoard());
+				WallMove whiteWallMove = new WallMove(0, 0, getWhitePlayer(), whiteWallTile, game, whiteWallDirection, whiteWall);
+				gamePositionToLoad.getWhiteWallsOnBoard(j).setMove(whiteWallMove);
+				j++;
+			}
+		}
+		//NEED TO ADD THE WALLS ON STOCK, means need to create all of them
+//		while(j < 10) {
+//			Wall whiteWall = new Wall( j, getWhitePlayer());
+//			gamePositionToLoad.addWhiteWallsInStock(whiteWall);
+//			j++;
+//		}
+
+		for (int i = 2; i < blackPositions.length; i++) {
+
+			int blackWallColumn = blackPositions[i].charAt(0) - 96;
+			int blackWallRow = blackPositions[i].charAt(1) - 48; //unicode value of char representing row, not actual row number
+			char blackWallO = blackPositions[i].charAt(2);
+			String wallOrientation = "";
+			Direction blackWallDirection;
+			if (blackWallO == 'v') {
+				wallOrientation = "vertical";
+				blackWallDirection = Direction.Vertical;
+			} else {
+				wallOrientation = "horizontal";
+				blackWallDirection = Direction.Horizontal;
+			}
+
+
+			blackWallsValid = blackWallsValid & initiatePosValidation(blackWallRow, blackWallColumn, wallOrientation, 10 + i - 2 );
+			if (blackWallsValid = true) {
+				Tile blackWallTile = new Tile(blackWallColumn, blackWallRow, QuoridorApplication.getQuoridor().getBoard());
+				Wall blackWall = new Wall(10 + i - 2, getBlackPlayer());
+				gamePositionToLoad.addBlackWallsOnBoard(blackWall);
+				WallMove blackWallMove = new WallMove(0, 0, getBlackPlayer(), blackWallTile, game, blackWallDirection, blackWall);
+				gamePositionToLoad.getBlackWallsOnBoard(k).setMove(blackWallMove);
+				k++;
+			}
+		}
+//		while(k < 10) {
+//			Wall blackWall = new Wall( k + 10, getBlackPlayer());
+//			gamePositionToLoad.addBlackWallsInStock(blackWall);
+//			k++;
+//		}
+		validPosition = whitePawnValid & blackPawnValid & whiteWallsValid & blackWallsValid;
+		if(validPosition  = true) {
+			QuoridorApplication.getQuoridor().getCurrentGame().setCurrentPosition(gamePositionToLoad);
+		}
+		
+		return validPosition;
 	}
 
 	/**
