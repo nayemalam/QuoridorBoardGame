@@ -27,7 +27,7 @@ public class QuoridorController {
 	 * @author Ousmane Baricisse
 	 * @return time in seconds
 	 */
-	public quori
+	
 	public static long stopClock() throws Exception {
 		try {
 			return TimerUtilities.getCurrentTime();
@@ -49,7 +49,8 @@ public class QuoridorController {
 	 * @throws
 	 */
 	public static boolean completeMove(Quoridor quoridor) {
-		throw new UnsupportedOperationException();
+		Player player = quoridor.getCurrentGame().getCurrentPosition().getPlayerToMove();
+		return player.hasWalls();
 	}
 
 	/**
