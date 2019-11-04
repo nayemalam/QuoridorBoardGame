@@ -14,7 +14,10 @@ import javax.swing.SwingConstants;
 import javax.swing.JComboBox;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
+import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.controller.*;
+import ca.mcgill.ecse223.quoridor.model.Quoridor;
 
 public class LoadPositionPage {
 	public JFrame frame;
@@ -58,6 +61,8 @@ public class LoadPositionPage {
 		// Forces fullscreen
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.getContentPane().setLayout(null);
+
+		
 
 		LoadFileNameTextField = new JTextField();
 		LoadFileNameTextField.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -103,7 +108,7 @@ public class LoadPositionPage {
 					MainGameWindow main = new MainGameWindow();
 					main.frmQuoridorPlay.setVisible(true);
 				} catch (IOException e1) {
-					
+					InvalidLoadFileLabel.setVisible(true);
 				}
 				if(valid = false) {
 					InvalidLoadFileLabel.setVisible(true);
