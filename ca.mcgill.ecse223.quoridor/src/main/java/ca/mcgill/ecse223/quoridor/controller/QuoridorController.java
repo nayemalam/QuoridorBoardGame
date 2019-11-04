@@ -69,12 +69,13 @@ public class QuoridorController {
 	 */
 	public static boolean grabWall(Quoridor quoridor) {
 		// TODO Auto-generated method stub
-		
+
 		Player playerToMove = quoridor.getCurrentGame().getCurrentPosition().getPlayerToMove();
-		
+
 		List<Wall> list = playerToMove.getWalls();
-		
-		
+
+
+
 		boolean wasRemoved = false;
 		System.out.println("sizeee: " + list.size());
 		if(list.size() != 0) {
@@ -86,7 +87,8 @@ public class QuoridorController {
 			} else {
 				wasRemoved = quoridor.getCurrentGame().getCurrentPosition().removeWhiteWallsInStock(wall);
 			}
-			
+
+
 			Tile tile = new Tile(1, 1, quoridor.getBoard());
 			List<Move> listOfMoves = quoridor.getCurrentGame().getMoves();
 			WallMove wallMove;
@@ -96,14 +98,15 @@ public class QuoridorController {
 				Move move = listOfMoves.get(listOfMoves.size()-1);
 				wallMove = new WallMove(move.getMoveNumber(), move.getRoundNumber(), playerToMove, tile, quoridor.getCurrentGame(), Direction.Horizontal, wall);
 			}
-			
+
 			quoridor.getCurrentGame().setWallMoveCandidate(wallMove);
-			
+
 		}
-		
+
 		return wasRemoved;
-		
-		
+
+
+
 	}
 
 	/**
@@ -564,7 +567,8 @@ public class QuoridorController {
 				if(id == i) {
 					continue; //don t want to compare the wall with itself
 				}
-				
+
+
 				if(i>9) {
 					if(q.getCurrentGame().getBlackPlayer().getWall(i-10).hasMove() == false) {
 						continue;
@@ -1109,7 +1113,8 @@ public class QuoridorController {
 		if(validPosition  = true) {
 			QuoridorApplication.getQuoridor().getCurrentGame().setCurrentPosition(gamePositionToLoad);
 		}
-		
+
+
 		return validPosition;
 	}
 
@@ -1191,7 +1196,7 @@ public class QuoridorController {
 
 	/**
 	 * @author ousmanebaricisse
-	 * 
+	 *
 	 */
 	public static boolean isWhitePlayer(Quoridor quoridor, Player player) {
 		return player.equals(quoridor.getCurrentGame().getWhitePlayer());

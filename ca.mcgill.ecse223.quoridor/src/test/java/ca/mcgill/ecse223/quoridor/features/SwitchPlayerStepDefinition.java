@@ -45,7 +45,8 @@ public class SwitchPlayerStepDefinition {
 			this.currentPlayer = whitePlayer;
 			this.nextPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
 			condition = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().setPlayerToMove(whitePlayer);
-			
+
+
 		} else {
 			Player blackPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
 			condition = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().setPlayerToMove(blackPlayer);
