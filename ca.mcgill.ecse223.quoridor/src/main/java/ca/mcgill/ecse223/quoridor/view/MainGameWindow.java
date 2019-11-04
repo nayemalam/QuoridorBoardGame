@@ -32,7 +32,6 @@ import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
 import ca.mcgill.ecse223.quoridor.view.QuoridorPage;
 import java.awt.CardLayout;
 import java.awt.GridBagLayout;
-import net.miginfocom.swing.MigLayout;
 
 public class MainGameWindow {
 
