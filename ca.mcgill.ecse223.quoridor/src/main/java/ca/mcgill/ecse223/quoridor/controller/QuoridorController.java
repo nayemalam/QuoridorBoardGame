@@ -1224,7 +1224,7 @@ public class QuoridorController {
 			
 		}
 		else {
-			return q.getCurrentGame().getWhitePlayer().getWall(id);
+			return q.getCurrentGame().getBlackPlayer().getWall(id);
 		}
 	}
 }
