@@ -17,9 +17,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.SpringLayout;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
@@ -36,11 +34,10 @@ import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
 import ca.mcgill.ecse223.quoridor.view.QuoridorPage;
 import java.awt.CardLayout;
 import java.awt.GridBagLayout;
-import net.miginfocom.swing.MigLayout;
 
 public class MainGameWindow {
 
-	private JFrame frmQuoridorPlay;
+	public JFrame frmQuoridorPlay;
 	private JTextField txtCurrentPlayer;
 	private JTextField textField_1;
 	private JTextField txtTimeRemaining;
@@ -58,7 +55,7 @@ public class MainGameWindow {
 	private static final int TOTAL_NUMBER_OF_TILES = 81;
 	private static final int TOTAL_ROWS = 9;
 	private static final int TOTAL_COLS = 9;
-	private JButton[][] btnArray = new JButton[TOTAL_ROWS][TOTAL_COLS];
+	private JButtonWrapper[][] btnArray = new JButtonWrapper[TOTAL_ROWS][TOTAL_COLS];
 	private JButton[] wallArray = new JButton[20];
 	private JButton btnPlaceNewWall;
 	private JButton btnNewButton;
@@ -111,6 +108,8 @@ public class MainGameWindow {
 		frmQuoridorPlay.setTitle("Quoridor - Play Game");
 		frmQuoridorPlay.setBounds(100, 100, 1256, 876);
 		frmQuoridorPlay.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmQuoridorPlay.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+		frmQuoridorPlay.setVisible(true);
 
 		JPanel leftPanel = new JPanel();
 		leftPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -133,6 +132,7 @@ public class MainGameWindow {
 		txtWhitePlayer.setEditable(false);
 		txtWhitePlayer.setFont(new Font("Tahoma", Font.BOLD, 13));
 		txtWhitePlayer.setHorizontalAlignment(SwingConstants.CENTER);
+		
 		txtWhitePlayer.setText("White Player - Wall Stock");
 		txtWhitePlayer.setToolTipText("");
 		panel_3.add(txtWhitePlayer);
@@ -196,6 +196,7 @@ public class MainGameWindow {
 
 		for(int row = 0; row < TOTAL_ROWS; row++) {
 			for(int col = 0; col < TOTAL_COLS; col ++) {
+
 				
 				lblPleaseSelectMove.setVisible(false);
 
@@ -203,16 +204,19 @@ public class MainGameWindow {
 				btnArray[row][col].setBounds((tileLength +11)*row, (tileWidth+11)*col, tileLength, tileWidth);
 				centerPanel.add(btnArray[row][col]);
 
-				btnArray[row][col].addMouseListener(new MouseAdapter() {
+
+				btnArray[row][col].getButton().addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseReleased(MouseEvent arg0) {
 						// TODO: Add correct mouse listener for this tile, aka the right method call
 						//textField_1.setText("SUP");
+
 //						int nrow = (btnArray[row][col].getX())/(tileLength+11);
 //						int ncol = (btnArray[row][col].getY())/(tileWidth+11);
 						//tileListener(arg0, ncol, ncol);
 					}
 				});
+
 
 			}
 		}
@@ -401,25 +405,25 @@ public class MainGameWindow {
 			if(QuoridorController.initializeValidatePosition(row-1 , col) == true) {
 
 
-				btnArray[row-1][col].setBackground(Color.GREEN);
+				btnArray[row-1][col].getButton().setBackground(Color.GREEN);
 
 			}
 			if(QuoridorController.initializeValidatePosition(row+1 , col) == true) {
 
 
-				btnArray[row+1][col].setBackground(Color.GREEN);
+				btnArray[row+1][col].getButton().setBackground(Color.GREEN);
 
 			}
 			if(QuoridorController.initializeValidatePosition(row , col-1) == true) {
 
 
-				btnArray[row][col-1].setBackground(Color.GREEN);
+				btnArray[row][col-1].getButton().setBackground(Color.GREEN);
 
 			}
 			if(QuoridorController.initializeValidatePosition(row , col+1) == true) {
 
 
-				btnArray[row][col+1].setBackground(Color.GREEN);
+				btnArray[row][col+1].getButton().setBackground(Color.GREEN);
 
 			}
 		}
@@ -432,25 +436,25 @@ public class MainGameWindow {
 			if(QuoridorController.initializeValidatePosition(row-1 , col) == true) {
 
 
-				btnArray[row-1][col].setBackground(Color.GREEN);
+				btnArray[row-1][col].getButton().setBackground(Color.GREEN);
 
 			}
 			if(QuoridorController.initializeValidatePosition(row+1 , col) == true) {
 
 
-				btnArray[row+1][col].setBackground(Color.GREEN);
+				btnArray[row+1][col].getButton().setBackground(Color.GREEN);
 
 			}
 			if(QuoridorController.initializeValidatePosition(row , col-1) == true) {
 
 
-				btnArray[row][col-1].setBackground(Color.GREEN);
+				btnArray[row][col-1].getButton().setBackground(Color.GREEN);
 
 			}
 			if(QuoridorController.initializeValidatePosition(row , col+1) == true) {
 
 
-				btnArray[row][col+1].setBackground(Color.GREEN);
+				btnArray[row][col+1].getButton().setBackground(Color.GREEN);
 
 			}
 		}
