@@ -33,7 +33,7 @@ public class GrabWallStepDefinition {
 	private static int previousNumberOfWalls;
 	private static boolean grabWallResult;
 	private static Game game = QuoridorApplication.getQuoridor().getCurrentGame(); // current game state
-
+	
 	/**
 	 * Step definition to make sure that I have enough walls on my stack. If I have
 	 * no walls, then add 10 walls in stock
@@ -45,6 +45,7 @@ public class GrabWallStepDefinition {
 		// Write code here that turns the phrase above into concrete actions
 
 		System.out.println("here is num:  " + this.previousNumberOfWalls);
+
 
 		boolean condition = this.game.getCurrentPosition().getPlayerToMove().getWalls().size() > 0;
 		System.out.println("here is num:  " + condition);
@@ -72,6 +73,7 @@ public class GrabWallStepDefinition {
 
 		this.grabWallResult = QuoridorController.grabWall(QuoridorApplication.getQuoridor());
 
+
 	}
 
 	/**
@@ -96,12 +98,14 @@ public class GrabWallStepDefinition {
 		// Write code here that turns the phrase above into concrete actions
 		// This is more of a GUI
 		int currentNumberOfWalls;
+
 		Player playerToMove = this.game.getCurrentPosition().getPlayerToMove();
  		if(playerToMove.equals(this.game.getWhitePlayer())) {
  			currentNumberOfWalls = this.game.getCurrentPosition().getWhiteWallsInStock().size();
 		} else {
 			currentNumberOfWalls = this.game.getCurrentPosition().getBlackWallsInStock().size();
 		}
+
 
 		boolean condition = currentNumberOfWalls == this.previousNumberOfWalls -1;
 		assertTrue(condition);
@@ -120,6 +124,7 @@ public class GrabWallStepDefinition {
      	int numberOfWalls = !QuoridorController.isWhitePlayer(QuoridorApplication.getQuoridor(), QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getPlayerToMove()) ? this.game.getCurrentPosition().getBlackWallsInStock().size() : this.game.getCurrentPosition().getWhiteWallsInStock().size();
 		boolean condition = numberOfWalls==0;
 
+
 		assertTrue(condition);
 	}
 
@@ -135,6 +140,7 @@ public class GrabWallStepDefinition {
 //			assertEquals("You have no more walls in stock!", this.);
 		System.out.println("was removed or nah ? " + this.grabWallResult);
 			assertTrue(this.grabWallResult);
+
 
 	}
 

@@ -75,6 +75,7 @@ public class QuoridorController {
 		List<Wall> list = playerToMove.getWalls();
 
 
+
 		boolean wasRemoved = false;
 		System.out.println("sizeee: " + list.size());
 		if(list.size() != 0) {
@@ -86,6 +87,7 @@ public class QuoridorController {
 			} else {
 				wasRemoved = quoridor.getCurrentGame().getCurrentPosition().removeWhiteWallsInStock(wall);
 			}
+
 
 			Tile tile = new Tile(1, 1, quoridor.getBoard());
 			List<Move> listOfMoves = quoridor.getCurrentGame().getMoves();
@@ -102,6 +104,7 @@ public class QuoridorController {
 		}
 
 		return wasRemoved;
+
 
 
 	}
@@ -564,6 +567,7 @@ public class QuoridorController {
 				if(id == i) {
 					continue; //don t want to compare the wall with itself
 				}
+
 
 				if(i>9) {
 					if(q.getCurrentGame().getBlackPlayer().getWall(i-10).hasMove() == false) {
@@ -1109,6 +1113,7 @@ public class QuoridorController {
 		if(validPosition  = true) {
 			QuoridorApplication.getQuoridor().getCurrentGame().setCurrentPosition(gamePositionToLoad);
 		}
+
 
 		return validPosition;
 	}
