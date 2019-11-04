@@ -1114,9 +1114,17 @@ public class QuoridorController {
 		 */
 		public static void rotateWall() throws Exception{
 
-			throw new UnsupportedOperationException();
-
+		Game curGame = QuoridorApplication.getQuoridor().getCurrentGame();	
+		if(curGame.getWallMoveCandidate()==null) {
+			throw new Exception("No wall Selected");
 		}
+		Direction wallDir = curGame.getWallMoveCandidate().getWallDirection();
+		if(wallDir==Direction.Horizontal) {
+			curGame.getWallMoveCandidate().setWallDirection(Direction.Vertical);
+		}else {
+			curGame.getWallMoveCandidate().setWallDirection(Direction.Horizontal);
+		}
+}
 		/**
 		 * Method used to drop a wall
 		 * @author Iyatan Atchoro
@@ -1125,18 +1133,41 @@ public class QuoridorController {
 		public static void dropWall() {	
 			throw new UnsupportedOperationException();
 		}
+	public static void dropWall() throws Exception {
+		// check wall in hand
+		
+		
+		  Quoridor q = QuoridorApplication.getQuoridor();
+		   WallMove wallMoveCandidate = q.getCurrentGame().getWallMoveCandidate();
+		   int x = wallMoveCandidate.getTargetTile().getRow();
+		   int y = wallMoveCandidate.getTargetTile().getColumn();
+		   String dir = wallMoveCandidate.getWallDirection().toString();
+		   int id = wallMoveCandidate.getWallPlaced().getId();
+		   
+		   if(initiatePosValidation(x,y,dir,id)){
+			   q.getCurrentGame().addMove(wallMoveCandidate);
+		       List<Move> curList = new ArrayList<>(q.getCurrentGame().getMoves());
+		       Move lastMoveInTheList = curList.get(curList.size()-1);
+		       lastMoveInTheList.setNextMove(wallMoveCandidate);
+		       wallMoveCandidate.setPrevMove(lastMoveInTheList);
+		   }else {
+			   throw new Exception("Not a valid position");
+		   }
+		   
+		   q.getCurrentGame().setGameStatus(GameStatus.Replay);
+	}
 
-		/**
-		 * Method used to get currentPlayer
-		 * @return player the current player
-		 */
-		public static Player getCurrentPlayer() {
-			Player playerWhite = QuoridorController.getWhitePlayer();
-			if(playerWhite.hasNextPlayer()){
-				return playerWhite;
-			}
-			return QuoridorController.getBlackPlayer();
+	/**
+	 * Method used to get currentPlayer
+	 * @return player the current player
+	 */
+	public static Player getCurrentPlayer() {
+		Player playerWhite = QuoridorController.getWhitePlayer();
+		if(playerWhite.hasNextPlayer()){
+			return playerWhite;
 		}
+		return QuoridorController.getBlackPlayer();
+	}
 
 		/**
 		 * This method uses getCurrentPlayer method to transform the current player into an int
@@ -1184,6 +1215,14 @@ public class QuoridorController {
 		}
 
 
+	/**
+	 * Method used to notify invalid Wall move
+	 * @author Iyatan Atchoro
+	 */
+	
+	public static String invalidWallMove() {
+		return "Invalid";
+	}
 
 		/**
 		 * @author ousmanebaricisse
