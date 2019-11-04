@@ -95,7 +95,7 @@ public class LoadPositionStepDef {
 	 */
 	@And ("{string} shall have a vertical wall at {int}:{int}")
 	public void PlayerShallHaveAVerticalWallAtRowCol(String player, int pw_row, int pw_col) {
-
+		gamePosition = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition();
 		//if(gamePosition.getGame().getBlackPlayer().equals(gamePosition.getPlayerToMove()))
 		
 		if(player.equals("black")) {

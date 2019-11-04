@@ -57,7 +57,7 @@ public class MainGameWindow {
 	public static JFrame frmQuoridorPlay;
 
 	// END OF WALLS //
-	public JFrame frmQuoridorPlay;
+	
 
 	private JTextField txtCurrentPlayer;
 	private JTextField textField_1;
@@ -217,15 +217,6 @@ public class MainGameWindow {
 		centerPanel.setLocation(x, y);
 
 
-
-
-		for(int row = 0; row < TOTAL_ROWS; row++) {
-			for(int col = 0; col < TOTAL_COLS; col ++) {
-
-				
-				lblPleaseSelectMove.setVisible(false);
-				JButton button = new JButton();
-
 		for (int row = 0; row < TOTAL_ROWS; row++) {
 			for (int col = 0; col < TOTAL_COLS; col++) {
 				CurrRow = row;
@@ -236,49 +227,7 @@ public class MainGameWindow {
 				btnArray[row][col].setBounds((tileLength +11)*row, (tileWidth+11)*col, tileLength, tileWidth);
 				centerPanel.add(btnArray[row][col]);
 
-				btnArray[row][col].addMouseListener(new MouseAdapter() {
-					@Override
-					public void mouseReleased(MouseEvent arg0) {
-						// TODO: Add correct mouse listener for this tile, aka the right method call
-						// textField_1.setText("SUP");
-
-						for (int i = 0; i < 20; i++) {
-
-							if (wallArray[i].isVisible() == false) {// checking if there is one wall grabbed or not
-
-								WallGrabbed = true;
-
-							} else {
-								continue;
-							}
-						}
-
-						if (WallGrabbed == true) {
-
-							// TODO call the method for drop wall (drop wall should call wallMove from
-							// controller)
-							// so that the changes from the view are applied to the system
-
-						}
-						if (WallGrabbed == false) {
-
-							if (btnArray[CurrRow][CurrCol].getBackground().equals(Color.GREEN)) {
-
-								// TODO implement pawn move
-
-							} else {
-
-								lblPleaseSelectMove.setVisible(true);
-								SwingUtilities.updateComponentTreeUI(frmQuoridorPlay);
-
-							}
-
-				btnArray[row][col].addMouseListener(new ButtonActionListener(row+1, col+1));
-
-
-			}
-		}
-
+				
 		JPanel northPanel = new JPanel();
 		northPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
 		frmQuoridorPlay.getContentPane().add(northPanel, BorderLayout.NORTH);
