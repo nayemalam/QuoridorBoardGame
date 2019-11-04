@@ -90,8 +90,8 @@ public class MainGameWindow {
 	private static JButton vertical = new JButton("vertical");
 	static JLabel lblPleaseSelectMove = new JLabel("Incorrect Move");
 	private static int wallIndex;
-	private int tileLength = 87;
-	private int tileWidth = 45;
+	private static int tileLength = 87;
+	private static int tileWidth = 45;
 	private static JPanel panel_10 = new JPanel();
 	private static JPanel panel_11 = new JPanel();
 	private static JPanel centerPanel = new JPanel();
@@ -685,9 +685,6 @@ public class MainGameWindow {
 
 
 	public static void moveWallView(int row, int col, String dir, int wallIndex) {
-		boolean wallMove;
-		wallMove = QuoridorController.wallMove(row, col, dir, QuoridorController.getWall(wallIndex), QuoridorController.getCurrentPlayer());
-		System.out.println(wallMove);
 		if(wallIndex<=9) {
 			
 			panel_10.remove(wallArray[wallIndex]);
@@ -696,13 +693,14 @@ public class MainGameWindow {
 			if(QuoridorController.wallMove(row, col, dir, QuoridorController.getWall(wallIndex), QuoridorController.getCurrentPlayer()) == true) {
 				if(dir.equals("horizontal")) {
 					
-					wallArray[wallIndex].setBounds(btnArray[row][col].getX()+btnArray[row][col].getWidth(), btnArray[row][col].getY()+btnArray[row][col].getHeight(), wallWidth, wallHeight);
+					wallArray[wallIndex].setBounds(btnArray[row-1][col-1].getX(), btnArray[row-1][col-1].getY()+tileWidth, wallWidth, wallHeight);
 					wallArray[wallIndex].setVisible(true);
 					SwingUtilities.updateComponentTreeUI(frmQuoridorPlay);
+					
 
 				}
 				else {
-					wallArray[wallIndex].setBounds(btnArray[row][col].getX()+btnArray[row][col].getWidth(), btnArray[row][col].getY()+btnArray[row][col].getHeight(), wallHeight, wallWidth);
+					wallArray[wallIndex].setBounds(btnArray[row][col].getX(), btnArray[row][col].getY(), wallHeight-42, wallWidth);
 					wallArray[wallIndex].setVisible(true);
 					SwingUtilities.updateComponentTreeUI(frmQuoridorPlay);
 				}
@@ -716,23 +714,25 @@ public class MainGameWindow {
 			centerPanel.add(wallArray[wallIndex]);
 			if(QuoridorController.wallMove(row, col, dir, QuoridorController.getWall(wallIndex), QuoridorController.getCurrentPlayer()) == true) {
 				if(dir.equals("horizontal")) {
-					wallArray[wallIndex].setBounds(btnArray[row][col].getX()+btnArray[row][col].getWidth(), btnArray[row][col].getY()+btnArray[row][col].getHeight(), wallWidth, wallHeight);
+					btnArray[row][col].setBackground(Color.RED);
+					wallArray[wallIndex].setBounds(btnArray[row-1][col-1].getX(), btnArray[row-1][col-1].getY()+tileWidth, wallWidth, wallHeight);
 					wallArray[wallIndex].setVisible(true);
 					SwingUtilities.updateComponentTreeUI(frmQuoridorPlay);
 
 				}
 				else {
-					wallArray[wallIndex].setBounds(btnArray[row][col].getX()+btnArray[row][col].getWidth(), btnArray[row][col].getY()+btnArray[row][col].getHeight(), wallHeight, wallWidth);
+					wallArray[wallIndex].setBounds(btnArray[row-1][col-1].getX(), btnArray[row-1][col-1].getY(), wallHeight-42, wallWidth);
 					wallArray[wallIndex].setVisible(true);
 					SwingUtilities.updateComponentTreeUI(frmQuoridorPlay);
 				}
 
 			}
+			else {
+				lblPleaseSelectMove.setVisible(true);
+
+			}
 		}
 		
-		else {
-			lblPleaseSelectMove.setVisible(true);
-
-		}
+		
 	}
 }
