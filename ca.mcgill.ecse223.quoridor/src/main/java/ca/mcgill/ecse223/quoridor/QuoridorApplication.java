@@ -6,7 +6,7 @@ import ca.mcgill.ecse223.quoridor.view.*;
 
 
 public class QuoridorApplication {
-
+	
 	private static Quoridor quoridor;
 
 	public static void main(String[] args) {
