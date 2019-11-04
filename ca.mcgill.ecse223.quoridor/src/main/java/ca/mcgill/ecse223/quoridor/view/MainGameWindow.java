@@ -10,6 +10,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JTextPane;
 import java.awt.Font;
 import java.awt.SystemColor;
+import java.awt.Toolkit;
 import java.awt.GridLayout;
 import java.awt.FlowLayout;
 import javax.swing.JTextField;
@@ -23,6 +24,7 @@ import javax.swing.JButton;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -63,6 +65,12 @@ public class MainGameWindow {
 	private boolean WallGrabbed = false;
 	private static int CurrRow;
 	private int CurrCol;
+	private JButton horizontal = new JButton("horizontal");
+	private JButton vertical = new JButton("vertical");
+	JLabel lblPleaseSelectMove = new JLabel("Incorrect Move");
+	private int wallIndex;
+	private int tileLength = 87;
+	private int tileWidth = 45;
 
 	/**
 	 * Launch the application.
@@ -118,6 +126,8 @@ public class MainGameWindow {
 		panel_3.setLayout(new BoxLayout(panel_3, BoxLayout.Y_AXIS));
 
 
+
+
 		txtWhitePlayer = new JTextField();
 		txtWhitePlayer.setEditable(false);
 		txtWhitePlayer.setFont(new Font("Tahoma", Font.BOLD, 13));
@@ -159,9 +169,9 @@ public class MainGameWindow {
 		wallsOnBoardWhitePlayer.setEditable(false);
 		panel_5.add(wallsOnBoardWhitePlayer);
 		wallsOnBoardWhitePlayer.setColumns(10);
-		
 
-		JLabel lblPleaseSelectMove = new JLabel("Please Select Move Mode First");
+
+
 		lblPleaseSelectMove.setBackground(Color.RED);
 		lblPleaseSelectMove.setForeground(Color.RED);
 		lblPleaseSelectMove.setFont(new Font("Tahoma", Font.BOLD, 25));
@@ -169,21 +179,31 @@ public class MainGameWindow {
 		frmQuoridorPlay.getContentPane().add(lblPleaseSelectMove);
 		lblPleaseSelectMove.setVisible(false);
 
+
 		JPanel panel_10 = new JPanel();
 		panel_2.add(panel_10);
 		panel_10.setLayout(null);
 
 		JPanel centerPanel = new JPanel();
 		frmQuoridorPlay.getContentPane().add(centerPanel, BorderLayout.CENTER);
-		centerPanel.setLayout(new GridLayout(9, 9, 10, 10));
+		centerPanel.setLayout(null);
+		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+		int x = (int) ((dimension.getWidth() - centerPanel.getWidth()) / 2);
+		int y = (int) ((dimension.getHeight() - centerPanel.getHeight()) / 2);
+		centerPanel.setLocation(x, y);
+
+
 
 		for(int row = 0; row < TOTAL_ROWS; row++) {
 			for(int col = 0; col < TOTAL_COLS; col ++) {
-				CurrRow = row;
-				CurrCol = col;
+
+				
 				lblPleaseSelectMove.setVisible(false);
-				JButton button = new JButton();
-				btnArray[row][col] = new JButtonWrapper(row, col, button);
+
+				btnArray[row][col] = new JButton();
+				btnArray[row][col].setBounds((tileLength +11)*row, (tileWidth+11)*col, tileLength, tileWidth);
+				centerPanel.add(btnArray[row][col]);
+
 
 				btnArray[row][col].getButton().addMouseListener(new MouseAdapter() {
 					@Override
@@ -191,44 +211,13 @@ public class MainGameWindow {
 						// TODO: Add correct mouse listener for this tile, aka the right method call
 						//textField_1.setText("SUP");
 
-						for(int i = 0; i<20; i++) {
-
-							if(wallArray[i].isVisible() == false) {//checking if there is one wall grabbed or not
-
-								WallGrabbed = true;
-
-							}
-							else {
-								continue;
-							}
-						}
-
-						if(WallGrabbed == true) {
-
-							//TODO call the method for drop wall (drop wall should call wallMove from controller)
-							//so that the changes from the view are applied to the system
-
-						}
-						if(WallGrabbed == false) {
-
-							if(btnArray[CurrRow][CurrCol].getButton().getBackground().equals(Color.GREEN)) {
-								
-								//TODO implement pawn move
-
-							}
-							else {
-								
-								lblPleaseSelectMove.setVisible(true);
-								SwingUtilities.updateComponentTreeUI(frmQuoridorPlay);
-								
-							}
-
-						}
-
+//						int nrow = (btnArray[row][col].getX())/(tileLength+11);
+//						int ncol = (btnArray[row][col].getY())/(tileWidth+11);
+						tileListener(arg0, ncol, ncol);
 					}
 				});
 
-				centerPanel.add(btnArray[row][col].getButton());
+
 			}
 		}
 
@@ -284,6 +273,10 @@ public class MainGameWindow {
 
 		JPanel southPanel = new JPanel();
 		frmQuoridorPlay.getContentPane().add(southPanel, BorderLayout.SOUTH);
+
+
+		southPanel.add(vertical);
+		southPanel.add(horizontal);
 
 		JPanel rightPanel = new JPanel();
 		rightPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -344,13 +337,21 @@ public class MainGameWindow {
 		for(int i = 0; i< wallArray.length; i++) { //Initializing the walls for both players
 
 			if(i<=9) {
-
+				int wId=i;
 				wallArray[i] = new JButton("Wall"+i);
 				wallArray[i].addMouseListener(new MouseAdapter() {
 
 					public void mouseReleased(MouseEvent e) {
-						
+
+						for(int j = 0; j<wallArray.length; j++) {
+							if(wallArray[j].isVisible() == false && wId != j) {
+
+								wallArray[j].setVisible(true);
+							}
+
+						}
 						lblPleaseSelectMove.setVisible(false);
+						wallArray[wId].setVisible(false);
 						// TODO call the method that specifies what happens to the wall once it is grabbed
 						// TODO call the method for rotate wall in here
 
@@ -367,7 +368,15 @@ public class MainGameWindow {
 				wallArray[i].addMouseListener(new MouseAdapter() {
 
 					public void mouseReleased(MouseEvent e) {
-						
+
+						for(int j = 0; j<wallArray.length; j++) {
+							if(wallArray[j].isVisible() == false && bId != j) {
+
+								wallArray[j].setVisible(true);
+							}
+
+						}
+						wallArray[bId].setVisible(false);
 						lblPleaseSelectMove.setVisible(false);
 						// TODO call the method that specifies what happens to the wall once it is grabbed
 						// TODO call the method for rotate wall in here
@@ -451,5 +460,87 @@ public class MainGameWindow {
 
 
 
+	}
+	private void tileListener(MouseEvent arg0, int row, int col){
+		for(int i = 0; i<20; i++) {
+
+			if(wallArray[i].isVisible() == false) {//checking if there is one wall grabbed or not
+
+				WallGrabbed = true;
+				wallIndex = i;
+
+			}
+			else {
+				continue;
+			}
+		}
+		if(WallGrabbed == true) {
+
+			//TODO call the method for drop wall (drop wall should call wallMove from controller)
+			//so that the changes from the view are applied to the system
+
+
+			vertical.addMouseListener(new MouseAdapter() {
+
+				public void mouseClicked(MouseEvent e) {
+					btnArray[row][col].setBackground(Color.RED);
+					moveWallView(row, col, "vertical", wallIndex);
+
+				}
+			});
+
+
+			horizontal.addMouseListener(new MouseAdapter() {
+
+				public void mouseClicked(MouseEvent e) {
+
+
+					moveWallView(row, col, "horizontal", wallIndex);
+
+				}
+			});
+
+
+		}
+		if(WallGrabbed == false) {
+
+			if(btnArray[CurrRow][CurrCol].getBackground().equals(Color.GREEN)) {
+
+				//TODO implement pawn move
+
+			}
+			else {
+
+				lblPleaseSelectMove.setVisible(true);
+				SwingUtilities.updateComponentTreeUI(frmQuoridorPlay);
+
+			}
+
+		}
+		WallGrabbed = false;
+
+	}
+
+
+	public void moveWallView(int row, int col, String dir, int wallIndex) {
+
+		if(QuoridorController.wallMove(row, col, dir, QuoridorController.getWall(wallIndex), QuoridorController.getCurrentPlayer()) == true) {
+			if(dir.equals("horizontal")) {
+				wallArray[wallIndex].setBounds(btnArray[row][col].getX()+btnArray[row][col].getWidth(), btnArray[row][col].getY()+btnArray[row][col].getHeight(), wallWidth, wallHeight);
+				wallArray[wallIndex].setVisible(true);
+				SwingUtilities.updateComponentTreeUI(frmQuoridorPlay);
+
+			}
+			else {
+				wallArray[wallIndex].setBounds(btnArray[row][col].getX()+btnArray[row][col].getWidth(), btnArray[row][col].getY()+btnArray[row][col].getHeight(), wallHeight, wallWidth);
+				wallArray[wallIndex].setVisible(true);
+				SwingUtilities.updateComponentTreeUI(frmQuoridorPlay);
+			}
+
+		}
+		else {
+			lblPleaseSelectMove.setVisible(true);
+
+		}
 	}
 }
