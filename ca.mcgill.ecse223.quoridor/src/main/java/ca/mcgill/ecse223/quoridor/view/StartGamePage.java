@@ -251,9 +251,9 @@ public class StartGamePage {
 		try {
 			
 			Quoridor quoridor = QuoridorApplication.getQuoridor();
-			// TODO: Set the correct names!
-			quoridor.addUser("TestUser1");
-			quoridor.addUser("TestUser2");
+//			// TODO: Set the correct names!
+//			quoridor.addUser("TestUser1");
+//			quoridor.addUser("TestUser2");
 //			QuoridorController.setWhitePlayerUserName(PlayerLabel_1.getText());
 //			QuoridorController.setBlackPlayerUserName(PlayerLabel_2.getText());
 			QuoridorController.initializeNewGame(quoridor);
