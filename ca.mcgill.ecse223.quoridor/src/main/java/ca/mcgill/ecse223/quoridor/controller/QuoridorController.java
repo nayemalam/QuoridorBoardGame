@@ -1,8 +1,8 @@
 package ca.mcgill.ecse223.quoridor.controller;
-
+import java.util.*;
 
 import javax.swing.text.Utilities;
-
+import java.io.*;
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.model.Game.GameStatus;
@@ -67,8 +67,46 @@ public class QuoridorController {
 	 * @author Ousmane Baricisse
 	 * @return
 	 */
-	public static void grabWall(Board board, Player player) {
+	public static boolean grabWall(Quoridor quoridor) {
 		// TODO Auto-generated method stub
+
+		Player playerToMove = quoridor.getCurrentGame().getCurrentPosition().getPlayerToMove();
+
+		List<Wall> list = playerToMove.getWalls();
+
+
+
+		boolean wasRemoved = false;
+		System.out.println("sizeee: " + list.size());
+		if(list.size() != 0) {
+//			System.out.println("Do uuuuuu?  " + playerToMove.equals(quoridor.getCurrentGame().getWhitePlayer()));
+			Wall wall = list.get(list.size()-1);
+			System.out.println("CHECKKKK: " + playerToMove.equals(quoridor.getCurrentGame().getWhitePlayer()));
+			if(playerToMove.equals(quoridor.getCurrentGame().getBlackPlayer())) {
+				wasRemoved = quoridor.getCurrentGame().getCurrentPosition().removeBlackWallsInStock(wall);
+			} else {
+				wasRemoved = quoridor.getCurrentGame().getCurrentPosition().removeWhiteWallsInStock(wall);
+			}
+
+
+			Tile tile = new Tile(1, 1, quoridor.getBoard());
+			List<Move> listOfMoves = quoridor.getCurrentGame().getMoves();
+			WallMove wallMove;
+			if(listOfMoves.size()==0) {
+				wallMove = new WallMove(1, 1, playerToMove, tile, quoridor.getCurrentGame(), Direction.Horizontal, wall);
+			} else {
+				Move move = listOfMoves.get(listOfMoves.size()-1);
+				wallMove = new WallMove(move.getMoveNumber(), move.getRoundNumber(), playerToMove, tile, quoridor.getCurrentGame(), Direction.Horizontal, wall);
+			}
+
+			quoridor.getCurrentGame().setWallMoveCandidate(wallMove);
+
+		}
+
+		return wasRemoved;
+
+
+
 	}
 
 	/**
@@ -529,7 +567,8 @@ public class QuoridorController {
 				if(id == i) {
 					continue; //don t want to compare the wall with itself
 				}
-				
+
+
 				if(i>9) {
 				
 					if(q.getCurrentGame().getBlackPlayer().getWall(i-10).hasMove() == false) {
@@ -782,21 +821,20 @@ public class QuoridorController {
 	 * @author Nicolas Buisson
 	 * 
 	 */
-	public static String saveGamePosition(String filename) throws IllegalArgumentException, IOException {
+	public static boolean saveGamePosition(String filename) throws IllegalArgumentException, IOException {
 		File file = new File(filename);
 
-		//this if statement takes care of overwriting
-		//if file exists, delete it
-		//to recreate it with new content
-		//if it doesn't exist, just create it
-
 		boolean fileExists = file.createNewFile();
+		//false if it already exists
+		//true if it doesn't, gets created
 
-		if(!fileExists) {
-			throw new IllegalArgumentException("File already exists!");
+//		if(!fileExists) {
+//			throw new IllegalArgumentException("File already exists!");
+//		}
+		if (fileExists = true) {
+			overwriteGamePosition(filename);
 		}
-
-		return overwriteGamePosition(filename);
+		return fileExists;
 
 	}
 
@@ -1047,11 +1085,11 @@ public class QuoridorController {
 			}
 		}
 		//NEED TO ADD THE WALLS ON STOCK, means need to create all of them
-		while(j < 10) {
-			Wall whiteWall = new Wall( j, getWhitePlayer());
-			gamePositionToLoad.addWhiteWallsInStock(whiteWall);
-			j++;
-		}
+//		while(j < 10) {
+//			Wall whiteWall = new Wall( j, getWhitePlayer());
+//			gamePositionToLoad.addWhiteWallsInStock(whiteWall);
+//			j++;
+//		}
 
 		for (int i = 2; i < blackPositions.length; i++) {
 
@@ -1079,17 +1117,17 @@ public class QuoridorController {
 				k++;
 			}
 		}
-		while(k < 10) {
-			Wall blackWall = new Wall( k + 10, getBlackPlayer());
-			gamePositionToLoad.addBlackWallsInStock(blackWall);
-			k++;
-		}
+//		while(k < 10) {
+//			Wall blackWall = new Wall( k + 10, getBlackPlayer());
+//			gamePositionToLoad.addBlackWallsInStock(blackWall);
+//			k++;
+//		}
 		validPosition = whitePawnValid & blackPawnValid & whiteWallsValid & blackWallsValid;
-		if(validPosition  = false) {
-			throw new IOException("invalid position") ;
+		if(validPosition  = true) {
+			QuoridorApplication.getQuoridor().getCurrentGame().setCurrentPosition(gamePositionToLoad);
 		}
-		
-		QuoridorApplication.getQuoridor().getCurrentGame().setCurrentPosition(gamePositionToLoad);
+
+
 		return validPosition;
 	}
 
@@ -1167,6 +1205,16 @@ public class QuoridorController {
 		}
 
 	}
+
+
+
+	/**
+	 * @author ousmanebaricisse
+	 *
+	 */
+	public static boolean isWhitePlayer(Quoridor quoridor, Player player) {
+		return player.equals(quoridor.getCurrentGame().getWhitePlayer());
+
 	public static Wall getWall(int id) {
 		Quoridor q = QuoridorApplication.getQuoridor();
 		if(id>9) {
