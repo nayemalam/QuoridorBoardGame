@@ -1,6 +1,8 @@
 package ca.mcgill.ecse223.quoridor.view;
 
+import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
+import ca.mcgill.ecse223.quoridor.model.Quoridor;
 
 import java.awt.*;
 
@@ -247,8 +249,15 @@ public class StartGamePage {
 		error = null;
 		frame.dispose();
 		try {
-			MainGameWindow mainGameWindow = new MainGameWindow();
-			mainGameWindow.frmQuoridorPlay.setVisible(true);
+			frame.dispose();
+			Quoridor quoridor = QuoridorApplication.getQuoridor();
+			quoridor.addUser("TestUser1");
+			quoridor.addUser("TestUser2");
+			QuoridorController.initializeNewGame(quoridor);
+			QuoridorController.initializeBoard(quoridor);
+			
+			MainGameWindow gameWindow = new MainGameWindow();
+			gameWindow.frmQuoridorPlay.setVisible(true);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
