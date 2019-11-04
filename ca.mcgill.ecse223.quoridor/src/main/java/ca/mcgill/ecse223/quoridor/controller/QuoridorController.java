@@ -888,7 +888,6 @@ public class QuoridorController {
 		}
 		return QuoridorController.getBlackPlayer();
 	}
-<<<<<<< HEAD
 
 	/**
 	 * This method uses getCurrentPlayer method to transform the current player into an int
@@ -934,9 +933,8 @@ public class QuoridorController {
 		}
 
 	}
-}
 
-=======
+
 	/**
 	 * @author ousmanebaricisse
 	 * 
@@ -945,4 +943,3 @@ public class QuoridorController {
 		return player.equals(quoridor.getCurrentGame().getWhitePlayer());
 	}
 }
->>>>>>> Implementation of grab wall method. and correction of step definition assertions
