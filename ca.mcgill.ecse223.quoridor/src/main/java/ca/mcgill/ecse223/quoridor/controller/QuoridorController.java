@@ -27,7 +27,7 @@ public class QuoridorController {
 	 * @author Ousmane Baricisse
 	 * @return time in seconds
 	 */
-	public 
+	public quori
 	public static long stopClock() throws Exception {
 		try {
 			return TimerUtilities.getCurrentTime();
