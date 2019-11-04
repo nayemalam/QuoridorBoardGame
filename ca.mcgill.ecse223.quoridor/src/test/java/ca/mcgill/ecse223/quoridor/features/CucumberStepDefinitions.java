@@ -6,7 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
+<<<<<<< HEAD
 import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
+=======
+>>>>>>> Sharing iteration 4 base project
 import ca.mcgill.ecse223.quoridor.model.Board;
 import ca.mcgill.ecse223.quoridor.model.Direction;
 import ca.mcgill.ecse223.quoridor.model.Game;
@@ -25,6 +28,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 
 public class CucumberStepDefinitions {
+<<<<<<< HEAD
 	// ***********************************************
 	// Scenario and scenario outline step definitions
 	// ***********************************************
@@ -41,6 +45,11 @@ public class CucumberStepDefinitions {
 	// Clean up
 	// ***********************************************
 
+=======
+
+	// ***********************************************
+	// Background step definitions
+>>>>>>> Sharing iteration 4 base project
 	// ***********************************************
 
 	@Given("^The game is not running$")
@@ -122,11 +131,17 @@ public class CucumberStepDefinitions {
 	public void aNewGameIsInitializing() throws Throwable {
 		initQuoridorAndBoard();
 		ArrayList<Player> players = createUsersAndPlayers("user1", "user2");
+<<<<<<< HEAD
 		// TODO: Fix this
 		QuoridorController.initializeNewGame(QuoridorApplication.getQuoridor(), players.get(0), players.get(1));
 		//new Game(GameStatus.Initializing, MoveMode.PlayerMove, QuoridorApplication.getQuoridor());
 	}
 	
+=======
+		new Game(GameStatus.Initializing, MoveMode.PlayerMove, QuoridorApplication.getQuoridor());
+	}
+
+>>>>>>> Sharing iteration 4 base project
 	// ***********************************************
 	// Scenario and scenario outline step definitions
 	// ***********************************************
@@ -140,10 +155,13 @@ public class CucumberStepDefinitions {
 	 */
 
 	// ***********************************************
+<<<<<<< HEAD
 	// END OF CODE - Ousmane Baricisse
 	// ***********************************************
 
 	// ***********************************************
+=======
+>>>>>>> Sharing iteration 4 base project
 	// Clean up
 	// ***********************************************
 
@@ -224,6 +242,7 @@ public class CucumberStepDefinitions {
 
 	private void createAndStartGame(ArrayList<Player> players) {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
+<<<<<<< HEAD
 		// There are total 36 tiles in the first four rows and
 		// indexing starts from 0 -> tiles with indices 36 and 36+8=44 are the starting
 		// positions
@@ -231,6 +250,13 @@ public class CucumberStepDefinitions {
 		Tile player2StartPos = quoridor.getBoard().getTile(44);
 		
 		// TODO: Fix this
+=======
+		// Tile indices start from 0 -> tiles with indices 4 and 8*9+4=76 are the starting
+		// positions
+		Tile player1StartPos = quoridor.getBoard().getTile(4);
+		Tile player2StartPos = quoridor.getBoard().getTile(76);
+		
+>>>>>>> Sharing iteration 4 base project
 		Game game = new Game(GameStatus.Running, MoveMode.PlayerMove, quoridor);
 		game.setWhitePlayer(players.get(0));
 		game.setBlackPlayer(players.get(1));
