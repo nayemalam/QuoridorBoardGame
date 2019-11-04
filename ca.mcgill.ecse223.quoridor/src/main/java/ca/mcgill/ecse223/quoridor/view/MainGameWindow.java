@@ -208,7 +208,7 @@ public class MainGameWindow {
 				centerPanel.add(btnArray[row][col]);
 
 
-				btnArray[row][col].addMouseListener(new ButtonActionListener(row, col));
+				btnArray[row][col].addMouseListener(new ButtonActionListener(row+1, col+1));
 
 
 			}
@@ -327,7 +327,7 @@ public class MainGameWindow {
 		panel_6.add(panel_11);
 		panel_11.setLayout(null);
 
-		for(int i = 0; i< wallArray.length; i++) { //Initializing the walls for both players
+		for(int i = 0; i < wallArray.length; i++) { //Initializing the walls for both players
 
 			if(i<=9) {
 				int wId=i;
@@ -476,9 +476,7 @@ public class MainGameWindow {
 			vertical.addMouseListener(new MouseAdapter() {
 
 				public void mouseClicked(MouseEvent e) {
-					
 					moveWallView(row, col, "vertical", wallIndex);
-
 				}
 			});
 

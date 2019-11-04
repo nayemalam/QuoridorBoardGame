@@ -249,15 +249,20 @@ public class StartGamePage {
 		error = null;
 		frame.dispose();
 		try {
-			frame.dispose();
+			
 			Quoridor quoridor = QuoridorApplication.getQuoridor();
+			// TODO: Set the correct names!
 			quoridor.addUser("TestUser1");
 			quoridor.addUser("TestUser2");
+//			QuoridorController.setWhitePlayerUserName(PlayerLabel_1.getText());
+//			QuoridorController.setBlackPlayerUserName(PlayerLabel_2.getText());
 			QuoridorController.initializeNewGame(quoridor);
 			QuoridorController.initializeBoard(quoridor);
 			
 			MainGameWindow gameWindow = new MainGameWindow();
-			gameWindow.frmQuoridorPlay.setVisible(true);
+			MainGameWindow.frmQuoridorPlay.setVisible(true);
+			frame.dispose();
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
