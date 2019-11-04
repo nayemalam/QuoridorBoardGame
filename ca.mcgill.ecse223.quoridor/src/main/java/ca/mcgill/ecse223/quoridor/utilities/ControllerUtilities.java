@@ -74,9 +74,9 @@ public class ControllerUtilities {
 	 */
 	public static void initializeWallsInStock(GamePosition initialGamePosition, Player currentWhitePlayer, Player currentBlackPlayer) {
 		for(int i = 0; i < ControllerUtilities.TOTAL_NUMBER_OF_WALLS_PER_PLAYER; i++) {
-			Wall newBlackWall = new Wall(i, currentBlackPlayer);
-			Wall newWhiteWall = new Wall(i + 
-					ControllerUtilities.TOTAL_NUMBER_OF_WALLS_PER_PLAYER, currentWhitePlayer);
+			Wall newBlackWall = new Wall(i + 
+					ControllerUtilities.TOTAL_NUMBER_OF_WALLS_PER_PLAYER, currentBlackPlayer);
+			Wall newWhiteWall = new Wall(i, currentWhitePlayer);
 			initialGamePosition.addBlackWallsInStock(newBlackWall);
 			initialGamePosition.addWhiteWallsInStock(newWhiteWall);
 		}
