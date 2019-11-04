@@ -101,6 +101,8 @@ public class MainGameWindow {
 		frmQuoridorPlay.setTitle("Quoridor - Play Game");
 		frmQuoridorPlay.setBounds(100, 100, 1256, 876);
 		frmQuoridorPlay.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmQuoridorPlay.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+		frmQuoridorPlay.setVisible(true);
 
 		JPanel leftPanel = new JPanel();
 		leftPanel.setBorder(new LineBorder(new Color(0, 0, 0)));

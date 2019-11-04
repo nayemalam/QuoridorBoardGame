@@ -36,7 +36,7 @@ public class QuoridorPage {
 	private static int index;
 
 
-	public JFrame frame;
+	public static JFrame frame;
 
 	/**
 	 * Launch the application.
