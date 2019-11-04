@@ -53,7 +53,7 @@ public class MainGameWindow {
 	private static final int TOTAL_NUMBER_OF_TILES = 81;
 	private static final int TOTAL_ROWS = 9;
 	private static final int TOTAL_COLS = 9;
-	private JButton[][] btnArray = new JButton[TOTAL_ROWS][TOTAL_COLS];
+	private JButtonWrapper[][] btnArray = new JButtonWrapper[TOTAL_ROWS][TOTAL_COLS];
 	private JButton[] wallArray = new JButton[20];
 	private JButton btnPlaceNewWall;
 	private JButton btnNewButton;
@@ -182,10 +182,10 @@ public class MainGameWindow {
 				CurrRow = row;
 				CurrCol = col;
 				lblPleaseSelectMove.setVisible(false);
-				
-				btnArray[row][col] = new JButton();
+				JButton button = new JButton();
+				btnArray[row][col] = new JButtonWrapper(row, col, button);
 
-				btnArray[row][col].addMouseListener(new MouseAdapter() {
+				btnArray[row][col].getButton().addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseReleased(MouseEvent arg0) {
 						// TODO: Add correct mouse listener for this tile, aka the right method call
@@ -211,7 +211,7 @@ public class MainGameWindow {
 						}
 						if(WallGrabbed == false) {
 
-							if(btnArray[CurrRow][CurrCol].getBackground().equals(Color.GREEN)) {
+							if(btnArray[CurrRow][CurrCol].getButton().getBackground().equals(Color.GREEN)) {
 								
 								//TODO implement pawn move
 
@@ -228,7 +228,7 @@ public class MainGameWindow {
 					}
 				});
 
-				centerPanel.add(btnArray[row][col]);
+				centerPanel.add(btnArray[row][col].getButton());
 			}
 		}
 
@@ -395,25 +395,25 @@ public class MainGameWindow {
 			if(QuoridorController.initializeValidatePosition(row-1 , col) == true) {
 
 
-				btnArray[row-1][col].setBackground(Color.GREEN);
+				btnArray[row-1][col].getButton().setBackground(Color.GREEN);
 
 			}
 			if(QuoridorController.initializeValidatePosition(row+1 , col) == true) {
 
 
-				btnArray[row+1][col].setBackground(Color.GREEN);
+				btnArray[row+1][col].getButton().setBackground(Color.GREEN);
 
 			}
 			if(QuoridorController.initializeValidatePosition(row , col-1) == true) {
 
 
-				btnArray[row][col-1].setBackground(Color.GREEN);
+				btnArray[row][col-1].getButton().setBackground(Color.GREEN);
 
 			}
 			if(QuoridorController.initializeValidatePosition(row , col+1) == true) {
 
 
-				btnArray[row][col+1].setBackground(Color.GREEN);
+				btnArray[row][col+1].getButton().setBackground(Color.GREEN);
 
 			}
 		}
@@ -426,25 +426,25 @@ public class MainGameWindow {
 			if(QuoridorController.initializeValidatePosition(row-1 , col) == true) {
 
 
-				btnArray[row-1][col].setBackground(Color.GREEN);
+				btnArray[row-1][col].getButton().setBackground(Color.GREEN);
 
 			}
 			if(QuoridorController.initializeValidatePosition(row+1 , col) == true) {
 
 
-				btnArray[row+1][col].setBackground(Color.GREEN);
+				btnArray[row+1][col].getButton().setBackground(Color.GREEN);
 
 			}
 			if(QuoridorController.initializeValidatePosition(row , col-1) == true) {
 
 
-				btnArray[row][col-1].setBackground(Color.GREEN);
+				btnArray[row][col-1].getButton().setBackground(Color.GREEN);
 
 			}
 			if(QuoridorController.initializeValidatePosition(row , col+1) == true) {
 
 
-				btnArray[row][col+1].setBackground(Color.GREEN);
+				btnArray[row][col+1].getButton().setBackground(Color.GREEN);
 
 			}
 		}
