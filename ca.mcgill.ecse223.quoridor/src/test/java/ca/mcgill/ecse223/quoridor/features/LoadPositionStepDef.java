@@ -65,6 +65,7 @@ public class LoadPositionStepDef {
 	 */
 	@Then("It shall be {string}'s turn")
 	public void ItShallBePlayerTurn(String player) {
+		gamePosition = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition();
 		gamePosition.getPlayerToMove().getUser().setName("black");
 		gamePosition.getPlayerToMove().getNextPlayer().getUser().setName("white");
 		assertEquals(player, gamePosition.getPlayerToMove().getUser().getName());
@@ -144,6 +145,7 @@ public class LoadPositionStepDef {
 	 */
 	@And ("Both players shall have {int} in their stacks")
 	public void BothPlayersShallHaveRemainingWallsInTheirStacks(int remaining_walls) { 
+		
 		assertEquals(remaining_walls, gamePosition.getWhiteWallsInStock().size());
 		assertEquals(remaining_walls, gamePosition.getBlackWallsInStock().size());
 	}

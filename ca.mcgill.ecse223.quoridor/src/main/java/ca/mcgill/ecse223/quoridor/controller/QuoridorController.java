@@ -1007,11 +1007,13 @@ public class QuoridorController {
 			whiteData = positions[0];
 			blackData = positions[1];
 			gamePositionToLoad.setPlayerToMove(QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer());
+			getWhitePlayer().setNextPlayer(getBlackPlayer());
 			// white player's turn to play
 		} else {
 			blackData = positions[0];
 			whiteData = positions[1];
 			gamePositionToLoad.setPlayerToMove(QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer());
+			getBlackPlayer().setNextPlayer(getWhitePlayer());
 			// black player's turn to play
 		}
 		String whitePositions[] = whiteData.split(" ");
@@ -1068,12 +1070,12 @@ public class QuoridorController {
 			}
 		}
 		//NEED TO ADD THE WALLS ON STOCK, means need to create all of them
-//		while(j < 10) {
-//			Wall whiteWall = new Wall( j, getWhitePlayer());
-//			gamePositionToLoad.addWhiteWallsInStock(whiteWall);
-//			j++;
-//		}
-
+		while(j < 10) {
+			Wall whiteWall = new Wall( j, getWhitePlayer());
+			gamePositionToLoad.addWhiteWallsInStock(whiteWall);
+			j++;
+		}
+		
 		for (int i = 2; i < blackPositions.length; i++) {
 
 			int blackWallColumn = blackPositions[i].charAt(0) - 96;
@@ -1088,7 +1090,6 @@ public class QuoridorController {
 				wallOrientation = "horizontal";
 				blackWallDirection = Direction.Horizontal;
 			}
-
 
 			blackWallsValid = blackWallsValid & initiatePosValidation(blackWallRow, blackWallColumn, wallOrientation, 10 + i - 2 );
 			if (blackWallsValid = true) {
