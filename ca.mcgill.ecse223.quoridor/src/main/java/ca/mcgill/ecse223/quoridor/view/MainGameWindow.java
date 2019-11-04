@@ -16,9 +16,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.SpringLayout;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
@@ -34,7 +32,6 @@ import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
 import ca.mcgill.ecse223.quoridor.view.QuoridorPage;
 import java.awt.CardLayout;
 import java.awt.GridBagLayout;
-import net.miginfocom.swing.MigLayout;
 
 public class MainGameWindow {
 
@@ -103,6 +100,8 @@ public class MainGameWindow {
 		frmQuoridorPlay.setTitle("Quoridor - Play Game");
 		frmQuoridorPlay.setBounds(100, 100, 1256, 876);
 		frmQuoridorPlay.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmQuoridorPlay.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+		frmQuoridorPlay.setVisible(true);
 
 		JPanel leftPanel = new JPanel();
 		leftPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -123,6 +122,7 @@ public class MainGameWindow {
 		txtWhitePlayer.setEditable(false);
 		txtWhitePlayer.setFont(new Font("Tahoma", Font.BOLD, 13));
 		txtWhitePlayer.setHorizontalAlignment(SwingConstants.CENTER);
+		
 		txtWhitePlayer.setText("White Player - Wall Stock");
 		txtWhitePlayer.setToolTipText("");
 		panel_3.add(txtWhitePlayer);
