@@ -55,6 +55,10 @@ public class LoadPositionPage {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
+		// Forces fullscreen
+		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		frame.getContentPane().setLayout(null);
+
 		LoadFileNameTextField = new JTextField();
 		LoadFileNameTextField.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		LoadFileNameTextField.setHorizontalAlignment(SwingConstants.CENTER);
