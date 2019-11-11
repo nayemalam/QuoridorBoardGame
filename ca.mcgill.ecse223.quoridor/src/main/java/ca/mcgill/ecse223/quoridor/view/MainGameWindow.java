@@ -30,10 +30,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
 import ca.mcgill.ecse223.quoridor.view.QuoridorPage;
 import java.awt.CardLayout;
 import java.awt.GridBagLayout;
+
+import ca.mcgill.ecse223.quoridor.view.main.BlackWallPanel;
+import ca.mcgill.ecse223.quoridor.view.main.WhiteWallPanel;
 
 public class MainGameWindow {
 
@@ -183,11 +187,12 @@ public class MainGameWindow {
 		frmQuoridorPlay.getContentPane().add(lblPleaseSelectMove);
 		lblPleaseSelectMove.setVisible(false);
 
-
-		
+		BlackWallPanel whitePane = new BlackWallPanel(panel_10);
+		WhiteWallPanel blackPane = new WhiteWallPanel(panel_11);
 		panel_2.add(panel_10);
-		panel_10.setLayout(null);
-
+		panel_11 = blackPane.getWallPanel();
+	    panel_10 = whitePane.getWallPanel();
+	
 		
 		frmQuoridorPlay.getContentPane().add(centerPanel, BorderLayout.CENTER);
 		centerPanel.setLayout(null);
@@ -296,9 +301,6 @@ public class MainGameWindow {
 		JPanel panel_8 = new JPanel();
 		panel_7.add(panel_8);
 
-
-
-
 		txtWallsInStock_1 = new JTextField();
 		txtWallsInStock_1.setEditable(false);
 		txtWallsInStock_1.setText("Walls in Stock:");
@@ -326,68 +328,10 @@ public class MainGameWindow {
 
 		
 		panel_6.add(panel_11);
-		panel_11.setLayout(null);
-
-		for(int i = 0; i < wallArray.length; i++) { //Initializing the walls for both players
-
-			if(i<=9) {
-				int wId=i;
-				wallArray[i] = new JButton("Wall"+i);
-				wallArray[i].addMouseListener(new MouseAdapter() {
-
-					public void mouseReleased(MouseEvent e) {
-
-						for(int j = 0; j<wallArray.length; j++) {
-							if(wallArray[j].isVisible() == false && wId != j) {
-
-								wallArray[j].setVisible(true);
-							}
-
-						}
-						lblPleaseSelectMove.setVisible(false);
-						wallArray[wId].setVisible(false);
-						// TODO call the method that specifies what happens to the wall once it is grabbed
-						// TODO call the method for rotate wall in here
-
-					}
-
-				});
-
-				panel_10.add(wallArray[i]);
-				wallArray[i].setBounds(10, 11+i*(wallHeight+5),wallWidth , wallHeight);
-			}
-			else {
-				int bId = i-10;
-				int Aid = i;
-				wallArray[i] = new JButton("Wall"+bId);
-				wallArray[i].addMouseListener(new MouseAdapter() {
-
-					public void mouseReleased(MouseEvent e) {
-
-						for(int j = 0; j<wallArray.length; j++) {
-							if(wallArray[j].isVisible() == false && Aid != j) {
-
-								wallArray[j].setVisible(true);
-								
-							}
-
-						}
-						wallArray[Aid].setVisible(false);
-						lblPleaseSelectMove.setVisible(false);
-						// TODO call the method that specifies what happens to the wall once it is grabbed
-						// TODO call the method for rotate wall in here
-
-					}
-
-				});
-				panel_11.add(wallArray[i]);
-				wallArray[i].setBounds(10, 11+(i-10)*(wallHeight+5),wallWidth , wallHeight);
-			}
-
-		}
+	
 
 	}
-
+	
 	private void validatePawnPosition() {
 
 		int Player = QuoridorController.currentPlayerInt();
