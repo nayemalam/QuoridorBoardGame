@@ -1,14 +1,11 @@
 package ca.mcgill.ecse223.quoridor.view;
 
 import java.awt.EventQueue;
-import ca.mcgill.ecse223.quoridor.*;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
-
-import javax.swing.AbstractAction;
 import javax.swing.BoxLayout;
 import javax.swing.JTextPane;
 import java.awt.Font;
@@ -27,23 +24,20 @@ import javax.swing.JButton;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
-
-
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.*;
 
 import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
-import ca.mcgill.ecse223.quoridor.model.Quoridor;
-import ca.mcgill.ecse223.quoridor.model.Wall;
 import ca.mcgill.ecse223.quoridor.view.QuoridorPage;
 import java.awt.CardLayout;
 import java.awt.GridBagLayout;
 
+public class MainGameWindow {
 
+	public static JFrame frmQuoridorPlay;
 	private JTextField txtCurrentPlayer;
 	private JTextField textField_1;
 	private JTextField txtTimeRemaining;
@@ -66,7 +60,8 @@ import java.awt.GridBagLayout;
 	private JButton btnPlaceNewWall;
 	private JButton btnNewButton;
 	private JButton button;
-	private static int wallWidth = 160;
+	private static int wallWidth = 185;
+	private static int wallWidthV = 101;
 	private static int wallHeight = 10;
 	private static boolean WallGrabbed = false;
 	private static int CurrRow;
@@ -81,7 +76,6 @@ import java.awt.GridBagLayout;
 	private static JPanel panel_11 = new JPanel();
 	private static JPanel centerPanel = new JPanel();
 
-	
 	/**
 	 * Launch the application.
 	 */
@@ -103,7 +97,6 @@ import java.awt.GridBagLayout;
 	 */
 	public MainGameWindow() {
 		try {
-			
 			initialize();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -113,8 +106,8 @@ import java.awt.GridBagLayout;
 
 	/**
 	 * Initialize the contents of the frame.
-	 */ 
-	private void initialize() throws InterruptedException {
+	 */
+	private void initialize() throws InterruptedException  {
 		frmQuoridorPlay = new JFrame();
 		frmQuoridorPlay.setTitle("Quoridor - Play Game");
 		frmQuoridorPlay.setBounds(100, 100, 1256, 876);
@@ -139,13 +132,11 @@ import java.awt.GridBagLayout;
 
 
 
-
-
 		txtWhitePlayer = new JTextField();
 		txtWhitePlayer.setEditable(false);
 		txtWhitePlayer.setFont(new Font("Tahoma", Font.BOLD, 13));
 		txtWhitePlayer.setHorizontalAlignment(SwingConstants.CENTER);
-
+		
 		txtWhitePlayer.setText("White Player - Wall Stock");
 		txtWhitePlayer.setToolTipText("");
 		panel_3.add(txtWhitePlayer);
@@ -207,18 +198,15 @@ import java.awt.GridBagLayout;
 
 
 
-
 		for(int row = 0; row < TOTAL_ROWS; row++) {
 			for(int col = 0; col < TOTAL_COLS; col ++) {
 
 				
 				lblPleaseSelectMove.setVisible(false);
 				JButton button = new JButton();
-
 				btnArray[row][col] = new JButton();
 				btnArray[row][col].setBounds((tileLength +11)*row, (tileWidth+11)*col, tileLength, tileWidth);
 				centerPanel.add(btnArray[row][col]);
-
 
 
 				btnArray[row][col].addMouseListener(new ButtonActionListener(row+1, col+1));
@@ -226,6 +214,9 @@ import java.awt.GridBagLayout;
 
 			}
 		}
+
+
+
 
 		JPanel northPanel = new JPanel();
 		northPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -246,16 +237,13 @@ import java.awt.GridBagLayout;
 		txtCurrentPlayer = new JTextField();
 		txtCurrentPlayer.setEditable(false);
 		txtCurrentPlayer.setFont(new Font("Tahoma", Font.BOLD, 13));
-		txtCurrentPlayer.setText("Current Player: ");
+		txtCurrentPlayer.setText("Current Player:");
 		txtCurrentPlayer.setHorizontalAlignment(SwingConstants.LEFT);
-		
 		panel.add(txtCurrentPlayer);
 		txtCurrentPlayer.setColumns(10);
-		
+
 		textField_1 = new JTextField();
 		textField_1.setEditable(false);
-		String currentPlayer = QuoridorApplication.getQuoridor().getCurrentGame() != null ? QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getPlayerToMove().getUser().getName() : "White";
-		textField_1.setText(currentPlayer);
 		panel.add(textField_1);
 		textField_1.setColumns(10);
 
@@ -268,13 +256,14 @@ import java.awt.GridBagLayout;
 		txtTimeRemaining.setText("Time Remaining:");
 		txtTimeRemaining.setEditable(false);
 		panel_1.add(txtTimeRemaining);
-		
 		txtTimeRemaining.setColumns(10);
-		
+
 		textField_2 = new JTextField();
 		textField_2.setEditable(false);
 		panel_1.add(textField_2);
 		textField_2.setColumns(10);
+
+
 
 		JPanel southPanel = new JPanel();
 		frmQuoridorPlay.getContentPane().add(southPanel, BorderLayout.SOUTH);
@@ -307,6 +296,9 @@ import java.awt.GridBagLayout;
 		JPanel panel_8 = new JPanel();
 		panel_7.add(panel_8);
 
+
+
+
 		txtWallsInStock_1 = new JTextField();
 		txtWallsInStock_1.setEditable(false);
 		txtWallsInStock_1.setText("Walls in Stock:");
@@ -334,7 +326,6 @@ import java.awt.GridBagLayout;
 
 		
 		panel_6.add(panel_11);
-
 		panel_11.setLayout(null);
 
 		for(int i = 0; i < wallArray.length; i++) { //Initializing the walls for both players
@@ -358,175 +349,112 @@ import java.awt.GridBagLayout;
 						// TODO call the method that specifies what happens to the wall once it is grabbed
 						// TODO call the method for rotate wall in here
 
-
 					}
+
 				});
 
-			} else {
-				btn.setAction(new AbstractAction("Wall " + num++) {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						if (!set2.contains(e.getSource()) && set2.size() != 0) {
-							JButton btn2 = set2.remove(set2.size() - 1);
-							btn2.setVisible(true);
-
+				panel_10.add(wallArray[i]);
+				wallArray[i].setBounds(10, 11+i*(wallHeight+5),wallWidth , wallHeight);
+			}
+			else {
+				int bId = i-10;
+				int Aid = i;
+				wallArray[i] = new JButton("Wall"+bId);
+				wallArray[i].addMouseListener(new MouseAdapter() {
 
 					public void mouseReleased(MouseEvent e) {
 
 						for(int j = 0; j<wallArray.length; j++) {
-							if(wallArray[j].isVisible() == false && bId != j) {
+							if(wallArray[j].isVisible() == false && Aid != j) {
 
 								wallArray[j].setVisible(true);
 								
 							}
 
 						}
-						wallArray[bId].setVisible(false);
+						wallArray[Aid].setVisible(false);
 						lblPleaseSelectMove.setVisible(false);
 						// TODO call the method that specifies what happens to the wall once it is grabbed
 						// TODO call the method for rotate wall in here
 
-						btn.setVisible(false);
-						panel_11.revalidate();
-						panel_11.repaint();
-						set2.add(btn);
-
 					}
+
 				});
+				panel_11.add(wallArray[i]);
+				wallArray[i].setBounds(10, 11+(i-10)*(wallHeight+5),wallWidth , wallHeight);
 			}
 
 		}
-		
-//		for(int i = 0; i< wallArray.length; i++) { //Initializing the walls for both players
-//
-//			if(i<=9) {
-//
-//				wallArray[i] = new JButton("Wall"+i);
-//				JButton btn = wallArray[i];
-//				wallArray[i].addMouseListener(new MouseAdapter() {
-//				
-//					public void mouseReleased(MouseEvent e) {
-//						
-//						lblPleaseSelectMove.setVisible(false);
-//						// TODO call the method that specifies what happens to the wall once it is grabbed
-//						
-//						// TODO call the method for rotate wall in here
-//
-//					}
-//
-//				});
-//
-//				panel_10.add(wallArray[i]);
-//				wallArray[i].setBounds(10, 11+i*(wallHeight+5),wallWidth , wallHeight);
-//			}
-//			else {
-//				int bId = i-10;
-//				wallArray[i] = new JButton("Wall"+bId);
-//				wallArray[i].addMouseListener(new MouseAdapter() {
-//					
-//					public void mouseReleased(MouseEvent e) {
-//						
-//						lblPleaseSelectMove.setVisible(false);
-//						// TODO call the method that specifies what happens to the wall once it is grabbed
-//						// TODO call the method for rotate wall in here
-//
-//					}
-//
-//				});
-//				panel_11.add(wallArray[i]);
-//				wallArray[i].setBounds(10, 11+(i-10)*(wallHeight+5),wallWidth , wallHeight);
-//			}
-//
-//		}
+
 	}
-	
-	private static int grabWallFromGui() {
-		return 0;
-	}
-	private JPanel getWallPanel() {
 
-		JPanel panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		JButton[] walls = new JButton[10];
-		for (int i = 0; i < 10; i++) {
-			walls[i] = new JButton();
-			panel.add(walls[i]);
-		}
-
-		int num = 1;
-		for (JButton btn : walls) {
-
-			btn.setAction(new AbstractAction("Wall " + num++) {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-//					stack.push(btn);
-
-					btn.setVisible(false);
-					panel.revalidate();
-					panel.repaint();
-				}
-			});
-		}
-
-		return panel;
-	}
-	
 	private void validatePawnPosition() {
 
 		int Player = QuoridorController.currentPlayerInt();
-		if (Player == 1) {
+		if(Player == 1) {
 
 			int row = QuoridorController.getBlackPlayerPlayerPosition().getTile().getRow();
 			int col = QuoridorController.getBlackPlayerPlayerPosition().getTile().getColumn();
 
-			if (QuoridorController.initializeValidatePosition(row - 1, col) == true) {
 
-				btnArray[row - 1][col].setBackground(Color.GREEN);
+			if(QuoridorController.initializeValidatePosition(row-1 , col) == true) {
 
-			}
-			if (QuoridorController.initializeValidatePosition(row + 1, col) == true) {
 
-				btnArray[row + 1][col].setBackground(Color.GREEN);
+				btnArray[row-1][col].setBackground(Color.GREEN);
 
 			}
-			if (QuoridorController.initializeValidatePosition(row, col - 1) == true) {
+			if(QuoridorController.initializeValidatePosition(row+1 , col) == true) {
 
-				btnArray[row][col - 1].setBackground(Color.GREEN);
+
+				btnArray[row+1][col].setBackground(Color.GREEN);
 
 			}
-			if (QuoridorController.initializeValidatePosition(row, col + 1) == true) {
+			if(QuoridorController.initializeValidatePosition(row , col-1) == true) {
 
-				btnArray[row][col + 1].setBackground(Color.GREEN);
+
+				btnArray[row][col-1].setBackground(Color.GREEN);
+
+			}
+			if(QuoridorController.initializeValidatePosition(row , col+1) == true) {
+
+
+				btnArray[row][col+1].setBackground(Color.GREEN);
 
 			}
 		}
-		if (Player == 0) {
+		if(Player == 0) {
 
 			int row = QuoridorController.getWhitePlayerPosition().getTile().getRow();
 			int col = QuoridorController.getWhitePlayerPosition().getTile().getColumn();
 
-			if (QuoridorController.initializeValidatePosition(row - 1, col) == true) {
 
-				btnArray[row - 1][col].setBackground(Color.GREEN);
+			if(QuoridorController.initializeValidatePosition(row-1 , col) == true) {
 
-			}
-			if (QuoridorController.initializeValidatePosition(row + 1, col) == true) {
 
-				btnArray[row + 1][col].setBackground(Color.GREEN);
+				btnArray[row-1][col].setBackground(Color.GREEN);
 
 			}
-			if (QuoridorController.initializeValidatePosition(row, col - 1) == true) {
+			if(QuoridorController.initializeValidatePosition(row+1 , col) == true) {
 
-				btnArray[row][col - 1].setBackground(Color.GREEN);
+
+				btnArray[row+1][col].setBackground(Color.GREEN);
 
 			}
-			if (QuoridorController.initializeValidatePosition(row, col + 1) == true) {
+			if(QuoridorController.initializeValidatePosition(row , col-1) == true) {
 
-				btnArray[row][col + 1].setBackground(Color.GREEN);
+
+				btnArray[row][col-1].setBackground(Color.GREEN);
+
+			}
+			if(QuoridorController.initializeValidatePosition(row , col+1) == true) {
+
+
+				btnArray[row][col+1].setBackground(Color.GREEN);
 
 			}
 		}
+
+
 
 	}
 	public static void tileListener( int row, int col){
@@ -603,10 +531,14 @@ import java.awt.GridBagLayout;
 
 				}
 				else {
-					wallArray[wallIndex].setBounds(btnArray[row][col].getX(), btnArray[row][col].getY(), wallHeight-42, wallWidth);
+					wallArray[wallIndex].setBounds(btnArray[row-1][col-1].getX()+tileLength, btnArray[row-1][col-1].getY(), wallHeight, wallWidthV  );
 					wallArray[wallIndex].setVisible(true);
 					SwingUtilities.updateComponentTreeUI(frmQuoridorPlay);
 				}
+
+			}
+			else {
+				lblPleaseSelectMove.setVisible(true);
 
 			}
 			
@@ -624,7 +556,7 @@ import java.awt.GridBagLayout;
 
 				}
 				else {
-					wallArray[wallIndex].setBounds(btnArray[row-1][col-1].getX(), btnArray[row-1][col-1].getY(), wallHeight-42, wallWidth);
+					wallArray[wallIndex].setBounds(btnArray[row-1][col-1].getX()-11, btnArray[row-1][col-1].getY(), wallHeight, wallWidthV);
 					wallArray[wallIndex].setVisible(true);
 					SwingUtilities.updateComponentTreeUI(frmQuoridorPlay);
 				}
