@@ -123,7 +123,7 @@ public class CucumberStepDefinitions {
 		initQuoridorAndBoard();
 		ArrayList<Player> players = createUsersAndPlayers("user1", "user2");
 		// TODO: Fix this
-		QuoridorController.initializeNewGame(QuoridorApplication.getQuoridor());
+		QuoridorController.initializeNewGame(QuoridorApplication.getQuoridor(), players.get(0), players.get(1));
 		//new Game(GameStatus.Initializing, MoveMode.PlayerMove, QuoridorApplication.getQuoridor());
 	}
 	
