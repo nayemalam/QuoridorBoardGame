@@ -138,7 +138,6 @@ public class CucumberStepDefinitions {
 	}
 	
 =======
-		new Game(GameStatus.Initializing, MoveMode.PlayerMove, QuoridorApplication.getQuoridor());
 	}
 
 >>>>>>> Sharing iteration 4 base project

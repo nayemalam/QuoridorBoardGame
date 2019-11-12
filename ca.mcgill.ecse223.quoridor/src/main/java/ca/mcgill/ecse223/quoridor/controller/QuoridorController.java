@@ -1140,12 +1140,12 @@ public class QuoridorController {
 		}
 
 
-		/**
-		 * Method used to rotate a wall
-		 * @author Iyatan Atchoro
-		 */
-		public static void rotateWall() throws Exception{
 
+	/**
+	 * Method used to rotate a wall
+	 * @author Iyatan Atchoro
+	 */
+	public static void rotateWall() throws Exception{
 		Game curGame = QuoridorApplication.getQuoridor().getCurrentGame();	
 		if(curGame.getWallMoveCandidate()==null) {
 			throw new Exception("No wall Selected");
@@ -1157,6 +1157,8 @@ public class QuoridorController {
 			curGame.getWallMoveCandidate().setWallDirection(Direction.Horizontal);
 		}
 }
+
+		}
 		/**
 		 * Method used to drop a wall
 		 * @author Iyatan Atchoro
@@ -1198,8 +1200,6 @@ public class QuoridorController {
 		if(playerWhite.hasNextPlayer()){
 			return playerWhite;
 		}
-		return QuoridorController.getBlackPlayer();
-	}
 
 		/**
 		 * This method uses getCurrentPlayer method to transform the current player into an int
