@@ -208,7 +208,6 @@ public class MainGameWindow {
 
 				
 				lblPleaseSelectMove.setVisible(false);
-				JButton button = new JButton();
 				btnArray[row][col] = new JButton();
 				btnArray[row][col].setBounds((tileLength +11)*row, (tileWidth+11)*col, tileLength, tileWidth);
 				centerPanel.add(btnArray[row][col]);
