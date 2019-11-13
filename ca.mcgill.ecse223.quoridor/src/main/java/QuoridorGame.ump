@@ -7,12 +7,18 @@ use ca.mcgill.ecse223.quoridor.model.Direction;
 
 
 class Quoridor {
+<<<<<<< HEAD
 
 	1 <@>- 0..1 Board board;
 	1 <@>- 0..1 Game currentGame; 
 	1 <@>- * User users; 
 	
 	
+=======
+	1 <@>- 0..1 Board board;
+	1 <@>- 0..1 Game currentGame; 
+	1 <@>- * User users; 
+>>>>>>> iteration-4
 }
 
 class Board {
