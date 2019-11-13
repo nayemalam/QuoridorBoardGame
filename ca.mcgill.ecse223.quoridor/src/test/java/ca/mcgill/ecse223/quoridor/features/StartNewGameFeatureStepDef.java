@@ -9,6 +9,7 @@ import java.sql.Time;
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
 import ca.mcgill.ecse223.quoridor.model.Board;
+import ca.mcgill.ecse223.quoridor.model.Direction;
 import ca.mcgill.ecse223.quoridor.model.Game;
 import ca.mcgill.ecse223.quoridor.model.Player;
 import ca.mcgill.ecse223.quoridor.model.Quoridor;
@@ -40,7 +41,12 @@ public class StartNewGameFeatureStepDef {
 	 */
 	@When("A new game is being initialized")
 	public void aNewGameIsBeingInitialized() throws Exception {
-		QuoridorController.initializeNewGame(QuoridorApplication.getQuoridor());
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		User userWhite = quoridor.addUser("TestUser1");
+		User userBlack = quoridor.addUser("TestUser2");
+		Player whitePlayer = new Player(new Time(0), quoridor.getUser(0), ControllerUtilities.BLACK_TILE_INDEX, Direction.Horizontal);
+		Player blackPlayer = new Player(new Time(0), quoridor.getUser(1), ControllerUtilities.WHITE_TILE_INDEX, Direction.Horizontal);
+		QuoridorController.initializeNewGame(QuoridorApplication.getQuoridor(), whitePlayer, blackPlayer);
 	}
 
 	/**
@@ -107,7 +113,9 @@ public class StartNewGameFeatureStepDef {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
 		quoridor.addUser("TestUser1");
 		quoridor.addUser("TestUser2");
-		QuoridorController.initializeNewGame(quoridor);
+		Player whitePlayer = new Player(new Time(0), quoridor.getUser(0), ControllerUtilities.BLACK_TILE_INDEX, Direction.Horizontal);
+		Player blackPlayer = new Player(new Time(0), quoridor.getUser(1), ControllerUtilities.WHITE_TILE_INDEX, Direction.Horizontal);
+		QuoridorController.initializeNewGame(QuoridorApplication.getQuoridor(), whitePlayer, blackPlayer);
 		// Maybe other steps, dunno?
 	}
 
