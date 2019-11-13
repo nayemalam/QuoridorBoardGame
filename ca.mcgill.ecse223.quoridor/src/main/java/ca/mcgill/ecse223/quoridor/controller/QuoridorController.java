@@ -1076,7 +1076,7 @@ public class QuoridorController {
 		for (int i = 2; i < whitePositions.length; i++) {
 
 			int whiteWallColumn = whitePositions[i].charAt(0) - 96;
-			int whiteWallRow = whitePositions[i].charAt(1) - 48; // unicode value of char representing row, not actual
+			int whiteWallRow = whitePositions[i].charAt(1) - 48; // ASCII value of char representing row, not actual
 																	// row number
 			// '0' = 48
 			char whiteWallO = whitePositions[i].charAt(2);
