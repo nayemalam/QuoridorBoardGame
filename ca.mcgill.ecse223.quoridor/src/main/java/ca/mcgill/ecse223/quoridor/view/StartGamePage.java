@@ -55,6 +55,7 @@ public class StartGamePage {
 			public void run() {
 				try {
 					StartGamePage window = new StartGamePage();
+					initGame();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -255,16 +256,7 @@ public class StartGamePage {
 		frame.dispose();
 		try {
 			
-			Quoridor quoridor = QuoridorApplication.getQuoridor();
-			// TODO: Set the correct names!
-			quoridor.addUser("TestUser1");
-			quoridor.addUser("TestUser2");
-			// TODO: Set the correct names!
-			User userWhite = quoridor.addUser("TestUser1");
-			User userBlack = quoridor.addUser("TestUser2");
-			Player whitePlayer = new Player(new Time(0), quoridor.getUser(0), ControllerUtilities.BLACK_TILE_INDEX, Direction.Horizontal);
-			Player blackPlayer = new Player(new Time(0), quoridor.getUser(1), ControllerUtilities.WHITE_TILE_INDEX, Direction.Horizontal);
-			QuoridorController.initializeNewGame(quoridor, whitePlayer, blackPlayer);
+			
 			
 			MainGameWindow gameWindow = new MainGameWindow();
 			MainGameWindow.frmQuoridorPlay.setVisible(true);
@@ -353,6 +345,21 @@ public class StartGamePage {
 			errorMessage.setForeground(Color.RED);
 			errorMessage.setText("Invalid time input. Please enter integers.");
 			System.err.println("Not calling controller method ... ");
+		}
+	}
+	
+	private static void initGame() {
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		// TODO: Set the correct names!
+		User userWhite = quoridor.addUser("DummyName1");
+		User userBlack = quoridor.addUser("DummyName2");
+		Player whitePlayer = new Player(new Time(0), quoridor.getUser(0), ControllerUtilities.BLACK_TILE_INDEX, Direction.Horizontal);
+		Player blackPlayer = new Player(new Time(0), quoridor.getUser(1), ControllerUtilities.WHITE_TILE_INDEX, Direction.Horizontal);
+		try {
+			QuoridorController.initializeNewGame(quoridor, whitePlayer, blackPlayer);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }
