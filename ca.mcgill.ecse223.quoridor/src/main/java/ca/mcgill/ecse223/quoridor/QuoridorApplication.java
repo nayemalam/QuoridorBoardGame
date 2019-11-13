@@ -11,7 +11,7 @@ public class QuoridorApplication {
 	public static void main() {
 		try {
 			MainMenu menu = new MainMenu();
-			menu.setVisible();
+			menu.frame.setVisible(true);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
