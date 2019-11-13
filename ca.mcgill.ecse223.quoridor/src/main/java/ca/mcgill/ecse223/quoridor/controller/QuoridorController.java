@@ -1153,7 +1153,6 @@ public class QuoridorController {
 		} else {
 			curGame.getWallMoveCandidate().setWallDirection(Direction.Horizontal);
 		}
-}
 
 	}
 
