@@ -4,7 +4,7 @@
 package ca.mcgill.ecse223.quoridor.model;
 import java.util.*;
 
-// line 18 "../../../../../QuoridorGame.ump"
+// line 15 "../../../../../QuoridorGame.ump"
 public class Board
 {
 
