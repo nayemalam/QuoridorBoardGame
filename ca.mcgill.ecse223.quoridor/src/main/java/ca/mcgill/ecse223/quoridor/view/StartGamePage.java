@@ -2,7 +2,11 @@ package ca.mcgill.ecse223.quoridor.view;
 
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
+import ca.mcgill.ecse223.quoridor.model.Direction;
+import ca.mcgill.ecse223.quoridor.model.Player;
 import ca.mcgill.ecse223.quoridor.model.Quoridor;
+import ca.mcgill.ecse223.quoridor.model.User;
+import ca.mcgill.ecse223.quoridor.utilities.ControllerUtilities;
 
 import java.awt.*;
 
@@ -10,6 +14,7 @@ import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.event.ActionListener;
+import java.sql.Time;
 import java.awt.event.ActionEvent;
 
 public class StartGamePage {
@@ -254,10 +259,12 @@ public class StartGamePage {
 			// TODO: Set the correct names!
 			quoridor.addUser("TestUser1");
 			quoridor.addUser("TestUser2");
-//			QuoridorController.setWhitePlayerUserName(PlayerLabel_1.getText());
-//			QuoridorController.setBlackPlayerUserName(PlayerLabel_2.getText());
-			QuoridorController.initializeNewGame(quoridor);
-			QuoridorController.initializeBoard(quoridor);
+			// TODO: Set the correct names!
+			User userWhite = quoridor.addUser("TestUser1");
+			User userBlack = quoridor.addUser("TestUser2");
+			Player whitePlayer = new Player(new Time(0), quoridor.getUser(0), ControllerUtilities.BLACK_TILE_INDEX, Direction.Horizontal);
+			Player blackPlayer = new Player(new Time(0), quoridor.getUser(1), ControllerUtilities.WHITE_TILE_INDEX, Direction.Horizontal);
+			QuoridorController.initializeNewGame(quoridor, whitePlayer, blackPlayer);
 			
 			MainGameWindow gameWindow = new MainGameWindow();
 			MainGameWindow.frmQuoridorPlay.setVisible(true);

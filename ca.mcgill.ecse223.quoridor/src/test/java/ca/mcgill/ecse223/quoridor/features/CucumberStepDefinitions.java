@@ -26,10 +26,6 @@ import io.cucumber.java.en.Given;
 
 public class CucumberStepDefinitions {
 
-	// ***********************************************
-	// Background step definitions
-	// ***********************************************
-
 	@Given("^The game is not running$")
 	public void theGameIsNotRunning() {
 		initQuoridorAndBoard();
@@ -109,7 +105,9 @@ public class CucumberStepDefinitions {
 	public void aNewGameIsInitializing() throws Throwable {
 		initQuoridorAndBoard();
 		ArrayList<Player> players = createUsersAndPlayers("user1", "user2");
-		new Game(GameStatus.Initializing, MoveMode.PlayerMove, QuoridorApplication.getQuoridor());
+		// TODO: Fix this
+		QuoridorController.initializeNewGame(QuoridorApplication.getQuoridor(), players.get(0), players.get(1));
+		//new Game(GameStatus.Initializing, MoveMode.PlayerMove, QuoridorApplication.getQuoridor());
 	}
 	// ***********************************************
 	// Scenario and scenario outline step definitions
@@ -123,9 +121,6 @@ public class CucumberStepDefinitions {
 	 * 
 	 */
 
-	// ***********************************************
-	// Clean up
-	// ***********************************************
 
 	// After each scenario, the test model is discarded
 	@After
@@ -204,12 +199,12 @@ public class CucumberStepDefinitions {
 
 	private void createAndStartGame(ArrayList<Player> players) {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
+
 		// Tile indices start from 0 -> tiles with indices 4 and 8*9+4=76 are the starting
 		// positions
 		Tile player1StartPos = quoridor.getBoard().getTile(4);
 		Tile player2StartPos = quoridor.getBoard().getTile(76);
-		
-		// TODO: Fix this
+
 		Game game = new Game(GameStatus.Running, MoveMode.PlayerMove, quoridor);
 		game.setWhitePlayer(players.get(0));
 		game.setBlackPlayer(players.get(1));

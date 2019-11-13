@@ -6,6 +6,8 @@ import ca.mcgill.ecse223.quoridor.model.GamePosition;
 import ca.mcgill.ecse223.quoridor.model.Move;
 import ca.mcgill.ecse223.quoridor.model.Player;
 import ca.mcgill.ecse223.quoridor.model.Wall;
+import ca.mcgill.ecse223.quoridor.model.Game.GameStatus;
+import ca.mcgill.ecse223.quoridor.model.Game.MoveMode;
 
 /**
  * Class used to group together common utilities and constants used by the application controller methods.
@@ -50,6 +52,7 @@ public class ControllerUtilities {
 		Move tempMove;
 		while(currentGame.getMoves().size() > 0) {
 			tempMove = currentGame.getMove(0);
+			tempMove.delete();
 			currentGame.removeMove(tempMove);
 		}
 	}
@@ -62,6 +65,7 @@ public class ControllerUtilities {
 	public static void clearExistingPositions(Game currentGame) {
 		while (currentGame.getPositions().size() > 0) {
 			GamePosition tempPos = currentGame.getPosition(0);
+			tempPos.delete();
 			currentGame.removePosition(tempPos);
 		}
 	}
