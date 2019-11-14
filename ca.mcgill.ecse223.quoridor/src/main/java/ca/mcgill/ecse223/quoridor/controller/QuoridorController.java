@@ -21,18 +21,31 @@ public class QuoridorController {
 	Quoridor quoridor;
 
 	/**
-	 * Method to capture the time at which the clock is stopped Used as a helper
-	 * method @param @author Ousmane Baricisse @return time in seconds public static
-	 * long stopClock() throws Exception { try { return
-	 * TimerUtilities.getCurrentTime(); } catch (Exception e) { throw new
-	 * UnsupportedOperationException(); }
-	 * 
-	 * }
-	 * 
-	 * /** This method, according to the Gherkin definition, should Complete a
-	 * player move from the given position to the next tile. returns true if the
-	 * move was completed successfully. @param quoridor @author Ousmane
-	 * Baricisse @param quoridor @param destination @return boolean @throws
+	 * Method to capture the time at which the clock is stopped
+	 * Used as a helper method
+	 * @param
+	 * @author Ousmane Baricisse
+	 * @return time in seconds
+	 */ 
+	public static long stopClock() throws Exception {
+		try {
+			return TimerUtilities.getCurrentTime();
+		} catch (Exception e) {
+			throw new UnsupportedOperationException();
+		}
+
+	}
+
+	/**
+	 * This method, according to the Gherkin definition, should Complete 
+	 * a player move from the given position to the next tile.
+	 * returns true if the move was completed successfully.
+	 * @param quoridor
+	 * @author Ousmane Baricisse
+	 * @param quoridor
+	 * @param destination
+	 * @return boolean
+	 * @throws
 	 */
 	public static boolean completeMove(Quoridor quoridor) {
 		Player player = quoridor.getCurrentGame().getCurrentPosition().getPlayerToMove();
@@ -349,8 +362,7 @@ public class QuoridorController {
 	 * This method interacts with the GUI, it checks if the username is already
 	 * created if so, the user then selects that username
 	 *
-	 * @param username - String username can either exist in the list or can create
-	 *                 new username
+	 * @param username - String username can either exist in the list or can create new username
 	 * @author Nayem Alam
 	 */
 	public static void selectAnExistingUsernameGUI(String username) {
@@ -1155,13 +1167,11 @@ public class QuoridorController {
 		}
 
 	}
-
 	/**
 	 * Method used to drop a wall
 	 * 
 	 * @author Iyatan Atchoro
 	 */
-
 	public static void dropWall() throws Exception {
 		// check wall in hand
 
