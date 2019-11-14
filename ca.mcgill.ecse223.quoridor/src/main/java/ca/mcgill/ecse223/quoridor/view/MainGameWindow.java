@@ -29,6 +29,8 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.plaf.basic.BasicArrowButton;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -48,6 +50,7 @@ import java.awt.GridBagLayout;
 
 import ca.mcgill.ecse223.quoridor.view.main.BlackWallPanel;
 import ca.mcgill.ecse223.quoridor.view.main.WhiteWallPanel;
+import ca.mcgill.ecse223.quoridor.view.*;
 
 public class MainGameWindow {
 
@@ -91,6 +94,7 @@ public class MainGameWindow {
 	private static JPanel centerPanel = new JPanel();
 	private static JPanel boardPanel = new JPanel();
 	private static JPanel navigationButtonsPanel = new JPanel();
+	private WallMoveCandidate wallMoveCandidate;
 
 	/**
 	 * Launch the application.
@@ -214,8 +218,8 @@ public class MainGameWindow {
 		boardPanel.setLayout(null);
 
 		boardPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
-		boardPanel.setPreferredSize(new Dimension(200, 200));
-		boardPanel.setBackground(Color.pink);
+		boardPanel.setPreferredSize(new Dimension(x, y));
+		boardPanel.setBackground(new Color(107, 142, 35));
 		navigationButtonsPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
 		for (int row = 0; row < TOTAL_ROWS; row++) {
 			for (int col = 0; col < TOTAL_COLS; col++) {
@@ -224,16 +228,8 @@ public class MainGameWindow {
 
 				BufferedImage btnImg;
 
-				try {
-
-					btnImg = ImageIO.read(new File("/images/left-arrow.png"));
-					ImageIcon icon = new ImageIcon(btnImg);
-					btnArray[row][col] = new JButton(icon);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 				// ImageIcon icon = new ImageIcon(btnImg);
+				btnArray[row][col] = new JButton(new ImageIcon("./lightWall.png"));
 				btnArray[row][col] = new JButton();
 				// btnArray[row][col].setPreferredSize(new Dimension(5, 5));
 				btnArray[row][col].setIcon(btnArray[row][col].getIcon());
@@ -247,22 +243,17 @@ public class MainGameWindow {
 			}
 		}
 
-		JButton btn = new JButton(new ImageIcon("./cc.png"));
-		btn.setBounds(btnArray[2][1].getX() + tileLength - 3, btnArray[2][1].getY() + 3, wallWidthV, wallHeight);
-		btn.setBorder(BorderFactory.createLineBorder(Color.BLACK, 10));
-		btn.setBorder(new EmptyBorder(2, 2, 2, 2));
-		boardPanel.add(btn);
+		frmQuoridorPlay.repaint();
+		JButton grabWall = new JButton("Grab Wall");
+		JButton dropWall = new JButton("Drop Wall");
+		JButton rotateWall = new JButton("Rotate Wall");
+		navigationButtonsPanel.add(rotateWall);
+		navigationButtonsPanel.add(grabWall);
+		navigationButtonsPanel.add(dropWall);
 
-		// boardPanel.setVisible(true);
-
-		// btnArray[5][5].setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0,
-		// Color.black));
-		// btnArray[5][4].setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0,
-		// Color.black));
-		// btnArray[6][5].setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0,
-		// Color.black));
-		// btnArray[6][4].setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0,
-		// Color.black));
+		WallCandidateHandler(grabWall, dropWall);
+		handleRotateWall(rotateWall);
+		createNavigationButtons();
 
 		JPanel northPanel = new JPanel();
 		northPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -367,9 +358,212 @@ public class MainGameWindow {
 		panel_6.add(panel_11);
 
 	}
-	private void createWallsOnBoard(JPanel jPanel){
+
+	private void handleRotateWall(JButton rotateWall) {
+		rotateWall.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				if (wallMoveCandidate != null) {
+
+					if (!wallMoveCandidate.isRotated) {
+						int temp = wallHeight;
+						wallHeight = wallWidthV;
+						wallWidthV = temp;
+						setHorizontal();
+						wallMoveCandidate.isRotated = true;
+					} else {
+						int temp = wallHeight;
+						wallHeight = wallWidthV;
+						wallWidthV = temp;
+						setVerticle();
+						wallMoveCandidate.isRotated  = false;
+					}
+
+				}
+
+			}
+		});
+	}
+
+	private void setHorizontal() {
+		if (wallMoveCandidate != null && !wallMoveCandidate.isRotated) {
+			wallMoveCandidate.wallMoveBtn.setBounds(
+					btnArray[wallMoveCandidate.row + 1][wallMoveCandidate.col].getX() + tileLength + 7,
+					btnArray[wallMoveCandidate.row][wallMoveCandidate.col].getY() + tileLength - 3, wallWidthV, wallHeight);
+		}
+	}
+
+	private void setVerticle() {
+		wallMoveCandidate.wallMoveBtn.setBounds(
+				btnArray[wallMoveCandidate.row + 1][wallMoveCandidate.col].getX() + tileLength - 2,
+				btnArray[wallMoveCandidate.row][wallMoveCandidate.col].getY() + tileLength + 7, wallWidthV, wallHeight);
+	}
+
+	private void moveUpHandler(BasicArrowButton btn) {
+		btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (wallMoveCandidate != null && wallMoveCandidate.col > 0) {
+					System.out.println("wall Move not null");
+					wallMoveCandidate.wallMoveBtn.setBounds(
+							btnArray[wallMoveCandidate.row][--wallMoveCandidate.col].getX() + tileLength - 3,
+							btnArray[wallMoveCandidate.row][wallMoveCandidate.col].getY() + 3, wallWidthV, wallHeight);
+					frmQuoridorPlay.repaint();
+				} else {
+					// handlle message : please grab a wall if there are still more walls.
+				}
+
+			}
+		});
+	}
+
+	private void moveDownHandler(BasicArrowButton btn) {
+		btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (wallMoveCandidate != null && wallMoveCandidate.col < 7) {
+					System.out.println("wall Move not null");
+					wallMoveCandidate.wallMoveBtn.setBounds(
+							btnArray[wallMoveCandidate.row][++wallMoveCandidate.col].getX() + tileLength - 3,
+							btnArray[wallMoveCandidate.row][wallMoveCandidate.col].getY() + 3, wallWidthV, wallHeight);
+					frmQuoridorPlay.repaint();
+				} else {
+					// handlle message : please grab a wall if there are still more walls.
+				}
+
+			}
+		});
+	}
+
+	private void moveLeftHandler(BasicArrowButton btn) {
+		btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (wallMoveCandidate != null && wallMoveCandidate.row < 7) {
+					System.out.println("wall Move not null");
+					wallMoveCandidate.wallMoveBtn.getBounds().getWidth();
+					wallMoveCandidate.wallMoveBtn.setBounds(
+							btnArray[++wallMoveCandidate.row][wallMoveCandidate.col].getX() + tileLength - 3,
+							btnArray[wallMoveCandidate.row][wallMoveCandidate.col].getY() + 3,
+							wallMoveCandidate.wallMoveBtn.getWidth(), wallMoveCandidate.wallMoveBtn.getHeight());
+					frmQuoridorPlay.repaint();
+				} else {
+					// handlle message : please grab a wall if there are still more walls.
+				}
+
+			}
+		});
+	}
+
+	private void moveRightHandler(BasicArrowButton btn) {
+		btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (wallMoveCandidate != null && wallMoveCandidate.row > 0) {
+					System.out.println("wall Move not null");
+
+					wallMoveCandidate.wallMoveBtn.setBounds(
+							btnArray[--wallMoveCandidate.row][wallMoveCandidate.col].getX() + tileLength - 3,
+							btnArray[wallMoveCandidate.row][wallMoveCandidate.col].getY() + 3, wallWidthV, wallHeight);
+
+					frmQuoridorPlay.repaint();
+				} else {
+					// handlle message : please grab a wall if there are still more walls.
+				}
+
+			}
+		});
+	}
+
+	private void WallCandidateHandler(JButton grabWall, JButton dropWall) {
+
+		grabWall.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+
+				if (wallMoveCandidate == null) {
+					JButton wallMoveBtn = createWallMoveCandidate();
+
+					wallMoveCandidate = new WallMoveCandidate(wallMoveBtn, 0, 4);
+				} else {
+					// tell user to drop the current wall
+				}
+				dropWallHandler(dropWall);
+				frmQuoridorPlay.repaint();
+			}
+		});
 
 	}
+
+	private void dropWallHandler(JButton dropWall) {
+		dropWall.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				wallMoveCandidate.wallMoveBtn.setIcon(new ImageIcon("./dropedWall.png"));
+				wallMoveCandidate = null;
+				frmQuoridorPlay.repaint();
+			}
+		});
+	}
+
+	private JButton createWallMoveCandidate() {
+		JButton btn = new JButton(new ImageIcon("./lightWall.png"));
+		btn.setBounds(btnArray[0][7].getX() + tileLength - 3, btnArray[0][7].getY() + 3, wallWidthV, wallHeight);
+		btn.setBorder(BorderFactory.createLineBorder(Color.BLACK, 10));
+		btn.setBorder(new EmptyBorder(2, 2, 2, 2));
+		boardPanel.add(btn);
+
+		return btn;
+	}
+
+	private void createNavigationButtons() {
+		JPanel east = new JPanel();
+		east.setLayout(new BoxLayout(east, BoxLayout.X_AXIS));
+		JPanel newPanel = new JPanel();
+		newPanel.setLayout(new BoxLayout(newPanel, BoxLayout.Y_AXIS));
+
+		navigationButtonsPanel.add(east, BorderLayout.NORTH);
+
+		BasicArrowButton north = new BasicArrowButton(BasicArrowButton.NORTH) {
+			@Override
+			public Dimension getPreferredSize() {
+				return new Dimension(100, 100);
+			}
+		};
+		;
+
+		BasicArrowButton south = new BasicArrowButton(BasicArrowButton.SOUTH) {
+			@Override
+			public Dimension getPreferredSize() {
+				return new Dimension(100, 100);
+			}
+		};
+		;
+		BasicArrowButton west = new BasicArrowButton(BasicArrowButton.WEST) {
+			@Override
+			public Dimension getPreferredSize() {
+				return new Dimension(100, 100);
+			}
+		};
+		;
+		BasicArrowButton est = new BasicArrowButton(BasicArrowButton.EAST, Color.blue, Color.green, Color.PINK,
+				Color.lightGray) {
+			@Override
+			public Dimension getPreferredSize() {
+				return new Dimension(100, 100);
+			}
+		};
+		;
+
+		west.setBackground(Color.pink);
+
+		newPanel.add(north, BorderLayout.NORTH); // up
+		newPanel.add(south, BorderLayout.SOUTH); // down
+		east.add(west, BorderLayout.WEST);
+		east.add(newPanel, BorderLayout.CENTER);
+		east.add(est, BorderLayout.EAST);
+		moveUpHandler(north);
+		moveDownHandler(south);
+		moveLeftHandler(est);
+		moveRightHandler(west);
+		frmQuoridorPlay.repaint();
+	}
+
 	private void createWalls(JPanel jPanel) {
 		for (int i = 0; i < 10; i++) { // Initializing the walls for both players
 			JButton btn = new JButton("Wall" + i);
@@ -377,7 +571,6 @@ public class MainGameWindow {
 			jPanel.add(btn);
 		}
 	}
-
 
 	private void validatePawnPosition() {
 
