@@ -6,6 +6,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
+
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JTextPane;
 import java.awt.Font;
@@ -22,6 +24,8 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -74,11 +78,13 @@ public class MainGameWindow {
 	private static JButton vertical = new JButton("vertical");
 	static JLabel lblPleaseSelectMove = new JLabel("Incorrect Move");
 	private static int wallIndex;
-	private static int tileLength = 87;
+	private static int tileLength = 45;
 	private static int tileWidth = 45;
 	private static JPanel panel_10 = new JPanel();
 	private static JPanel panel_11 = new JPanel();
 	private static JPanel centerPanel = new JPanel();
+	private static JPanel boardPanel = new JPanel();
+	private static JPanel navigationButtonsPanel = new JPanel();
 
 	/**
 	 * Launch the application.
@@ -192,33 +198,46 @@ public class MainGameWindow {
 		panel_2.add(panel_10);
 		panel_11 = blackPane.getWallPanel();
 	    panel_10 = whitePane.getWallPanel();
-	
 		
 		frmQuoridorPlay.getContentPane().add(centerPanel, BorderLayout.CENTER);
-		centerPanel.setLayout(null);
+		centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
+
 		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
 		int x = (int) ((dimension.getWidth() - centerPanel.getWidth()) / 2);
 		int y = (int) ((dimension.getHeight() - centerPanel.getHeight()) / 2);
 		centerPanel.setLocation(x, y);
-
-
-
+		
+		centerPanel.add(boardPanel);
+		centerPanel.add(navigationButtonsPanel);
+		
+		boardPanel.setLayout(null);
+		boardPanel.setPreferredSize(new Dimension(x-200, y-200));
+		boardPanel.setBorder(new LineBorder(new Color(0, 0 , 0)));
+	
+		// boardPanel.setBackground(new Color(255,255,255));
+		navigationButtonsPanel.setBorder(new LineBorder(new Color(0, 0 , 0)));
 		for(int row = 0; row < TOTAL_ROWS; row++) {
 			for(int col = 0; col < TOTAL_COLS; col ++) {
 
-				
 				lblPleaseSelectMove.setVisible(false);
 				btnArray[row][col] = new JButton();
-				btnArray[row][col].setBounds((tileLength +11)*row, (tileWidth+11)*col, tileLength, tileWidth);
-				centerPanel.add(btnArray[row][col]);
-
-
+				// btnArray[row][col].setPreferredSize(new Dimension(5, 5));
+				btnArray[row][col].setVisible(true);
+				btnArray[row][col].setHorizontalAlignment(btnArray[row][col].CENTER);
+				btnArray[row][col].setBounds((tileLength +5)*row, (tileWidth+5)*col, tileLength, tileWidth);
+				boardPanel.add(btnArray[row][col]);
 				btnArray[row][col].addMouseListener(new ButtonActionListener(row+1, col+1));
-
 
 			}
 		}
-
+		JButton btn = new JButton("a wall");
+		btn.setBounds(btnArray[1][1].getX()+tileLength, btnArray[1][1].getY(), wallHeight, wallWidthV  );
+		boardPanel.add(btn);
+		
+		// btnArray[5][5].setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.black));
+		// btnArray[5][4].setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.black));
+		// btnArray[6][5].setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.black));
+		// btnArray[6][4].setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.black));
 
 
 
@@ -329,6 +348,13 @@ public class MainGameWindow {
 		panel_6.add(panel_11);
 	
 
+	}
+	private void createWalls(JPanel jPanel){
+		for (int i = 0; i < 10; i++) { // Initializing the walls for both players
+			JButton btn = new JButton("Wall" + i);
+			btn.setBounds(10, 11 + i * (wallHeight + 5), wallWidth, wallHeight);
+			jPanel.add(btn);
+		}
 	}
 	
 	private void validatePawnPosition() {
