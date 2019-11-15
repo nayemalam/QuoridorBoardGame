@@ -389,13 +389,15 @@ public class MainGameWindow {
 
 	private void setHorizontal() {
 
-		wallMoveCandidate.wallMoveBtn.setBounds(btnArray[wallMoveCandidate.row][wallMoveCandidate.col].getX(), btnArray[wallMoveCandidate.row][wallMoveCandidate.col].getY() + tileLength, wallWidth,
-				13);
+		wallMoveCandidate.wallMoveBtn.setBounds(btnArray[wallMoveCandidate.row][wallMoveCandidate.col].getX(),
+				btnArray[wallMoveCandidate.row][wallMoveCandidate.col].getY() + tileLength, wallWidth, 13);
 
 	}
 
 	private void setVerticle() {
-		wallMoveCandidate.wallMoveBtn.setBounds(btnArray[wallMoveCandidate.row][wallMoveCandidate.col].getX() + tileWidth, btnArray[wallMoveCandidate.row][wallMoveCandidate.col].getY(), 13, 102);
+		wallMoveCandidate.wallMoveBtn.setBounds(
+				btnArray[wallMoveCandidate.row][wallMoveCandidate.col].getX() + tileWidth,
+				btnArray[wallMoveCandidate.row][wallMoveCandidate.col].getY(), 13, 102);
 	}
 
 	private void moveUpHandler(BasicArrowButton btn) {
@@ -404,8 +406,8 @@ public class MainGameWindow {
 				if (wallMoveCandidate != null && wallMoveCandidate.col > 0) {
 					// if isRotated then it is in vertical position
 					wallMoveCandidate.col -= 1;
-					if(!wallMoveCandidate.isRotated){
-						
+					if (!wallMoveCandidate.isRotated) {
+
 						setHorizontal();
 					} else {
 						setVerticle();
@@ -423,7 +425,7 @@ public class MainGameWindow {
 			public void actionPerformed(ActionEvent e) {
 				if (wallMoveCandidate != null && wallMoveCandidate.col < 7) {
 					wallMoveCandidate.col += 1;
-					if(!wallMoveCandidate.isRotated){
+					if (!wallMoveCandidate.isRotated) {
 						setHorizontal();
 					} else {
 						setVerticle();
@@ -440,16 +442,16 @@ public class MainGameWindow {
 		btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (wallMoveCandidate != null && wallMoveCandidate.row < 7) {
-					System.out.println("wall Move not null");
-					wallMoveCandidate.wallMoveBtn.getBounds().getWidth();
-					wallMoveCandidate.wallMoveBtn.setBounds(
-							btnArray[++wallMoveCandidate.row][wallMoveCandidate.col].getX() + tileLength - 3,
-							btnArray[wallMoveCandidate.row][wallMoveCandidate.col].getY() + 3,
-							wallMoveCandidate.wallMoveBtn.getWidth(), wallMoveCandidate.wallMoveBtn.getHeight());
-					frmQuoridorPlay.repaint();
+					wallMoveCandidate.row += 1;
+					if (!wallMoveCandidate.isRotated) {
+						setHorizontal();
+					} else {
+						setVerticle();
+					}
 				} else {
 					// handlle message : please grab a wall if there are still more walls.
 				}
+				frmQuoridorPlay.repaint();
 
 			}
 		});
@@ -459,17 +461,18 @@ public class MainGameWindow {
 		btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (wallMoveCandidate != null && wallMoveCandidate.row > 0) {
-					System.out.println("wall Move not null");
+					wallMoveCandidate.row -= 1;
+					if(!wallMoveCandidate.isRotated){
+						setHorizontal();
+					} else {
+						setVerticle();
+					}
 
-					wallMoveCandidate.wallMoveBtn.setBounds(
-							btnArray[--wallMoveCandidate.row][wallMoveCandidate.col].getX() + tileLength - 3,
-							btnArray[wallMoveCandidate.row][wallMoveCandidate.col].getY() + 3, wallWidthV, wallHeight);
-
-					frmQuoridorPlay.repaint();
+					
 				} else {
 					// handlle message : please grab a wall if there are still more walls.
 				}
-
+				frmQuoridorPlay.repaint();
 			}
 		});
 	}
