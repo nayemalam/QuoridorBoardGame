@@ -88,7 +88,7 @@ public class MainGameWindow {
 	static JLabel lblPleaseSelectMove = new JLabel("Incorrect Move");
 	private static int wallIndex;
 	private static int tileLength = 45;
-	private static int tileWidth = 45;
+	private static int tileWidth = 87;
 	private static JPanel panel_10 = new JPanel();
 	private static JPanel panel_11 = new JPanel();
 	private static JPanel centerPanel = new JPanel();
@@ -209,7 +209,7 @@ public class MainGameWindow {
 
 		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
 		int x = (int) ((dimension.getWidth() - centerPanel.getWidth()) / 2);
-		int y = (int) ((dimension.getHeight() - centerPanel.getHeight()) / 2);
+		int y = (int) ((dimension.getHeight() - centerPanel.getHeight()) / 2) + 50;
 		centerPanel.setLocation(x, y);
 
 		centerPanel.add(boardPanel);
@@ -219,23 +219,18 @@ public class MainGameWindow {
 
 		boardPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
 		boardPanel.setPreferredSize(new Dimension(x, y));
-		boardPanel.setBackground(new Color(107, 142, 35));
+		boardPanel.setBackground(Color.lightGray);
 		navigationButtonsPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
 		for (int row = 0; row < TOTAL_ROWS; row++) {
 			for (int col = 0; col < TOTAL_COLS; col++) {
 
 				lblPleaseSelectMove.setVisible(false);
 
-				BufferedImage btnImg;
+				btnArray[row][col] = new JButton(new ImageIcon("./tile.png"));
 
-				// ImageIcon icon = new ImageIcon(btnImg);
-				btnArray[row][col] = new JButton(new ImageIcon("./lightWall.png"));
-				btnArray[row][col] = new JButton();
-				// btnArray[row][col].setPreferredSize(new Dimension(5, 5));
-				btnArray[row][col].setIcon(btnArray[row][col].getIcon());
 				btnArray[row][col].setVisible(true);
-				btnArray[row][col].setHorizontalAlignment(btnArray[row][col].CENTER);
-				btnArray[row][col].setBounds((tileLength + 5) * row, (tileWidth + 5) * col, tileWidth, tileLength);
+
+				btnArray[row][col].setBounds((tileWidth + 11) * row, (tileLength + 11) * col, tileWidth, tileLength);
 
 				boardPanel.add(btnArray[row][col]);
 				btnArray[row][col].addMouseListener(new ButtonActionListener(row + 1, col + 1));
@@ -376,7 +371,7 @@ public class MainGameWindow {
 						wallHeight = wallWidthV;
 						wallWidthV = temp;
 						setVerticle();
-						wallMoveCandidate.isRotated  = false;
+						wallMoveCandidate.isRotated = false;
 					}
 
 				}
@@ -389,7 +384,8 @@ public class MainGameWindow {
 		if (wallMoveCandidate != null && !wallMoveCandidate.isRotated) {
 			wallMoveCandidate.wallMoveBtn.setBounds(
 					btnArray[wallMoveCandidate.row + 1][wallMoveCandidate.col].getX() + tileLength + 7,
-					btnArray[wallMoveCandidate.row][wallMoveCandidate.col].getY() + tileLength - 3, wallWidthV, wallHeight);
+					btnArray[wallMoveCandidate.row][wallMoveCandidate.col].getY() + tileLength - 3, wallWidthV,
+					wallHeight);
 		}
 	}
 
