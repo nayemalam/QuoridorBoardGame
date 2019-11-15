@@ -476,13 +476,18 @@ public class MainGameWindow {
 		grabWall.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-
+			
 				if (wallMoveCandidate == null) {
+					
 					JButton wallMoveBtn = createWallMoveCandidate();
-
 					wallMoveCandidate = new WallMoveCandidate(wallMoveBtn, 0, 4);
+					grabWall.setText("Cancel Move");
+					
 				} else {
-					// tell user to drop the current wall
+					boardPanel.remove(wallMoveCandidate.wallMoveBtn);
+					wallMoveCandidate = null;
+					grabWall.setText("Grab Wall");
+				
 				}
 				dropWallHandler(dropWall);
 				frmQuoridorPlay.repaint();
