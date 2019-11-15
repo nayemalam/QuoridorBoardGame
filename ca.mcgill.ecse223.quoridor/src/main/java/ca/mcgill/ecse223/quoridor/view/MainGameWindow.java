@@ -308,7 +308,7 @@ public class MainGameWindow {
 		timeRemaining_TextField.setEditable(false);
 		panel_1.add(timeRemaining_TextField);
 		timeRemaining_TextField.setColumns(10);
-
+		timeRemaining_TextField.setText(QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer().getRemainingTime().toString());
 		// layout
 		JPanel southPanel = new JPanel();
 		frmQuoridorPlay.getContentPane().add(southPanel, BorderLayout.SOUTH);

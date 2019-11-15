@@ -297,10 +297,6 @@ public class QuoridorController {
 		wPlayer.setRemainingTime(thinkingTime);
 	}
 
-	public static String testMethod() {
-		return "Hello world!";
-	}
-
 	/**
 	 * Method - selectExistingUserName(String username)
 	 *
@@ -416,6 +412,24 @@ public class QuoridorController {
 	public static Player createBlackPlayer() {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
 		return new Player(new Time(0), quoridor.getUser(1), ControllerUtilities.WHITE_TILE_INDEX, Direction.Vertical);
+	}
+	/**
+	 * GUI related Method - setThinkingTimeGUI(Player wPlayer, Player bPlayer, Integer min, Integer sec)
+	 *
+	 * This method interacts with the GUI, it sets the thinking time for player1 and 2
+	 *
+	 * @param wPlayer - Player sets the whitePlayer
+	 * @param bPlayer - Player sets the blackPlayer
+	 * @param min - Integer sets the number of minutes
+	 * @param sec - Integer sets the number of seconds
+	 * @author Nayem Alam
+	 */
+	public static void setThinkingTimeGUI(Player wPlayer, Player bPlayer, Integer min, Integer sec) {
+		// converts min and sec to long type (unix epoch time)
+		Time thinkingTime = new Time(min * 60L * 1000 + sec * 1000L);
+		// set same thinking time for both players
+		bPlayer.setRemainingTime(thinkingTime);
+		wPlayer.setRemainingTime(thinkingTime);
 	}
 
 	// public static List<String> myUsers() {
