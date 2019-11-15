@@ -475,9 +475,9 @@ public class MainGameWindow {
 		grabWall.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-
-				if (wallMoveCandidate == null) {
-
+			
+				if (wallMoveCandidate == null ) {
+					QuoridorController.grabWall(QuoridorApplication.getQuoridor());
 					JButton wallMoveBtn = createWallMoveCandidate();
 					wallMoveCandidate = new WallMoveCandidate(wallMoveBtn, 0, 7);
 					grabWall.setText("Cancel Move");

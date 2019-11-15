@@ -1,4 +1,5 @@
 package ca.mcgill.ecse223.quoridor.features;
+
 import java.util.*;
 import java.util.concurrent.locks.Condition;
 
@@ -33,7 +34,7 @@ public class GrabWallStepDefinition {
 	private static int previousNumberOfWalls;
 	private static boolean grabWallResult;
 	private static Game game = QuoridorApplication.getQuoridor().getCurrentGame(); // current game state
-	
+
 	/**
 	 * Step definition to make sure that I have enough walls on my stack. If I have
 	 * no walls, then add 10 walls in stock
@@ -45,7 +46,6 @@ public class GrabWallStepDefinition {
 		// Write code here that turns the phrase above into concrete actions
 
 		System.out.println("here is num:  " + this.previousNumberOfWalls);
-
 
 		boolean condition = this.game.getCurrentPosition().getPlayerToMove().getWalls().size() > 0;
 		System.out.println("here is num:  " + condition);
@@ -60,19 +60,18 @@ public class GrabWallStepDefinition {
 	 * @author Ousmane Baricisse
 	 * @throws Exception
 	 */
-	
+
 	@When("I try to grab a wall from my stock")
-	public void i_try_to_grab_a_wall_from_my_stock(){
+	public void i_try_to_grab_a_wall_from_my_stock() {
 		// Write code here that turns the phrase above into concrete actions
 		Player playerToMove = this.game.getCurrentPosition().getPlayerToMove();
-		if(playerToMove.equals(this.game.getWhitePlayer())) {
- 			this.previousNumberOfWalls = this.game.getCurrentPosition().getWhiteWallsInStock().size();
+		if (playerToMove.equals(this.game.getWhitePlayer())) {
+			this.previousNumberOfWalls = this.game.getCurrentPosition().getWhiteWallsInStock().size();
 		} else {
 			this.previousNumberOfWalls = this.game.getCurrentPosition().getBlackWallsInStock().size();
 		}
 
 		this.grabWallResult = QuoridorController.grabWall(QuoridorApplication.getQuoridor());
-
 
 	}
 
@@ -100,14 +99,13 @@ public class GrabWallStepDefinition {
 		int currentNumberOfWalls;
 
 		Player playerToMove = this.game.getCurrentPosition().getPlayerToMove();
- 		if(playerToMove.equals(this.game.getWhitePlayer())) {
- 			currentNumberOfWalls = this.game.getCurrentPosition().getWhiteWallsInStock().size();
+		if (playerToMove.equals(this.game.getWhitePlayer())) {
+			currentNumberOfWalls = this.game.getCurrentPosition().getWhiteWallsInStock().size();
 		} else {
 			currentNumberOfWalls = this.game.getCurrentPosition().getBlackWallsInStock().size();
 		}
 
-
-		boolean condition = currentNumberOfWalls == this.previousNumberOfWalls -1;
+		boolean condition = currentNumberOfWalls == this.previousNumberOfWalls - 1;
 		assertTrue(condition);
 	}
 
@@ -121,11 +119,19 @@ public class GrabWallStepDefinition {
 	public void i_have_no_more_walls_on_stock() {
 		// Write code here that turns the phrase above into concrete actions
 
-     	int numberOfWalls = !QuoridorController.isWhitePlayer(QuoridorApplication.getQuoridor(), QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getPlayerToMove()) ? this.game.getCurrentPosition().getBlackWallsInStock().size() : this.game.getCurrentPosition().getWhiteWallsInStock().size();
-		boolean condition = numberOfWalls==0;
+		while (QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getPlayerToMove().hasWalls()) {
+			QuoridorController.grabWall(QuoridorApplication.getQuoridor());
+			try {
+				QuoridorController.dropWall();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
+		}
 
-		assertTrue(condition);
+	
+
 	}
 
 	/**
@@ -137,10 +143,9 @@ public class GrabWallStepDefinition {
 	public void i_shall_be_notified_that_I_have_no_more_walls() {
 		// Write code here that turns the phrase above into concrete actions
 
-//			assertEquals("You have no more walls in stock!", this.);
+		// assertEquals("You have no more walls in stock!", this.);
 		System.out.println("was removed or nah ? " + this.grabWallResult);
-			assertTrue(this.grabWallResult);
-
+		assertTrue(this.grabWallResult);
 
 	}
 
@@ -156,7 +161,7 @@ public class GrabWallStepDefinition {
 		// Write code here that turns the phrase above into concrete actions
 		// perhaps GUI
 
-		boolean condition = this.previousNumberOfWalls ==0;
+		boolean condition = this.previousNumberOfWalls == 0;
 		assertTrue(condition);
 	}
 
