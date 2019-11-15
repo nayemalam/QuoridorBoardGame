@@ -355,7 +355,7 @@ public class StartGamePage {
 		Integer sec = Integer.parseInt(Seconds_TextField.getText().trim());
 		long thinkingTime = min* 60L *1000 + sec* 1000L;
 		try {
-			QuoridorController.setThinkingTime(min, sec);
+			QuoridorController.setThinkingTimeGUI(QuoridorController.createWhitePlayer(), QuoridorController.createBlackPlayer(),min, sec);
 			errorMessage.setForeground(Color.BLACK);
 			errorMessage.setText("Time set to: " + min +" minutes and " +sec+ " seconds.");
 		} catch (Exception e) {
