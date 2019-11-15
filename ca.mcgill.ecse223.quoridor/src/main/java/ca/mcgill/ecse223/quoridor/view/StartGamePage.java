@@ -88,7 +88,6 @@ public class StartGamePage {
 		model_1 = new DefaultComboBoxModel(QuoridorController.getUsers(" ").toArray());
 		model_2 = new DefaultComboBoxModel(QuoridorController.getUsers(" ").toArray());
 
-
 		// global settings
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frame.setTitle("Quoridor - Start New Game");
@@ -170,7 +169,6 @@ public class StartGamePage {
 		errorMessage.setFont(new Font("Monospaced", Font.BOLD, 30));
 		errorMessage.setHorizontalAlignment(SwingConstants.CENTER);
 		errorMessage.setForeground(Color.RED);
-
 
 		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
 		groupLayout.setHorizontalGroup(
@@ -268,21 +266,14 @@ public class StartGamePage {
 	private void startGameActionPerformed(ActionEvent evt) {
 		// clears error message
 		error = null;
-		frame.dispose();
 		try {
-
-//			Quoridor quoridor = QuoridorApplication.getQuoridor();
-//			// TODO: Set the correct names!
-//			quoridor.addUser(PlayerSelect_1.getSelectedItem().toString());
-//			quoridor.addUser(PlayerSelect_2.getSelectedItem().toString());
-//			Player whitePlayer = new Player(new Time(0), quoridor.getUser(0), ControllerUtilities.BLACK_TILE_INDEX, Direction.Horizontal);
-//			Player blackPlayer = new Player(new Time(0), quoridor.getUser(1), ControllerUtilities.WHITE_TILE_INDEX, Direction.Horizontal);
-//			QuoridorController.initializeNewGame(quoridor, whitePlayer, blackPlayer);
-//
+			Quoridor quoridor = QuoridorApplication.getQuoridor();
+			Player whitePlayer = new Player(new Time(0), quoridor.getUser(0), ControllerUtilities.BLACK_TILE_INDEX, Direction.Horizontal);
+			Player blackPlayer = new Player(new Time(0), quoridor.getUser(1), ControllerUtilities.WHITE_TILE_INDEX, Direction.Horizontal);
+			QuoridorController.initializeNewGame(quoridor, whitePlayer, blackPlayer);
 			MainGameWindow gameWindow = new MainGameWindow();
 			MainGameWindow.frmQuoridorPlay.setVisible(true);
 			frame.dispose();
-
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -319,7 +310,7 @@ public class StartGamePage {
 				errorMessage.setForeground(Color.BLACK);
 				errorMessage.setText("Username: " + PlayerSelect_1.getSelectedItem() + " created.");
 				try {
-					QuoridorController.createNewUsernameGUI(PlayerSelect_1.getSelectedItem().toString());
+					QuoridorController.createNewUsernamePlayerOneGUI(PlayerSelect_1.getSelectedItem().toString());
 				} catch (Exception e) {
 					error = e.getMessage();
 					System.err.println("Not calling controller method ... ");
@@ -349,7 +340,7 @@ public class StartGamePage {
 				errorMessage.setForeground(Color.BLACK);
 				errorMessage.setText("Username: " + PlayerSelect_2.getSelectedItem() + " created.");
 				try {
-					QuoridorController.createNewUsernameGUI(PlayerSelect_2.getSelectedItem().toString());
+					QuoridorController.createNewUsernamePlayerTwoGUI(PlayerSelect_2.getSelectedItem().toString());
 				} catch (Exception e) {
 					error = e.getMessage();
 					System.err.println("Not calling controller method ... ");

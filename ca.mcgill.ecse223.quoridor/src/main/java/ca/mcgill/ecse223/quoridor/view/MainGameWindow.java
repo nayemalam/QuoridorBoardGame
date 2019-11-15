@@ -39,6 +39,7 @@ import java.io.IOException;
 import java.net.URL;
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
+import ca.mcgill.ecse223.quoridor.model.Quoridor;
 import ca.mcgill.ecse223.quoridor.view.QuoridorPage;
 import java.awt.CardLayout;
 import java.awt.GridBagLayout;
@@ -286,6 +287,12 @@ public class MainGameWindow {
 		currentPlayer_TextField.setEditable(false);
 		panel.add(currentPlayer_TextField);
 		currentPlayer_TextField.setColumns(10);
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		// print statement: for checking if we get the right users
+		// this will get the names of player one and two that was set in prev. window
+		System.out.println("Player One: " + quoridor.getUser(0).getName());
+		System.out.println("Player Two: " + quoridor.getUser(1).getName());
+		currentPlayer_TextField.setText(quoridor.getUser(0).getName());
 
 		// layout
 		JPanel panel_1 = new JPanel();
