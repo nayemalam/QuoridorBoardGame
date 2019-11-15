@@ -415,11 +415,12 @@ public class MainGameWindow {
 		btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (wallMoveCandidate != null && wallMoveCandidate.col < 7) {
-					System.out.println("wall Move not null");
-					wallMoveCandidate.wallMoveBtn.setBounds(
-							btnArray[wallMoveCandidate.row][++wallMoveCandidate.col].getX() + tileLength - 3,
-							btnArray[wallMoveCandidate.row][wallMoveCandidate.col].getY() + 3, wallWidthV, wallHeight);
-					frmQuoridorPlay.repaint();
+					wallMoveCandidate.col += 1;
+					if(!wallMoveCandidate.isRotated){
+						setHorizontal();
+					} else {
+						setVerticle();
+					}
 				} else {
 					// handlle message : please grab a wall if there are still more walls.
 				}
@@ -484,18 +485,19 @@ public class MainGameWindow {
 					grabWall.setText("Grab Wall");
 
 				}
-				dropWallHandler(dropWall);
+				dropWallHandler(dropWall, grabWall);
 				frmQuoridorPlay.repaint();
 			}
 		});
 
 	}
 
-	private void dropWallHandler(JButton dropWall) {
+	private void dropWallHandler(JButton dropWall, JButton grabWall) {
 		dropWall.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				wallMoveCandidate.wallMoveBtn.setIcon(new ImageIcon("./dropedWall.png"));
 				wallMoveCandidate = null;
+				grabWall.setText("Grab Wall");
 				frmQuoridorPlay.repaint();
 			}
 		});
