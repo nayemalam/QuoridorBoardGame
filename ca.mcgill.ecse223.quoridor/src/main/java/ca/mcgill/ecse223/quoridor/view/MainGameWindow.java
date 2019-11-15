@@ -209,7 +209,7 @@ public class MainGameWindow {
 
 		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
 		int x = (int) ((dimension.getWidth() - centerPanel.getWidth()) / 2);
-		int y = (int) ((dimension.getHeight() - centerPanel.getHeight()) / 2) + 50;
+		int y = (int) ((dimension.getHeight() - centerPanel.getHeight()) / 2);
 		centerPanel.setLocation(x, y);
 
 		centerPanel.add(boardPanel);
@@ -218,7 +218,7 @@ public class MainGameWindow {
 		boardPanel.setLayout(null);
 
 		boardPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
-		boardPanel.setPreferredSize(new Dimension(x, y));
+		boardPanel.setPreferredSize(new Dimension(x, y + 60));
 		boardPanel.setBackground(Color.lightGray);
 		navigationButtonsPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
 		for (int row = 0; row < TOTAL_ROWS; row++) {
@@ -242,10 +242,14 @@ public class MainGameWindow {
 		JButton grabWall = new JButton("Grab Wall");
 		JButton dropWall = new JButton("Drop Wall");
 		JButton rotateWall = new JButton("Rotate Wall");
-		navigationButtonsPanel.add(rotateWall);
-		navigationButtonsPanel.add(grabWall);
-		navigationButtonsPanel.add(dropWall);
-
+		JPanel wallActionsPanel = new JPanel();
+		wallActionsPanel.setLayout(new GridLayout(1, 3));
+		wallActionsPanel.add(grabWall);
+		wallActionsPanel.add(dropWall);
+		wallActionsPanel.add(rotateWall);
+		navigationButtonsPanel.setLayout(new GridLayout(2, 1));
+		navigationButtonsPanel.add(wallActionsPanel);
+		
 		WallCandidateHandler(grabWall, dropWall);
 		handleRotateWall(rotateWall);
 		createNavigationButtons();
@@ -518,7 +522,7 @@ public class MainGameWindow {
 		BasicArrowButton north = new BasicArrowButton(BasicArrowButton.NORTH) {
 			@Override
 			public Dimension getPreferredSize() {
-				return new Dimension(100, 100);
+				return new Dimension(70, 70);
 			}
 		};
 		;
@@ -526,27 +530,23 @@ public class MainGameWindow {
 		BasicArrowButton south = new BasicArrowButton(BasicArrowButton.SOUTH) {
 			@Override
 			public Dimension getPreferredSize() {
-				return new Dimension(100, 100);
+				return new Dimension(70, 70);
 			}
 		};
 		;
 		BasicArrowButton west = new BasicArrowButton(BasicArrowButton.WEST) {
 			@Override
 			public Dimension getPreferredSize() {
-				return new Dimension(100, 100);
+				return new Dimension(70, 70);
 			}
 		};
 		;
-		BasicArrowButton est = new BasicArrowButton(BasicArrowButton.EAST, Color.blue, Color.green, Color.PINK,
-				Color.lightGray) {
+		BasicArrowButton est = new BasicArrowButton(BasicArrowButton.EAST) {
 			@Override
 			public Dimension getPreferredSize() {
-				return new Dimension(100, 100);
+				return new Dimension(70, 70);
 			}
 		};
-		;
-
-		west.setBackground(Color.pink);
 
 		newPanel.add(north, BorderLayout.NORTH); // up
 		newPanel.add(south, BorderLayout.SOUTH); // down
