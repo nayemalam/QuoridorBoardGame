@@ -255,7 +255,7 @@ public class MainGameWindow {
 		wallActionsPanel.add(rotateWall);
 		navigationButtonsPanel.setLayout(new GridLayout(2, 1));
 		navigationButtonsPanel.add(wallActionsPanel);
-		
+
 		WallCandidateHandler(grabWall, dropWall);
 		handleRotateWall(rotateWall);
 		createNavigationButtons();
@@ -371,18 +371,14 @@ public class MainGameWindow {
 
 				if (wallMoveCandidate != null) {
 
-					if (!wallMoveCandidate.isRotated) {
-						int temp = wallHeight;
-						wallHeight = wallWidthV;
-						wallWidthV = temp;
+					if (wallMoveCandidate.isRotated) {
+
 						setHorizontal();
-						wallMoveCandidate.isRotated = true;
-					} else {
-						int temp = wallHeight;
-						wallHeight = wallWidthV;
-						wallWidthV = temp;
-						setVerticle();
 						wallMoveCandidate.isRotated = false;
+					} else {
+
+						setVerticle();
+						wallMoveCandidate.isRotated = true;
 					}
 
 				}
@@ -392,18 +388,14 @@ public class MainGameWindow {
 	}
 
 	private void setHorizontal() {
-		if (wallMoveCandidate != null && !wallMoveCandidate.isRotated) {
-			wallMoveCandidate.wallMoveBtn.setBounds(
-					btnArray[wallMoveCandidate.row + 1][wallMoveCandidate.col].getX() + tileLength + 7,
-					btnArray[wallMoveCandidate.row][wallMoveCandidate.col].getY() + tileLength - 3, wallWidthV,
-					wallHeight);
-		}
+
+		wallMoveCandidate.wallMoveBtn.setBounds(btnArray[0][7].getX(), btnArray[0][7].getY() + tileLength, wallWidth,
+				13);
+
 	}
 
 	private void setVerticle() {
-		wallMoveCandidate.wallMoveBtn.setBounds(
-				btnArray[wallMoveCandidate.row + 1][wallMoveCandidate.col].getX() + tileLength - 2,
-				btnArray[wallMoveCandidate.row][wallMoveCandidate.col].getY() + tileLength + 7, wallWidthV, wallHeight);
+		wallMoveCandidate.wallMoveBtn.setBounds(btnArray[0][7].getX() + tileWidth, btnArray[0][7].getY(), 13, 102);
 	}
 
 	private void moveUpHandler(BasicArrowButton btn) {
@@ -483,18 +475,18 @@ public class MainGameWindow {
 		grabWall.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-			
+
 				if (wallMoveCandidate == null) {
-					
+
 					JButton wallMoveBtn = createWallMoveCandidate();
 					wallMoveCandidate = new WallMoveCandidate(wallMoveBtn, 0, 7);
 					grabWall.setText("Cancel Move");
-					
+
 				} else {
 					boardPanel.remove(wallMoveCandidate.wallMoveBtn);
 					wallMoveCandidate = null;
 					grabWall.setText("Grab Wall");
-				
+
 				}
 				dropWallHandler(dropWall);
 				frmQuoridorPlay.repaint();
@@ -515,7 +507,7 @@ public class MainGameWindow {
 
 	private JButton createWallMoveCandidate() {
 		JButton btn = new JButton(new ImageIcon("./lightWall.png"));
-		btn.setBounds(btnArray[0][7].getX(), btnArray[0][7].getY() + tileLength ,  wallWidth, 13);
+		btn.setBounds(btnArray[0][7].getX(), btnArray[0][7].getY() + tileLength, wallWidth, 13);
 		btn.setBorder(BorderFactory.createLineBorder(Color.BLACK, 10));
 		btn.setBorder(new EmptyBorder(2, 2, 2, 2));
 		boardPanel.add(btn);
