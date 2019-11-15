@@ -505,7 +505,7 @@ public class MainGameWindow {
 	private void dropWallHandler(JButton dropWall, JButton grabWall) {
 		dropWall.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				wallMoveCandidate.wallMoveBtn.setIcon(new ImageIcon("./dropedWall.png"));
+				wallMoveCandidate.wallMoveBtn.setIcon(new ImageIcon("./dropped.png"));
 				wallMoveCandidate = null;
 				grabWall.setText("Grab Wall");
 				frmQuoridorPlay.repaint();
