@@ -395,6 +395,28 @@ public class QuoridorController {
 			}
 		}
 	}
+	/**
+	 * GUI related Method - createWhitePlayer()
+	 *
+	 * This method creates a new WhitePlayer, to interact with the view
+	 *
+	 * @author Nayem Alam
+	 */
+	public static Player createWhitePlayer() {
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		return new Player(new Time(0), quoridor.getUser(0), ControllerUtilities.BLACK_TILE_INDEX, Direction.Horizontal);
+	}
+	/**
+	 * GUI related Method - createBlackPlayer()
+	 *
+	 * This method creates a new WhitePlayer, to interact with the view
+	 *
+	 * @author Nayem Alam
+	 */
+	public static Player createBlackPlayer() {
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		return new Player(new Time(0), quoridor.getUser(1), ControllerUtilities.WHITE_TILE_INDEX, Direction.Vertical);
+	}
 
 	// public static List<String> myUsers() {
 	// List<String> userList = new ArrayList<>();

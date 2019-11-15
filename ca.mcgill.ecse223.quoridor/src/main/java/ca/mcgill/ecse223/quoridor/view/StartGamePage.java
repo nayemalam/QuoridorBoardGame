@@ -2,11 +2,6 @@ package ca.mcgill.ecse223.quoridor.view;
 
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
-import ca.mcgill.ecse223.quoridor.model.Direction;
-import ca.mcgill.ecse223.quoridor.model.Player;
-import ca.mcgill.ecse223.quoridor.model.Quoridor;
-import ca.mcgill.ecse223.quoridor.model.User;
-import ca.mcgill.ecse223.quoridor.utilities.ControllerUtilities;
 
 import java.awt.*;
 
@@ -267,10 +262,7 @@ public class StartGamePage {
 		// clears error message
 		error = null;
 		try {
-			Quoridor quoridor = QuoridorApplication.getQuoridor();
-			Player whitePlayer = new Player(new Time(0), quoridor.getUser(0), ControllerUtilities.BLACK_TILE_INDEX, Direction.Horizontal);
-			Player blackPlayer = new Player(new Time(0), quoridor.getUser(1), ControllerUtilities.WHITE_TILE_INDEX, Direction.Horizontal);
-			QuoridorController.initializeNewGame(quoridor, whitePlayer, blackPlayer);
+			QuoridorController.initializeNewGame(QuoridorApplication.getQuoridor(), QuoridorController.createWhitePlayer(), QuoridorController.createBlackPlayer());
 			MainGameWindow gameWindow = new MainGameWindow();
 			MainGameWindow.frmQuoridorPlay.setVisible(true);
 			frame.dispose();
