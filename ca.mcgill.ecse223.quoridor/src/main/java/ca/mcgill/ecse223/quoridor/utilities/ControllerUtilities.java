@@ -83,8 +83,8 @@ public class ControllerUtilities {
 			Wall newBlackWall = new Wall(i + ControllerUtilities.TOTAL_NUMBER_OF_WALLS_PER_PLAYER, currentBlackPlayer);
 			initialGamePosition.addWhiteWallsInStock(newWhiteWall);
 			initialGamePosition.addBlackWallsInStock(newBlackWall);
-			currentBlackPlayer.addWall(newBlackWall);
 			currentWhitePlayer.addWall(newWhiteWall);
+			currentBlackPlayer.addWall(newBlackWall);
 		}
 	}
 	
@@ -96,6 +96,12 @@ public class ControllerUtilities {
 	private static void clearPlayerWalls(Player currentWhitePlayer, Player currentBlackPlayer) {
 		if(currentWhitePlayer.equals(null) || currentBlackPlayer.equals(null)) {
 			throw new IllegalArgumentException("Players cannot be null!");
+		}
+		for(int i = 0; i < ControllerUtilities.TOTAL_NUMBER_OF_WALLS_PER_PLAYER * 2; i ++) {
+			if(Wall.hasWithId(i)) {
+				Wall tempWall = Wall.getWithId(i);
+				tempWall.delete();	
+			}
 		}
 		Wall currWall;
 		while(currentWhitePlayer.hasWalls()) {
