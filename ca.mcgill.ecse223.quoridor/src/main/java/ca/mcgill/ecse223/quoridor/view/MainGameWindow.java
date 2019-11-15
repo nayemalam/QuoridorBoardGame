@@ -84,7 +84,7 @@ public class MainGameWindow {
 	private JButton button;
 	private static int wallWidth = 185;
 	private static int wallWidthV = 11;
-	private static int wallHeight = 88;
+	private static int wallHeight = 102;
 	private static boolean WallGrabbed = false;
 	private static int CurrRow;
 	private static int CurrCol;
@@ -223,7 +223,7 @@ public class MainGameWindow {
 		centerPanel.add(navigationButtonsPanel);
 		boardPanel.setLayout(null);
 		boardPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
-		boardPanel.setPreferredSize(new Dimension(x, y + 60));
+		boardPanel.setPreferredSize(new Dimension(x, y + 500));
 		boardPanel.setBackground(Color.lightGray);
 		navigationButtonsPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
 		for (int row = 0; row < TOTAL_ROWS; row++) {
@@ -487,7 +487,7 @@ public class MainGameWindow {
 				if (wallMoveCandidate == null) {
 					
 					JButton wallMoveBtn = createWallMoveCandidate();
-					wallMoveCandidate = new WallMoveCandidate(wallMoveBtn, 0, 4);
+					wallMoveCandidate = new WallMoveCandidate(wallMoveBtn, 0, 7);
 					grabWall.setText("Cancel Move");
 					
 				} else {
@@ -515,7 +515,7 @@ public class MainGameWindow {
 
 	private JButton createWallMoveCandidate() {
 		JButton btn = new JButton(new ImageIcon("./lightWall.png"));
-		btn.setBounds(btnArray[0][7].getX() + tileLength - 3, btnArray[0][7].getY() + 3, wallWidthV, wallHeight);
+		btn.setBounds(btnArray[0][7].getX(), btnArray[0][7].getY() + tileLength ,  wallWidth, 13);
 		btn.setBorder(BorderFactory.createLineBorder(Color.BLACK, 10));
 		btn.setBorder(new EmptyBorder(2, 2, 2, 2));
 		boardPanel.add(btn);
