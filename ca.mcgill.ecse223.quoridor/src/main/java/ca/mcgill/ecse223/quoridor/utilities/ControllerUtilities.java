@@ -1,13 +1,11 @@
 package ca.mcgill.ecse223.quoridor.utilities;
 
-import ca.mcgill.ecse223.quoridor.model.Board;
-import ca.mcgill.ecse223.quoridor.model.Game;
-import ca.mcgill.ecse223.quoridor.model.GamePosition;
-import ca.mcgill.ecse223.quoridor.model.Move;
-import ca.mcgill.ecse223.quoridor.model.Player;
-import ca.mcgill.ecse223.quoridor.model.Wall;
+import ca.mcgill.ecse223.quoridor.QuoridorApplication;
+import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.model.Game.GameStatus;
 import ca.mcgill.ecse223.quoridor.model.Game.MoveMode;
+
+import java.util.List;
 
 /**
  * Class used to group together common utilities and constants used by the application controller methods.
@@ -143,5 +141,19 @@ public class ControllerUtilities {
 			}
 		}
 
+	}
+	/**
+	 * Method used to check if username already exists within the list of users
+	 * @param username - String value for checking the given username
+	 * @author Nayem Alam
+	 */
+	public static boolean isDuplicate(String username) {
+		List<User> userList = QuoridorApplication.getQuoridor().getUsers();
+		for (User user : userList) {
+			if (user.getName().equals(username)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

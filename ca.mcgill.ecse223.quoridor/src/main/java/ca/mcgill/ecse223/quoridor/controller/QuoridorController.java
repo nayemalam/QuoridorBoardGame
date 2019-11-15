@@ -347,22 +347,39 @@ public class QuoridorController {
 	}
 
 	/**
-	 * GUI related Method - createNewUsername(String username)
+	 * GUI related Method - createNewUsernamePlayerOneGUI(String username)
 	 *
-	 * This method interacts with the GUI, it creates a new name for the user with
-	 * given string
+	 * This method interacts with the GUI, it creates a new user with username
+	 * for player 1
+	 * View handles warning if duplicate user
 	 *
 	 * @param username - String username to create
 	 * @author Nayem Alam
 	 */
-	public static void createNewUsernameGUI(String username) {
+	public static void createNewUsernamePlayerOneGUI(String username) {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
-		User user = new User(username, quoridor);
-		user.setName(username);
+		// add a new user
+		quoridor.addUser(username);
+
+	}
+	/**
+	 * GUI related Method - createNewUsernamePlayerTwoGUI(String username)
+	 *
+	 * This method interacts with the GUI, it creates a new user with username
+	 * for player 2
+	 * View handles warning if duplicate user
+	 *
+	 * @param username - String username to create
+	 * @author Nayem Alam
+	 */
+	public static void createNewUsernamePlayerTwoGUI(String username) {
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		// add a new user
+		quoridor.addUser(username);
 	}
 
 	/**
-	 * GUI related Method - selectAnExistingUsername(String username)
+	 * GUI related Method - selectAnExistingUsernameGUI(String username)
 	 *
 	 * This method interacts with the GUI, it checks if the username is already
 	 * created if so, the user then selects that username
