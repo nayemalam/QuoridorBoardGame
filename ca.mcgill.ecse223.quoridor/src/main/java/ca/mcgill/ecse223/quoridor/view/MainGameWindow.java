@@ -370,7 +370,7 @@ public class MainGameWindow {
 			public void actionPerformed(ActionEvent e) {
 
 				if (wallMoveCandidate != null) {
-
+					// if rotated then it is in vertical position
 					if (wallMoveCandidate.isRotated) {
 
 						setHorizontal();
@@ -389,24 +389,27 @@ public class MainGameWindow {
 
 	private void setHorizontal() {
 
-		wallMoveCandidate.wallMoveBtn.setBounds(btnArray[0][7].getX(), btnArray[0][7].getY() + tileLength, wallWidth,
+		wallMoveCandidate.wallMoveBtn.setBounds(btnArray[wallMoveCandidate.row][wallMoveCandidate.col].getX(), btnArray[wallMoveCandidate.row][wallMoveCandidate.col].getY() + tileLength, wallWidth,
 				13);
 
 	}
 
 	private void setVerticle() {
-		wallMoveCandidate.wallMoveBtn.setBounds(btnArray[0][7].getX() + tileWidth, btnArray[0][7].getY(), 13, 102);
+		wallMoveCandidate.wallMoveBtn.setBounds(btnArray[wallMoveCandidate.row][wallMoveCandidate.col].getX() + tileWidth, btnArray[wallMoveCandidate.row][wallMoveCandidate.col].getY(), 13, 102);
 	}
 
 	private void moveUpHandler(BasicArrowButton btn) {
 		btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (wallMoveCandidate != null && wallMoveCandidate.col > 0) {
-					System.out.println("wall Move not null");
-					wallMoveCandidate.wallMoveBtn.setBounds(
-							btnArray[wallMoveCandidate.row][--wallMoveCandidate.col].getX() + tileLength - 3,
-							btnArray[wallMoveCandidate.row][wallMoveCandidate.col].getY() + 3, wallWidthV, wallHeight);
-					frmQuoridorPlay.repaint();
+					// if isRotated then it is in vertical position
+					wallMoveCandidate.col -= 1;
+					if(!wallMoveCandidate.isRotated){
+						
+						setHorizontal();
+					} else {
+						setVerticle();
+					}
 				} else {
 					// handlle message : please grab a wall if there are still more walls.
 				}
