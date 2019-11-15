@@ -668,8 +668,8 @@ public class QuoridorController {
 				}
 			}
 			return true;
-		} else
-			return false;
+		} 
+		else return false;
 	}
 
 	/**
