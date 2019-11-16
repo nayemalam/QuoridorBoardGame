@@ -10,9 +10,12 @@ import java.awt.List;
 
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
+import ca.mcgill.ecse223.quoridor.model.Direction;
 import ca.mcgill.ecse223.quoridor.model.Game;
 import ca.mcgill.ecse223.quoridor.model.Player;
+import ca.mcgill.ecse223.quoridor.model.Tile;
 import ca.mcgill.ecse223.quoridor.model.Wall;
+import ca.mcgill.ecse223.quoridor.model.WallMove;
 import cucumber.api.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -64,14 +67,8 @@ public class GrabWallStepDefinition {
 	@When("I try to grab a wall from my stock")
 	public void i_try_to_grab_a_wall_from_my_stock() {
 		// Write code here that turns the phrase above into concrete actions
-		Player playerToMove = this.game.getCurrentPosition().getPlayerToMove();
-		if (playerToMove.equals(this.game.getWhitePlayer())) {
-			this.previousNumberOfWalls = this.game.getCurrentPosition().getWhiteWallsInStock().size();
-		} else {
-			this.previousNumberOfWalls = this.game.getCurrentPosition().getBlackWallsInStock().size();
-		}
 
-		this.grabWallResult = QuoridorController.grabWall(QuoridorApplication.getQuoridor());
+		this.grabWallResult =  QuoridorController.grabWall(QuoridorApplication.getQuoridor());
 
 	}
 
@@ -91,22 +88,15 @@ public class GrabWallStepDefinition {
 	 * did not implement this as it is related to the GUI
 	 * 
 	 * @author ousmanebaricisse
+	 * @throws Exception
 	 */
 	@Then("The wall in my hand shall disappear from my stock")
-	public void the_wall_in_my_hand_shall_disappear_from_my_stock() {
+	public void the_wall_in_my_hand_shall_disappear_from_my_stock() throws Exception {
 		// Write code here that turns the phrase above into concrete actions
 		// This is more of a GUI
 		int currentNumberOfWalls;
-
-		Player playerToMove = this.game.getCurrentPosition().getPlayerToMove();
-		if (playerToMove.equals(this.game.getWhitePlayer())) {
-			currentNumberOfWalls = this.game.getCurrentPosition().getWhiteWallsInStock().size();
-		} else {
-			currentNumberOfWalls = this.game.getCurrentPosition().getBlackWallsInStock().size();
-		}
-
-		boolean condition = currentNumberOfWalls == this.previousNumberOfWalls - 1;
-		assertTrue(condition);
+		QuoridorController.dropWall();
+		boolean condition = !QuoridorApplication.getQuoridor().getCurrentGame().hasWallMoveCandidate();
 	}
 
 	/**
@@ -118,20 +108,27 @@ public class GrabWallStepDefinition {
 	@Given("I have no more walls on stock")
 	public void i_have_no_more_walls_on_stock() {
 		// Write code here that turns the phrase above into concrete actions
-
-		while (QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getPlayerToMove().hasWalls()) {
-			QuoridorController.grabWall(QuoridorApplication.getQuoridor());
-			try {
-				QuoridorController.dropWall();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
+		Player playerToMove = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getPlayerToMove();
+		if(playerToMove.equals(this.game.getWhitePlayer())){
+			ArrayList<Wall> removedWalls = new ArrayList<>();
+			for(Wall wall : game.getCurrentPosition().getWhiteWallsInStock()){
+				game.getCurrentPosition().addWhiteWallsOnBoard(wall);
+				Tile tile = new Tile(1, 1, QuoridorApplication.getQuoridor().getBoard());
+				WallMove wallMove = new WallMove(1, 1, playerToMove, tile, QuoridorApplication.getQuoridor().getCurrentGame(), Direction.Horizontal, wall);
+				QuoridorApplication.getQuoridor().getCurrentGame().setWallMoveCandidate(wallMove);
+				
+			} 
+			for(Wall wall :removedWalls ) game.getCurrentPosition().removeWhiteWallsInStock(wall);
+		} else if(playerToMove.equals(this.game.getBlackPlayer())){
+			ArrayList<Wall> removedWalls = new ArrayList<>();
+			for(Wall wall : game.getCurrentPosition().getBlackWallsInStock()){
+				game.getCurrentPosition().addBlackWallsOnBoard(wall);
+				Tile tile = new Tile(1, 1, QuoridorApplication.getQuoridor().getBoard());
+				WallMove wallMove = new WallMove(1, 1, playerToMove, tile, QuoridorApplication.getQuoridor().getCurrentGame(), Direction.Horizontal, wall);
+				QuoridorApplication.getQuoridor().getCurrentGame().setWallMoveCandidate(wallMove);
+			} 
+			for(Wall wall :removedWalls ) game.getCurrentPosition().removeBlackWallsInStock(wall);
 		}
-
-	
-
 	}
 
 	/**
@@ -144,7 +141,7 @@ public class GrabWallStepDefinition {
 		// Write code here that turns the phrase above into concrete actions
 
 		// assertEquals("You have no more walls in stock!", this.);
-		System.out.println("was removed or nah ? " + this.grabWallResult);
+		
 		assertTrue(this.grabWallResult);
 
 	}
