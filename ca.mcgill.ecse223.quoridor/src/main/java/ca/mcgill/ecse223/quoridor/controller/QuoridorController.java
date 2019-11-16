@@ -71,10 +71,17 @@ public class QuoridorController {
 	 */
 	public static boolean grabWall(Quoridor quoridor) {
 		// TODO Auto-generated method stub
-
+		
 		Player playerToMove = quoridor.getCurrentGame().getCurrentPosition().getPlayerToMove();
-
-		List<Wall> list = playerToMove.getWalls();
+		
+		Game game = quoridor.getCurrentGame();
+	
+		List<Wall> list = new ArrayList<>();
+		if(playerToMove.equals(game.getWhitePlayer())){
+			list = game.getCurrentPosition().getWhiteWallsInStock();
+		} else if(playerToMove.equals(game.getBlackPlayer())){
+			list = game.getCurrentPosition().getBlackWallsInStock();
+		}
 
 		boolean wasRemoved = false;
 		System.out.println("sizeee: " + list.size());
