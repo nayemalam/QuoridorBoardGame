@@ -1092,7 +1092,7 @@ public class QuoridorController {
 				whiteWallDirection = Direction.Horizontal;
 			}
 
-			boolean whiteWallsValid = initiatePosValidation(whiteWallRow, whiteWallColumn, wallOrientation, i - 1);
+			boolean whiteWallsValid = initiatePosValidation(whiteWallRow, whiteWallColumn, wallOrientation, i-1);
 			if (whiteWallsValid) {
 				Wall whiteWall = gamePositionToLoad.getWhiteWallsInStock().remove(0);
 				gamePositionToLoad.addWhiteWallsOnBoard(whiteWall);
