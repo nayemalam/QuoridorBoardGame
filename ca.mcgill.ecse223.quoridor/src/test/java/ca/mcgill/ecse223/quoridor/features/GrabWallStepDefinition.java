@@ -94,9 +94,14 @@ public class GrabWallStepDefinition {
 	public void the_wall_in_my_hand_shall_disappear_from_my_stock() throws Exception {
 		// Write code here that turns the phrase above into concrete actions
 		// This is more of a GUI
-		int currentNumberOfWalls;
-		QuoridorController.dropWall();
-		boolean condition = !QuoridorApplication.getQuoridor().getCurrentGame().hasWallMoveCandidate();
+		Player playerToMove = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getPlayerToMove();
+		Wall wall = this.game.getWallMoveCandidate().getWallPlaced();
+		if(playerToMove.equals(this.game.getWhitePlayer())){
+			assertTrue(!this.game.getCurrentPosition().getWhiteWallsInStock().contains(wall));
+		} else if(playerToMove.equals(this.game.getBlackPlayer())){
+			assertTrue(!this.game.getCurrentPosition().getBlackWallsInStock().contains(wall));
+		}
+		
 	}
 
 	/**
