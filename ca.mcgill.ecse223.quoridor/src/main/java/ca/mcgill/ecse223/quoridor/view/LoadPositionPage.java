@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.MouseListener;
 import java.io.*;
+import java.sql.Time;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -17,7 +18,11 @@ import java.awt.event.MouseEvent;
 
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.controller.*;
+import ca.mcgill.ecse223.quoridor.model.Direction;
+import ca.mcgill.ecse223.quoridor.model.Player;
 import ca.mcgill.ecse223.quoridor.model.Quoridor;
+import ca.mcgill.ecse223.quoridor.model.User;
+import ca.mcgill.ecse223.quoridor.utilities.ControllerUtilities;
 
 public class LoadPositionPage {
 	public JFrame frame;
@@ -103,12 +108,21 @@ public class LoadPositionPage {
 					return;
 				}
 				try {
-					valid = QC.loadSavedPosition(LoadFileNameTextField.getText());
+					Quoridor quoridor = QuoridorApplication.getQuoridor();
+					User userWhite = quoridor.addUser("TestUser1");
+					User userBlack = quoridor.addUser("TestUser2");
+					Player whitePlayer = new Player(new Time(0), quoridor.getUser(0), ControllerUtilities.BLACK_TILE_INDEX, Direction.Horizontal);
+					Player blackPlayer = new Player(new Time(0), quoridor.getUser(1), ControllerUtilities.WHITE_TILE_INDEX, Direction.Horizontal);
+					QuoridorController.initializeNewGame(QuoridorApplication.getQuoridor(), whitePlayer, blackPlayer);
+					valid = QC.loadSavedPosition(LoadFileNameTextField.getText(), whitePlayer, blackPlayer);
 					frame.dispose();
 					MainGameWindow main = new MainGameWindow();
 					main.frmQuoridorPlay.setVisible(true);
 				} catch (IOException e1) {
 					InvalidLoadFileLabel.setVisible(true);
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
 				if(valid = false) {
 					InvalidLoadFileLabel.setVisible(true);

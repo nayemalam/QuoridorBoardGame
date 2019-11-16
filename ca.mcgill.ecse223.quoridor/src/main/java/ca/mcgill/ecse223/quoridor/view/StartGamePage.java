@@ -2,7 +2,6 @@ package ca.mcgill.ecse223.quoridor.view;
 
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
-import ca.mcgill.ecse223.quoridor.model.Quoridor;
 
 import java.awt.*;
 
@@ -10,6 +9,7 @@ import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.event.ActionListener;
+import java.sql.Time;
 import java.awt.event.ActionEvent;
 
 public class StartGamePage {
@@ -41,6 +41,7 @@ public class StartGamePage {
 
 	// data elements
 	private String error = null;
+	private JButton btnNewButton;
 
 	/**
 	 * Launch the application.
@@ -81,7 +82,6 @@ public class StartGamePage {
 		frame.getContentPane().setLayout(null);
 		model_1 = new DefaultComboBoxModel(QuoridorController.getUsers(" ").toArray());
 		model_2 = new DefaultComboBoxModel(QuoridorController.getUsers(" ").toArray());
-
 
 		// global settings
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -151,12 +151,20 @@ public class StartGamePage {
 				setTotalThinkingTimeActionPerformed(evt);
 			}
 		});
+		// listeners for back button
+		btnNewButton = new JButton("BACK");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				backActionPerformed(evt);
+			}
+		});
 
 		// elements for error message
 		errorMessage = new JLabel("");
 		errorMessage.setFont(new Font("Monospaced", Font.BOLD, 30));
 		errorMessage.setHorizontalAlignment(SwingConstants.CENTER);
 		errorMessage.setForeground(Color.RED);
+
 		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
 		groupLayout.setHorizontalGroup(
 				groupLayout.createParallelGroup(Alignment.LEADING)
@@ -190,12 +198,17 @@ public class StartGamePage {
 								.addGap(23))
 						.addGroup(groupLayout.createSequentialGroup()
 								.addContainerGap()
-								.addComponent(errorMessage, GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE)
-								.addContainerGap())
-						.addGroup(groupLayout.createSequentialGroup()
-								.addContainerGap()
 								.addComponent(btnStartGame, GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE)
 								.addContainerGap())
+						.addGroup(groupLayout.createSequentialGroup()
+								.addGap(12)
+								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+										.addGroup(groupLayout.createSequentialGroup()
+												.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 210, GroupLayout.PREFERRED_SIZE)
+												.addContainerGap())
+										.addGroup(groupLayout.createSequentialGroup()
+												.addComponent(errorMessage, GroupLayout.DEFAULT_SIZE, 417, Short.MAX_VALUE)
+												.addGap(21))))
 		);
 		groupLayout.setVerticalGroup(
 				groupLayout.createParallelGroup(Alignment.LEADING)
@@ -234,11 +247,12 @@ public class StartGamePage {
 												.addGap(6)
 												.addComponent(Seconds_TextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 										.addComponent(btnSetTime))
-								.addGap(22)
-								.addComponent(btnStartGame, GroupLayout.PREFERRED_SIZE, 47, GroupLayout.PREFERRED_SIZE)
 								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(errorMessage, GroupLayout.DEFAULT_SIZE, 51, Short.MAX_VALUE)
-								.addContainerGap())
+								.addComponent(btnStartGame, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(errorMessage, GroupLayout.DEFAULT_SIZE, 11, Short.MAX_VALUE)
+								.addGap(17)
+								.addComponent(btnNewButton))
 		);
 		frame.getContentPane().setLayout(groupLayout);
 
@@ -247,22 +261,25 @@ public class StartGamePage {
 	private void startGameActionPerformed(ActionEvent evt) {
 		// clears error message
 		error = null;
-		frame.dispose();
 		try {
-			
-			Quoridor quoridor = QuoridorApplication.getQuoridor();
-			// TODO: Set the correct names!
-			quoridor.addUser("TestUser1");
-			quoridor.addUser("TestUser2");
-//			QuoridorController.setWhitePlayerUserName(PlayerLabel_1.getText());
-//			QuoridorController.setBlackPlayerUserName(PlayerLabel_2.getText());
-			QuoridorController.initializeNewGame(quoridor);
-			QuoridorController.initializeBoard(quoridor);
-			
+			QuoridorController.initializeNewGame(QuoridorApplication.getQuoridor(), QuoridorController.createWhitePlayer(), QuoridorController.createBlackPlayer());
 			MainGameWindow gameWindow = new MainGameWindow();
 			MainGameWindow.frmQuoridorPlay.setVisible(true);
 			frame.dispose();
-			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			errorMessage.setText(e.getMessage());
+		}
+	}
+	private void backActionPerformed(ActionEvent evt) {
+		// clears error message
+		error = null;
+		try {
+			MainMenu mainMenu = new MainMenu();
+			mainMenu.frame.setVisible(true);
+			frame.dispose();
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -285,7 +302,7 @@ public class StartGamePage {
 				errorMessage.setForeground(Color.BLACK);
 				errorMessage.setText("Username: " + PlayerSelect_1.getSelectedItem() + " created.");
 				try {
-					QuoridorController.createNewUsernameGUI(PlayerSelect_1.getSelectedItem().toString());
+					QuoridorController.createNewUsernamePlayerOneGUI(PlayerSelect_1.getSelectedItem().toString());
 				} catch (Exception e) {
 					error = e.getMessage();
 					System.err.println("Not calling controller method ... ");
@@ -315,7 +332,7 @@ public class StartGamePage {
 				errorMessage.setForeground(Color.BLACK);
 				errorMessage.setText("Username: " + PlayerSelect_2.getSelectedItem() + " created.");
 				try {
-					QuoridorController.createNewUsernameGUI(PlayerSelect_2.getSelectedItem().toString());
+					QuoridorController.createNewUsernamePlayerTwoGUI(PlayerSelect_2.getSelectedItem().toString());
 				} catch (Exception e) {
 					error = e.getMessage();
 					System.err.println("Not calling controller method ... ");
@@ -338,7 +355,7 @@ public class StartGamePage {
 		Integer sec = Integer.parseInt(Seconds_TextField.getText().trim());
 		long thinkingTime = min* 60L *1000 + sec* 1000L;
 		try {
-			QuoridorController.setThinkingTime(min, sec);
+			QuoridorController.setThinkingTimeGUI(QuoridorController.createWhitePlayer(), QuoridorController.createBlackPlayer(),min, sec);
 			errorMessage.setForeground(Color.BLACK);
 			errorMessage.setText("Time set to: " + min +" minutes and " +sec+ " seconds.");
 		} catch (Exception e) {
