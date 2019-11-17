@@ -24,6 +24,7 @@ public class MovePawnFeatureStepDef {
 	private QuoridorController QC = new QuoridorController();
 	private Quoridor q = QuoridorApplication.getQuoridor();
 	private String statusOfMove = "";
+	private boolean legalMove = false;
 
 	@Given("The player is located at {int}:{int}")
 	public void the_player_is_located_at(Integer int1, Integer int2) {
@@ -53,25 +54,39 @@ public class MovePawnFeatureStepDef {
 		}
 	}
 
-	@Given("There are no {string} walls {string} from the player nearby")
-	public void there_are_no_walls_from_the_player_nearby(String string, String string2) {
-		//do nothing, don't place any walls
+	@Given("There are no {string} walls {string} from the player")
+	public void there_are_no_walls_from_the_player(String string, String string2) {
+		//do not place any walls
 	}
+
+	@Given("The opponent is not {string} from the player")
+	public void The_opponent_is_not_from_the_player(String string) {
+
+	}
+
 
 	@When("Player {string} initiates to move {string}")
 	public void player_initiates_to_move(String string, String string2) {
 		Player player;
 		if(string.equals("black")) {
-			 player = q.getCurrentGame().getBlackPlayer();
+			player = q.getCurrentGame().getBlackPlayer();
 		}else {
-			 player = q.getCurrentGame().getWhitePlayer();
+			player = q.getCurrentGame().getWhitePlayer();
 		}
-		QC.MovePawn(player, string2);
+		try {
+			legalMove = QC.movePawn(player, string2);
+		}catch(IllegalArgumentException e){
+			legalMove = false;
+		}
 	}
 
 	@Then("The move {string} shall be {string}")
 	public void the_move_shall_be(String string, String string2) {
-		
+		if(legalMove) {
+			statusOfMove = "success";
+		}else {
+			statusOfMove = "illegal";
+		}
 		assertEquals(string2, statusOfMove);
 	}
 
@@ -83,19 +98,27 @@ public class MovePawnFeatureStepDef {
 			assertEquals(int2, (Integer)q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getColumn());
 		}else {
 			assertEquals(int1, (Integer)q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getRow());
-			assertEquals(int1, (Integer)q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getColumn());
+			assertEquals(int2, (Integer)q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getColumn());
 		}
 
 	}
 
 	@Then("The next player to move shall become {string}")
 	public void the_next_player_to_move_shall_become(String string) {
-		
+
 		String nextPlayerToMove = "";
 		if(q.getCurrentGame().getCurrentPosition().getPlayerToMove().equals(q.getCurrentGame().getBlackPlayer())) {
-			nextPlayerToMove = "white";
+			if(legalMove) {
+				nextPlayerToMove = "white";
+			}else {
+				nextPlayerToMove = "black";
+			}
 		}else {
-			nextPlayerToMove = "black";
+			if(legalMove) {
+				nextPlayerToMove = "black";
+			}else {
+				nextPlayerToMove = "white";
+			}
 		}
 		assertEquals(string, nextPlayerToMove);
 	}
@@ -104,14 +127,16 @@ public class MovePawnFeatureStepDef {
 	public void there_is_a_wall_at(String string, Integer int1, Integer int2) {
 
 		if(string.equals("vertical")) {
-			Wall wall = new Wall(0, q.getCurrentGame().getBlackPlayer());
+			Wall wall = q.getCurrentGame().getCurrentPosition().getBlackWallsInStock(0);
+			q.getCurrentGame().getCurrentPosition().removeBlackWallsInStock(wall);
 			Tile wallTile = q.getBoard().getTile((int1 -1)*9 + (int2-1));
 			WallMove wallMove = new WallMove(0, 0, q.getCurrentGame().getBlackPlayer(), wallTile, q.getCurrentGame(), Direction.Vertical, wall);
 			wall.setMove(wallMove);
 			q.getCurrentGame().getCurrentPosition().addBlackWallsOnBoard(wall);
 		}
 		else {
-			Wall wall = new Wall(0, q.getCurrentGame().getBlackPlayer());
+			Wall wall = q.getCurrentGame().getCurrentPosition().getBlackWallsInStock(0);
+			q.getCurrentGame().getCurrentPosition().removeBlackWallsInStock(wall);
 			Tile wallTile = q.getBoard().getTile((int1 -1)*9 + (int2-1));
 			WallMove wallMove = new WallMove(0, 0, q.getCurrentGame().getBlackPlayer(), wallTile, q.getCurrentGame(), Direction.Horizontal, wall);
 			wall.setMove(wallMove);
