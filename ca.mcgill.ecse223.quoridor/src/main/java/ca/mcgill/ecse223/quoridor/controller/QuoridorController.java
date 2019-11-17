@@ -1338,7 +1338,12 @@ public class QuoridorController {
 	public static void JumpPawn(Player player, String side) {
 
 	}
-
+	/**
+	 * helper method made to access a Tile
+	 * using its row and column coordinates
+	 * @author Nicolas Buisson
+	 * 
+	 */
 	public static Tile getTileAtRowCol(int row, int column) {
 		return QuoridorApplication.getQuoridor().getBoard().getTile((row-1)*9 + column-1);
 	}

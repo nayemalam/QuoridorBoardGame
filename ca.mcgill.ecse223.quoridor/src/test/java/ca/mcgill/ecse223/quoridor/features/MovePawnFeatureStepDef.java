@@ -52,26 +52,32 @@ public class MovePawnFeatureStepDef {
 			q.getCurrentGame().getCurrentPosition().setBlackPosition(opponentPos);
 		}
 	}
-
-	@Given("There are no {string} walls {string} from the player nearby")
-	public void there_are_no_walls_from_the_player_nearby(String string, String string2) {
-		//do nothing, don't place any walls
+	
+	@Given("There are no {string} walls {string} from the player")
+	public void there_are_no_walls_from_the_player(String string, String string2) {
+	   //do not place any walls
 	}
+
+	@Given("The opponent is not {string} from the player")
+	public void The_opponent_is_not_from_the_player(String string) {
+
+	}
+
 
 	@When("Player {string} initiates to move {string}")
 	public void player_initiates_to_move(String string, String string2) {
 		Player player;
 		if(string.equals("black")) {
-			 player = q.getCurrentGame().getBlackPlayer();
+			player = q.getCurrentGame().getBlackPlayer();
 		}else {
-			 player = q.getCurrentGame().getWhitePlayer();
+			player = q.getCurrentGame().getWhitePlayer();
 		}
 		QC.MovePawn(player, string2);
 	}
 
 	@Then("The move {string} shall be {string}")
 	public void the_move_shall_be(String string, String string2) {
-		
+
 		assertEquals(string2, statusOfMove);
 	}
 
@@ -90,7 +96,7 @@ public class MovePawnFeatureStepDef {
 
 	@Then("The next player to move shall become {string}")
 	public void the_next_player_to_move_shall_become(String string) {
-		
+
 		String nextPlayerToMove = "";
 		if(q.getCurrentGame().getCurrentPosition().getPlayerToMove().equals(q.getCurrentGame().getBlackPlayer())) {
 			nextPlayerToMove = "white";
