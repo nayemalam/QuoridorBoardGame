@@ -18,7 +18,7 @@ import java.util.Timer;
 public class QuoridorController {
 
 	private static int moveNumber;
-	Quoridor quoridor;
+	private static Quoridor quoridor;
 
 	/**
 	 * Method to capture the time at which the clock is stopped
@@ -145,10 +145,7 @@ public class QuoridorController {
 		newGame.setBlackPlayer(blackPlayer);
 		// Set the game to the quoridor object
 		quoridor.setCurrentGame(newGame);
-		
-		// initialise player positions and set the players to their initial tiles
-		//PlayerPosition whitePos = new PlayerPosition(whitePlayer, QuoridorApplication.getQuoridor().getBoard())
-		
+
 		initializeBoard(quoridor);
 
 		return true;
@@ -1064,13 +1061,13 @@ public class QuoridorController {
 		whitePlayer.setNextPlayer(blackPlayer);
 		blackPlayer.setNextPlayer(whitePlayer);
 
-		String whitePositions[] = whiteData.split(" ");
-		String blackPositions[] = blackData.split(" ");
+		String whitePositions[] = whiteData.split(",");
+		String blackPositions[] = blackData.split(",");
 
-		// use unicode values
+		// use ASCII values
 		// 'a' = 97, will correspond to the column numbers
-		int whitePawnColumn = ((int) whitePositions[1].charAt(0)) - 96;
-		int whitePawnRow = whitePositions[1].charAt(1) - 48;
+		int whitePawnColumn = ((int) whitePositions[0].charAt(3)) - 96;
+		int whitePawnRow = whitePositions[0].charAt(4) - 48;
 		boolean whitePawnValid = initializeValidatePosition(whitePawnRow, whitePawnColumn);
 		if (whitePawnValid) {
 			Tile whitePawnTile = quoridor.getBoard().getTile((whitePawnRow - 1) * 9 + whitePawnColumn - 1);
@@ -1079,8 +1076,8 @@ public class QuoridorController {
 			quoridor.setCurrentGame(null);
 			throw new IllegalArgumentException("Invalid Positions loaded!");
 		}
-		int blackPawnColumn = ((int) blackPositions[1].charAt(0)) - 96;
-		int blackPawnRow = blackPositions[1].charAt(1) - 48;
+		int blackPawnColumn = ((int) blackPositions[0].charAt(3)) - 96;
+		int blackPawnRow = blackPositions[0].charAt(4) - 48;
 
 		boolean blackPawnValid = initializeValidatePosition(blackPawnRow, blackPawnColumn);
 		if (blackPawnValid = true) {
@@ -1090,11 +1087,13 @@ public class QuoridorController {
 			quoridor.setCurrentGame(null);
 			throw new IllegalArgumentException("Invalid Positions loaded!");
 		}
-		for (int i = 2; i < whitePositions.length; i++) {
+		for (int i = 1; i < whitePositions.length; i++) {
+
+			whitePositions[i] = whitePositions[i].trim(); 
 
 			int whiteWallColumn = whitePositions[i].charAt(0) - 96;
 			int whiteWallRow = whitePositions[i].charAt(1) - 48; // ASCII value of char representing row, not actual
-																	// row number
+			// row number
 			// '0' = 48
 			char whiteWallO = whitePositions[i].charAt(2);
 			Direction whiteWallDirection;
@@ -1107,13 +1106,13 @@ public class QuoridorController {
 				whiteWallDirection = Direction.Horizontal;
 			}
 
-			boolean whiteWallsValid = initiatePosValidation(whiteWallRow, whiteWallColumn, wallOrientation, i - 2);
+			boolean whiteWallsValid = initiatePosValidation(whiteWallRow, whiteWallColumn, wallOrientation, i-1);
 			if (whiteWallsValid) {
 				Wall whiteWall = gamePositionToLoad.getWhiteWallsInStock().remove(0);
 				gamePositionToLoad.addWhiteWallsOnBoard(whiteWall);
 				Tile whiteWallTile = quoridor.getBoard().getTile((whiteWallRow - 1) * 9 + (whiteWallColumn - 1));
 				// TODO Double check round and move stuff.
-				WallMove whiteWallMove = new WallMove(i - 1, i - 1, getWhitePlayer(), whiteWallTile, game,
+				WallMove whiteWallMove = new WallMove(i, i, getWhitePlayer(), whiteWallTile, game,
 						whiteWallDirection, whiteWall);
 				whiteWall.setMove(whiteWallMove);
 			} else {
@@ -1122,11 +1121,13 @@ public class QuoridorController {
 			}
 		}
 
-		for (int i = 2; i < blackPositions.length; i++) {
+		for (int i = 1; i < blackPositions.length; i++) {
+
+			blackPositions[i] = blackPositions[i].trim();
 
 			int blackWallColumn = blackPositions[i].charAt(0) - 96;
 			int blackWallRow = blackPositions[i].charAt(1) - 48; // unicode value of char representing row, not actual
-																	// row number
+			// row number
 			char blackWallO = blackPositions[i].charAt(2);
 			String wallOrientation = "";
 			Direction blackWallDirection;
@@ -1138,12 +1139,12 @@ public class QuoridorController {
 				blackWallDirection = Direction.Horizontal;
 			}
 
-			boolean blackWallsValid = initiatePosValidation(blackWallRow, blackWallColumn, wallOrientation, 10 + i - 2);
+			boolean blackWallsValid = initiatePosValidation(blackWallRow, blackWallColumn, wallOrientation, 10 + i - 1);
 			if (blackWallsValid) {
 				Wall blackWall = gamePositionToLoad.getBlackWallsInStock().remove(0);
 				gamePositionToLoad.addBlackWallsOnBoard(blackWall);
 				Tile blackWallTile = quoridor.getBoard().getTile((blackWallRow - 1) * 9 + (blackWallColumn - 1));
-				WallMove blackWallMove = new WallMove(i - 1, i - 1, getBlackPlayer(), blackWallTile, game,
+				WallMove blackWallMove = new WallMove(i, i, getBlackPlayer(), blackWallTile, game,
 						blackWallDirection, blackWall);
 				blackWall.setMove(blackWallMove);
 			} else {
@@ -1288,4 +1289,63 @@ public class QuoridorController {
 			return q.getCurrentGame().getBlackPlayer().getWall(id);
 		}
 	}
+
+	/**
+	 * method for moving a pawn
+	 * @author Nicolas Buisson
+	 */
+	public static void MovePawn(Player player, String side) {
+
+		Tile playerTile;
+		Tile newPlayerTile = null;
+
+		if(player.equals(getBlackPlayer())) {
+
+			playerTile = quoridor.getCurrentGame().getCurrentPosition().getBlackPosition().getTile();
+
+		}else {
+			playerTile = quoridor.getCurrentGame().getCurrentPosition().getWhitePosition().getTile();
+		}
+		int playerRow = playerTile.getRow();
+		int playerColumn = playerTile.getColumn();
+		boolean leftIsAllowed = (playerColumn > 1);
+		boolean rightIsAllowed = (playerColumn < 9);
+		boolean upIsAllowed = (playerRow > 1);
+		boolean downIsAllowed = (playerRow < 9);
+
+		if(side.equals("left") && leftIsAllowed) {
+			newPlayerTile = getTileAtRowCol(playerRow, playerColumn-1);
+		}
+		else if(side.equals("right") && rightIsAllowed) {
+			newPlayerTile = getTileAtRowCol(playerRow, playerColumn+1);
+		}
+		else if(side.equals("up") && upIsAllowed) {
+			newPlayerTile = getTileAtRowCol(playerRow-1, playerColumn);
+		}
+		else if(side.equals("down") && downIsAllowed) {
+			newPlayerTile = getTileAtRowCol(playerRow+1, playerColumn);
+		} else {
+			throw new IllegalArgumentException("Cannot perform move " + side);
+		}
+		
+		if(player.equals(getBlackPlayer())) {
+			quoridor.getCurrentGame().getCurrentPosition().getBlackPosition().setTile(newPlayerTile);
+		}else {
+			quoridor.getCurrentGame().getCurrentPosition().getWhitePosition().setTile(newPlayerTile);
+		}
+	} 
+
+
+	/**
+	 * method for making a pawn jump over the opponent's pawn
+	 * @author Nicolas Buisson
+	 */
+	public static void JumpPawn(Player player, String side) {
+
+	}
+
+	public static Tile getTileAtRowCol(int row, int column) {
+		return QuoridorApplication.getQuoridor().getBoard().getTile((row-1)*9 + column-1);
+	}
 }
+
