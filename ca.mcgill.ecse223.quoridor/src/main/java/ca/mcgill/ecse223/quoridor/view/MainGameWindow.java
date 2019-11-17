@@ -187,7 +187,7 @@ public class MainGameWindow {
 		errorMessage.setBounds(410, 350, 400, 52);
 		frmQuoridorPlay.getContentPane().add(errorMessage);
 		errorMessage.setVisible(false);
-
+		
 		// elements for blackPlayer
 		BlackWallPanel whitePane = new BlackWallPanel(panel_10_1);
 		WhiteWallPanel blackPane = new WhiteWallPanel(panel_11);
@@ -286,11 +286,11 @@ public class MainGameWindow {
 		// this will get the names of player one and two that was set in prev. window
 		String playerName = "";
 		try {
-			playerName = QuoridorApplication.getQuoridor().getUser(0).getName();
+			playerName = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getPlayerToMove().getUser().getName();
 		} catch (Exception e) {
 		}
 		currentPlayer_TextField.setText(playerName);
-
+		currentPlayer_TextField.setFont(new Font("Tahoma", Font.BOLD, 13));
 		// layout
 		JPanel panel_1 = new JPanel();
 		northPanel.add(panel_1);
@@ -316,6 +316,15 @@ public class MainGameWindow {
 		timeRemaining_TextField.setText(remainingTimeValue);
 	}
 
+	private void updateCurrentPlayer(){
+		String playerName = "";
+		try {
+			playerName = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getPlayerToMove().getUser().getName();
+		} catch (Exception e) {
+		}
+		currentPlayer_TextField.setFont(new Font("Tahoma", Font.BOLD, 13));
+		currentPlayer_TextField.setText(playerName);
+	}
 	private void createBlackAndWhitePawns() {
 
 		JButton whitePawn = new JButton();
@@ -465,30 +474,31 @@ public class MainGameWindow {
 		timeRemaining_TextField.setText(time);
 
 		JPanel playerPanel = new JPanel();
-		currentPlayer_Label = new JTextField();
-		currentPlayer_Label.setEditable(false);
-		currentPlayer_Label.setFont(new Font("Tahoma", Font.BOLD, 13));
+		JTextField newPlayerLabel = new JTextField();
+		newPlayerLabel.setEditable(false);
+		newPlayerLabel.setFont(new Font("Tahoma", Font.BOLD, 13));
 		if (player.equalsIgnoreCase("White")) {
-			currentPlayer_Label.setText("White Player:");
+			newPlayerLabel.setText("White Player:");
 		} else if (player.equalsIgnoreCase("Black")) {
-			currentPlayer_Label.setText("Black Player:");
+			newPlayerLabel.setText("Black Player:");
 		}
-
-		currentPlayer_Label.setHorizontalAlignment(SwingConstants.LEFT);
-		playerPanel.add(currentPlayer_Label);
-		currentPlayer_Label.setColumns(10);
-		currentPlayer_TextField = new JTextField();
-		currentPlayer_TextField.setEditable(false);
-		playerPanel.add(currentPlayer_TextField);
-		currentPlayer_TextField.setColumns(10);
+		JTextField newPlayerTextFeild = new JTextField();
+		
+		newPlayerLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		playerPanel.add(newPlayerLabel);
+		newPlayerLabel.setColumns(10);
+		
+		newPlayerTextFeild.setEditable(false);
+		playerPanel.add(newPlayerTextFeild);
+		newPlayerTextFeild.setColumns(10);
 		// print statement: for checking if we get the right users
 		// this will get the names of player one and two that was set in prev. window
 		String name = player.equalsIgnoreCase("white") ? "Naruto" : "Sasuke";
 		try {
-			name = QuoridorApplication.getQuoridor().getUser(0).getName();
+			name = player.equalsIgnoreCase("white") ?  QuoridorApplication.getQuoridor().getUser(0).getName() : QuoridorApplication.getQuoridor().getUser(1).getName();
 		} catch (Exception e) {
 		}
-		currentPlayer_TextField.setText(name);
+		newPlayerTextFeild.setText(name);
 		jPanel.add(playerPanel);
 		jPanel.add(timePanel);
 		frmQuoridorPlay.repaint();
@@ -566,6 +576,7 @@ public class MainGameWindow {
 					} catch(Exception event){}
 					
 				}
+				updateCurrentPlayer();
 				frmQuoridorPlay.repaint();
 
 			}
@@ -609,6 +620,7 @@ public class MainGameWindow {
 
 				
 				}
+				updateCurrentPlayer();
 				frmQuoridorPlay.repaint();
 
 			}
@@ -652,6 +664,7 @@ public class MainGameWindow {
 
 					
 				}
+				updateCurrentPlayer();
 				frmQuoridorPlay.repaint();
 
 			}
@@ -696,6 +709,7 @@ public class MainGameWindow {
 
 					
 				}
+				updateCurrentPlayer();
 				frmQuoridorPlay.repaint();
 			}
 		});
@@ -707,10 +721,10 @@ public class MainGameWindow {
 
 			public void actionPerformed(ActionEvent e) {
 				// boolean grabbed =
-				// QuoridorController.grabWall(QuoridorApplication.getQuoridor());
+				
 
-				if (wallMoveCandidate == null) {
-
+				if (wallMoveCandidate == null && QuoridorController.grabWall(QuoridorApplication.getQuoridor())) {
+					
 					JButton wallMoveBtn = createWallMoveCandidate();
 					wallMoveCandidate = new MoveCandidate(wallMoveBtn, 0, 0);
 					grabWall.setText("Cancel Move");
@@ -721,7 +735,12 @@ public class MainGameWindow {
 					grabWall.setText("Grab Wall");
 
 				}
-				dropWallHandler(dropWall, grabWall);
+				
+				
+				if(QuoridorController.wallMove(wallMoveCandidate.row, wallMoveCandidate.col, QuoridorController.getWallDirection(wallMoveCandidate.isRotated).toString(), QuoridorController.getWallMoveCandidate(), QuoridorController.getCurrentPlayer())){
+					dropWallHandler(dropWall, grabWall);
+				}
+				
 				frmQuoridorPlay.repaint();
 			}
 		});
@@ -731,9 +750,11 @@ public class MainGameWindow {
 	private void dropWallHandler(JButton dropWall, JButton grabWall) {
 		dropWall.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 				wallMoveCandidate.wallMoveBtn.setIcon(new ImageIcon("./dropped.png"));
 				wallMoveCandidate = null;
 				grabWall.setText("Grab Wall");
+				updateCurrentPlayer();
 				frmQuoridorPlay.repaint();
 			}
 		});

@@ -1368,6 +1368,22 @@ public class QuoridorController {
 		return player.equals(quoridor.getCurrentGame().getWhitePlayer());
 	}
 
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public static Wall getWallMoveCandidate(){
+		return QuoridorApplication.getQuoridor().getCurrentGame().getWallMoveCandidate().getWallPlaced();
+	}
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public static Direction getWallDirection(boolean isRotated){
+		return isRotated ? Direction.Vertical : Direction.Horizontal;
+	}
 	public static Wall getWall(int id) {
 		Quoridor q = QuoridorApplication.getQuoridor();
 		if (id > 9) {
