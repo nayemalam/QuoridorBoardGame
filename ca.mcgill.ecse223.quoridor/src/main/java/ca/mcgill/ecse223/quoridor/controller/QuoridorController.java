@@ -1357,7 +1357,6 @@ public static Tile getPlayerPosition(Player player) {
 				else continue;
 				
 			}
-			
 			if(side.equals("left") && row == row1 && col == col1 && dir.equals(Direction.Vertical)) {
 				return false;
 			}
