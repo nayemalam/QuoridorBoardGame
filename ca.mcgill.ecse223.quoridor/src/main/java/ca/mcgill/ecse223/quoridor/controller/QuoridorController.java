@@ -1289,17 +1289,17 @@ public class QuoridorController {
 	 * method for moving a pawn
 	 * @author Nicolas Buisson
 	 */
-	public static void MovePawn(Player player, String side) {
+	public static boolean MovePawn(Player player, String side) throws IllegalArgumentException {
 
 		Tile playerTile;
 		Tile newPlayerTile = null;
 
 		if(player.equals(getBlackPlayer())) {
 
-			playerTile = quoridor.getCurrentGame().getCurrentPosition().getBlackPosition().getTile();
+			playerTile = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getBlackPosition().getTile();
 
 		}else {
-			playerTile = quoridor.getCurrentGame().getCurrentPosition().getWhitePosition().getTile();
+			playerTile = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getWhitePosition().getTile();
 		}
 		int playerRow = playerTile.getRow();
 		int playerColumn = playerTile.getColumn();
@@ -1324,10 +1324,11 @@ public class QuoridorController {
 		}
 		
 		if(player.equals(getBlackPlayer())) {
-			quoridor.getCurrentGame().getCurrentPosition().getBlackPosition().setTile(newPlayerTile);
+			QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getBlackPosition().setTile(newPlayerTile);
 		}else {
-			quoridor.getCurrentGame().getCurrentPosition().getWhitePosition().setTile(newPlayerTile);
+			QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getWhitePosition().setTile(newPlayerTile);
 		}
+		return true;
 	} 
 
 
