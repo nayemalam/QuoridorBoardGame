@@ -1011,29 +1011,17 @@ public class QuoridorController {
 	 */
 	public static boolean loadSavedPosition(String filename, Player whitePlayer, Player blackPlayer)
 			throws IOException {
-		// NEED TO CREATE A GAME
-		Quoridor quoridor = QuoridorApplication.getQuoridor();
 
-		Tile whiteStartPos = quoridor.getBoard().getTile(36);
-		Tile blackStartPos = quoridor.getBoard().getTile(44);
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
 
 		try {
 			QuoridorController.initializeNewGame(quoridor, whitePlayer, blackPlayer);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		// Create game and set players
 		Game game = QuoridorApplication.getQuoridor().getCurrentGame();
-		game.setWhitePlayer(whitePlayer);
-		game.setBlackPlayer(blackPlayer);
-
-		PlayerPosition whitePosition = new PlayerPosition(whitePlayer, whiteStartPos);
-		PlayerPosition blackPosition = new PlayerPosition(blackPlayer, blackStartPos);
-
-		GamePosition gamePositionToLoad = new GamePosition(1, whitePosition, blackPosition, whitePlayer, game);
-		game.setCurrentPosition(gamePositionToLoad);
+		GamePosition gamePositionToLoad = game.getCurrentPosition();
 
 		File file = new File(filename);
 		String content = "";
@@ -1078,6 +1066,11 @@ public class QuoridorController {
 		}
 		int blackPawnColumn = ((int) blackPositions[0].charAt(3)) - 96;
 		int blackPawnRow = blackPositions[0].charAt(4) - 48;
+		
+		//check if the pawns are placed on the same tile
+		if(blackPawnColumn == whitePawnColumn && blackPawnRow == whitePawnRow) {
+			throw new IllegalArgumentException("Invalid Positions loaded!");
+		}
 
 		boolean blackPawnValid = initializeValidatePosition(blackPawnRow, blackPawnColumn);
 		if (blackPawnValid = true) {
@@ -1108,7 +1101,8 @@ public class QuoridorController {
 
 			boolean whiteWallsValid = initiatePosValidation(whiteWallRow, whiteWallColumn, wallOrientation, i-1);
 			if (whiteWallsValid) {
-				Wall whiteWall = gamePositionToLoad.getWhiteWallsInStock().remove(0);
+				Wall whiteWall = gamePositionToLoad.getWhiteWallsInStock(0);
+				gamePositionToLoad.removeWhiteWallsInStock(whiteWall);
 				gamePositionToLoad.addWhiteWallsOnBoard(whiteWall);
 				Tile whiteWallTile = quoridor.getBoard().getTile((whiteWallRow - 1) * 9 + (whiteWallColumn - 1));
 				// TODO Double check round and move stuff.
@@ -1141,7 +1135,8 @@ public class QuoridorController {
 
 			boolean blackWallsValid = initiatePosValidation(blackWallRow, blackWallColumn, wallOrientation, 10 + i - 1);
 			if (blackWallsValid) {
-				Wall blackWall = gamePositionToLoad.getBlackWallsInStock().remove(0);
+				Wall blackWall = gamePositionToLoad.getBlackWallsInStock(0);
+				gamePositionToLoad.removeBlackWallsInStock(blackWall);
 				gamePositionToLoad.addBlackWallsOnBoard(blackWall);
 				Tile blackWallTile = quoridor.getBoard().getTile((blackWallRow - 1) * 9 + (blackWallColumn - 1));
 				WallMove blackWallMove = new WallMove(i, i, getBlackPlayer(), blackWallTile, game,
