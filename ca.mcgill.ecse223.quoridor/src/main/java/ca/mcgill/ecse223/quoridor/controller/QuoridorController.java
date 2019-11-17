@@ -1277,4 +1277,20 @@ public class QuoridorController {
 			return q.getCurrentGame().getBlackPlayer().getWall(id);
 		}
 	}
+	/**
+	 * method for moving a pawn
+	 * @author Nicolas Buisson
+	 */
+	public static void MovePawn(Player player, String side) {
+		
+	}
+	
+	/**
+	 * method for making a pawn jump over the opponent's pawn
+	 * @author Nicolas Buisson
+	 */
+	public static void JumpPawn(Player player, String side) {
+		
+	}
 }
+
