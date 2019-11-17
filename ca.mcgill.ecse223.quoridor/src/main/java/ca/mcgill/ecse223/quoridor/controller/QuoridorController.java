@@ -143,8 +143,6 @@ public class QuoridorController {
 		whitePlayer.setGameAsWhite(newGame);
 		blackPlayer.setGameAsBlack(newGame);
 
-
-
 		newGame.setWhitePlayer(whitePlayer);
 		newGame.setBlackPlayer(blackPlayer);
 		// Set the game to the quoridor object
@@ -701,6 +699,7 @@ public class QuoridorController {
 	 * @author Alexander Legouverneur
 	 */
 	public static boolean checkWallValid(int row, int col, String dir, Wall wall) {
+
 		if (initiatePosValidation(row, col, dir, wall.getId()-1) == true) {
 			return true;
 		} else
@@ -838,6 +837,7 @@ public class QuoridorController {
 			if (aWall.hasMove() == false && pos == true) {
 				moveNumber++;
 				new WallMove(moveNumber, 1, player, aTile, q.getCurrentGame(), Direction.Vertical, aWall);
+
 				if(player.equals(q.getCurrentGame().getWhitePlayer())) {
 
 					//quoridor.getCurrentGame().getCurrentPosition().removeWhiteWallsInStock(aWall);
@@ -849,6 +849,7 @@ public class QuoridorController {
 					//quoridor.getCurrentGame().getCurrentPosition().removeBlackWallsInStock(aWall);
 					quoridor.getCurrentGame().getCurrentPosition().addBlackWallsOnBoard(aWall);
 				}
+
 
 				return true;
 			} else {
@@ -1040,29 +1041,16 @@ public class QuoridorController {
 	 */
 	public static boolean loadSavedPosition(String filename, Player whitePlayer, Player blackPlayer)
 			throws IOException {
-		// NEED TO CREATE A GAME
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
-
-		Tile whiteStartPos = quoridor.getBoard().getTile(36);
-		Tile blackStartPos = quoridor.getBoard().getTile(44);
 
 		try {
 			QuoridorController.initializeNewGame(quoridor, whitePlayer, blackPlayer);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		// Create game and set players
 		Game game = QuoridorApplication.getQuoridor().getCurrentGame();
-		game.setWhitePlayer(whitePlayer);
-		game.setBlackPlayer(blackPlayer);
-
-		PlayerPosition whitePosition = new PlayerPosition(whitePlayer, whiteStartPos);
-		PlayerPosition blackPosition = new PlayerPosition(blackPlayer, blackStartPos);
-
-		GamePosition gamePositionToLoad = new GamePosition(1, whitePosition, blackPosition, whitePlayer, game);
-		game.setCurrentPosition(gamePositionToLoad);
+		GamePosition gamePositionToLoad = game.getCurrentPosition();
 
 		File file = new File(filename);
 		String content = "";
@@ -1107,6 +1095,12 @@ public class QuoridorController {
 		}
 		int blackPawnColumn = ((int) blackPositions[0].charAt(3)) - 96;
 		int blackPawnRow = blackPositions[0].charAt(4) - 48;
+		
+		//check if the pawns are placed on the same tile
+		if(blackPawnColumn == whitePawnColumn && blackPawnRow == whitePawnRow) {
+			throw new IllegalArgumentException("Invalid Positions loaded!");
+		}
+
 
 		boolean blackPawnValid = initializeValidatePosition(blackPawnRow, blackPawnColumn);
 		if (blackPawnValid = true) {
@@ -1137,7 +1131,8 @@ public class QuoridorController {
 
 			boolean whiteWallsValid = initiatePosValidation(whiteWallRow, whiteWallColumn, wallOrientation, i-1);
 			if (whiteWallsValid) {
-				Wall whiteWall = gamePositionToLoad.getWhiteWallsInStock().remove(0);
+				Wall whiteWall = gamePositionToLoad.getWhiteWallsInStock(0);
+				gamePositionToLoad.removeWhiteWallsInStock(whiteWall);
 				gamePositionToLoad.addWhiteWallsOnBoard(whiteWall);
 				Tile whiteWallTile = quoridor.getBoard().getTile((whiteWallRow - 1) * 9 + (whiteWallColumn - 1));
 				// TODO Double check round and move stuff.
@@ -1170,7 +1165,8 @@ public class QuoridorController {
 
 			boolean blackWallsValid = initiatePosValidation(blackWallRow, blackWallColumn, wallOrientation, 10 + i - 1);
 			if (blackWallsValid) {
-				Wall blackWall = gamePositionToLoad.getBlackWallsInStock().remove(0);
+				Wall blackWall = gamePositionToLoad.getBlackWallsInStock(0);
+				gamePositionToLoad.removeBlackWallsInStock(blackWall);
 				gamePositionToLoad.addBlackWallsOnBoard(blackWall);
 				Tile blackWallTile = quoridor.getBoard().getTile((blackWallRow - 1) * 9 + (blackWallColumn - 1));
 				WallMove blackWallMove = new WallMove(i, i, getBlackPlayer(), blackWallTile, game,
@@ -1319,22 +1315,22 @@ public class QuoridorController {
 		}
 	}
 
-
 	/**
 	 * method for moving a pawn
 	 * @author Nicolas Buisson
 	 */
-	public static void MovePawn(Player player, String side) {
+
+	public static boolean movePawn(Player player, String side) throws IllegalArgumentException {
+
 
 		Tile playerTile;
 		Tile newPlayerTile = null;
 
 		if(player.equals(getBlackPlayer())) {
-
-			playerTile = quoridor.getCurrentGame().getCurrentPosition().getBlackPosition().getTile();
+			playerTile = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getBlackPosition().getTile();
 
 		}else {
-			playerTile = quoridor.getCurrentGame().getCurrentPosition().getWhitePosition().getTile();
+			playerTile = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getWhitePosition().getTile();
 		}
 		int playerRow = playerTile.getRow();
 		int playerColumn = playerTile.getColumn();
@@ -1357,12 +1353,13 @@ public class QuoridorController {
 		} else {
 			throw new IllegalArgumentException("Cannot perform move " + side);
 		}
-
 		if(player.equals(getBlackPlayer())) {
-			quoridor.getCurrentGame().getCurrentPosition().getBlackPosition().setTile(newPlayerTile);
+			QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getBlackPosition().setTile(newPlayerTile);
 		}else {
-			quoridor.getCurrentGame().getCurrentPosition().getWhitePosition().setTile(newPlayerTile);
+			QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getWhitePosition().setTile(newPlayerTile);
 		}
+		return true;
+
 	} 
 
 
@@ -1370,10 +1367,15 @@ public class QuoridorController {
 	 * method for making a pawn jump over the opponent's pawn
 	 * @author Nicolas Buisson
 	 */
-	public static void JumpPawn(Player player, String side) {
+	public static void jumpPawn(Player player, String side) {
 
 	}
-
+	/**
+	 * helper method made to access a Tile
+	 * using its row and column coordinates
+	 * @author Nicolas Buisson
+	 * 
+	 */
 	public static Tile getTileAtRowCol(int row, int column) {
 		return QuoridorApplication.getQuoridor().getBoard().getTile((row-1)*9 + column-1);
 	}
@@ -1582,32 +1584,5 @@ public class QuoridorController {
 		
 		
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
