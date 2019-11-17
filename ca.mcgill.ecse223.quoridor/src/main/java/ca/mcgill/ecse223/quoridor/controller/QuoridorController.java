@@ -59,7 +59,11 @@ public class QuoridorController {
 	public static String showPlayerTurn() {
 		throw new UnsupportedOperationException();
 	}
-
+	/**
+	 * @author Ousmane Baricisse
+	 * @return 
+	 * 
+	 */
 	public static void switchCurrentPlayer(){
 		
 		Game game = QuoridorApplication.getQuoridor().getCurrentGame();
@@ -70,6 +74,22 @@ public class QuoridorController {
 			game.getCurrentPosition().setPlayerToMove(game.getWhitePlayer());
 		}
 	}
+	
+	/**
+	 * @author Ousmane Baricisse
+	 * @return 
+	 * 
+	 */
+	public static String getCurPlayerToString(){
+		Game game = QuoridorApplication.getQuoridor().getCurrentGame();
+		Player curPlayer = game.getCurrentPosition().getPlayerToMove();
+		if(curPlayer.equals(game.getWhitePlayer())){
+			return "white";
+		} else {
+			return "black";
+		}
+	}
+
 	/**
 	 * This method, according to the Gherkin definition, should grab wall from the
 	 * stock and add it to the board Need to know the player and the board as

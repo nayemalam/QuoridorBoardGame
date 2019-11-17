@@ -535,7 +535,7 @@ public class MainGameWindow {
 					// handlle message : please grab a wall if there are still more walls.
 					String curPlayer = "white";
 					try {
-						curPlayer = QuoridorController.getCurrentPlayer().toString();
+						curPlayer = QuoridorController.getCurPlayerToString();
 					} catch (Exception event) {
 					}
 					System.out.println(curPlayer);
@@ -575,7 +575,7 @@ public class MainGameWindow {
 					// handlle message : please grab a wall if there are still more walls.
 					String curPlayer = "white";
 					try {
-						curPlayer = QuoridorController.getCurrentPlayer().toString();
+						curPlayer = QuoridorController.getCurPlayerToString();
 					} catch (Exception event) {
 					}
 					
@@ -618,7 +618,7 @@ public class MainGameWindow {
 					// handlle message : please grab a wall if there are still more walls.
 					String curPlayer = "white";
 					try {
-						curPlayer = QuoridorController.getCurrentPlayer().toString();
+						curPlayer = QuoridorController.getCurPlayerToString();
 					} catch (Exception event) {
 					}
 					
@@ -662,7 +662,7 @@ public class MainGameWindow {
 					// handlle message : please grab a wall if there are still more walls.
 					String curPlayer = "white";
 					try {
-						curPlayer = QuoridorController.getCurrentPlayer().toString();
+						curPlayer = QuoridorController.getCurPlayerToString();
 					} catch (Exception event) {
 					}
 					
