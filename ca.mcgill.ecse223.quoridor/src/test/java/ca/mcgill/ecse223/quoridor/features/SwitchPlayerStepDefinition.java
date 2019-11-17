@@ -25,7 +25,7 @@ import io.cucumber.java.en.When;
  */
 
 public class SwitchPlayerStepDefinition {
-	
+
 	private static Player nextPlayer; // keeps track of next Player
 	private static Player currentPlayer; // keeps track of current Player
 
@@ -40,21 +40,15 @@ public class SwitchPlayerStepDefinition {
 	public void the_player_to_move_is(String string) throws Exception {
 		// Write code here that turns the phrase above into concrete actions
 		boolean condition = false;
-		if (string.equals("white")) {
-			Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
-			this.currentPlayer = whitePlayer;
-			this.nextPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
-			condition = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().setPlayerToMove(whitePlayer);
+		Player playerToMove; 
+		if (string.equalsIgnoreCase("white")) {
+			playerToMove = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
+			QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().setPlayerToMove(playerToMove);
 
 
-		} else {
-			Player blackPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
-			condition = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().setPlayerToMove(blackPlayer);
-			this.currentPlayer = blackPlayer;
-			this.nextPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
-		}
-		assertTrue(condition);
-
+		} else if(string.equalsIgnoreCase("black")) {
+			playerToMove = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
+			QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().setPlayerToMove(playerToMove);
 	}
 
 	/**
@@ -67,9 +61,8 @@ public class SwitchPlayerStepDefinition {
 	@Given("The clock of {string} is running")
 	public void the_clock_of_is_running(String string) {
 		// Write code here that turns the phrase above into concrete actions
-		Time  time = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getPlayerToMove().getRemainingTime();
 		QuoridorController.startClock();
-		currentPlayer.setRemainingTime(new Time(180000));
+
 	}
 
 	/**
@@ -81,22 +74,22 @@ public class SwitchPlayerStepDefinition {
 	 */
 	@Given("The clock of {string} is stopped")
 	public void the_clock_of_is_stopped(String string) throws Exception {
-		// Write code here that turns the phrase above into concrete actions
-		this.nextPlayer.setRemainingTime(new Time(0));
+		QuoridorController.stopClock();
 	}
 
 	/**
 	 * calls controller method to complete the move controller method is a void
-	 * method
-	 * Pass in as parameter a given destination and the state of game, as well as the current player
+	 * method Pass in as parameter a given destination and the state of game, as
+	 * well as the current player
+	 * 
 	 * @param string
 	 * @author ousmanebaricisse
 	 */
 	@When("Player {string} completes his move")
 	public void player_completes_his_move(String string) {
 		// Write code here that turns the phrase above into concrete actions
-		boolean condition = QuoridorController.completeMove(QuoridorApplication.getQuoridor());
-		assertTrue(condition);
+		assertTrue(QuoridorApplication.getQuoridor().getCurrentGame().hasWallMoveCandidate());
+		// assertTrue(condition);
 	}
 
 	/**
@@ -107,9 +100,9 @@ public class SwitchPlayerStepDefinition {
 	@Then("The user interface shall be showing it is {string} turn")
 	public void the_user_interface_shall_be_showing_it_is_turn(String string) {
 		// Write code here that turns the phrase above into concrete actions
-		
+
 		Player playerToMove = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getPlayerToMove();
-		
+
 	}
 
 	/**
@@ -122,8 +115,9 @@ public class SwitchPlayerStepDefinition {
 	@Then("The clock of {string} shall be stopped")
 	public void the_clock_of_shall_be_stopped(String string) throws Exception {
 		// Write code here that turns the phrase above into concrete actions
-		int time = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getPlayerToMove().getRemainingTime().getMinutes(); 
-		boolean condition = time != 0 ;
+		int time = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getPlayerToMove()
+				.getRemainingTime().getMinutes();
+		boolean condition = time != 0;
 		assertTrue(condition);
 	}
 
@@ -137,7 +131,8 @@ public class SwitchPlayerStepDefinition {
 	public void the_clock_of_shall_be_running(String string) {
 		// Write code here that turns the phrase above into concrete actions
 
-		boolean condition = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getPlayerToMove().hasNextPlayer();
+		boolean condition = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getPlayerToMove()
+				.hasNextPlayer();
 		assertTrue(!condition);
 	}
 
@@ -151,7 +146,8 @@ public class SwitchPlayerStepDefinition {
 	@Then("The next player to move shall be {string}")
 	public void the_next_player_to_move_shall_be(String string) {
 		// Write code here that turns the phrase above into concrete actions
-		boolean condition = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getPlayerToMove().hasNextPlayer();
+		boolean condition = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getPlayerToMove()
+				.hasNextPlayer();
 		assertTrue(!condition);
 
 	}
