@@ -1289,7 +1289,7 @@ public class QuoridorController {
 	 * method for moving a pawn
 	 * @author Nicolas Buisson
 	 */
-	public static boolean MovePawn(Player player, String side) throws IllegalArgumentException {
+	public static boolean movePawn(Player player, String side) throws IllegalArgumentException {
 
 		Tile playerTile;
 		Tile newPlayerTile = null;
@@ -1336,7 +1336,7 @@ public class QuoridorController {
 	 * method for making a pawn jump over the opponent's pawn
 	 * @author Nicolas Buisson
 	 */
-	public static void JumpPawn(Player player, String side) {
+	public static void jumpPawn(Player player, String side) {
 
 	}
 	/**

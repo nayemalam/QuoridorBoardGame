@@ -74,7 +74,7 @@ public class MovePawnFeatureStepDef {
 			player = q.getCurrentGame().getWhitePlayer();
 		}
 		try {
-			legalMove = QC.MovePawn(player, string2);
+			legalMove = QC.movePawn(player, string2);
 		}catch(IllegalArgumentException e){
 			legalMove = false;
 		}
@@ -127,14 +127,16 @@ public class MovePawnFeatureStepDef {
 	public void there_is_a_wall_at(String string, Integer int1, Integer int2) {
 
 		if(string.equals("vertical")) {
-			Wall wall = new Wall(0, q.getCurrentGame().getBlackPlayer());
+			Wall wall = q.getCurrentGame().getCurrentPosition().getBlackWallsInStock(0);
+			q.getCurrentGame().getCurrentPosition().removeBlackWallsInStock(wall);
 			Tile wallTile = q.getBoard().getTile((int1 -1)*9 + (int2-1));
 			WallMove wallMove = new WallMove(0, 0, q.getCurrentGame().getBlackPlayer(), wallTile, q.getCurrentGame(), Direction.Vertical, wall);
 			wall.setMove(wallMove);
 			q.getCurrentGame().getCurrentPosition().addBlackWallsOnBoard(wall);
 		}
 		else {
-			Wall wall = new Wall(0, q.getCurrentGame().getBlackPlayer());
+			Wall wall = q.getCurrentGame().getCurrentPosition().getBlackWallsInStock(0);
+			q.getCurrentGame().getCurrentPosition().removeBlackWallsInStock(wall);
 			Tile wallTile = q.getBoard().getTile((int1 -1)*9 + (int2-1));
 			WallMove wallMove = new WallMove(0, 0, q.getCurrentGame().getBlackPlayer(), wallTile, q.getCurrentGame(), Direction.Horizontal, wall);
 			wall.setMove(wallMove);
