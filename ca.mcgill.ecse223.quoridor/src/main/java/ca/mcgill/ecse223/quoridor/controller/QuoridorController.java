@@ -19,6 +19,7 @@ public class QuoridorController {
 
 	private static int moveNumber;
 	Quoridor quoridor;
+	private Tile[] availableTiles = new Tile[81];
 
 	/**
 	 * Method to capture the time at which the clock is stopped
@@ -700,7 +701,7 @@ public class QuoridorController {
 	 * @author Alexander Legouverneur
 	 */
 	public static boolean checkWallValid(int row, int col, String dir, Wall wall) {
-		if (initiatePosValidation(row, col, dir, wall.getId()) == true) {
+		if (initiatePosValidation(row, col, dir, wall.getId()-1) == true) {
 			return true;
 		} else
 			return false;
@@ -1288,4 +1289,130 @@ public class QuoridorController {
 			return q.getCurrentGame().getBlackPlayer().getWall(id);
 		}
 	}
+	//MOVE PAWN LOGIC
+	
+public static Tile getPlayerPosition(Player player) {
+	
+	Quoridor q = QuoridorApplication.getQuoridor();
+	if(player.equals(q.getCurrentGame().getBlackPlayer())) {
+		
+		return q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile();
+		
+	}
+	else {
+		return q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile();
+	}
+	
+	
+}
+	public static void mainValidateMovePawn(Player player) {
+		
+		Quoridor q = QuoridorApplication.getQuoridor();
+		int row;
+		int col;
+		String side;
+		if(player.equals(q.getCurrentGame().getBlackPlayer())) {
+			
+			row = q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getRow();
+			col = q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getColumn();
+			
+		}
+		else {
+			
+			row = q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getRow();
+			col = q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getColumn();
+			
+		}
+		if(checkWallOnWay(row, col-1, "left") == true) {
+			
+		}
+		
+		
+	}
+	public static boolean checkWallOnWay(int row, int col, String side) {
+		Quoridor q = QuoridorApplication.getQuoridor();
+		int row1;
+		int col1;
+		Direction dir;
+		for(int i=0; i<20; i++) {
+			
+			if(i<10) {
+				if(q.getCurrentGame().getWhitePlayer().getWall(i).hasMove() == true) {
+					
+					row1 = q.getCurrentGame().getWhitePlayer().getWall(i).getMove().getTargetTile().getRow();
+					col1 = q.getCurrentGame().getWhitePlayer().getWall(i).getMove().getTargetTile().getColumn();
+					dir =  q.getCurrentGame().getWhitePlayer().getWall(i).getMove().getWallDirection();
+				}
+				else continue;
+			}
+			else {
+				
+				if(q.getCurrentGame().getBlackPlayer().getWall(i).hasMove() == true) {
+					
+					row1 = q.getCurrentGame().getBlackPlayer().getWall(i).getMove().getTargetTile().getRow();
+					col1 = q.getCurrentGame().getBlackPlayer().getWall(i).getMove().getTargetTile().getColumn();
+					dir =  q.getCurrentGame().getBlackPlayer().getWall(i).getMove().getWallDirection();
+					
+				}
+				else continue;
+				
+			}
+			
+			if(side.equals("left") && row == row1 && col == col1 && dir.equals(Direction.Vertical)) {
+				return false;
+			}
+			if(side.equals("left") && row == row1+1 && col == col1 && dir.equals(Direction.Vertical)) {
+				return false;
+			}
+			if(side.equals("right") && row == row1 && col == col1+1 && dir.equals(Direction.Vertical)) {
+				return false;
+			}
+			if(side.equals("right") && row == row1+1 && col == col1+1 && dir.equals(Direction.Vertical)) {
+				return false;
+			}
+			if(side.equals("up") && row == row1 && col == col1-1 && dir.equals(Direction.Horizontal)) {
+				return false;
+			}
+			if(side.equals("up") && row == row1 && col == col1 && dir.equals(Direction.Horizontal)) {
+				return false;
+			}
+			if(side.equals("down") && row == row1-1 && col == col1-1 && dir.equals(Direction.Horizontal)) {
+				return false;
+			}
+			if(side.equals("down") && row == row1-1 && col == col1 && dir.equals(Direction.Horizontal)) {
+				return false;
+			}
+			
+		}
+		return true;
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
