@@ -94,8 +94,9 @@ public class MainGameWindow {
 	private static int wallIndex;
 	private static int tileLength = 45;
 	private static int tileWidth = 87;
-	private static JPanel panel_10_1 = new JPanel();
 	private static JPanel panel_10 = new JPanel();
+
+	private static JPanel panel_10_1 = new JPanel();
 	private static JPanel panel_11 = new JPanel();
 	private static JPanel centerPanel = new JPanel();
 	private static JPanel boardPanel = new JPanel();
@@ -208,6 +209,17 @@ public class MainGameWindow {
 		boardPanel.setPreferredSize(new Dimension(x, y + 500));
 		boardPanel.setBackground(Color.lightGray);
 		navigationButtonsPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
+	
+
+		centerPanel.add(boardPanel);
+		centerPanel.add(navigationButtonsPanel);
+
+		boardPanel.setLayout(null);
+
+		boardPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
+		boardPanel.setPreferredSize(new Dimension(x, y + 500));
+		boardPanel.setBackground(Color.lightGray);
+		navigationButtonsPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
 		for (int row = 0; row < TOTAL_ROWS; row++) {
 			for (int col = 0; col < TOTAL_COLS; col++) {
 
@@ -226,7 +238,6 @@ public class MainGameWindow {
 		}
 		createBlackAndWhitePawns();
 
-		// elements for bottom panel
 		frmQuoridorPlay.repaint();
 		JButton grabWall = new JButton("Grab Wall");
 		JButton dropWall = new JButton("Drop Wall");
