@@ -1379,7 +1379,12 @@ public class QuoridorController {
 	}
 
 	//VALIDATE MOVE PAWN LOGIC
-
+	/**
+	 * helper method to get the player position
+	 * @author Alexander Legouverneur
+	 * @param player to move 
+	 * @return the tile of the position of the player
+	 */
 	public static Tile getPlayerPosition(Player player) {
 
 		Quoridor q = QuoridorApplication.getQuoridor();
@@ -1394,6 +1399,12 @@ public class QuoridorController {
 
 
 	}
+	/**
+	 * This method is the main method to get all the available tiles for a pawn move for a given player
+	 * It calls other methods that have the logic behind them
+	 * @author Alexander Legouverneur
+	 * @param player the current player
+	 */
 	public static void mainValidateMovePawn(Player player) {
 
 		Quoridor q = QuoridorApplication.getQuoridor();
@@ -1445,6 +1456,14 @@ public class QuoridorController {
 		}
 
 	}
+	/**
+	 * Method to check if there is a wall on the way of the possible move, returns false if yes, else returns true
+	 * @param row of the tile after the move is done
+	 * @param col of the tile after the move is done
+	 * @param side of the move, the side the player went to arrive to the (row,col) tile
+	 * @return true if no walls, else false
+	 * \@author Alexander Legouverneur
+	 */
 	public static boolean checkWallOnWay(int row, int col, String side) {//tile where the move is not the player tile
 		Quoridor q = QuoridorApplication.getQuoridor();
 		int row1;
@@ -1502,7 +1521,15 @@ public class QuoridorController {
 		return true;
 
 	}
-
+	/**
+	 * Method that checks if there is a pawn in an adjacent tile of the current player position. If yes return true else return false.
+	 * This method calls getJumpPawnTiles if the condition is set to true.
+	 * Cond is here because sometimes pawnOnWay is called just to check and not add the tiles to the array
+	 * @param player current player
+	 * @param cond  boolean to know if it has to call the other method
+	 * @return true if there is a pawn in an adjacent tile to the current player, else false
+	 * @author Alexander Legouverneur
+	 */
 	public static boolean pawnOnWay(Player player, boolean cond) { //sometimes I call the method and don t want to call pawnJump with it 
 		Quoridor q = QuoridorApplication.getQuoridor();				//thats why I add a condition boolean
 		int row;
@@ -1523,7 +1550,7 @@ public class QuoridorController {
 			col1 = q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getColumn();
 
 		}
-		if(row+1 == row1 && col == col1) {//TODO call the method for the jump pawn logic
+		if(row+1 == row1 && col == col1) {
 			if(cond == true) {
 				getJumpPawnTiles(row1, col1, row,col);
 			}
@@ -1551,6 +1578,16 @@ public class QuoridorController {
 
 
 	}
+	
+	/**
+	 * This method gets all the available tiles for a jump pawn move and adds them into the array of available tiles to be
+	 * sent into the view. It also makes sure, the current player position is not added to the list.
+	 * @param row  row of the tile of the pawn of the opponent
+	 * @param col col of the tile of the pawn of the opponent
+	 * @param ActualRow  row of the current player position
+	 * @param ActualCol  col of the current player position
+	 * @author Alexander Legouverneur
+	 */
 	public static void getJumpPawnTiles(int row, int col, int ActualRow, int ActualCol) {//row and col are the coordinates of the player we want to jump
 																				//ActualRow and ActualCol are the coordinates of the current player
 		if(checkWallOnWay(row-1,col,"up") == true) {
@@ -1582,7 +1619,15 @@ public class QuoridorController {
 		
 		
 	}
-
+	/**
+	 * Helper method to send the available tiles into view
+	 * @param i
+	 * @return available tile
+	 * @author Alexander Legouverneur
+	 */
+	public static Tile getAvailableTiles(int i) { // i is the index of the array
+		return availableTiles[i];
+	}
 
 
 
