@@ -1795,19 +1795,19 @@ public class QuoridorController {
 			if(side.equals("left") && targetRow == wallRow + 1 && targetCol == wallCol && dir.equals(Direction.Vertical)) {
 				return true;
 			}
-			if(side.equals("right") && targetRow == wallRow && targetCol == wallCol - 1 && dir.equals(Direction.Vertical)) {
+			if(side.equals("right") && targetRow == wallRow && targetCol == wallCol + 1 && dir.equals(Direction.Vertical)) {
 				return true;
 			}
-			if(side.equals("right") && targetRow == wallRow + 1 && targetCol == wallCol - 1 && dir.equals(Direction.Vertical)) {
+			if(side.equals("right") && targetRow == wallRow + 1 && targetCol == wallCol + 1 && dir.equals(Direction.Vertical)) {
 				return true;
 			}
-			if(side.equals("up") && targetRow == wallRow && targetCol == wallCol-1 && dir.equals(Direction.Horizontal)) {
+			if(side.equals("up") && targetRow == wallRow && targetCol == wallCol + 1 && dir.equals(Direction.Horizontal)) {
 				return true;
 			}
 			if(side.equals("up") && targetRow == wallRow && targetCol == wallCol && dir.equals(Direction.Horizontal)) {
 				return true;
 			}
-			if(side.equals("down") && targetRow == wallRow + 1 && targetCol == wallCol-1 && dir.equals(Direction.Horizontal)) {
+			if(side.equals("down") && targetRow == wallRow + 1 && targetCol == wallCol + 1 && dir.equals(Direction.Horizontal)) {
 				return true;
 			}
 			if(side.equals("down") && targetRow == wallRow + 1 && targetCol == wallCol && dir.equals(Direction.Horizontal)) {
