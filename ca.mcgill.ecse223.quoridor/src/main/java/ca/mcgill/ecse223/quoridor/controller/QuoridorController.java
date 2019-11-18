@@ -1841,25 +1841,25 @@ public class QuoridorController {
 		// Verify if opponent has walls around him
 
 		// Down jump
-		if(!checkWallOnWay(opponentRow-1,opponentCol,"up")) {
+		if(initializeValidatePosition(opponentRow - 1, opponentCol) && !checkWallOnWay(opponentRow-1,opponentCol,"up")) {
 			// If not our current player tile
-			if(initializeValidatePosition(opponentRow - 1, opponentCol) && (opponentRow-1 != currentPlayerRow || opponentCol != currentPlayerCol)) {
+			if( (opponentRow-1 != currentPlayerRow || opponentCol != currentPlayerCol)) {
 				availableTiles.add(getTileAtRowCol(opponentRow-1,opponentCol));
 			}
 		}
 		if(initializeValidatePosition(opponentRow + 1, opponentCol) && !checkWallOnWay(opponentRow+1,opponentCol,"down")) {
 			if((opponentRow+1 != currentPlayerRow || opponentCol != currentPlayerCol)) {
-				availableTiles.add(getTileAtRowCol(opponentRow+1,opponentCol));
+				availableTiles.add(getTileAtRowCol(opponentRow + 1,opponentCol));
 			}
 		}
 		if(initializeValidatePosition(opponentRow, opponentCol - 1) && !checkWallOnWay(opponentRow,opponentCol-1,"left")) {
-			if((opponentRow != currentPlayerRow || opponentCol-1 != currentPlayerCol)) {
-				availableTiles.add(getTileAtRowCol(opponentRow+1,opponentCol));
+			if((opponentRow != currentPlayerRow || opponentCol - 1 != currentPlayerCol)) {
+				availableTiles.add(getTileAtRowCol(opponentRow,opponentCol - 1 ));
 			}
 		}
 		if(initializeValidatePosition(opponentRow, opponentCol + 1) && !checkWallOnWay(opponentRow,opponentCol+1,"right")) {
-			if((opponentRow != currentPlayerRow || opponentCol+1 != currentPlayerCol)) {
-				availableTiles.add(getTileAtRowCol(opponentRow+1,opponentCol));
+			if((opponentRow != currentPlayerRow || opponentCol + 1 != currentPlayerCol)) {
+				availableTiles.add(getTileAtRowCol(opponentRow,opponentCol + 1));
 			}
 		}
 	}
