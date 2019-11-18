@@ -63,6 +63,36 @@ public class QuoridorController {
 	public static String showPlayerTurn() {
 		throw new UnsupportedOperationException();
 	}
+	/**
+	 * @author Ousmane Baricisse
+	 * @return 
+	 * 
+	 */
+	public static void switchCurrentPlayer(){
+		
+		Game game = QuoridorApplication.getQuoridor().getCurrentGame();
+		Player curPlayer = game.getCurrentPosition().getPlayerToMove();
+		if(curPlayer.equals(game.getWhitePlayer())){
+			game.getCurrentPosition().setPlayerToMove(game.getBlackPlayer());
+		} else {
+			game.getCurrentPosition().setPlayerToMove(game.getWhitePlayer());
+		}
+	}
+	
+	/**
+	 * @author Ousmane Baricisse
+	 * @return 
+	 * 
+	 */
+	public static String getCurPlayerToString(){
+		Game game = QuoridorApplication.getQuoridor().getCurrentGame();
+		Player curPlayer = game.getCurrentPosition().getPlayerToMove();
+		if(curPlayer.equals(game.getWhitePlayer())){
+			return "white";
+		} else {
+			return "black";
+		}
+	}
 
 	/**
 	 * This method, according to the Gherkin definition, should grab wall from the
@@ -75,10 +105,17 @@ public class QuoridorController {
 	 */
 	public static boolean grabWall(Quoridor quoridor) {
 		// TODO Auto-generated method stub
-
+		
 		Player playerToMove = quoridor.getCurrentGame().getCurrentPosition().getPlayerToMove();
-
-		List<Wall> list = playerToMove.getWalls();
+		
+		Game game = quoridor.getCurrentGame();
+	
+		List<Wall> list = new ArrayList<>();
+		if(playerToMove.equals(game.getWhitePlayer())){
+			list = game.getCurrentPosition().getWhiteWallsInStock();
+		} else if(playerToMove.equals(game.getBlackPlayer())){
+			list = game.getCurrentPosition().getBlackWallsInStock();
+		}
 
 		boolean wasRemoved = false;
 		System.out.println("sizeee: " + list.size());
@@ -296,10 +333,6 @@ public class QuoridorController {
 		wPlayer.setRemainingTime(thinkingTime);
 	}
 
-	public static String testMethod() {
-		return "Hello world!";
-	}
-
 	/**
 	 * Method - selectExistingUserName(String username)
 	 *
@@ -346,22 +379,39 @@ public class QuoridorController {
 	}
 
 	/**
-	 * GUI related Method - createNewUsername(String username)
+	 * GUI related Method - createNewUsernamePlayerOneGUI(String username)
 	 *
-	 * This method interacts with the GUI, it creates a new name for the user with
-	 * given string
+	 * This method interacts with the GUI, it creates a new user with username
+	 * for player 1
+	 * View handles warning if duplicate user
 	 *
 	 * @param username - String username to create
 	 * @author Nayem Alam
 	 */
-	public static void createNewUsernameGUI(String username) {
+	public static void createNewUsernamePlayerOneGUI(String username) {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
-		User user = new User(username, quoridor);
-		user.setName(username);
+		// add a new user
+		quoridor.addUser(username);
+
+	}
+	/**
+	 * GUI related Method - createNewUsernamePlayerTwoGUI(String username)
+	 *
+	 * This method interacts with the GUI, it creates a new user with username
+	 * for player 2
+	 * View handles warning if duplicate user
+	 *
+	 * @param username - String username to create
+	 * @author Nayem Alam
+	 */
+	public static void createNewUsernamePlayerTwoGUI(String username) {
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		// add a new user
+		quoridor.addUser(username);
 	}
 
 	/**
-	 * GUI related Method - selectAnExistingUsername(String username)
+	 * GUI related Method - selectAnExistingUsernameGUI(String username)
 	 *
 	 * This method interacts with the GUI, it checks if the username is already
 	 * created if so, the user then selects that username
@@ -376,6 +426,46 @@ public class QuoridorController {
 				user.setName(username);
 			}
 		}
+	}
+	/**
+	 * GUI related Method - createWhitePlayer()
+	 *
+	 * This method creates a new WhitePlayer, to interact with the view
+	 *
+	 * @author Nayem Alam
+	 */
+	public static Player createWhitePlayer() {
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		return new Player(new Time(0), quoridor.getUser(0), ControllerUtilities.BLACK_TILE_INDEX, Direction.Horizontal);
+	}
+	/**
+	 * GUI related Method - createBlackPlayer()
+	 *
+	 * This method creates a new WhitePlayer, to interact with the view
+	 *
+	 * @author Nayem Alam
+	 */
+	public static Player createBlackPlayer() {
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		return new Player(new Time(0), quoridor.getUser(1), ControllerUtilities.WHITE_TILE_INDEX, Direction.Vertical);
+	}
+	/**
+	 * GUI related Method - setThinkingTimeGUI(Player wPlayer, Player bPlayer, Integer min, Integer sec)
+	 *
+	 * This method interacts with the GUI, it sets the thinking time for player1 and 2
+	 *
+	 * @param wPlayer - Player sets the whitePlayer
+	 * @param bPlayer - Player sets the blackPlayer
+	 * @param min - Integer sets the number of minutes
+	 * @param sec - Integer sets the number of seconds
+	 * @author Nayem Alam
+	 */
+	public static void setThinkingTimeGUI(Player wPlayer, Player bPlayer, Integer min, Integer sec) {
+		// converts min and sec to long type (unix epoch time)
+		Time thinkingTime = new Time(min * 60L * 1000 + sec * 1000L);
+		// set same thinking time for both players
+		bPlayer.setRemainingTime(thinkingTime);
+		wPlayer.setRemainingTime(thinkingTime);
 	}
 
 	// public static List<String> myUsers() {
@@ -667,8 +757,8 @@ public class QuoridorController {
 				}
 			}
 			return true;
-		} else
-			return false;
+		} 
+		else return false;
 	}
 
 	/**
@@ -1304,6 +1394,22 @@ public class QuoridorController {
 		return player.equals(quoridor.getCurrentGame().getWhitePlayer());
 	}
 
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public static Wall getWallMoveCandidate(){
+		return QuoridorApplication.getQuoridor().getCurrentGame().getWallMoveCandidate().getWallPlaced();
+	}
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public static Direction getWallDirection(boolean isRotated){
+		return isRotated ? Direction.Vertical : Direction.Horizontal;
+	}
 	public static Wall getWall(int id) {
 		Quoridor q = QuoridorApplication.getQuoridor();
 		if (id > 9) {
