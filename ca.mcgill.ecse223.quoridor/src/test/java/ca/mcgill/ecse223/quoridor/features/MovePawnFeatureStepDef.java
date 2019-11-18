@@ -74,7 +74,7 @@ public class MovePawnFeatureStepDef {
 			player = q.getCurrentGame().getWhitePlayer();
 		}
 		try {
-			legalMove = QC.movePawn(player, string2);
+			legalMove = QuoridorController.movePawn(player, string2);
 		}catch(IllegalArgumentException e){
 			legalMove = false;
 		}
