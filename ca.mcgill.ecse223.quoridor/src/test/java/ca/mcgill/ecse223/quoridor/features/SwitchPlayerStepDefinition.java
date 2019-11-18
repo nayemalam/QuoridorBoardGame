@@ -40,16 +40,16 @@ public class SwitchPlayerStepDefinition {
 	public void the_player_to_move_is(String string) throws Exception {
 		// Write code here that turns the phrase above into concrete actions
 		boolean condition = false;
-		Player playerToMove; 
+		Player playerToMove;
 		if (string.equalsIgnoreCase("white")) {
 			playerToMove = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
 			QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().setPlayerToMove(playerToMove);
-
-
-		} else if(string.equalsIgnoreCase("black")) {
+			QuoridorController.setCurrentPlayer(playerToMove);
+		} else if (string.equalsIgnoreCase("black")) {
 			playerToMove = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
 			QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().setPlayerToMove(playerToMove);
-	}
+			QuoridorController.setCurrentPlayer(playerToMove);
+		}
 	}
 
 	/**
