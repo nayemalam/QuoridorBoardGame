@@ -5,6 +5,7 @@ import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.sql.Time;
+import java.util.Timer;
 
 import javax.swing.text.Position;
 
@@ -16,6 +17,8 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import ca.mcgill.ecse223.quoridor.utilities.*;
+import ca.mcgill.ecse223.quoridor.view.MainGameWindow;;;
 
 /**
  * class to handle Switch Current Player Feature
@@ -28,6 +31,8 @@ public class SwitchPlayerStepDefinition {
 
 	private static Player nextPlayer; // keeps track of next Player
 	private static Player currentPlayer; // keeps track of current Player
+	private static PlayerThread blackPlayerTimer;
+	private static PlayerThread whitePlayerTimer;
 
 	/**
 	 * sets the player to move to the correct player based on given parameter
@@ -41,19 +46,22 @@ public class SwitchPlayerStepDefinition {
 		// Write code here that turns the phrase above into concrete actions
 		boolean condition = false;
 		Player playerToMove;
+		Player blackPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
+		Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
+		blackPlayerTimer = new PlayerThread("black", new ThreadTimer(blackPlayer), new Timer());
+		whitePlayerTimer = new PlayerThread("white", new ThreadTimer(whitePlayer), new Timer());
 		if (string.equalsIgnoreCase("white")) {
-			playerToMove = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
-			QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().setPlayerToMove(playerToMove);
-			QuoridorController.setCurrentPlayer(playerToMove);
+
+			QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().setPlayerToMove(whitePlayer);
+
 		} else if (string.equalsIgnoreCase("black")) {
-			playerToMove = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
-			QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().setPlayerToMove(playerToMove);
-			QuoridorController.setCurrentPlayer(playerToMove);
+
+			QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().setPlayerToMove(blackPlayer);
 		}
 	}
 
 	/**
-	 * sets the time remaining for current Player to 180s
+	 * sets the time remaining for current Player to 180s ;
 	 * 
 	 * @param string
 	 * 
@@ -62,7 +70,19 @@ public class SwitchPlayerStepDefinition {
 	@Given("The clock of {string} is running")
 	public void the_clock_of_is_running(String string) {
 		// Write code here that turns the phrase above into concrete actions
-		QuoridorController.startClock();
+
+		Player curPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getPlayerToMove();
+		if (string.equalsIgnoreCase("black") && curPlayer.equals(QuoridorApplication.getQuoridor())) {
+			blackPlayerTimer.timer.schedule(blackPlayerTimer.thread, 0, 1000);
+			blackPlayerTimer.hasStarted = true;
+			Player blackPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
+
+		} else if (string.equalsIgnoreCase("white")) {
+			Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
+			whitePlayerTimer.timer.schedule(whitePlayerTimer.thread, 0, 1000);
+			whitePlayerTimer.hasStarted = true;
+
+		}
 
 	}
 
@@ -75,7 +95,23 @@ public class SwitchPlayerStepDefinition {
 	 */
 	@Given("The clock of {string} is stopped")
 	public void the_clock_of_is_stopped(String string) throws Exception {
-		QuoridorController.stopClock();
+		// by default only one thread will be running because of
+		Player curPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getPlayerToMove();
+		if (string.equalsIgnoreCase("black")
+				&& curPlayer.equals(QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer())) {
+			blackPlayerTimer.timer.cancel();
+			blackPlayerTimer.timer.purge();
+			blackPlayerTimer.hasStarted = false;
+			Player blackPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
+
+		} else if (string.equalsIgnoreCase("white")
+				&& curPlayer.equals(QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer())) {
+			Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
+			whitePlayerTimer.timer.cancel();
+			whitePlayerTimer.timer.purge();
+			whitePlayerTimer.hasStarted = false;
+
+		}
 	}
 
 	/**
@@ -89,8 +125,24 @@ public class SwitchPlayerStepDefinition {
 	@When("Player {string} completes his move")
 	public void player_completes_his_move(String string) {
 		// Write code here that turns the phrase above into concrete actions
-		assertTrue(QuoridorApplication.getQuoridor().getCurrentGame().hasWallMoveCandidate());
-		// assertTrue(condition);
+		boolean condition = false;
+
+		Player curPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getPlayerToMove();
+		QuoridorController.switchCurrentPlayer();
+		System.out.println(curPlayer.hasGameAsBlack());
+		if (string.equalsIgnoreCase("black")) {
+
+			condition = curPlayer.hasGameAsWhite();
+
+		} else if (string.equalsIgnoreCase("white")) {
+			if (curPlayer.hasGameAsBlack()) {
+				condition = true;
+			}
+
+		}
+
+		assertTrue(condition);
+
 	}
 
 	/**
@@ -101,8 +153,13 @@ public class SwitchPlayerStepDefinition {
 	@Then("The user interface shall be showing it is {string} turn")
 	public void the_user_interface_shall_be_showing_it_is_turn(String string) {
 		// Write code here that turns the phrase above into concrete actions
+		String curPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer().getUser().getName();
+		// String displayed = MainGameWindow.getCurrentPlayer();
+		if (string.equalsIgnoreCase("black")) {
 
-		Player playerToMove = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getPlayerToMove();
+		} else if (string.equalsIgnoreCase("white")) {
+
+		}
 
 	}
 
@@ -116,10 +173,22 @@ public class SwitchPlayerStepDefinition {
 	@Then("The clock of {string} shall be stopped")
 	public void the_clock_of_shall_be_stopped(String string) throws Exception {
 		// Write code here that turns the phrase above into concrete actions
-		int time = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getPlayerToMove()
-				.getRemainingTime().getMinutes();
-		boolean condition = time != 0;
-		assertTrue(condition);
+		Player curPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getPlayerToMove();
+		if (string.equalsIgnoreCase("black")
+				&& curPlayer.equals(QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer())) {
+			blackPlayerTimer.timer.cancel();
+
+			blackPlayerTimer.hasStarted = false;
+			Player blackPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
+
+		} else if (string.equalsIgnoreCase("white")
+				&& curPlayer.equals(QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer())) {
+			Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
+			whitePlayerTimer.timer.cancel();
+
+			whitePlayerTimer.hasStarted = false;
+
+		}
 	}
 
 	/**
@@ -131,10 +200,22 @@ public class SwitchPlayerStepDefinition {
 	@Then("The clock of {string} shall be running")
 	public void the_clock_of_shall_be_running(String string) {
 		// Write code here that turns the phrase above into concrete actions
+		Player curPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getPlayerToMove();
+		if (string.equalsIgnoreCase("black") && curPlayer.equals(QuoridorApplication.getQuoridor())) {
+			Player blackPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
+			// blackPlayerTimer.thread = new ThreadTimer(blackPlayer);
+			blackPlayerTimer.timer = new Timer();
+			blackPlayerTimer.timer.schedule(blackPlayerTimer.thread, 0, 1000);
+			blackPlayerTimer.hasStarted = true;
 
-		boolean condition = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getPlayerToMove()
-				.hasNextPlayer();
-		assertTrue(!condition);
+		} else if (string.equalsIgnoreCase("white")) {
+			Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
+			// whitePlayerTimer.thread = new ThreadTimer(whitePlayer);
+			whitePlayerTimer.timer = new Timer();
+			whitePlayerTimer.timer.schedule(whitePlayerTimer.thread, 0, 1000);
+			whitePlayerTimer.hasStarted = true;
+
+		}
 	}
 
 	/**

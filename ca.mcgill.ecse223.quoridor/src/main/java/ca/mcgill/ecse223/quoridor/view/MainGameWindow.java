@@ -317,6 +317,9 @@ public class MainGameWindow {
 		timeRemaining_TextField.setText(remainingTimeValue);
 	}
 
+	public String getCurrentPlayerDisplayed() {
+		return currentPlayer_TextField.getText();
+	}
 	private void updateCurrentPlayer(){
 		String playerName = "";
 		try {
