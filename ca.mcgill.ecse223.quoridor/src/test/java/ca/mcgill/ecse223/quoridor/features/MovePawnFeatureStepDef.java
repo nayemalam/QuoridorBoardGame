@@ -93,7 +93,7 @@ public class MovePawnFeatureStepDef {
 	@Then("Player's new position shall be {int}:{int}")
 	public void player_s_new_position_shall_be(Integer int1, Integer int2) {
 
-		if(q.getCurrentGame().getCurrentPosition().getPlayerToMove().equals(q.getCurrentGame().getBlackPlayer())) {
+		if(QuoridorController.getBlackPlayer().equals(QuoridorController.getCurrentPlayer())) {
 			assertEquals(int1, (Integer)q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getRow());
 			assertEquals(int2, (Integer)q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getColumn());
 		}else {
@@ -110,7 +110,7 @@ public class MovePawnFeatureStepDef {
 		if(QuoridorController.getCurrentPlayer().equals(QuoridorController.getBlackPlayer())) {
 			if(legalMove) {
 				nextPlayerToMove = "white";
-			}else {
+			} else {
 				nextPlayerToMove = "black";
 			}
 		}else {

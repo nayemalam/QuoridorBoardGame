@@ -70,11 +70,13 @@ public class QuoridorController {
 	public static void switchCurrentPlayer(){
 		
 		Game game = QuoridorApplication.getQuoridor().getCurrentGame();
-		Player curPlayer = game.getCurrentPosition().getPlayerToMove();
+		Player curPlayer = getCurrentPlayer();
 		if(curPlayer.equals(game.getWhitePlayer())){
 			game.getCurrentPosition().setPlayerToMove(game.getBlackPlayer());
+			game.getBlackPlayer().setNextPlayer(game.getWhitePlayer());
 		} else {
 			game.getCurrentPosition().setPlayerToMove(game.getWhitePlayer());
+			game.getWhitePlayer().setNextPlayer(game.getBlackPlayer());
 		}
 	}
 	
@@ -1340,6 +1342,21 @@ public class QuoridorController {
 			return QuoridorController.getBlackPlayer();
 		}
 	}
+	
+	/**
+	 * Method used to set the current player
+	 * @param currentPlayer
+	 * @author Tristan Bouchard
+	 */
+	public static void setCurrentPlayer(Player currentPlayer) {
+		Player playerWhite = QuoridorController.getWhitePlayer();
+		if(currentPlayer.equals(playerWhite)){
+			playerWhite.setNextPlayer(getBlackPlayer());
+		}
+		else {
+			getBlackPlayer().setNextPlayer(playerWhite);
+		}
+	}
 
 	/**
 	 * This method uses getCurrentPlayer method to transform the current player into
@@ -1577,11 +1594,10 @@ public class QuoridorController {
 			QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getWhitePosition().setTile(newPlayerTile);
 		}
 		else {
-			return false;
+			throw new IllegalArgumentException("Illegal move!");
 		}
+		switchCurrentPlayer();
 		return true;
-		
-		
 	} 
 	
 	/**
