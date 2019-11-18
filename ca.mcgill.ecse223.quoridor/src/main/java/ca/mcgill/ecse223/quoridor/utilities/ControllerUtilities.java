@@ -25,6 +25,13 @@ public class ControllerUtilities {
 	public static final int TOTAL_WALL_STOCK_AT_START = 10;
 	public static final int TOTAL_NUMBER_OF_WALLS_PER_PLAYER = 10;
 	
+	public enum DiagonalDirections{
+		upleft,
+		upright,
+		downleft,
+		downright
+	}
+	
 	// ***************************************
 	
 	// ***************************************
