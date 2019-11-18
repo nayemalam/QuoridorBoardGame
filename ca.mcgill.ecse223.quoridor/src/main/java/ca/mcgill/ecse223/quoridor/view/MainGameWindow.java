@@ -37,6 +37,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
 import ca.mcgill.ecse223.quoridor.view.QuoridorPage;
@@ -137,7 +140,6 @@ public class MainGameWindow {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() throws InterruptedException {
-
 		// layout
 		frmQuoridorPlay = new JFrame();
 		frmQuoridorPlay.setTitle("Quoridor - Play Game");
@@ -323,6 +325,7 @@ public class MainGameWindow {
 			playerName = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getPlayerToMove().getUser().getName();
 		} catch (Exception e) {
 		}
+		//validatePawnPosition();
 		currentPlayer_TextField.setFont(new Font("Tahoma", Font.BOLD, 13));
 		currentPlayer_TextField.setText(playerName);
 	}
@@ -830,59 +833,21 @@ public class MainGameWindow {
 		}
 	}
 
+	/**
+	 * This methods sets all the available tiles for pawn move in green
+	 * @author Alexander Legouverneur
+	 */
 	private void validatePawnPosition() {
-
-		int Player = QuoridorController.currentPlayerInt();
-		if (Player == 1) {
-
-			int row = QuoridorController.getBlackPlayerPlayerPosition().getTile().getRow();
-			int col = QuoridorController.getBlackPlayerPlayerPosition().getTile().getColumn();
-
-			if (QuoridorController.initializeValidatePosition(row - 1, col) == true) {
-
-				btnArray[row - 1][col].setBackground(Color.GREEN);
-
-			}
-			if (QuoridorController.initializeValidatePosition(row + 1, col) == true) {
-
-				btnArray[row + 1][col].setBackground(Color.GREEN);
-
-			}
-			if (QuoridorController.initializeValidatePosition(row, col - 1) == true) {
-
-				btnArray[row][col - 1].setBackground(Color.GREEN);
-
-			}
-			if (QuoridorController.initializeValidatePosition(row, col + 1) == true) {
-
-				btnArray[row][col + 1].setBackground(Color.GREEN);
-
-			}
-		}
-		if (Player == 0) {
-
-			int row = QuoridorController.getWhitePlayerPosition().getTile().getRow();
-			int col = QuoridorController.getWhitePlayerPosition().getTile().getColumn();
-
-			if (QuoridorController.initializeValidatePosition(row - 1, col) == true) {
-
-				btnArray[row - 1][col].setBackground(Color.GREEN);
-
-			}
-			if (QuoridorController.initializeValidatePosition(row + 1, col) == true) {
-
-				btnArray[row + 1][col].setBackground(Color.GREEN);
-
-			}
-			if (QuoridorController.initializeValidatePosition(row, col - 1) == true) {
-
-				btnArray[row][col - 1].setBackground(Color.GREEN);
-
-			}
-			if (QuoridorController.initializeValidatePosition(row, col + 1) == true) {
-
-				btnArray[row][col + 1].setBackground(Color.GREEN);
-
+		
+		QuoridorController.mainValidateMovePawn(QuoridorController.getCurrentPlayer());
+		for(int column = 0; column<9 ; column++) {
+			for(int row = 0; row< 9; row++) {
+				if(QuoridorController.compareAvailableTiles(row,column)) {
+					btnArray[row][column].setBackground(Color.GREEN);
+				}
+				else {
+					btnArray[row][column].setBackground(Color.GRAY);
+				}
 			}
 		}
 
