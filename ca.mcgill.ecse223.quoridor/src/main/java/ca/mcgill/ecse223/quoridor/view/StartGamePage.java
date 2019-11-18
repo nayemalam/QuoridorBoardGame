@@ -284,7 +284,15 @@ public class StartGamePage {
 		// If no errors, perform the respective actions and start the game
 		addPlayerOneUsernameActionPerformed(evt);
 		addPlayerTwoUsernameActionPerformed(evt);
-		setTotalThinkingTimeActionPerformed(evt);
+		try {
+			setTotalThinkingTimeActionPerformed(evt);
+		} catch (Exception e) {
+			error = "Cannot set a non-integer as time! Please set a correct integer";
+			errorMessage.setForeground(Color.RED);
+			errorMessage.setText(error);
+			return;
+		}
+		
 		try {
 			QuoridorController.initializeNewGame(QuoridorApplication.getQuoridor(), QuoridorController.createWhitePlayer(), QuoridorController.createBlackPlayer());
 			MainGameWindow gameWindow = new MainGameWindow();
@@ -373,7 +381,6 @@ public class StartGamePage {
 	private void setTotalThinkingTimeActionPerformed(ActionEvent evt) {
 		// clears error message
 		error = null;
-
 		// call controller
 		Integer min = Integer.parseInt(Minutes_TextField.getText().trim());
 		Integer sec = Integer.parseInt(Seconds_TextField.getText().trim());
