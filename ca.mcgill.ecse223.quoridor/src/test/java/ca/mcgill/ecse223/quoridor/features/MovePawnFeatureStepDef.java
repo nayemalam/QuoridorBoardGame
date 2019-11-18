@@ -107,7 +107,7 @@ public class MovePawnFeatureStepDef {
 	public void the_next_player_to_move_shall_become(String string) {
 
 		String nextPlayerToMove = "";
-		if(q.getCurrentGame().getCurrentPosition().getPlayerToMove().equals(q.getCurrentGame().getBlackPlayer())) {
+		if(QuoridorController.getCurrentPlayer().equals(QuoridorController.getBlackPlayer())) {
 			if(legalMove) {
 				nextPlayerToMove = "white";
 			}else {

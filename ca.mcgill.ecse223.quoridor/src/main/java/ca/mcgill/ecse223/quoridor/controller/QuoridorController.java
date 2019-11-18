@@ -1433,8 +1433,12 @@ public class QuoridorController {
 	}
 
 	/**
-	 * method for moving a pawn
-	 * @author Nicolas Buisson
+	 * Method used to move a pawn based on a selection of possible tiles
+	 * @param player - Current player to move
+	 * @param side - Direction of move
+	 * @return true if successful move 
+	 * @throws IllegalArgumentException on error
+	 * @author Tristan Bouchard, Nicolas Buisson
 	 */
 	public static boolean movePawn(Player player, String side) throws IllegalArgumentException {
 
@@ -1448,49 +1452,136 @@ public class QuoridorController {
 			playerTile = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getWhitePosition().getTile();
 		}
 		
+		int currentPlayerRow = playerTile.getRow();
+		int currentPlayerColumn = playerTile.getColumn();
+		
+		boolean leftIsAllowed = currentPlayerColumn > 1;
+		boolean rightIsAllowed = currentPlayerColumn < 9;
+		boolean upIsAllowed = currentPlayerRow > 1;
+		boolean downIsAllowed = currentPlayerRow < 9;
+		
+		boolean leftJumpIsAllowed = currentPlayerColumn > 2;
+		boolean rightJumpIsAllowed = currentPlayerColumn < 8;
+		boolean upJumpIsAllowed = currentPlayerRow > 2;
+		boolean downJumpIsAllowed = currentPlayerRow < 8;
+		
 		// Begin by getting all possible tiles this player can move to
 		mainValidateMovePawn(player);
 		
-		int playerRow = playerTile.getRow();
-		int playerColumn = playerTile.getColumn();
-		boolean leftIsAllowed = (playerColumn > 1);
-		boolean rightIsAllowed = (playerColumn < 9);
-		boolean upIsAllowed = (playerRow > 1);
-		boolean downIsAllowed = (playerRow < 9);
-		boolean isNotASideMove = false;
+		int i = 0;
+		for (Tile tile: availableTiles) {
+			
+			if(side.equals("left")) {
+				// Take care of left and left jump
+				if(leftIsAllowed) {
+					Tile closeLeftTile = getTileAtRowCol(currentPlayerRow, currentPlayerColumn - 1);
+					if(tile.equals(closeLeftTile)) {
+						newPlayerTile = closeLeftTile;
+						break;
+					} else if (leftJumpIsAllowed) {
+						Tile farLeftTile = getTileAtRowCol(currentPlayerRow, currentPlayerColumn - 2);
+						if(tile.equals(farLeftTile)) {
+							newPlayerTile = farLeftTile;
+							break;
+						}
+					}
+				}
+					
+			} else if(side.equals("right")) {
+				// Take care of right and right jump
+				if(rightIsAllowed) {
+					Tile closeRightTile = getTileAtRowCol(currentPlayerRow, currentPlayerColumn + 1);
+					if(tile.equals(closeRightTile)) {
+						newPlayerTile = closeRightTile;
+						break;
+					} else if (rightJumpIsAllowed) {
+						Tile farRightTile = getTileAtRowCol(currentPlayerRow, currentPlayerColumn + 2);
+						if(tile.equals(farRightTile)) {
+							newPlayerTile = farRightTile;
+							break;
+						}
+					}
+				}
+			} else if(side.equals("up")) {
+				// Take care of up and up jump
+				if(upIsAllowed) {
+					Tile closeUpTile = getTileAtRowCol(currentPlayerRow - 1, currentPlayerColumn);
+					if(tile.equals(closeUpTile)) {
+						newPlayerTile = closeUpTile;
+						break;
+					} else if (upJumpIsAllowed) {
+						Tile farUpTile = getTileAtRowCol(currentPlayerRow - 2, currentPlayerColumn);
+						if(tile.equals(farUpTile)) {
+							newPlayerTile = farUpTile;
+							break;
+						}
+					}
+				}
+			} else if(side.equals("down")) {
+				// Take care of down and down jump
+				if(downIsAllowed) {
+					Tile closeDownTile = getTileAtRowCol(currentPlayerRow + 1, currentPlayerColumn);
+					if(tile.equals(closeDownTile)) {
+						newPlayerTile = closeDownTile;
+						break;
+					} else if (downJumpIsAllowed) {
+						Tile farDownTile = getTileAtRowCol(currentPlayerRow + 2, currentPlayerColumn);
+						if(tile.equals(farDownTile)) {
+							newPlayerTile = farDownTile;
+							break;
+						}
+					}
+				}
+			} else if(side.equals(ControllerUtilities.DiagonalDirections.upleft.toString())){
+				// UpLeft
+				if(upIsAllowed && leftIsAllowed) {
+					Tile upLeft = getTileAtRowCol(currentPlayerRow - 1, currentPlayerColumn - 1);
+					if(tile.equals(upLeft)) {
+						newPlayerTile = upLeft;
+						break;
+					}
+				}
+			} else if(side.equals(ControllerUtilities.DiagonalDirections.upright.toString())){
+				// UpRight
+				if(upIsAllowed && rightIsAllowed) {
+					Tile upRight = getTileAtRowCol(currentPlayerRow - 1, currentPlayerColumn + 1);
+					if(tile.equals(upRight)) {
+						newPlayerTile = upRight;
+						break;
+					}
+				}
+			} else if(side.equals(ControllerUtilities.DiagonalDirections.downleft.toString())){
+				// downLeft
+				if(downIsAllowed && leftIsAllowed) {
+					Tile downLeft = getTileAtRowCol(currentPlayerRow + 1, currentPlayerColumn - 1);
+					if(tile.equals(downLeft)) {
+						newPlayerTile = downLeft;
+						break;
+					}
+				}
+			} else if(side.equals(ControllerUtilities.DiagonalDirections.downright.toString())){
+				// downRight
+				if(downIsAllowed && rightIsAllowed) {
+					Tile downRight = getTileAtRowCol(currentPlayerRow + 1, currentPlayerColumn + 1);
+					if(tile.equals(downRight)) {
+						newPlayerTile = downRight;
+						break;
+					}
+				}
+			}
+		}
 		
-		if(side.equals("left") && leftIsAllowed) {
-			newPlayerTile = getTileAtRowCol(playerRow, playerColumn-1);
-		}
-		else if(side.equals("right") && rightIsAllowed) {
-			newPlayerTile = getTileAtRowCol(playerRow, playerColumn+1);
-		}
-		else if(side.equals("up") && upIsAllowed) {
-			newPlayerTile = getTileAtRowCol(playerRow-1, playerColumn);
-		}
-		else if(side.equals("down") && downIsAllowed) {
-			newPlayerTile = getTileAtRowCol(playerRow+1, playerColumn);
-		} else {
-			isNotASideMove = true;
-		}
-		
-		// Verify if the move is a jump:
-		boolean isAJumpMoveAndIsValid = QuoridorController.validateJump(player, side);
-		
-		if(!isAJumpMoveAndIsValid && isNotASideMove) {
-			throw new IllegalArgumentException("Cannot perform jump move" + side);
-		}
-		else if(isAJumpMoveAndIsValid){
-			newPlayerTile = getJumpMoveTile(player, side);
-		}
-		
-		if(player.equals(getBlackPlayer())) {
+		if(player.equals(getBlackPlayer()) && !(newPlayerTile == null)) {
 			QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getBlackPosition().setTile(newPlayerTile);
-		}else {
+		}else if(player.equals(getWhitePlayer()) && !(newPlayerTile == null)){
 			QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getWhitePosition().setTile(newPlayerTile);
 		}
+		else {
+			return false;
+		}
 		return true;
-
+		
+		
 	} 
 	
 	/**
@@ -1685,13 +1776,13 @@ public class QuoridorController {
 			if(side.equals("left") && targetRow == wallRow && targetCol == wallCol && dir.equals(Direction.Vertical)) {
 				return true;
 			}
-			if(side.equals("left") && targetRow == wallRow - 1 && targetCol == wallCol && dir.equals(Direction.Vertical)) {
+			if(side.equals("left") && targetRow == wallRow + 1 && targetCol == wallCol && dir.equals(Direction.Vertical)) {
 				return true;
 			}
 			if(side.equals("right") && targetRow == wallRow && targetCol == wallCol - 1 && dir.equals(Direction.Vertical)) {
 				return true;
 			}
-			if(side.equals("right") && targetRow == wallRow - 1 && targetCol == wallCol - 1 && dir.equals(Direction.Vertical)) {
+			if(side.equals("right") && targetRow == wallRow + 1 && targetCol == wallCol - 1 && dir.equals(Direction.Vertical)) {
 				return true;
 			}
 			if(side.equals("up") && targetRow == wallRow && targetCol == wallCol-1 && dir.equals(Direction.Horizontal)) {
