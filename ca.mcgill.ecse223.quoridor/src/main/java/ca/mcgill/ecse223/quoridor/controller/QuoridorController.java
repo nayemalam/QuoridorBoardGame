@@ -1479,7 +1479,7 @@ public class QuoridorController {
 		return true;
 
 	} 
-
+	
 
 	/**
 	 * method for making a pawn jump over the opponent's pawn
@@ -1517,8 +1517,6 @@ public class QuoridorController {
 		else {
 			return q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile();
 		}
-
-
 	}
   
   /**
