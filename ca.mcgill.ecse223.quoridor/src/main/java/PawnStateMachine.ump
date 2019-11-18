@@ -30,6 +30,7 @@ class PawnBehavior {
 	    			stepUp[isLegalStep(MoveDirection.North) && getCurrentPawnRow() == 3] -> SoftNorth;
 	    			jumpUp[isLegalJump(MoveDirection.North) && getCurrentPawnRow() == 4] -> SoftNorth;
 	    			jumpUp[isLegalJump(MoveDirection.North) && getCurrentPawnRow() == 3] -> TrueNorth;
+	    			jumpUp[!isLegalJump(MoveDirection.North)] / {illegalMove();} -> MiddleVertical;
 	    			jumpUp -> MiddleVertical;
 	    			stepUp -> MiddleVertical;
 	    			stepDown[isLegalStep(MoveDirection.South) && getCurrentPawnRow() == 7] -> SoftSouth;
