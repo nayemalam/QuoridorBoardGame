@@ -43,13 +43,13 @@ public class MovePawnFeatureStepDef {
 	@Given("The opponent is located at {int}:{int}")
 	public void the_opponent_is_located_at(Integer int1, Integer int2) {
 
-		if(q.getCurrentGame().getCurrentPosition().getPlayerToMove().equals(q.getCurrentGame().getBlackPlayer())) {
-			Tile playerTile = q.getBoard().getTile(9*(int1 -1) + (int2 -1));
+		if(QuoridorController.getCurrentPlayer().equals(QuoridorController.getWhitePlayer())) {
+			Tile playerTile = QuoridorController.getTileAtRowCol(int1, int2);
 			PlayerPosition opponentPos = new PlayerPosition(q.getCurrentGame().getBlackPlayer(), playerTile);
 			q.getCurrentGame().getCurrentPosition().setWhitePosition(opponentPos);
 		}else {
-			Tile playerTile = q.getBoard().getTile(9*(int1 -1) + (int2 -1));
-			PlayerPosition opponentPos = new PlayerPosition(q.getCurrentGame().getBlackPlayer(), playerTile);
+			Tile playerTile = QuoridorController.getTileAtRowCol(int1, int2);
+			PlayerPosition opponentPos = new PlayerPosition(q.getCurrentGame().getWhitePlayer(), playerTile);
 			q.getCurrentGame().getCurrentPosition().setBlackPosition(opponentPos);
 		}
 	}
@@ -94,11 +94,11 @@ public class MovePawnFeatureStepDef {
 	public void player_s_new_position_shall_be(Integer int1, Integer int2) {
 
 		if(QuoridorController.getBlackPlayer().equals(QuoridorController.getCurrentPlayer())) {
-			assertEquals(int1, (Integer)q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getRow());
-			assertEquals(int2, (Integer)q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getColumn());
+			assertEquals(int1, (Integer)QuoridorController.getBlackPlayer().getGameAsBlack().getCurrentPosition().getBlackPosition().getTile().getRow());
+			assertEquals(int2, (Integer)QuoridorController.getBlackPlayer().getGameAsBlack().getCurrentPosition().getBlackPosition().getTile().getColumn());
 		}else {
-			assertEquals(int1, (Integer)q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getRow());
-			assertEquals(int2, (Integer)q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getColumn());
+			assertEquals(int1, (Integer)QuoridorController.getWhitePlayer().getGameAsWhite().getCurrentPosition().getWhitePosition().getTile().getRow());
+			assertEquals(int2, (Integer)QuoridorController.getWhitePlayer().getGameAsWhite().getCurrentPosition().getWhitePosition().getTile().getColumn());
 		}
 
 	}
