@@ -50,6 +50,7 @@ public class SwitchPlayerStepDefinition {
 			playerToMove = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
 			QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().setPlayerToMove(playerToMove);
 	}
+	}
 
 	/**
 	 * sets the time remaining for current Player to 180s
