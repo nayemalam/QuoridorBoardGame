@@ -1634,7 +1634,7 @@ public class QuoridorController {
 	/**
 	 * This method is the main method to get all the available tiles for a pawn move for a given player
 	 * It calls other methods that have the logic behind them
-	 * @author Alexander Legouverneur
+	 * @author Alexander Legouverneur, Tristan Bouchard
 	 * @param player the current player
 	 */
 	public static void mainValidateMovePawn(Player player) {
@@ -1880,6 +1880,10 @@ public class QuoridorController {
 			return false;
 	}
 
+	public static void InitTwoUsers() {
+		QuoridorApplication.getQuoridor().addUser("U1");
+		QuoridorApplication.getQuoridor().addUser("U2");
+	}
 }
 
 
