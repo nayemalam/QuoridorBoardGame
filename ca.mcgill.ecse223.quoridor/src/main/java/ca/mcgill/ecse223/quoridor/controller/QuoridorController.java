@@ -700,11 +700,14 @@ public class QuoridorController {
 			Direction dir1;
 			int col1;
 			int row1;
+			
 			for (int i = 0; i <= 19; i++) {
+				boolean wallPassed = false;
 				if (id == i) {
+					
 					continue; // don t want to compare the wall with itself
 				}
-
+				//System.out.println("Iteration Id"+ i);
 				if (i > 9) {
 
 					if (q.getCurrentGame().getBlackPlayer().getWall(i - 10).hasMove() == false) {
@@ -713,6 +716,7 @@ public class QuoridorController {
 					row1 = q.getCurrentGame().getBlackPlayer().getWall(i - 10).getMove().getTargetTile().getRow();
 					col1 = q.getCurrentGame().getBlackPlayer().getWall(i - 10).getMove().getTargetTile().getColumn();
 					dir1 = q.getCurrentGame().getBlackPlayer().getWall(i - 10).getMove().getWallDirection();
+					wallPassed = true;
 				} else {
 					if (q.getCurrentGame().getWhitePlayer().getWall(i).hasMove() == false) {
 						continue;
@@ -720,9 +724,10 @@ public class QuoridorController {
 					row1 = q.getCurrentGame().getWhitePlayer().getWall(i).getMove().getTargetTile().getRow();
 					col1 = q.getCurrentGame().getWhitePlayer().getWall(i).getMove().getTargetTile().getColumn();
 					dir1 = q.getCurrentGame().getWhitePlayer().getWall(i).getMove().getWallDirection();
+					wallPassed = true;
 				}
 
-				if (dir1 == Direction.Horizontal) {
+				if (wallPassed && dir1 == Direction.Horizontal) {
 					if (Walldir.equals("horizontal")) {
 						if (col1 == col && row1 == row) {
 							return false;
@@ -738,7 +743,7 @@ public class QuoridorController {
 							return false;
 						}
 					}
-				} else {
+				} else if(wallPassed && dir1 == Direction.Vertical) {
 					if (Walldir.equals("vertical")) {
 						if (row1 == row + 1 && col1 == col) {
 							return false;
@@ -758,7 +763,11 @@ public class QuoridorController {
 			}
 			return true;
 		} 
-		else return false;
+		
+		else {
+			System.out.println("this");
+			return false;
+		}
 	}
 
 	/**
@@ -916,7 +925,7 @@ public class QuoridorController {
 	 * @param player player to whom the wall belongs
 	 */
 	public static boolean wallMove(int row, int col, String dir, Wall aWall, Player player) {
-		System.out.println("wall move not working " + row );
+		System.out.println("wall move not working " + row + ","+ col + " id "+ aWall.getId());
 		
 		Quoridor q = QuoridorApplication.getQuoridor();
 		boolean pos;
@@ -924,21 +933,23 @@ public class QuoridorController {
 
 		if (dir.equals("vertical")) {
 			pos = initiatePosValidation(row, col, "vertical", aWall.getId());
-
-			if (aWall.hasMove() == false && pos == true) {
+			System.out.println("THIS IS IN MOVE WALL "+pos);
+			System.out.println("Wall Has move "+aWall.hasMove());
+			if (aWall.hasMove() && pos == true) {
 				moveNumber++;
-				new WallMove(moveNumber, 1, player, aTile, q.getCurrentGame(), Direction.Vertical, aWall);
-
+				
+				aWall.getMove().setWallDirection(Direction.Vertical);
+				aWall.getMove().setTargetTile(aTile);
 				if(player.equals(q.getCurrentGame().getWhitePlayer())) {
 
-					//quoridor.getCurrentGame().getCurrentPosition().removeWhiteWallsInStock(aWall);
-					quoridor.getCurrentGame().getCurrentPosition().addWhiteWallsOnBoard(aWall);
+					
+					q.getCurrentGame().getCurrentPosition().addWhiteWallsOnBoard(aWall);
 
 				}
 				else {
 
 					//quoridor.getCurrentGame().getCurrentPosition().removeBlackWallsInStock(aWall);
-					quoridor.getCurrentGame().getCurrentPosition().addBlackWallsOnBoard(aWall);
+					q.getCurrentGame().getCurrentPosition().addBlackWallsOnBoard(aWall);
 				}
 
 
@@ -948,20 +959,20 @@ public class QuoridorController {
 			}
 		} else {
 			pos = initiatePosValidation(row, col, "horizontal", aWall.getId());
-
-			if (aWall.hasMove() == false && pos == true) {
+			if (aWall.hasMove() && pos == true) {
 				moveNumber++;
-				new WallMove(moveNumber, 1, player, aTile, q.getCurrentGame(), Direction.Horizontal, aWall);
+				aWall.getMove().setWallDirection(Direction.Horizontal);
+				aWall.getMove().setTargetTile(aTile);
 				if(player.equals(q.getCurrentGame().getWhitePlayer())) {
 
-					//quoridor.getCurrentGame().getCurrentPosition().removeWhiteWallsInStock(aWall);
-					quoridor.getCurrentGame().getCurrentPosition().addWhiteWallsOnBoard(aWall);
+					q.getCurrentGame().getCurrentPosition().addWhiteWallsOnBoard(aWall);
 
 				}
 				else {
 
-					//quoridor.getCurrentGame().getCurrentPosition().removeBlackWallsInStock(aWall);
-					quoridor.getCurrentGame().getCurrentPosition().addBlackWallsOnBoard(aWall);
+					
+					q.getCurrentGame().getCurrentPosition().addBlackWallsOnBoard(aWall);
+					
 				}
 
 				return true;
