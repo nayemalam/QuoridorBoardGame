@@ -736,7 +736,13 @@ public class MainGameWindow {
 					grabWall.setText("Grab Wall");
 
 				}
-	
+
+				
+				
+				if(QuoridorController.wallMove(wallMoveCandidate.row, wallMoveCandidate.col, QuoridorController.getWallDirection(wallMoveCandidate.isRotated).toString(), QuoridorController.getWallMoveCandidate(), QuoridorController.getCurrentPlayer())){
+					dropWallHandler(dropWall, grabWall);
+				}
+
 				
 				frmQuoridorPlay.repaint();
 			}

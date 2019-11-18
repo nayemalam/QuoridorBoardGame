@@ -916,7 +916,8 @@ public class QuoridorController {
 	 * @param player player to whom the wall belongs
 	 */
 	public static boolean wallMove(int row, int col, String dir, Wall aWall, Player player) {
-
+		System.out.println("wall move not working " + row );
+		
 		Quoridor q = QuoridorApplication.getQuoridor();
 		boolean pos;
 		Tile aTile = new Tile(row, col, q.getBoard());
