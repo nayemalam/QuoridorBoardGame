@@ -737,9 +737,9 @@ public class MainGameWindow {
 				}
 				
 				
-				//if(QuoridorController.wallMove(wallMoveCandidate.row, wallMoveCandidate.col, QuoridorController.getWallDirection(wallMoveCandidate.isRotated).toString(), QuoridorController.getWallMoveCandidate(), QuoridorController.getCurrentPlayer())){
+				if(QuoridorController.wallMove(wallMoveCandidate.row, wallMoveCandidate.col, QuoridorController.getWallDirection(wallMoveCandidate.isRotated).toString(), QuoridorController.getWallMoveCandidate(), QuoridorController.getCurrentPlayer())){
 					dropWallHandler(dropWall, grabWall);
-				//}
+				}
 				
 				frmQuoridorPlay.repaint();
 			}
