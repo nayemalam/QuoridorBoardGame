@@ -251,6 +251,7 @@ public class MainGameWindow {
 		navigationButtonsPanel.add(wallActionsPanel);
 
 		WallCandidateHandler(grabWall, dropWall);
+		dropWallHandler(dropWall, grabWall);
 		rotateWallHandler(rotateWall);
 		createNavigationButtons();
 
@@ -735,11 +736,13 @@ public class MainGameWindow {
 					grabWall.setText("Grab Wall");
 
 				}
+
 				
 				
 				if(QuoridorController.wallMove(wallMoveCandidate.row, wallMoveCandidate.col, QuoridorController.getWallDirection(wallMoveCandidate.isRotated).toString(), QuoridorController.getWallMoveCandidate(), QuoridorController.getCurrentPlayer())){
 					dropWallHandler(dropWall, grabWall);
 				}
+
 				
 				frmQuoridorPlay.repaint();
 			}
@@ -750,12 +753,14 @@ public class MainGameWindow {
 	private void dropWallHandler(JButton dropWall, JButton grabWall) {
 		dropWall.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(QuoridorController.wallMove(wallMoveCandidate.row + 1, wallMoveCandidate.col + 1, QuoridorController.getWallDirection(wallMoveCandidate.isRotated).toString(), QuoridorController.getWallMoveCandidate(), QuoridorController.getCurrentPlayer())){
+					wallMoveCandidate.wallMoveBtn.setIcon(new ImageIcon("./dropped.png"));
+					wallMoveCandidate = null;
+					grabWall.setText("Grab Wall");
+					updateCurrentPlayer();
+					frmQuoridorPlay.repaint();
+				}
 				
-				wallMoveCandidate.wallMoveBtn.setIcon(new ImageIcon("./dropped.png"));
-				wallMoveCandidate = null;
-				grabWall.setText("Grab Wall");
-				updateCurrentPlayer();
-				frmQuoridorPlay.repaint();
 			}
 		});
 	}
