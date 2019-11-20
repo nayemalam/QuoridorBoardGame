@@ -24,6 +24,8 @@ public class ControllerUtilities {
 	public static final int BLACK_TILE_INDEX = 76;
 	public static final int TOTAL_WALL_STOCK_AT_START = 10;
 	public static final int TOTAL_NUMBER_OF_WALLS_PER_PLAYER = 10;
+	public static final String CURRENT_BLACK_TIMER_THREAD_NAME = "CurrentBlackPlayerTimerThread";
+	public static final String CURRENT_WHITE_TIMER_THREAD_NAME = "CurrentWhitePlayerTimerThread";
 	
 	public enum DiagonalDirections{
 		upleft,

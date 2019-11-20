@@ -326,9 +326,14 @@ public class MainGameWindow {
 //		} catch (Exception e) {
 //		}
 		//validatePawnPosition();
+		// Stop old current Playerclock and start new player clock
+		QuoridorController.stopCurrentPlayerClock();
+		
 		QuoridorController.switchCurrentPlayer();
 		currentPlayer_TextField.setFont(new Font("Tahoma", Font.BOLD, 13));
 		currentPlayer_TextField.setText(QuoridorController.getCurrentPlayer().getUser().getName());
+		
+		
 	}
 	private void createBlackAndWhitePawns() {
 

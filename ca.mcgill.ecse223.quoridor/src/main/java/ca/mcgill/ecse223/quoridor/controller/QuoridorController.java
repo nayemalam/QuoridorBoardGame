@@ -22,6 +22,9 @@ public class QuoridorController {
 	private static Quoridor quoridor;
 
 	private static List<Tile> availableTiles = new ArrayList<Tile>();
+	
+	private static Timer currentBlackPlayerTimer;
+	private static Timer currentWhitePlayerTimer;
 
 	/**
 	 * Method to capture the time at which the clock is stopped
@@ -68,7 +71,7 @@ public class QuoridorController {
 	 * 
 	 */
 	public static void switchCurrentPlayer(){
-
+		stopCurrentPlayerClock();
 		Game game = QuoridorApplication.getQuoridor().getCurrentGame();
 		Player curPlayer = getCurrentPlayer();
 		if(curPlayer.equals(game.getWhitePlayer())){
@@ -80,6 +83,8 @@ public class QuoridorController {
 			game.getWhitePlayer().setNextPlayer(game.getBlackPlayer());
 			setCurrentPlayer(getWhitePlayer());
 		}
+		startClock();
+		
 	}
 
 	/**
@@ -212,14 +217,44 @@ public class QuoridorController {
 			throw new RuntimeException("Game has incorrect amount of players. Please verify the players.");
 		}
 		Player currentPlayer = getCurrentPlayer();
-
-		// TODO: how do I start the time???
-		Timer timer = new Timer("MyTimer");
-		timer.schedule(new ThreadTimer(currentPlayer), 0, 1000);
+		
+		if(currentPlayer.equals(getBlackPlayer())) {
+			currentBlackPlayerTimer = new Timer(ControllerUtilities.CURRENT_BLACK_TIMER_THREAD_NAME);
+			currentBlackPlayerTimer.schedule(new ThreadTimer(currentPlayer), 0, 1000);
+		} else {
+			currentBlackPlayerTimer = new Timer(ControllerUtilities.CURRENT_WHITE_TIMER_THREAD_NAME);
+			currentBlackPlayerTimer.schedule(new ThreadTimer(currentPlayer), 0, 1000);
+		}
 		// Set game status to running
 		currentGame.setGameStatus(GameStatus.Running);
 
 		return true;
+	}
+	
+	public static void stopCurrentPlayerClock() {
+		Player currentPlayer = getCurrentPlayer();
+		
+		if(currentPlayer.equals(getBlackPlayer()) && !(currentBlackPlayerTimer == null)) {
+			currentBlackPlayerTimer.cancel();
+			currentBlackPlayerTimer = null;
+		} else if(!(currentWhitePlayerTimer == null)){
+			currentWhitePlayerTimer.cancel();
+			currentWhitePlayerTimer = null;
+		} else {
+		}
+		
+	}
+	public static void stopNonCurrentPlayerClock() {
+		Player currentPlayer = getCurrentPlayer();
+		
+		if(currentPlayer.equals(getBlackPlayer()) && !(currentWhitePlayerTimer == null)) {
+			currentWhitePlayerTimer.cancel();
+			currentWhitePlayerTimer = null;
+		} else if(!(currentBlackPlayerTimer == null)){
+			currentBlackPlayerTimer.cancel();
+			currentBlackPlayerTimer = null;
+		} else {
+		}
 	}
 
 	/**
