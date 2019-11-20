@@ -319,15 +319,16 @@ public class MainGameWindow {
 		timeRemaining_TextField.setText(remainingTimeValue);
 	}
 
-	private void updateCurrentPlayer(){
-		String playerName = "";
-		try {
-			playerName = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getPlayerToMove().getUser().getName();
-		} catch (Exception e) {
-		}
+	private void switchCurrentPlayerGuiAndBackend(){
+//		String playerName = "";
+//		try {
+//			playerName = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getPlayerToMove().getUser().getName();
+//		} catch (Exception e) {
+//		}
 		//validatePawnPosition();
+		QuoridorController.switchCurrentPlayer();
 		currentPlayer_TextField.setFont(new Font("Tahoma", Font.BOLD, 13));
-		currentPlayer_TextField.setText(playerName);
+		currentPlayer_TextField.setText(QuoridorController.getCurrentPlayer().getUser().getName());
 	}
 	private void createBlackAndWhitePawns() {
 
@@ -580,7 +581,7 @@ public class MainGameWindow {
 					} catch(Exception event){}
 					
 				}
-				updateCurrentPlayer();
+				switchCurrentPlayerGuiAndBackend();
 				frmQuoridorPlay.repaint();
 
 			}
@@ -624,7 +625,7 @@ public class MainGameWindow {
 
 				
 				}
-				updateCurrentPlayer();
+				switchCurrentPlayerGuiAndBackend();
 				frmQuoridorPlay.repaint();
 
 			}
@@ -668,7 +669,7 @@ public class MainGameWindow {
 
 					
 				}
-				updateCurrentPlayer();
+				switchCurrentPlayerGuiAndBackend();
 				frmQuoridorPlay.repaint();
 
 			}
@@ -713,7 +714,7 @@ public class MainGameWindow {
 
 					
 				}
-				updateCurrentPlayer();
+				switchCurrentPlayerGuiAndBackend();
 				frmQuoridorPlay.repaint();
 			}
 		});
@@ -724,27 +725,15 @@ public class MainGameWindow {
 		grabWall.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				// boolean grabbed =
-				
-
 				if (wallMoveCandidate == null && QuoridorController.grabWall(QuoridorApplication.getQuoridor())) {
-					
 					JButton wallMoveBtn = createWallMoveCandidate();
 					wallMoveCandidate = new MoveCandidate(wallMoveBtn, 0, 0);
 					grabWall.setText("Cancel Move");
-
 				} else {
 					boardPanel.remove(wallMoveCandidate.wallMoveBtn);
 					wallMoveCandidate = null;
 					grabWall.setText("Grab Wall");
-
 				}
-
-				
-				
-			
-
-				
 				frmQuoridorPlay.repaint();
 			}
 		});
@@ -754,11 +743,12 @@ public class MainGameWindow {
 	private void dropWallHandler(JButton dropWall, JButton grabWall) {
 		dropWall.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				// Create wall move candidate
 				if(QuoridorController.wallMove(wallMoveCandidate.row + 1, wallMoveCandidate.col + 1, QuoridorController.getWallDirection(wallMoveCandidate.isRotated).toString(), QuoridorController.getWallMoveCandidate(), QuoridorController.getCurrentPlayer())){
 					wallMoveCandidate.wallMoveBtn.setIcon(new ImageIcon("./dropped.png"));
 					wallMoveCandidate = null;
 					grabWall.setText("Grab Wall");
-					updateCurrentPlayer();
+					switchCurrentPlayerGuiAndBackend();
 					frmQuoridorPlay.repaint();
 				}
 				

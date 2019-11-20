@@ -51,12 +51,9 @@ public class SwitchPlayerStepDefinition {
 		blackPlayerTimer = new PlayerThread("black", new ThreadTimer(blackPlayer), new Timer());
 		whitePlayerTimer = new PlayerThread("white", new ThreadTimer(whitePlayer), new Timer());
 		if (string.equalsIgnoreCase("white")) {
-
 			QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().setPlayerToMove(whitePlayer);
 			QuoridorController.setCurrentPlayer(QuoridorController.getWhitePlayer());
-
 		} else if (string.equalsIgnoreCase("black")) {
-
 			QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().setPlayerToMove(blackPlayer);
 			QuoridorController.setCurrentPlayer(QuoridorController.getBlackPlayer());
 		}
@@ -127,7 +124,6 @@ public class SwitchPlayerStepDefinition {
 	@When("Player {string} completes his move")
 	public void player_completes_his_move(String string) {
 		// Write code here that turns the phrase above into concrete actions
-
 		QuoridorController.switchCurrentPlayer();
 
 	}
@@ -201,7 +197,6 @@ public class SwitchPlayerStepDefinition {
 			whitePlayerTimer.timer = new Timer();
 			whitePlayerTimer.timer.schedule(whitePlayerTimer.thread, 0, 1000);
 			whitePlayerTimer.hasStarted = true;
-
 		}
 	}
 
@@ -221,8 +216,8 @@ public class SwitchPlayerStepDefinition {
 		} else {
 			curPlayer = "white";
 		}
-		//assertEquals(string, curPlayer);
-		assertTrue(true);
+		assertEquals(string, curPlayer);
+		//assertTrue(true);
 
 	}
 }

@@ -74,9 +74,11 @@ public class QuoridorController {
 		if(curPlayer.equals(game.getWhitePlayer())){
 			game.getCurrentPosition().setPlayerToMove(game.getBlackPlayer());
 			game.getBlackPlayer().setNextPlayer(game.getWhitePlayer());
+			setCurrentPlayer(getBlackPlayer());
 		} else {
 			game.getCurrentPosition().setPlayerToMove(game.getWhitePlayer());
 			game.getWhitePlayer().setNextPlayer(game.getBlackPlayer());
+			setCurrentPlayer(getWhitePlayer());
 		}
 	}
 
@@ -1335,7 +1337,7 @@ public class QuoridorController {
 	 */
 	public static Player getCurrentPlayer() {
 		Player playerWhite = QuoridorController.getWhitePlayer();
-		if(playerWhite.hasNextPlayer()){
+		if(playerWhite.hasNextPlayer() && !playerWhite.getNextPlayer().equals(null)){
 			return playerWhite;
 		}
 		else {
@@ -1352,9 +1354,11 @@ public class QuoridorController {
 		Player playerWhite = QuoridorController.getWhitePlayer();
 		if(currentPlayer.equals(playerWhite)){
 			playerWhite.setNextPlayer(getBlackPlayer());
+			getBlackPlayer().setNextPlayer(null);
 		}
 		else {
 			getBlackPlayer().setNextPlayer(playerWhite);
+			getWhitePlayer().setNextPlayer(null);
 		}
 	}
 
