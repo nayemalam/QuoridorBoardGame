@@ -33,6 +33,12 @@ public class ControllerUtilities {
 		downleft,
 		downright
 	}
+	public enum MoveDirections{
+		up,
+		down,
+		left,
+		right
+	}
 	
 	// ***************************************
 	
