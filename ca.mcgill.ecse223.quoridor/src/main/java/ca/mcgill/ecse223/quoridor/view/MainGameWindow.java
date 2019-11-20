@@ -213,7 +213,6 @@ public class MainGameWindow {
 		boardPanel.setPreferredSize(new Dimension(x, y + 500));
 		boardPanel.setBackground(Color.lightGray);
 		navigationButtonsPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
-	
 
 		centerPanel.add(boardPanel);
 		centerPanel.add(navigationButtonsPanel);
@@ -226,17 +225,14 @@ public class MainGameWindow {
 		navigationButtonsPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
 		for (int row = 0; row < TOTAL_ROWS; row++) {
 			for (int col = 0; col < TOTAL_COLS; col++) {
-
 				errorMessage.setVisible(false);
-
 				btnArray[row][col] = new JButton(new ImageIcon("./tile.png"));
-				// btnArray[row][col].setLayout(null);
 				btnArray[row][col].setVisible(true);
-
-				btnArray[row][col].setBounds((tileWidth + 11) * row, (tileLength + 11) * col, tileWidth, tileLength);
-
+				
+				// This may look wrong, but making it right flips everything, so don't touch plz -tbutch
+				btnArray[row][col].setBounds((tileWidth + 11) * col, (tileLength + 11) * row, tileWidth, tileLength);
 				boardPanel.add(btnArray[row][col]);
-				btnArray[row][col].addMouseListener(new ButtonActionListener(row + 1, col + 1));
+				//btnArray[row][col].addMouseListener(new ButtonActionListener(row + 1, col + 1));
 			}
 		}
 		createBlackAndWhitePawns();
@@ -353,22 +349,17 @@ public class MainGameWindow {
 
 		whitePawn.setMaximumSize(new Dimension(20, 20));
 
-		whitePawn.setBounds(btnArray[0][4].getX() + tileWidth, btnArray[0][4].getY() + tileLength, 20, 20);
+		whitePawn.setBounds(btnArray[4][0].getX() + tileWidth, btnArray[4][0].getY() + tileLength, 20, 20);
 		JButton blackPawn = new JButton();
 		blackPawn.setIcon(new ImageIcon("./lightWall.png"));
 
-		JPanel p = new JPanel(new BorderLayout());
-
-		btnArray[8][4].add(blackPawn);
-		// p.add(blackPawn, BorderLayout.NORTH);
-		btnArray[0][4].add(whitePawn);
-		int x = btnArray[8][4].getX() + tileWidth;
-		int y = btnArray[8][4].getY() + tileWidth;
+		btnArray[4][8].add(blackPawn);
+		btnArray[4][0].add(whitePawn);
 
 		blackPawn.setMaximumSize(new Dimension(20, 20));
-		blackPawn.setBounds(btnArray[8][4].getX() + tileWidth / 2, btnArray[8][4].getY(), 20, 20);
-		this.blackPawnMove = new MoveCandidate(blackPawn, 8, 4);
-		this.whitePawnMove = new MoveCandidate(whitePawn, 0, 4);
+		blackPawn.setBounds(btnArray[4][8].getX() + tileWidth / 2, btnArray[4][8].getY(), 20, 20);
+		this.blackPawnMove = new MoveCandidate(blackPawn, 4, 8);
+		this.whitePawnMove = new MoveCandidate(whitePawn, 4, 0);
 	}
 
 	private void wallsHandler(JPanel jPanel, String player) {
@@ -517,21 +508,16 @@ public class MainGameWindow {
 	private void rotateWallHandler(JButton rotateWall) {
 		rotateWall.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
 				if (wallMoveCandidate != null) {
 					// if rotated then it is in vertical position
 					if (wallMoveCandidate.isRotated) {
-
 						setHorizontal();
 						wallMoveCandidate.isRotated = false;
 					} else {
-
 						setVertical();
 						wallMoveCandidate.isRotated = true;
 					}
-
 				}
-
 			}
 		});
 	}
@@ -792,113 +778,109 @@ public class MainGameWindow {
 				}
 			}
 		}
-
 	}
 
-	public static void tileListener(int row, int col) {
+//	public static void tileListener(int row, int col) {
+//
+//		for (int i = 0; i < 20; i++) {
+//
+//			if (wallArray[i].isVisible() == false) {// checking if there is one wall grabbed or not
+//
+//				WallGrabbed = true;
+//				wallIndex = i;
+//
+//			} else {
+//				continue;
+//			}
+//		}
+//		if (WallGrabbed == true) {
+//
+//			vertical.addMouseListener(new MouseAdapter() {
+//
+//				public void mouseClicked(MouseEvent e) {
+//					moveWallView(row, col, "vertical", wallIndex);
+//				}
+//			});
+//
+//			horizontal.addMouseListener(new MouseAdapter() {
+//				public void mouseClicked(MouseEvent e) {
+//					moveWallView(row, col, "horizontal", wallIndex);
+//				}
+//			});
+//
+//		}
+//		if (WallGrabbed == false) {
+//
+//			if (btnArray[CurrRow][CurrCol].getBackground().equals(Color.GREEN)) {
+//
+//				// TODO implement pawn move
+//
+//			} else {
+//
+//				errorMessage.setVisible(true);
+//				SwingUtilities.updateComponentTreeUI(frmQuoridorPlay);
+//
+//			}
+//
+//		}
+//		WallGrabbed = false;
+//
+//	}
 
-		for (int i = 0; i < 20; i++) {
-
-			if (wallArray[i].isVisible() == false) {// checking if there is one wall grabbed or not
-
-				WallGrabbed = true;
-				wallIndex = i;
-
-			} else {
-				continue;
-			}
-		}
-		if (WallGrabbed == true) {
-
-			vertical.addMouseListener(new MouseAdapter() {
-
-				public void mouseClicked(MouseEvent e) {
-					moveWallView(row, col, "vertical", wallIndex);
-				}
-			});
-
-			horizontal.addMouseListener(new MouseAdapter() {
-
-				public void mouseClicked(MouseEvent e) {
-
-					moveWallView(row, col, "horizontal", wallIndex);
-
-				}
-			});
-
-		}
-		if (WallGrabbed == false) {
-
-			if (btnArray[CurrRow][CurrCol].getBackground().equals(Color.GREEN)) {
-
-				// TODO implement pawn move
-
-			} else {
-
-				errorMessage.setVisible(true);
-				SwingUtilities.updateComponentTreeUI(frmQuoridorPlay);
-
-			}
-
-		}
-		WallGrabbed = false;
-
-	}
-
-	public static void moveWallView(int row, int col, String dir, int wallIndex) {
-		if (wallIndex <= 9) {
-
-			panel_10.remove(wallArray[wallIndex]);
-			centerPanel.add(wallArray[wallIndex]);
-			wallArray[wallIndex].setVisible(true);
-			if (QuoridorController.wallMove(row, col, dir, QuoridorController.getWall(wallIndex),
-					QuoridorController.getCurrentPlayer()) == true) {
-				if (dir.equals("horizontal")) {
-
-					wallArray[wallIndex].setBounds(btnArray[row - 1][col - 1].getX(),
-							btnArray[row - 1][col - 1].getY() + tileWidth, wallWidth, wallHeight);
-					wallArray[wallIndex].setVisible(true);
-					SwingUtilities.updateComponentTreeUI(frmQuoridorPlay);
-
-				} else {
-					wallArray[wallIndex].setBounds(btnArray[row - 1][col - 1].getX() + tileLength,
-							btnArray[row - 1][col - 1].getY(), wallHeight, wallWidthV);
-					wallArray[wallIndex].setVisible(true);
-					SwingUtilities.updateComponentTreeUI(frmQuoridorPlay);
-				}
-
-			} else {
-				errorMessage.setVisible(true);
-
-			}
-
-		}
-		if (wallIndex > 9) {
-
-			panel_11.remove(wallArray[wallIndex]);
-			centerPanel.add(wallArray[wallIndex]);
-			if (QuoridorController.wallMove(row, col, dir, QuoridorController.getWall(wallIndex),
-					QuoridorController.getCurrentPlayer()) == true) {
-				if (dir.equals("horizontal")) {
-					btnArray[row][col].setBackground(Color.RED);
-					wallArray[wallIndex].setBounds(btnArray[row - 1][col - 1].getX(),
-							btnArray[row - 1][col - 1].getY() + tileWidth, wallWidth, wallHeight);
-					wallArray[wallIndex].setVisible(true);
-					SwingUtilities.updateComponentTreeUI(frmQuoridorPlay);
-
-				} else {
-					wallArray[wallIndex].setBounds(btnArray[row - 1][col - 1].getX() - 11,
-							btnArray[row - 1][col - 1].getY(), wallHeight, wallWidthV);
-					wallArray[wallIndex].setVisible(true);
-					SwingUtilities.updateComponentTreeUI(frmQuoridorPlay);
-				}
-
-			} else {
-				errorMessage.setVisible(true);
-			}
-		}
-
-	}
+//	public static void moveWallView(int row, int col, String dir, int wallIndex) {
+//		if (wallIndex <= 9) {
+//
+//			panel_10.remove(wallArray[wallIndex]);
+//			centerPanel.add(wallArray[wallIndex]);
+//			wallArray[wallIndex].setVisible(true);
+//			if (QuoridorController.wallMove(row, col, dir, QuoridorController.getWall(wallIndex),
+//					QuoridorController.getCurrentPlayer()) == true) {
+//				if (dir.equals("horizontal")) {
+//
+//					wallArray[wallIndex].setBounds(btnArray[row - 1][col - 1].getX(),
+//							btnArray[row - 1][col - 1].getY() + tileWidth, wallWidth, wallHeight);
+//					wallArray[wallIndex].setVisible(true);
+//					SwingUtilities.updateComponentTreeUI(frmQuoridorPlay);
+//
+//				} else {
+//					wallArray[wallIndex].setBounds(btnArray[row - 1][col - 1].getX() + tileLength,
+//							btnArray[row - 1][col - 1].getY(), wallHeight, wallWidthV);
+//					wallArray[wallIndex].setVisible(true);
+//					SwingUtilities.updateComponentTreeUI(frmQuoridorPlay);
+//				}
+//
+//			} else {
+//				errorMessage.setVisible(true);
+//
+//			}
+//
+//		}
+//		if (wallIndex > 9) {
+//
+//			panel_11.remove(wallArray[wallIndex]);
+//			centerPanel.add(wallArray[wallIndex]);
+//			if (QuoridorController.wallMove(row, col, dir, QuoridorController.getWall(wallIndex),
+//					QuoridorController.getCurrentPlayer()) == true) {
+//				if (dir.equals("horizontal")) {
+//					btnArray[row][col].setBackground(Color.RED);
+//					wallArray[wallIndex].setBounds(btnArray[row - 1][col - 1].getX(),
+//							btnArray[row - 1][col - 1].getY() + tileWidth, wallWidth, wallHeight);
+//					wallArray[wallIndex].setVisible(true);
+//					SwingUtilities.updateComponentTreeUI(frmQuoridorPlay);
+//
+//				} else {
+//					wallArray[wallIndex].setBounds(btnArray[row - 1][col - 1].getX() - 11,
+//							btnArray[row - 1][col - 1].getY(), wallHeight, wallWidthV);
+//					wallArray[wallIndex].setVisible(true);
+//					SwingUtilities.updateComponentTreeUI(frmQuoridorPlay);
+//				}
+//
+//			} else {
+//				errorMessage.setVisible(true);
+//			}
+//		}
+//
+//	}
 	
 	/**
 	 * Method used to update the remaining time for the currentplayer

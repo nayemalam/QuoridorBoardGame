@@ -23,8 +23,8 @@ public class QuoridorController {
 
 	private static List<Tile> availableTiles = new ArrayList<Tile>();
 	
-	private static Timer currentBlackPlayerTimer;
-	private static Timer currentWhitePlayerTimer;
+	private static Timer currentBlackPlayerTimer = null;
+	private static Timer currentWhitePlayerTimer = null;
 
 	/**
 	 * Method to capture the time at which the clock is stopped
@@ -72,6 +72,7 @@ public class QuoridorController {
 	 */
 	public static void switchCurrentPlayer(){
 		stopCurrentPlayerClock();
+		stopNonCurrentPlayerClock();
 		Game game = QuoridorApplication.getQuoridor().getCurrentGame();
 		Player curPlayer = getCurrentPlayer();
 		if(curPlayer.equals(game.getWhitePlayer())){
