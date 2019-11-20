@@ -584,6 +584,7 @@ public class MainGameWindow {
 	private void moveHandler(ControllerUtilities.MoveDirections dir) {
 		
 		// If a wall move is instantiated, move the wall move candidate!
+		boolean playerMoved = false;
 		if (wallMoveCandidate != null) {
 			if (dir == ControllerUtilities.MoveDirections.up && moveIsValidated(wallMoveCandidate.row - 1, wallMoveCandidate.col)) {
 				wallMoveCandidate.row -= 1;
@@ -605,52 +606,69 @@ public class MainGameWindow {
 		// If no wall move candidate exists, move the pawn!
 		} else {
 			Player currentPlayer = QuoridorController.getCurrentPlayer();
-			int targetPawnRow = 0;
-			int targetPawnColumn = 0;
-
+			int targetRow = 0;
+			int targetCol = 0;
+			boolean targetModified = false;
+			
 			if (currentPlayer.equals(QuoridorController.getWhitePlayer())) {
-				
-				if (dir == ControllerUtilities.MoveDirections.up && moveIsValidated(wallMoveCandidate.row - 1, wallMoveCandidate.col)) {
-					whitePawnMove.row -= 1;
-				} else if (dir == ControllerUtilities.MoveDirections.down && moveIsValidated(wallMoveCandidate.row + 1, wallMoveCandidate.col)) {
-					whitePawnMove.row += 1;
-				} else if (dir == ControllerUtilities.MoveDirections.left && moveIsValidated(wallMoveCandidate.row, wallMoveCandidate.col - 1)) {
-					whitePawnMove.col -= 1;
-				} else if (dir == ControllerUtilities.MoveDirections.right && moveIsValidated(wallMoveCandidate.row, wallMoveCandidate.col + 1)) {
-					whitePawnMove.col += 1;
+				targetRow = whitePawnMove.row;
+				targetCol = whitePawnMove.col;
+				if (dir == ControllerUtilities.MoveDirections.up && moveIsValidated(whitePawnMove.row - 1, whitePawnMove.col)) {
+					targetModified = true;
+					targetRow = whitePawnMove.row - 1;
+				} else if (dir == ControllerUtilities.MoveDirections.down && moveIsValidated(whitePawnMove.row + 1, whitePawnMove.col)) {
+					targetModified = true;
+					targetRow = whitePawnMove.row + 1;
+				} else if (dir == ControllerUtilities.MoveDirections.left && moveIsValidated(whitePawnMove.row, whitePawnMove.col - 1)) {
+					targetModified = true;
+					targetCol = whitePawnMove.col - 1;
+				} else if (dir == ControllerUtilities.MoveDirections.right && moveIsValidated(whitePawnMove.row, whitePawnMove.col + 1)) {
+					targetModified = true;
+					targetCol = whitePawnMove.col + 1;
 				}
-
-				if (whitePawnMove.row > 0) {
+				if(targetModified) {
 					btnArray[whitePawnMove.row][whitePawnMove.col].remove(whitePawnMove.wallMoveBtn);
-					btnArray[--whitePawnMove.row][whitePawnMove.col].add(whitePawnMove.wallMoveBtn);
+					whitePawnMove.row = targetRow;
+					whitePawnMove.col = targetCol;
+					btnArray[whitePawnMove.row][whitePawnMove.col].add(whitePawnMove.wallMoveBtn);
+					playerMoved = true;
 				}
 			} else if (currentPlayer.equals(QuoridorController.getBlackPlayer())) {
-				if (dir == ControllerUtilities.MoveDirections.up && moveIsValidated(wallMoveCandidate.row - 1, wallMoveCandidate.col)) {
-					blackPawnMove.row -= 1;
-				} else if (dir == ControllerUtilities.MoveDirections.down && moveIsValidated(wallMoveCandidate.row + 1, wallMoveCandidate.col)) {
-					blackPawnMove.row += 1;
-				} else if (dir == ControllerUtilities.MoveDirections.left && moveIsValidated(wallMoveCandidate.row, wallMoveCandidate.col - 1)) {
-					blackPawnMove.col -= 1;
-				} else if (dir == ControllerUtilities.MoveDirections.right && moveIsValidated(wallMoveCandidate.row, wallMoveCandidate.col + 1)) {
-					blackPawnMove.col += 1;
+				targetRow = blackPawnMove.row;
+				targetCol = blackPawnMove.col;
+				if (dir == ControllerUtilities.MoveDirections.up && moveIsValidated(blackPawnMove.row - 1, blackPawnMove.col)) {
+					targetModified = true;
+					targetRow = blackPawnMove.row - 1;
+				} else if (dir == ControllerUtilities.MoveDirections.down && moveIsValidated(blackPawnMove.row + 1, blackPawnMove.col)) {
+					targetModified = true;
+					targetRow = blackPawnMove.row + 1;
+				} else if (dir == ControllerUtilities.MoveDirections.left && moveIsValidated(blackPawnMove.row, blackPawnMove.col - 1)) {
+					targetModified = true;
+					targetCol = blackPawnMove.col - 1;
+				} else if (dir == ControllerUtilities.MoveDirections.right && moveIsValidated(blackPawnMove.row, blackPawnMove.col + 1)) {
+					targetModified = true;
+					targetCol = blackPawnMove.col + 1;
 				}
-				if (blackPawnMove.row > 0) {
+				if(targetModified) {
 					btnArray[blackPawnMove.row][blackPawnMove.col].remove(blackPawnMove.wallMoveBtn);
-					btnArray[--blackPawnMove.row][blackPawnMove.col].add(blackPawnMove.wallMoveBtn);
-				}	
+					blackPawnMove.row = targetRow;
+					blackPawnMove.col = targetCol;
+					btnArray[blackPawnMove.row][blackPawnMove.col].add(blackPawnMove.wallMoveBtn);
+					playerMoved = true;
+				}
 			}
 		}
-		if(wallMoveCandidate == null) {
+		if(wallMoveCandidate == null && playerMoved) {
 			switchCurrentPlayerGuiAndBackend();
 		}
-		validatePawnPosition();
+		//validatePawnPosition();
 		frmQuoridorPlay.repaint();
 	}
 	
 	private boolean moveIsValidated(int row, int column) {
-		boolean rowIsValid = row > 0 && row <= 9;
-		boolean colIsValid = column > 0 && column <= 9;
-		return rowIsValid && colIsValid;
+		boolean rowIsValid = row >= 0 && row < 9;
+		boolean colIsValid = column >= 0 && column < 9;
+		return rowIsValid & colIsValid;
 	}
 	
 	private void WallCandidateHandler(JButton grabWall, JButton dropWall) {
@@ -745,8 +763,8 @@ public class MainGameWindow {
 		east.add(est, BorderLayout.EAST);
 		moveUpHandler(north);
 		moveDownHandler(south);
-		moveLeftHandler(est);
-		moveRightHandler(west);
+		moveRightHandler(est);
+		moveLeftHandler(west);
 		frmQuoridorPlay.repaint();
 	}
 
