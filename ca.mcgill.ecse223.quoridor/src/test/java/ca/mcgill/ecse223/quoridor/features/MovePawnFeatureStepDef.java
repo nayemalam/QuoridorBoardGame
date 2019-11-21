@@ -28,13 +28,14 @@ public class MovePawnFeatureStepDef {
 
 	@Given("The player is located at {int}:{int}")
 	public void the_player_is_located_at(Integer int1, Integer int2) {
-
-		if(q.getCurrentGame().getCurrentPosition().getPlayerToMove().equals(q.getCurrentGame().getBlackPlayer())) {
-			Tile playerTile = q.getBoard().getTile(9*(int1 -1) + (int2 -1));
+		
+		// If current player is black player, set position
+		if(QuoridorController.getCurrentPlayer().equals(QuoridorController.getBlackPlayer())) {
+			Tile playerTile = QuoridorController.getTileAtRowCol(int1, int2);
 			PlayerPosition playerPos = new PlayerPosition(q.getCurrentGame().getBlackPlayer(), playerTile);
 			q.getCurrentGame().getCurrentPosition().setBlackPosition(playerPos);
 		}else {
-			Tile playerTile = q.getBoard().getTile(9*(int1 -1) + (int2 -1));
+			Tile playerTile = QuoridorController.getTileAtRowCol(int1, int2);
 			PlayerPosition playerPos = new PlayerPosition(q.getCurrentGame().getBlackPlayer(), playerTile);
 			q.getCurrentGame().getCurrentPosition().setWhitePosition(playerPos);
 		}
@@ -43,14 +44,15 @@ public class MovePawnFeatureStepDef {
 	@Given("The opponent is located at {int}:{int}")
 	public void the_opponent_is_located_at(Integer int1, Integer int2) {
 
+		// If current player is white player, set position of black player
 		if(QuoridorController.getCurrentPlayer().equals(QuoridorController.getWhitePlayer())) {
 			Tile playerTile = QuoridorController.getTileAtRowCol(int1, int2);
 			PlayerPosition opponentPos = new PlayerPosition(q.getCurrentGame().getBlackPlayer(), playerTile);
-			q.getCurrentGame().getCurrentPosition().setWhitePosition(opponentPos);
+			q.getCurrentGame().getCurrentPosition().setBlackPosition(opponentPos);
 		}else {
 			Tile playerTile = QuoridorController.getTileAtRowCol(int1, int2);
 			PlayerPosition opponentPos = new PlayerPosition(q.getCurrentGame().getWhitePlayer(), playerTile);
-			q.getCurrentGame().getCurrentPosition().setBlackPosition(opponentPos);
+			q.getCurrentGame().getCurrentPosition().setWhitePosition(opponentPos);
 		}
 	}
 
@@ -92,8 +94,9 @@ public class MovePawnFeatureStepDef {
 
 	@Then("Player's new position shall be {int}:{int}")
 	public void player_s_new_position_shall_be(Integer int1, Integer int2) {
-
-		if(QuoridorController.getBlackPlayer().equals(QuoridorController.getCurrentPlayer())) {
+		
+		// Player has switched after a valid move, will not switch after an invalid move
+		if(QuoridorController.getCurrentPlayer().equals(QuoridorController.getBlackPlayer())) {
 			assertEquals(int1, (Integer)QuoridorController.getBlackPlayer().getGameAsBlack().getCurrentPosition().getBlackPosition().getTile().getRow());
 			assertEquals(int2, (Integer)QuoridorController.getBlackPlayer().getGameAsBlack().getCurrentPosition().getBlackPosition().getTile().getColumn());
 		}else {
@@ -105,7 +108,6 @@ public class MovePawnFeatureStepDef {
 
 	@Then("The next player to move shall become {string}")
 	public void the_next_player_to_move_shall_become(String string) {
-
 		String nextPlayerToMove = "";
 		if(QuoridorController.getCurrentPlayer().equals(QuoridorController.getBlackPlayer())) {
 			if(legalMove) {
@@ -120,7 +122,9 @@ public class MovePawnFeatureStepDef {
 				nextPlayerToMove = "white";
 			}
 		}
+		QuoridorController.switchCurrentPlayer();
 		assertEquals(string, nextPlayerToMove);
+		
 	}
 
 	@Given("There is a {string} wall at {int}:{int}")
