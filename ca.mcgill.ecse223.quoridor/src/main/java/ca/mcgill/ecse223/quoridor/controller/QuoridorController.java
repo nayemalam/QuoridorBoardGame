@@ -1624,7 +1624,7 @@ public class QuoridorController {
 		else {
 			throw new IllegalArgumentException("Illegal move!");
 		}
-		switchCurrentPlayer();
+		//switchCurrentPlayer();
 		return true;
 	} 
 

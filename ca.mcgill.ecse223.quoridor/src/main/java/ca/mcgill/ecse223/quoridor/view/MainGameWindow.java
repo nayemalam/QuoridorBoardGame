@@ -638,6 +638,7 @@ public class MainGameWindow {
 			}
 		}
 		if(wallMoveCandidate == null) {
+			QuoridorController.switchCurrentPlayer();
 		}
 		getAvailableMovesToCurrentPlayer();
 		frmQuoridorPlay.repaint();
