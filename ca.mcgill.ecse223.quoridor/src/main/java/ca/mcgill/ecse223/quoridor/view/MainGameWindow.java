@@ -637,8 +637,7 @@ public class MainGameWindow {
 				}
 			}
 		}
-		if(wallMoveCandidate == null && playerMoved) {
-			//switchCurrentPlayerGuiAndBackend();
+		if(wallMoveCandidate == null) {
 		}
 		getAvailableMovesToCurrentPlayer();
 		frmQuoridorPlay.repaint();
@@ -687,6 +686,7 @@ public class MainGameWindow {
 					wallMoveCandidate = null;
 					grabWall.setText("Grab Wall");
 					switchCurrentPlayerGuiAndBackend();
+					getAvailableMovesToCurrentPlayer();
 					frmQuoridorPlay.repaint();
 				}
 				
@@ -790,7 +790,7 @@ public class MainGameWindow {
 		boolean movePossible = false;
 		QuoridorController.mainValidateMovePawn(QuoridorController.getCurrentPlayer());
 		for(Tile tile: QuoridorController.getAvailableTiles()) {
-			if(targetRow == tile.getRow() && targetCol == tile.getColumn()) {
+			if(targetRow + 1 == tile.getRow() && targetCol + 1 == tile.getColumn()) {
 				return true;
 			}
 		}

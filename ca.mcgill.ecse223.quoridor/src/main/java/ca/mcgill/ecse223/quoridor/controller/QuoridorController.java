@@ -1725,7 +1725,7 @@ public class QuoridorController {
 		if(!checkWallOnWay(currentRow+1, currentCol, "down") && pawnOnWay(player, false)) {
 			pawnOnWay(player, true);
 		}
-
+		int i = 0;
 	}
 
 	/**
