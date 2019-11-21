@@ -328,7 +328,7 @@ public class MainGameWindow {
 		});
 		northPanel.add(btnStartWhiteTimer);
 		
-		validatePawnPosition();
+		getAvailableMovesToCurrentPlayer();
 	}
 
 	private void switchCurrentPlayerGuiAndBackend(){
@@ -654,7 +654,7 @@ public class MainGameWindow {
 		if(wallMoveCandidate == null && playerMoved) {
 			switchCurrentPlayerGuiAndBackend();
 		}
-		validatePawnPosition();
+		getAvailableMovesToCurrentPlayer();
 		frmQuoridorPlay.repaint();
 	}
 	
@@ -779,7 +779,7 @@ public class MainGameWindow {
 	 * This methods sets all the available tiles for pawn move in green
 	 * @author Alexander Legouverneur
 	 */
-	private void validatePawnPosition() {
+	private void getAvailableMovesToCurrentPlayer() {
 		QuoridorController.mainValidateMovePawn(QuoridorController.getCurrentPlayer());
 		for(int column = 1; column<=9 ; column++) {
 			for(int row = 1; row<=9; row++) {
@@ -792,6 +792,19 @@ public class MainGameWindow {
 			}
 		}
 		frmQuoridorPlay.repaint();
+	}
+	
+	private boolean validateIfPawnMoveIsPossible() {
+		boolean movePossible = false;
+		QuoridorController.mainValidateMovePawn(QuoridorController.getCurrentPlayer());
+		for(int column = 1; column<=9 ; column++) {
+			for(int row = 1; row<=9; row++) {
+				if(QuoridorController.compareAvailableTiles(row,column)) {
+					movePossible = true;
+				}
+			}
+		}
+		return movePossible;
 	}
 	
 	/**
