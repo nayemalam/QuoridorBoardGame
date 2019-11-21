@@ -743,7 +743,6 @@ public class QuoridorController {
 			for (int i = 0; i <= 19; i++) {
 				boolean wallPassed = false;
 				if (id == i) {
-
 					continue; // don t want to compare the wall with itself
 				}
 				//System.out.println("Iteration Id"+ i);
@@ -970,28 +969,21 @@ public class QuoridorController {
 		boolean pos;
 		Tile aTile = new Tile(row, col, q.getBoard());
 
-		if (dir.equals("vertical")) {
+		if (dir.toLowerCase().equals("vertical")) {
 			pos = initiatePosValidation(row, col, "vertical", aWall.getId());
 			System.out.println("THIS IS IN MOVE WALL "+pos);
 			System.out.println("Wall Has move "+aWall.hasMove());
-			if (aWall.hasMove() && pos == true) {
+			if (aWall.hasMove() && pos) {
 				moveNumber++;
-
 				aWall.getMove().setWallDirection(Direction.Vertical);
 				aWall.getMove().setTargetTile(aTile);
 				if(player.equals(q.getCurrentGame().getWhitePlayer())) {
-
-
 					q.getCurrentGame().getCurrentPosition().addWhiteWallsOnBoard(aWall);
-
 				}
 				else {
-
 					//quoridor.getCurrentGame().getCurrentPosition().removeBlackWallsInStock(aWall);
 					q.getCurrentGame().getCurrentPosition().addBlackWallsOnBoard(aWall);
 				}
-
-
 				return true;
 			} else {
 				return false;
@@ -1003,13 +995,9 @@ public class QuoridorController {
 				aWall.getMove().setWallDirection(Direction.Horizontal);
 				aWall.getMove().setTargetTile(aTile);
 				if(player.equals(q.getCurrentGame().getWhitePlayer())) {
-
 					q.getCurrentGame().getCurrentPosition().addWhiteWallsOnBoard(aWall);
-
 				}
 				else {
-
-
 					q.getCurrentGame().getCurrentPosition().addBlackWallsOnBoard(aWall);
 
 				}
@@ -1354,7 +1342,7 @@ public class QuoridorController {
 		String dir = wallMoveCandidate.getWallDirection().toString();
 		int id = wallMoveCandidate.getWallPlaced().getId();
 
-		if (initiatePosValidation(x, y, dir, id-1)) {
+		if (initiatePosValidation(x, y, dir, id)) {
 			q.getCurrentGame().addMove(wallMoveCandidate);
 			List<Move> curList = new ArrayList<>(q.getCurrentGame().getMoves());
 			Move lastMoveInTheList = curList.get(curList.size() - 1);

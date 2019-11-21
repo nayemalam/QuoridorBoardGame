@@ -683,6 +683,11 @@ public class MainGameWindow {
 						QuoridorController.getWallDirection(wallMoveCandidate.isRotated).toString(),
 						QuoridorController.getWallMoveCandidate(), QuoridorController.getCurrentPlayer())) {
 					wallMoveCandidate.wallMoveBtn.setIcon(new ImageIcon("./dropped.png"));
+					try {
+						QuoridorController.dropWall();
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
 					wallMoveCandidate = null;
 					grabWall.setText("Grab Wall");
 					switchCurrentPlayerGuiAndBackend();
