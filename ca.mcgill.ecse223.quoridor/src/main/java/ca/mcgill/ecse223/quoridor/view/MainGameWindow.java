@@ -637,7 +637,7 @@ public class MainGameWindow {
 				}
 			}
 		}
-		if(wallMoveCandidate == null) {
+		if(wallMoveCandidate == null && playerMoved) {
 			QuoridorController.switchCurrentPlayer();
 		}
 		getAvailableMovesToCurrentPlayer();
