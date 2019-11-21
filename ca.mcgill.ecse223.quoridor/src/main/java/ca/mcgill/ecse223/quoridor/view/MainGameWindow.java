@@ -43,6 +43,7 @@ import java.util.List;
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
 import ca.mcgill.ecse223.quoridor.model.Player;
+import ca.mcgill.ecse223.quoridor.model.Tile;
 import ca.mcgill.ecse223.quoridor.utilities.ControllerUtilities;
 import ca.mcgill.ecse223.quoridor.view.QuoridorPage;
 import java.awt.CardLayout;
@@ -323,12 +324,11 @@ public class MainGameWindow {
 			public void actionPerformed(ActionEvent arg0) {
 				QuoridorController.startClock();
 				btnStartWhiteTimer.setVisible(false);
+				getAvailableMovesToCurrentPlayer();
 				gameStarted = true;
 			}
 		});
 		northPanel.add(btnStartWhiteTimer);
-		
-		getAvailableMovesToCurrentPlayer();
 	}
 
 	private void switchCurrentPlayerGuiAndBackend(){
@@ -602,63 +602,49 @@ public class MainGameWindow {
 			int targetRow = 0;
 			int targetCol = 0;
 			boolean targetModified = false;
-
-			if (currentPlayer.equals(QuoridorController.getWhitePlayer())) {
-				targetRow = whitePawnMove.row;
-				targetCol = whitePawnMove.col;
-				if (dir == ControllerUtilities.MoveDirections.up && pawnMoveIsValidated(whitePawnMove.row - 1, whitePawnMove.col) && validateIfPawnMoveIsPossible()) {
-					targetModified = true;
-					targetRow = whitePawnMove.row - 1;
-				} else if (dir == ControllerUtilities.MoveDirections.down && pawnMoveIsValidated(whitePawnMove.row + 1, whitePawnMove.col) && validateIfPawnMoveIsPossible()) {
-					targetModified = true;
-					targetRow = whitePawnMove.row + 1;
-				} else if (dir == ControllerUtilities.MoveDirections.left && pawnMoveIsValidated(whitePawnMove.row, whitePawnMove.col - 1) && validateIfPawnMoveIsPossible()) {
-					targetModified = true;
-					targetCol = whitePawnMove.col - 1;
-				} else if (dir == ControllerUtilities.MoveDirections.right && pawnMoveIsValidated(whitePawnMove.row, whitePawnMove.col + 1) && validateIfPawnMoveIsPossible()) {
-					targetModified = true;
-					targetCol = whitePawnMove.col + 1;
-				}
-				if(targetModified) {
-					btnArray[whitePawnMove.row][whitePawnMove.col].remove(whitePawnMove.wallMoveBtn);
-					whitePawnMove.row = targetRow;
-					whitePawnMove.col = targetCol;
-					btnArray[whitePawnMove.row][whitePawnMove.col].add(whitePawnMove.wallMoveBtn);
-					playerMoved = true;
-				}
-			} else if (currentPlayer.equals(QuoridorController.getBlackPlayer())) {
-				targetRow = blackPawnMove.row;
-				targetCol = blackPawnMove.col;
-				if (dir == ControllerUtilities.MoveDirections.up && pawnMoveIsValidated(blackPawnMove.row - 1, blackPawnMove.col) && validateIfPawnMoveIsPossible()) {
-					targetModified = true;
-					targetRow = blackPawnMove.row - 1;
-				} else if (dir == ControllerUtilities.MoveDirections.down && pawnMoveIsValidated(blackPawnMove.row + 1, blackPawnMove.col) && validateIfPawnMoveIsPossible()) {
-					targetModified = true;
-					targetRow = blackPawnMove.row + 1;
-				} else if (dir == ControllerUtilities.MoveDirections.left && pawnMoveIsValidated(blackPawnMove.row, blackPawnMove.col - 1) && validateIfPawnMoveIsPossible()) {
-					targetModified = true;
-					targetCol = blackPawnMove.col - 1;
-				} else if (dir == ControllerUtilities.MoveDirections.right && pawnMoveIsValidated(blackPawnMove.row, blackPawnMove.col + 1) && validateIfPawnMoveIsPossible()) {
-					targetModified = true;
-					targetCol = blackPawnMove.col + 1;
-				}
-				if(targetModified) {
-					btnArray[blackPawnMove.row][blackPawnMove.col].remove(blackPawnMove.wallMoveBtn);
-					blackPawnMove.row = targetRow;
-					blackPawnMove.col = targetCol;
-					btnArray[blackPawnMove.row][blackPawnMove.col].add(blackPawnMove.wallMoveBtn);
-					playerMoved = true;
+			
+			MoveCandidate moveCandidate = currentPlayer.equals(QuoridorController.getWhitePlayer()) ? whitePawnMove : blackPawnMove;
+			targetRow = moveCandidate.row;
+			targetCol = moveCandidate.col;
+			if (dir == ControllerUtilities.MoveDirections.up && validateIfPawnMoveIsPossible(moveCandidate.row - 1, moveCandidate.col)) {
+				targetModified = true;
+				targetRow = moveCandidate.row - 1;
+			} else if (dir == ControllerUtilities.MoveDirections.down && validateIfPawnMoveIsPossible(moveCandidate.row + 1, moveCandidate.col)) {
+				targetModified = true;
+				targetRow = moveCandidate.row + 1;
+			} else if (dir == ControllerUtilities.MoveDirections.left && validateIfPawnMoveIsPossible(moveCandidate.row, moveCandidate.col - 1)) {
+				targetModified = true;
+				targetCol = moveCandidate.col - 1;
+			} else if (dir == ControllerUtilities.MoveDirections.right && validateIfPawnMoveIsPossible(moveCandidate.row, moveCandidate.col + 1)) {
+				targetModified = true;
+				targetCol = moveCandidate.col + 1;
+			}
+			if(targetModified) {
+				btnArray[moveCandidate.row][moveCandidate.col].remove(moveCandidate.wallMoveBtn);
+				moveCandidate.row = targetRow;
+				moveCandidate.col = targetCol;
+				btnArray[moveCandidate.row][moveCandidate.col].add(moveCandidate.wallMoveBtn);
+				playerMoved = true;
+				
+				// Call movePawn method to move the pawn
+				QuoridorController.movePawn(currentPlayer, dir.toString());
+				
+				// Reset the targetMove to the original move
+				if(currentPlayer.equals(QuoridorController.getWhitePlayer())) {
+					whitePawnMove = moveCandidate;
+				} else {
+					blackPawnMove = moveCandidate;
 				}
 			}
 		}
 		if(wallMoveCandidate == null && playerMoved) {
-			switchCurrentPlayerGuiAndBackend();
+			//switchCurrentPlayerGuiAndBackend();
 		}
 		getAvailableMovesToCurrentPlayer();
 		frmQuoridorPlay.repaint();
 	}
 	
-	private boolean pawnMoveIsValidated(int row, int column) {
+	private boolean validatePawnMoveIndicies(int row, int column) {
 		boolean rowIsValid = row >= 0 && row < 9;
 		boolean colIsValid = column >= 0 && column < 9;
 		return rowIsValid & colIsValid;
@@ -794,14 +780,18 @@ public class MainGameWindow {
 		frmQuoridorPlay.repaint();
 	}
 	
-	private boolean validateIfPawnMoveIsPossible() {
+	private boolean validateIfPawnMoveIsPossible(int targetRow, int targetCol) {
+		
+		boolean rowIsValid = targetRow >= 0 && targetRow < 9;
+		boolean colIsValid = targetCol >= 0 && targetCol < 9;
+		if(!rowIsValid || !colIsValid) {
+			return false;
+		}
 		boolean movePossible = false;
 		QuoridorController.mainValidateMovePawn(QuoridorController.getCurrentPlayer());
-		for(int column = 1; column<=9 ; column++) {
-			for(int row = 1; row<=9; row++) {
-				if(QuoridorController.compareAvailableTiles(row,column)) {
-					movePossible = true;
-				}
+		for(Tile tile: QuoridorController.getAvailableTiles()) {
+			if(targetRow == tile.getRow() && targetCol == tile.getColumn()) {
+				return true;
 			}
 		}
 		return movePossible;

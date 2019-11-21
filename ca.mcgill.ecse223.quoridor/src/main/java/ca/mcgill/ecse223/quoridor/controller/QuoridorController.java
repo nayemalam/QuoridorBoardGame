@@ -1924,6 +1924,10 @@ public class QuoridorController {
 		QuoridorApplication.getQuoridor().addUser("U1");
 		QuoridorApplication.getQuoridor().addUser("U2");
 	}
+	
+	public static List<Tile> getAvailableTiles(){
+		return availableTiles;
+	}
 }
 
 
