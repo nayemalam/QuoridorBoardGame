@@ -295,6 +295,8 @@ public class StartGamePage {
 		
 		try {
 			QuoridorController.initializeNewGame(QuoridorApplication.getQuoridor(), QuoridorController.createWhitePlayer(), QuoridorController.createBlackPlayer());
+			QuoridorController.stopCurrentPlayerClock();
+			QuoridorController.stopNonCurrentPlayerClock();
 			MainGameWindow gameWindow = new MainGameWindow();
 			MainGameWindow.frmQuoridorPlay.setVisible(true);
 			frame.dispose();

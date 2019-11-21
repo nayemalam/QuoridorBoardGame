@@ -61,7 +61,8 @@ public class MainGameWindow {
 	public static JFrame frmQuoridorPlay;
 	// time remaining
 	private JTextField timeRemaining_Label;
-	private static JTextField timeRemaining_TextField;
+	private static JTextField timeRemaining_TextFieldBlack;
+	private static JTextField timeRemaining_TextFieldWhite;
 	// current player
 	private JTextField currentPlayer_Label;
 	private JTextField currentPlayer_TextField;
@@ -109,6 +110,7 @@ public class MainGameWindow {
 	private MoveCandidate wallMoveCandidate;
 	private MoveCandidate blackPawnMove;
 	private MoveCandidate whitePawnMove;
+	private boolean gameStarted = false;
 
 	/**
 	 * Launch the application.
@@ -226,7 +228,8 @@ public class MainGameWindow {
 		for (int row = 0; row < TOTAL_ROWS; row++) {
 			for (int col = 0; col < TOTAL_COLS; col++) {
 				errorMessage.setVisible(false);
-				btnArray[row][col] = new JButton(new ImageIcon("./tile.png"));
+				btnArray[row][col] = new JButton(/*new ImageIcon("./tile.png")*/);
+				btnArray[row][col].setBackground(Color.GRAY);
 				btnArray[row][col].setVisible(true);
 				
 				// This may look wrong, but making it right flips everything, so don't touch plz -tbutch
@@ -303,23 +306,24 @@ public class MainGameWindow {
 		timeRemaining_Label.setEditable(false);
 		panel_1.add(timeRemaining_Label);
 		timeRemaining_Label.setColumns(10);
-		timeRemaining_TextField = new JTextField();
-		timeRemaining_TextField.setEditable(false);
-		panel_1.add(timeRemaining_TextField);
-		timeRemaining_TextField.setColumns(10);
+		timeRemaining_TextFieldBlack = new JTextField();
+		timeRemaining_TextFieldBlack.setEditable(false);
+		panel_1.add(timeRemaining_TextFieldBlack);
+		timeRemaining_TextFieldBlack.setColumns(10);
 		String remainingTimeValue = "";
 		try {
 			remainingTimeValue = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer().getRemainingTime()
 					.toString();
 		} catch (Exception e) {
 		}
-		timeRemaining_TextField.setText(remainingTimeValue);
+		timeRemaining_TextFieldBlack.setText(remainingTimeValue);
 		
 		JButton btnStartWhiteTimer = new JButton("Start White Timer to start the Game!");
 		btnStartWhiteTimer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				QuoridorController.startClock();
 				btnStartWhiteTimer.setVisible(false);
+				gameStarted = true;
 			}
 		});
 		northPanel.add(btnStartWhiteTimer);
@@ -338,7 +342,7 @@ public class MainGameWindow {
 		QuoridorController.switchCurrentPlayer();
 		currentPlayer_TextField.setFont(new Font("Tahoma", Font.BOLD, 13));
 		currentPlayer_TextField.setText(QuoridorController.getCurrentPlayer().getUser().getName());
-		timeRemaining_TextField.setText(QuoridorController.getCurrentPlayer().getRemainingTime().toString());
+		timeRemaining_TextFieldBlack.setText(QuoridorController.getCurrentPlayer().getRemainingTime().toString());
 		
 	}
 	private void createBlackAndWhitePawns() {
@@ -463,16 +467,15 @@ public class MainGameWindow {
 		timeRemaining_Label.setEditable(false);
 		timePanel.add(timeRemaining_Label);
 		timeRemaining_Label.setColumns(10);
-		timeRemaining_TextField = new JTextField();
-		timeRemaining_TextField.setEditable(false);
-		timePanel.add(timeRemaining_TextField);
-		timeRemaining_TextField.setColumns(10);
+		timeRemaining_TextFieldWhite = new JTextField();
+		timeRemaining_TextFieldWhite.setEditable(false);
+		timePanel.add(timeRemaining_TextFieldWhite);
+		timeRemaining_TextFieldWhite.setColumns(10);
 		String time = "";
 		try {
 			time = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer().getRemainingTime().toString();
 		} catch (Exception e) {
 		}
-		timeRemaining_TextField.setText(time);
 
 		JPanel playerPanel = new JPanel();
 		JTextField newPlayerLabel = new JTextField();
@@ -494,7 +497,7 @@ public class MainGameWindow {
 		newPlayerTextFeild.setColumns(10);
 		// print statement: for checking if we get the right users
 		// this will get the names of player one and two that was set in prev. window
-		String name = player.equalsIgnoreCase("white") ? "Naruto" : "Sasuke";
+		String name = "";
 		try {
 			name = player.equalsIgnoreCase("white") ?  QuoridorApplication.getQuoridor().getUser(0).getName() : QuoridorApplication.getQuoridor().getUser(1).getName();
 		} catch (Exception e) {
@@ -571,14 +574,18 @@ public class MainGameWindow {
 		
 		// If a wall move is instantiated, move the wall move candidate!
 		boolean playerMoved = false;
+		
+		if(!gameStarted) {
+			return;
+		}
 		if (wallMoveCandidate != null) {
-			if (dir == ControllerUtilities.MoveDirections.up && moveIsValidated(wallMoveCandidate.row - 1, wallMoveCandidate.col)) {
+			if (dir == ControllerUtilities.MoveDirections.up && wallMoveIsValidated(wallMoveCandidate.row - 1, wallMoveCandidate.col)) {
 				wallMoveCandidate.row -= 1;
-			} else if (dir == ControllerUtilities.MoveDirections.down && moveIsValidated(wallMoveCandidate.row + 1, wallMoveCandidate.col)) {
+			} else if (dir == ControllerUtilities.MoveDirections.down && wallMoveIsValidated(wallMoveCandidate.row + 1, wallMoveCandidate.col)) {
 				wallMoveCandidate.row += 1;
-			} else if (dir == ControllerUtilities.MoveDirections.left && moveIsValidated(wallMoveCandidate.row, wallMoveCandidate.col - 1)) {
+			} else if (dir == ControllerUtilities.MoveDirections.left && wallMoveIsValidated(wallMoveCandidate.row, wallMoveCandidate.col - 1)) {
 				wallMoveCandidate.col -= 1;
-			} else if (dir == ControllerUtilities.MoveDirections.right && moveIsValidated(wallMoveCandidate.row, wallMoveCandidate.col + 1)) {
+			} else if (dir == ControllerUtilities.MoveDirections.right && wallMoveIsValidated(wallMoveCandidate.row, wallMoveCandidate.col + 1)) {
 				wallMoveCandidate.col += 1;
 			}
 			
@@ -595,20 +602,20 @@ public class MainGameWindow {
 			int targetRow = 0;
 			int targetCol = 0;
 			boolean targetModified = false;
-			
+
 			if (currentPlayer.equals(QuoridorController.getWhitePlayer())) {
 				targetRow = whitePawnMove.row;
 				targetCol = whitePawnMove.col;
-				if (dir == ControllerUtilities.MoveDirections.up && moveIsValidated(whitePawnMove.row - 1, whitePawnMove.col)) {
+				if (dir == ControllerUtilities.MoveDirections.up && pawnMoveIsValidated(whitePawnMove.row - 1, whitePawnMove.col)) {
 					targetModified = true;
 					targetRow = whitePawnMove.row - 1;
-				} else if (dir == ControllerUtilities.MoveDirections.down && moveIsValidated(whitePawnMove.row + 1, whitePawnMove.col)) {
+				} else if (dir == ControllerUtilities.MoveDirections.down && pawnMoveIsValidated(whitePawnMove.row + 1, whitePawnMove.col)) {
 					targetModified = true;
 					targetRow = whitePawnMove.row + 1;
-				} else if (dir == ControllerUtilities.MoveDirections.left && moveIsValidated(whitePawnMove.row, whitePawnMove.col - 1)) {
+				} else if (dir == ControllerUtilities.MoveDirections.left && pawnMoveIsValidated(whitePawnMove.row, whitePawnMove.col - 1)) {
 					targetModified = true;
 					targetCol = whitePawnMove.col - 1;
-				} else if (dir == ControllerUtilities.MoveDirections.right && moveIsValidated(whitePawnMove.row, whitePawnMove.col + 1)) {
+				} else if (dir == ControllerUtilities.MoveDirections.right && pawnMoveIsValidated(whitePawnMove.row, whitePawnMove.col + 1)) {
 					targetModified = true;
 					targetCol = whitePawnMove.col + 1;
 				}
@@ -622,16 +629,16 @@ public class MainGameWindow {
 			} else if (currentPlayer.equals(QuoridorController.getBlackPlayer())) {
 				targetRow = blackPawnMove.row;
 				targetCol = blackPawnMove.col;
-				if (dir == ControllerUtilities.MoveDirections.up && moveIsValidated(blackPawnMove.row - 1, blackPawnMove.col)) {
+				if (dir == ControllerUtilities.MoveDirections.up && pawnMoveIsValidated(blackPawnMove.row - 1, blackPawnMove.col)) {
 					targetModified = true;
 					targetRow = blackPawnMove.row - 1;
-				} else if (dir == ControllerUtilities.MoveDirections.down && moveIsValidated(blackPawnMove.row + 1, blackPawnMove.col)) {
+				} else if (dir == ControllerUtilities.MoveDirections.down && pawnMoveIsValidated(blackPawnMove.row + 1, blackPawnMove.col)) {
 					targetModified = true;
 					targetRow = blackPawnMove.row + 1;
-				} else if (dir == ControllerUtilities.MoveDirections.left && moveIsValidated(blackPawnMove.row, blackPawnMove.col - 1)) {
+				} else if (dir == ControllerUtilities.MoveDirections.left && pawnMoveIsValidated(blackPawnMove.row, blackPawnMove.col - 1)) {
 					targetModified = true;
 					targetCol = blackPawnMove.col - 1;
-				} else if (dir == ControllerUtilities.MoveDirections.right && moveIsValidated(blackPawnMove.row, blackPawnMove.col + 1)) {
+				} else if (dir == ControllerUtilities.MoveDirections.right && pawnMoveIsValidated(blackPawnMove.row, blackPawnMove.col + 1)) {
 					targetModified = true;
 					targetCol = blackPawnMove.col + 1;
 				}
@@ -647,13 +654,19 @@ public class MainGameWindow {
 		if(wallMoveCandidate == null && playerMoved) {
 			switchCurrentPlayerGuiAndBackend();
 		}
-		//validatePawnPosition();
+		validatePawnPosition();
 		frmQuoridorPlay.repaint();
 	}
 	
-	private boolean moveIsValidated(int row, int column) {
+	private boolean pawnMoveIsValidated(int row, int column) {
 		boolean rowIsValid = row >= 0 && row < 9;
 		boolean colIsValid = column >= 0 && column < 9;
+		return rowIsValid & colIsValid;
+	}
+	
+	private boolean wallMoveIsValidated(int row, int column) {
+		boolean rowIsValid = row >= 0 && row < 8;
+		boolean colIsValid = column >= 0 && column < 8;
 		return rowIsValid & colIsValid;
 	}
 	
@@ -778,116 +791,21 @@ public class MainGameWindow {
 				}
 			}
 		}
+		frmQuoridorPlay.repaint();
 	}
-
-//	public static void tileListener(int row, int col) {
-//
-//		for (int i = 0; i < 20; i++) {
-//
-//			if (wallArray[i].isVisible() == false) {// checking if there is one wall grabbed or not
-//
-//				WallGrabbed = true;
-//				wallIndex = i;
-//
-//			} else {
-//				continue;
-//			}
-//		}
-//		if (WallGrabbed == true) {
-//
-//			vertical.addMouseListener(new MouseAdapter() {
-//
-//				public void mouseClicked(MouseEvent e) {
-//					moveWallView(row, col, "vertical", wallIndex);
-//				}
-//			});
-//
-//			horizontal.addMouseListener(new MouseAdapter() {
-//				public void mouseClicked(MouseEvent e) {
-//					moveWallView(row, col, "horizontal", wallIndex);
-//				}
-//			});
-//
-//		}
-//		if (WallGrabbed == false) {
-//
-//			if (btnArray[CurrRow][CurrCol].getBackground().equals(Color.GREEN)) {
-//
-//				// TODO implement pawn move
-//
-//			} else {
-//
-//				errorMessage.setVisible(true);
-//				SwingUtilities.updateComponentTreeUI(frmQuoridorPlay);
-//
-//			}
-//
-//		}
-//		WallGrabbed = false;
-//
-//	}
-
-//	public static void moveWallView(int row, int col, String dir, int wallIndex) {
-//		if (wallIndex <= 9) {
-//
-//			panel_10.remove(wallArray[wallIndex]);
-//			centerPanel.add(wallArray[wallIndex]);
-//			wallArray[wallIndex].setVisible(true);
-//			if (QuoridorController.wallMove(row, col, dir, QuoridorController.getWall(wallIndex),
-//					QuoridorController.getCurrentPlayer()) == true) {
-//				if (dir.equals("horizontal")) {
-//
-//					wallArray[wallIndex].setBounds(btnArray[row - 1][col - 1].getX(),
-//							btnArray[row - 1][col - 1].getY() + tileWidth, wallWidth, wallHeight);
-//					wallArray[wallIndex].setVisible(true);
-//					SwingUtilities.updateComponentTreeUI(frmQuoridorPlay);
-//
-//				} else {
-//					wallArray[wallIndex].setBounds(btnArray[row - 1][col - 1].getX() + tileLength,
-//							btnArray[row - 1][col - 1].getY(), wallHeight, wallWidthV);
-//					wallArray[wallIndex].setVisible(true);
-//					SwingUtilities.updateComponentTreeUI(frmQuoridorPlay);
-//				}
-//
-//			} else {
-//				errorMessage.setVisible(true);
-//
-//			}
-//
-//		}
-//		if (wallIndex > 9) {
-//
-//			panel_11.remove(wallArray[wallIndex]);
-//			centerPanel.add(wallArray[wallIndex]);
-//			if (QuoridorController.wallMove(row, col, dir, QuoridorController.getWall(wallIndex),
-//					QuoridorController.getCurrentPlayer()) == true) {
-//				if (dir.equals("horizontal")) {
-//					btnArray[row][col].setBackground(Color.RED);
-//					wallArray[wallIndex].setBounds(btnArray[row - 1][col - 1].getX(),
-//							btnArray[row - 1][col - 1].getY() + tileWidth, wallWidth, wallHeight);
-//					wallArray[wallIndex].setVisible(true);
-//					SwingUtilities.updateComponentTreeUI(frmQuoridorPlay);
-//
-//				} else {
-//					wallArray[wallIndex].setBounds(btnArray[row - 1][col - 1].getX() - 11,
-//							btnArray[row - 1][col - 1].getY(), wallHeight, wallWidthV);
-//					wallArray[wallIndex].setVisible(true);
-//					SwingUtilities.updateComponentTreeUI(frmQuoridorPlay);
-//				}
-//
-//			} else {
-//				errorMessage.setVisible(true);
-//			}
-//		}
-//
-//	}
 	
 	/**
 	 * Method used to update the remaining time for the currentplayer
 	 * Should be called on an interrupt basis.
 	 */
 	public static void updateTime() {
-		timeRemaining_TextField.setText(QuoridorController.getCurrentPlayer().getRemainingTime().toString());
+		Player currPlayer = QuoridorController.getCurrentPlayer();
+		timeRemaining_TextFieldBlack.setText(currPlayer.getRemainingTime().toString());
+		if(currPlayer.equals(QuoridorController.getWhitePlayer())) {
+			timeRemaining_TextFieldWhite.setText(currPlayer.getRemainingTime().toString());
+		} else {
+			timeRemaining_TextFieldBlack.setText(currPlayer.getRemainingTime().toString());
+		}
 		frmQuoridorPlay.repaint();
 	}
 	

@@ -319,8 +319,8 @@ public class QuoridorController {
 	private static void setInitialGamePosition(Game currentGame, Board board, Player currentWhitePlayer,
 			Player currentBlackPlayer) {
 		// Get initial tiles
-		Tile whitePlayerInitialTile = board.getTile(ControllerUtilities.WHITE_TILE_INDEX);
-		Tile blackPlayerInitialTile = board.getTile(ControllerUtilities.BLACK_TILE_INDEX);
+		Tile whitePlayerInitialTile = getTileAtRowCol(ControllerUtilities.WHITE_INITIAL_ROW, ControllerUtilities.WHITE_INITIAL_COL);
+		Tile blackPlayerInitialTile = getTileAtRowCol(ControllerUtilities.BLACK_INITIAL_ROW, ControllerUtilities.BLACK_INITIAL_COL);
 		// Set initial player positions
 		PlayerPosition whitePlayerPosition = new PlayerPosition(currentWhitePlayer, whitePlayerInitialTile);
 		PlayerPosition blackPlayerPosition = new PlayerPosition(currentBlackPlayer, blackPlayerInitialTile);
