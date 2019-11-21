@@ -606,16 +606,16 @@ public class MainGameWindow {
 			if (currentPlayer.equals(QuoridorController.getWhitePlayer())) {
 				targetRow = whitePawnMove.row;
 				targetCol = whitePawnMove.col;
-				if (dir == ControllerUtilities.MoveDirections.up && pawnMoveIsValidated(whitePawnMove.row - 1, whitePawnMove.col)) {
+				if (dir == ControllerUtilities.MoveDirections.up && pawnMoveIsValidated(whitePawnMove.row - 1, whitePawnMove.col) && validateIfPawnMoveIsPossible()) {
 					targetModified = true;
 					targetRow = whitePawnMove.row - 1;
-				} else if (dir == ControllerUtilities.MoveDirections.down && pawnMoveIsValidated(whitePawnMove.row + 1, whitePawnMove.col)) {
+				} else if (dir == ControllerUtilities.MoveDirections.down && pawnMoveIsValidated(whitePawnMove.row + 1, whitePawnMove.col) && validateIfPawnMoveIsPossible()) {
 					targetModified = true;
 					targetRow = whitePawnMove.row + 1;
-				} else if (dir == ControllerUtilities.MoveDirections.left && pawnMoveIsValidated(whitePawnMove.row, whitePawnMove.col - 1)) {
+				} else if (dir == ControllerUtilities.MoveDirections.left && pawnMoveIsValidated(whitePawnMove.row, whitePawnMove.col - 1) && validateIfPawnMoveIsPossible()) {
 					targetModified = true;
 					targetCol = whitePawnMove.col - 1;
-				} else if (dir == ControllerUtilities.MoveDirections.right && pawnMoveIsValidated(whitePawnMove.row, whitePawnMove.col + 1)) {
+				} else if (dir == ControllerUtilities.MoveDirections.right && pawnMoveIsValidated(whitePawnMove.row, whitePawnMove.col + 1) && validateIfPawnMoveIsPossible()) {
 					targetModified = true;
 					targetCol = whitePawnMove.col + 1;
 				}
@@ -629,16 +629,16 @@ public class MainGameWindow {
 			} else if (currentPlayer.equals(QuoridorController.getBlackPlayer())) {
 				targetRow = blackPawnMove.row;
 				targetCol = blackPawnMove.col;
-				if (dir == ControllerUtilities.MoveDirections.up && pawnMoveIsValidated(blackPawnMove.row - 1, blackPawnMove.col)) {
+				if (dir == ControllerUtilities.MoveDirections.up && pawnMoveIsValidated(blackPawnMove.row - 1, blackPawnMove.col) && validateIfPawnMoveIsPossible()) {
 					targetModified = true;
 					targetRow = blackPawnMove.row - 1;
-				} else if (dir == ControllerUtilities.MoveDirections.down && pawnMoveIsValidated(blackPawnMove.row + 1, blackPawnMove.col)) {
+				} else if (dir == ControllerUtilities.MoveDirections.down && pawnMoveIsValidated(blackPawnMove.row + 1, blackPawnMove.col) && validateIfPawnMoveIsPossible()) {
 					targetModified = true;
 					targetRow = blackPawnMove.row + 1;
-				} else if (dir == ControllerUtilities.MoveDirections.left && pawnMoveIsValidated(blackPawnMove.row, blackPawnMove.col - 1)) {
+				} else if (dir == ControllerUtilities.MoveDirections.left && pawnMoveIsValidated(blackPawnMove.row, blackPawnMove.col - 1) && validateIfPawnMoveIsPossible()) {
 					targetModified = true;
 					targetCol = blackPawnMove.col - 1;
-				} else if (dir == ControllerUtilities.MoveDirections.right && pawnMoveIsValidated(blackPawnMove.row, blackPawnMove.col + 1)) {
+				} else if (dir == ControllerUtilities.MoveDirections.right && pawnMoveIsValidated(blackPawnMove.row, blackPawnMove.col + 1) && validateIfPawnMoveIsPossible()) {
 					targetModified = true;
 					targetCol = blackPawnMove.col + 1;
 				}
