@@ -1985,6 +1985,41 @@ public class QuoridorController {
 	public static void stopGame(Game game) {
 		game.delete();
 	}
+	
+	/**
+	 * This method is used in the replay mode to jump to the start of the game to be able to replay
+	 * and monitor what happened from the start.
+	 * @param moveNum the moveNumber currently monitored
+	 * @author Alexander Legouverneur
+	 */
+	public static void jumpToStart(int moveNum, int roundNum) {
+		Quoridor q = QuoridorApplication.getQuoridor();
+		
+		Tile aTile = new Tile(1,5,q.getBoard());
+		PlayerPosition Bpos = new PlayerPosition(q.getCurrentGame().getBlackPlayer(), aTile);
+		q.getCurrentGame().getCurrentPosition().setBlackPosition(Bpos);
+		
+		Tile aTile1 = new Tile(9,5,q.getBoard());
+		PlayerPosition Wpos = new PlayerPosition(q.getCurrentGame().getWhitePlayer(), aTile1);
+		q.getCurrentGame().getCurrentPosition().setBlackPosition(Wpos);
+		if(roundNum==2) {
+			int thresh = 2*(moveNum-1)+1;
+			for(int i = 0; i<thresh; i++) {
+				stepBack();
+			}
+		}
+		else {
+			int thresh = 2*(moveNum-1);
+			for(int i = 0; i<thresh;i++) {
+				stepBack();
+			}
+		}
+		
+		
+	}
+	public static Move stepBack() {
+		
+	}
 }
 
 
