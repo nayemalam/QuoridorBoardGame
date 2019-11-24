@@ -1914,6 +1914,35 @@ public class QuoridorController {
 	public static List<Tile> getAvailableTiles(){
 		return availableTiles;
 	}
+	
+	/**
+	 * This method checks if the player reached the other side of the board (thus if he won).
+	 * @param player  the player we are checking for position
+	 * @param row   the row of the tile of the position of the player we are checking the position for
+	 * @param col   the column of the tile of the position of the player we are checking the position for
+	 * @return true if he reached the other side, false if he did not
+	 * @author Alexander Legouverneur
+	 */
+	public static boolean checkIfWon(Player player, int row, int col) {
+		Quoridor q = QuoridorApplication.getQuoridor();
+		if(player.equals(q.getCurrentGame().getBlackPlayer())) {
+			if(row == 1 ) {
+				//stopGame(q.getCurrentGame());
+				return true;
+			}
+			
+		}
+		else {
+			if(row == 9) {
+				//stopGame(q.getCurrentGame());
+				return true;
+			}
+		}
+		return false;
+	}
+	public static void stopGame(Game game) {
+		game.delete();
+	}
 }
 
 
