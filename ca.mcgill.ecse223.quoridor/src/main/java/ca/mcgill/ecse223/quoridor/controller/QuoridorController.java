@@ -22,7 +22,7 @@ public class QuoridorController {
 	private static Quoridor quoridor;
 
 	private static List<Tile> availableTiles = new ArrayList<Tile>();
-	
+
 	private static Timer currentBlackPlayerTimer = null;
 	private static Timer currentWhitePlayerTimer = null;
 
@@ -85,7 +85,7 @@ public class QuoridorController {
 			setCurrentPlayer(getWhitePlayer());
 		}
 		startClock();
-		
+
 	}
 
 	/**
@@ -218,7 +218,7 @@ public class QuoridorController {
 			throw new RuntimeException("Game has incorrect amount of players. Please verify the players.");
 		}
 		Player currentPlayer = getCurrentPlayer();
-		
+
 		if(currentPlayer.equals(getBlackPlayer())) {
 			currentBlackPlayerTimer = new Timer(ControllerUtilities.CURRENT_BLACK_TIMER_THREAD_NAME);
 			currentBlackPlayerTimer.schedule(new ThreadTimer(currentPlayer), 0, 1000);
@@ -231,10 +231,10 @@ public class QuoridorController {
 
 		return true;
 	}
-	
+
 	public static void stopCurrentPlayerClock() {
 		Player currentPlayer = getCurrentPlayer();
-		
+
 		if(currentPlayer.equals(getBlackPlayer()) && !(currentBlackPlayerTimer == null)) {
 			currentBlackPlayerTimer.cancel();
 			currentBlackPlayerTimer = null;
@@ -243,11 +243,11 @@ public class QuoridorController {
 			currentWhitePlayerTimer = null;
 		} else {
 		}
-		
+
 	}
 	public static void stopNonCurrentPlayerClock() {
 		Player currentPlayer = getCurrentPlayer();
-		
+
 		if(currentPlayer.equals(getBlackPlayer()) && !(currentWhitePlayerTimer == null)) {
 			currentWhitePlayerTimer.cancel();
 			currentWhitePlayerTimer = null;
@@ -1310,6 +1310,46 @@ public class QuoridorController {
 	}
 
 	/**
+	 * Method - loadSavedPosition()
+	 * 
+	 * Controller method used to load a file containing the game state of a previous
+	 * game that the user wishes to continue playing
+	 * 
+	 * @param filename - name of file
+	 * @return GamePosition - the game position is returned
+	 * @author Nicolas Buisson
+	 * 
+	 */
+	public static boolean loadGame(String filename, Player whitePlayer, Player blackPlayer)
+			throws IOException {
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+
+		try {
+			QuoridorController.initializeNewGame(quoridor, whitePlayer, blackPlayer);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		Game game = QuoridorApplication.getQuoridor().getCurrentGame();
+		GamePosition gamePositionToLoad = game.getCurrentPosition();
+
+		File file = new File(filename);
+		String content = "";
+		BufferedReader BF = new BufferedReader(new FileReader(file));
+		String line = BF.readLine();
+		while (line != null) {
+			content = content + line + "\n";
+			line = BF.readLine();
+		}
+
+		if (BF != null) {
+			BF.close();
+		}
+	
+	return true;
+	}
+
+	/**
 	 * Method used to rotate a wall
 	 * 
 	 * @author Iyatan Atchoro
@@ -1903,16 +1943,16 @@ public class QuoridorController {
 			if(tile.getRow() == row && tile.getColumn() == col) {
 				return true;
 			}
-			
+
 		}
-			return false;
+		return false;
 	}
 
 	public static void InitTwoUsers() {
 		QuoridorApplication.getQuoridor().addUser("U1");
 		QuoridorApplication.getQuoridor().addUser("U2");
 	}
-	
+
 	public static List<Tile> getAvailableTiles(){
 		return availableTiles;
 	}
