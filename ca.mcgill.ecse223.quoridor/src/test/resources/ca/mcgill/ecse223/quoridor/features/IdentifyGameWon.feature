@@ -18,7 +18,7 @@ Feature: Identify if game won
       | white  |   8 |   5 | pending |
       | black  |   2 |   4 | pending |
       | black  |   9 |   4 | pending |
-
+@this
   Scenario Outline: Player reaches target area
     Given Player "<player>" has just completed his move
     And The new position of "<player>" is <row>:<col>
