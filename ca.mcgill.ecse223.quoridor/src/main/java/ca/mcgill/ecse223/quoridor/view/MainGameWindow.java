@@ -240,8 +240,7 @@ public class MainGameWindow {
 		for (int row = 0; row < TOTAL_ROWS; row++) {
 			for (int col = 0; col < TOTAL_COLS; col++) {
 				errorMessage.setVisible(false);
-				btnArray[row][col] = new JButton(/*new ImageIcon("./tile.png")*/);
-				btnArray[row][col].setBackground(Color.GRAY);
+				btnArray[row][col] = new JButton(new ImageIcon("./tile.png"));
 				btnArray[row][col].setVisible(true);
 				
 				// This may look wrong, but making it right flips everything, so don't touch plz -tbutch
