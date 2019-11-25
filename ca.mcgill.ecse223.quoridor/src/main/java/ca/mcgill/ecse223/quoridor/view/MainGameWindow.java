@@ -342,11 +342,11 @@ public class MainGameWindow {
 	}
 
 	private void switchCurrentPlayerGuiAndBackend(){
-//		String playerName = "";
-//		try {
-//			playerName = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getPlayerToMove().getUser().getName();
-//		} catch (Exception e) {
-//		}
+		String playerName = "";
+		try {
+			playerName = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getPlayerToMove().getUser().getName();
+		} catch (Exception e) {
+		}
 		//validatePawnPosition();
 		// Clocks are all taken care of in the switchCurrentPlayer method
 		QuoridorController.switchCurrentPlayer();
@@ -487,6 +487,7 @@ public class MainGameWindow {
 		} catch (Exception e) {
 		}
 
+		timeRemaining_TextFieldWhite.setText(time);
 		JPanel playerPanel = new JPanel();
 		JTextField newPlayerLabel = new JTextField();
 		newPlayerLabel.setEditable(false);
@@ -719,7 +720,8 @@ public class MainGameWindow {
 			}
 		}
 		if(wallMoveCandidate == null && playerMoved) {
-			QuoridorController.switchCurrentPlayer();
+			
+			switchCurrentPlayerGuiAndBackend();
 		}
 		getAvailableMovesToCurrentPlayer();
 		frmQuoridorPlay.repaint();
