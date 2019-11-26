@@ -1,8 +1,5 @@
 package ca.mcgill.ecse223.quoridor.controller;
 
-import java.util.*;
-
-import javax.swing.text.Utilities;
 import java.io.*;
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.model.*;
@@ -1918,14 +1915,16 @@ public class QuoridorController {
 	 * @author Alexander Legouverneur
 	 */
 	public static boolean checkIfWon(Player player, int row, int col) {
-		Quoridor q = QuoridorApplication.getQuoridor();
-		if(player.equals(q.getCurrentGame().getBlackPlayer())) {
+		Player blackPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
+		Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
+		if(player.equals(blackPlayer)) {
 			if(row == 1 ) {
 				//stopGame(q.getCurrentGame());
 				return true;
 			}
+			player.setNextPlayer(whitePlayer);
 		}
-		else {
+		else if(player.equals(whitePlayer)){
 			if(row == 9) {
 				//stopGame(q.getCurrentGame());
 				return true;
@@ -1937,18 +1936,27 @@ public class QuoridorController {
 		game.delete();
 	}
 
-	public static void bPlayerResigns(Player blackPlayer) {
-		Quoridor quoridor = QuoridorApplication.getQuoridor();
-		if(blackPlayer.equals(quoridor.getCurrentGame().getBlackPlayer())) {
-			stopGame(quoridor.getCurrentGame());
+	public static void playerResigns(Player player) {
+		Player blackPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
+		Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
+		if(player.equals(blackPlayer)) {
 		}
 	}
 
-	public static void wPlayerResigns(Player whitePlayer) {
-		Quoridor quoridor = QuoridorApplication.getQuoridor();
-		if(whitePlayer.equals(quoridor.getCurrentGame().getWhitePlayer())) {
-			stopGame(quoridor.getCurrentGame());
+	public static void playerWins(Player player) {
+		Player blackPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
+		Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
+		if(player.equals(blackPlayer)) {
+			player.getGameAsBlack().setGameStatus(GameStatus.WhiteWon);
 		}
+		if(player.equals(whitePlayer)) {
+			player.getGameAsWhite().setGameStatus(GameStatus.BlackWon);
+		}
+
+	}
+
+	public static void gameDoesntRun() {
+		QuoridorApplication.getQuoridor().getCurrentGame().delete();
 	}
 }
 

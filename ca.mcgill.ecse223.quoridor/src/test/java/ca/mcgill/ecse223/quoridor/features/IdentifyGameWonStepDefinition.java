@@ -78,7 +78,7 @@ public class IdentifyGameWonStepDefinition {
 	@Then("Game result shall be {string}")
 	public void game_result_shall_be(String string) {
 		Quoridor q = QuoridorApplication.getQuoridor();
-		boolean status = QuoridorController.checkIfWon(player,currRow, currCol);
+		boolean status = QuoridorController.checkIfWon(player, currRow, currCol);
 	    if(status == true && player.equals(q.getCurrentGame().getBlackPlayer())) {
 	    	assertEquals(string, "blackWon");
 	    }
