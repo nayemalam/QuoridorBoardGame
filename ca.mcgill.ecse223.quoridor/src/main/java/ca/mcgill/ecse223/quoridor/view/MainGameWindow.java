@@ -95,7 +95,6 @@ public class MainGameWindow {
 	private static boolean WallGrabbed = false;
 	private static int CurrRow;
 	private static int CurrCol;
-	private static JButton saveGameButton = new JButton("Save Game");
 	static JLabel errorMessage = new JLabel("Incorrect Move");
 	private static int wallIndex;
 	private static int tileLength = 45;
