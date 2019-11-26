@@ -23,23 +23,12 @@ public class ResignGameStepDef {
         QuoridorController.playerResigns();
     }
 
-    @Then("Game result shall be {string}")
-    public void game_result_shall_be(String result) {
-        currentPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
-        currentPlayer.setNextPlayer(QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer());
-        if(currentPlayer.equals(QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer())) {
-            assertEquals(result, Game.GameStatus.BlackWon.toString());
-        } else {
-            assertEquals(result, Game.GameStatus.WhiteWon.toString());
-        }
-    }
-    // and then
-    @And("The game shall no longer be running")
-    public void the_game_shall_no_longer_be_running() {
-        // Write code here that turns the phrase above into concrete actions
-        currentPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
-        currentPlayer.setNextPlayer(QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer());
+    /* DONE in IdentifyGameWonStepDefinition.java
+        > Then Game result shall be "{string}"
+    */
 
-        assertEquals("", "");
-    }
+    /* DONE in IdentifyGameWonStepDefinition.java
+        > And The game shall no longer be running
+    */
+
 }
