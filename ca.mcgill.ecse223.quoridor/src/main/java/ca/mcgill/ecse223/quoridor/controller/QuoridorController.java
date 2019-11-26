@@ -506,12 +506,6 @@ public class QuoridorController {
 		bPlayer.setRemainingTime(thinkingTime);
 		wPlayer.setRemainingTime(thinkingTime);
 	}
-
-
-	public static void playerResigns() {
-
-
-	}
 	/**
 	 * Method - selectNewUserName(String username)
 	 *
@@ -1930,7 +1924,6 @@ public class QuoridorController {
 				//stopGame(q.getCurrentGame());
 				return true;
 			}
-			
 		}
 		else {
 			if(row == 9) {
@@ -1942,6 +1935,20 @@ public class QuoridorController {
 	}
 	public static void stopGame(Game game) {
 		game.delete();
+	}
+
+	public static void bPlayerResigns(Player blackPlayer) {
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		if(blackPlayer.equals(quoridor.getCurrentGame().getBlackPlayer())) {
+			stopGame(quoridor.getCurrentGame());
+		}
+	}
+
+	public static void wPlayerResigns(Player whitePlayer) {
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		if(whitePlayer.equals(quoridor.getCurrentGame().getWhitePlayer())) {
+			stopGame(quoridor.getCurrentGame());
+		}
 	}
 }
 
