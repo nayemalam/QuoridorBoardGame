@@ -24,7 +24,7 @@ import ca.mcgill.ecse223.quoridor.model.Quoridor;
 import ca.mcgill.ecse223.quoridor.model.User;
 import ca.mcgill.ecse223.quoridor.utilities.ControllerUtilities;
 
-public class LoadPositionPage {
+public class LoadGamePage {
 	public JFrame frame;
 	private QuoridorController QC;
 	private boolean valid;
@@ -37,7 +37,7 @@ public class LoadPositionPage {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					LoadPositionPage window = new LoadPositionPage();
+					LoadGamePage window = new LoadGamePage();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -49,7 +49,7 @@ public class LoadPositionPage {
 	/**
 	 * Create the application.
 	 */
-	public LoadPositionPage() {
+	public LoadGamePage() {
 		initialize();
 	}
 
@@ -76,35 +76,35 @@ public class LoadPositionPage {
 		frame.getContentPane().add(LoadFileNameTextField);
 		LoadFileNameTextField.setColumns(10);
 		
-		JLabel InvalidLoadFileLabel = new JLabel("Invalid file, Please select a valid file to load");
-		InvalidLoadFileLabel.setForeground(Color.RED);
-		InvalidLoadFileLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		InvalidLoadFileLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		InvalidLoadFileLabel.setBounds(591, 121, 354, 20);
-		frame.getContentPane().add(InvalidLoadFileLabel);
-		InvalidLoadFileLabel.setVisible(false);
+		JLabel invalidLoadFileLabel = new JLabel("Invalid file, Please select a valid file to load");
+		invalidLoadFileLabel.setForeground(Color.RED);
+		invalidLoadFileLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		invalidLoadFileLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		invalidLoadFileLabel.setBounds(591, 121, 354, 20);
+		frame.getContentPane().add(invalidLoadFileLabel);
+		invalidLoadFileLabel.setVisible(false);
 		
-		JLabel LoadPositionFileLabel = new JLabel("Select File to Load:");
-		LoadPositionFileLabel.setBackground(Color.WHITE);
-		LoadPositionFileLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		LoadPositionFileLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		LoadPositionFileLabel.setBounds(132, 151, 332, 68);
-		frame.getContentPane().add(LoadPositionFileLabel);
+		JLabel loadGameFileLabel = new JLabel("Select File to Load:");
+		loadGameFileLabel.setBackground(Color.WHITE);
+		loadGameFileLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		loadGameFileLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		loadGameFileLabel.setBounds(132, 151, 332, 68);
+		frame.getContentPane().add(loadGameFileLabel);
 		
-		JLabel InvalidFileNameLabel = new JLabel("Please enter a file name");
-		InvalidFileNameLabel.setForeground(Color.RED);
-		InvalidFileNameLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		InvalidFileNameLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		InvalidFileNameLabel.setBounds(591, 229, 354, 26);
-		frame.getContentPane().add(InvalidFileNameLabel);
-		InvalidFileNameLabel.setVisible(false);
+		JLabel emptyFileNameLabel = new JLabel("Please enter a file name");
+		emptyFileNameLabel.setForeground(Color.RED);
+		emptyFileNameLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		emptyFileNameLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		emptyFileNameLabel.setBounds(591, 229, 354, 26);
+		frame.getContentPane().add(emptyFileNameLabel);
+		emptyFileNameLabel.setVisible(false);
 		
-		JButton loadPositionFileButton = new JButton("Load File\r\n");
-		loadPositionFileButton.addMouseListener(new MouseAdapter() {
+		JButton loadGameFileButton = new JButton("Load File\r\n");
+		loadGameFileButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				if(LoadFileNameTextField.getText().isEmpty()) {
-					InvalidFileNameLabel.setVisible(true);
+					emptyFileNameLabel.setVisible(true);
 					return;
 				}
 				try {
@@ -114,24 +114,24 @@ public class LoadPositionPage {
 					Player whitePlayer = new Player(new Time(0), quoridor.getUser(0), ControllerUtilities.BLACK_TILE_INDEX, Direction.Horizontal);
 					Player blackPlayer = new Player(new Time(0), quoridor.getUser(1), ControllerUtilities.WHITE_TILE_INDEX, Direction.Horizontal);
 					QuoridorController.initializeNewGame(QuoridorApplication.getQuoridor(), whitePlayer, blackPlayer);
-					valid = QC.loadSavedPosition(LoadFileNameTextField.getText(), whitePlayer, blackPlayer);
+					valid = QC.loadGame(LoadFileNameTextField.getText(), whitePlayer, blackPlayer);
 					frame.dispose();
 					MainGameWindow main = new MainGameWindow();
 					main.frmQuoridorPlay.setVisible(true);
 				} catch (IOException e1) {
-					InvalidLoadFileLabel.setVisible(true);
+					invalidLoadFileLabel.setVisible(true);
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				if(valid = false) {
-					InvalidLoadFileLabel.setVisible(true);
+					invalidLoadFileLabel.setVisible(true);
 				}
 			}
 		});
-		loadPositionFileButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		loadPositionFileButton.setBounds(1103, 151, 238, 68);
-		frame.getContentPane().add(loadPositionFileButton);
+		loadGameFileButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		loadGameFileButton.setBounds(1103, 151, 238, 68);
+		frame.getContentPane().add(loadGameFileButton);
 		
 		JLabel TitleLabel = new JLabel("Quoridor\r\n");
 		TitleLabel.setFont(new Font("Tahoma", Font.PLAIN, 40));

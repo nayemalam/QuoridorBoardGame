@@ -1042,7 +1042,7 @@ public class QuoridorController {
 	}
 
 	/**
-	 * Method - overwriteGameFile(String filename, Game game)
+	 * Method - overwriteGamePosition(String filename, Game game)
 	 * 
 	 * Controller method used to save the game as a text file This file can later be
 	 * loaded to keep playing this instance of the game
@@ -1127,7 +1127,7 @@ public class QuoridorController {
 	/**
 	 * Method - overWriteFile()
 	 * 
-	 * Controller method used to overwrite a saved game file with the current game
+	 * Controller method used to overwrite a saved position file with the current game position
 	 * 
 	 * @param filename - String name of file
 	 * @return String - contains the content of the overwritten file
@@ -1307,6 +1307,27 @@ public class QuoridorController {
 			}
 		}
 		return true;
+	}
+	/**
+	 * 
+	 * @param filename - name of file to save
+	 * @return boolean - true if file was successfully created and saved, false if file already exists
+	 * @throws IllegalArgumentException
+	 * @throws IOException
+	 * @author Nicolas Buisson
+	 */
+	public static boolean saveGameFile(String filename) throws IllegalArgumentException, IOException {
+		File file = new File(filename);
+
+		boolean fileExists = file.createNewFile();
+		// false if it already exists
+		// true if it doesn't, gets created
+
+		if (fileExists = true) {
+			overwriteGameFile(filename);
+		}
+		return fileExists;
+
 	}
   
 /**
@@ -2198,6 +2219,6 @@ public class QuoridorController {
 		
 	}
 	public static Move stepBack() {
-		
+		return null;
 	}
 }
