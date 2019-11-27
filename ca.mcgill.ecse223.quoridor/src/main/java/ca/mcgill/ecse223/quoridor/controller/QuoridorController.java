@@ -1914,7 +1914,7 @@ public class QuoridorController {
 	}
 	
 	public static List<Tile> getAvailableTiles(){
-		return availableTiles;
+		return availableTiles; // for view
 	}
 }
 
