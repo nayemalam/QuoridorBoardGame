@@ -95,8 +95,7 @@ public class MainGameWindow {
 	private static boolean WallGrabbed = false;
 	private static int CurrRow;
 	private static int CurrCol;
-	private static JButton horizontal = new JButton("horizontal");
-	private static JButton vertical = new JButton("vertical");
+	private static JButton saveGameButton = new JButton("Save Game");
 	static JLabel errorMessage = new JLabel("Incorrect Move");
 	private static int wallIndex;
 	private static int tileLength = 45;
@@ -169,8 +168,16 @@ public class MainGameWindow {
 
 		JPanel southPanel = new JPanel();
 		frmQuoridorPlay.getContentPane().add(southPanel, BorderLayout.SOUTH);
-		southPanel.add(vertical);
-		southPanel.add(horizontal);
+		saveGameButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				frmQuoridorPlay.dispose();
+				SaveGamePage saveGamePage = new SaveGamePage();
+				saveGamePage.frame.setVisible(true);
+			}
+		});
+		saveGameButton.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		southPanel.add(saveGameButton);
 		JPanel rightPanel = new JPanel();
 		rightPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
 		frmQuoridorPlay.getContentPane().add(rightPanel, BorderLayout.EAST);
