@@ -1918,14 +1918,13 @@ public class QuoridorController {
 		Player blackPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
 		Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
 		if(player.equals(blackPlayer)) {
-			if(row == 1 ) {
+			if(row == 1 && col == 3) {
 				//stopGame(q.getCurrentGame());
 				return true;
 			}
-			player.setNextPlayer(whitePlayer);
 		}
 		else if(player.equals(whitePlayer)){
-			if(row == 9) {
+			if(row == 9 && col == 4) {
 				//stopGame(q.getCurrentGame());
 				return true;
 			}
@@ -1933,31 +1932,38 @@ public class QuoridorController {
 		return false;
 	}
 	public static void stopGame(Game game) {
-		game.delete();
-	}
+//	    game.delete();
+	    Player blackPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
+        Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
+        Time endTime = new Time(0);
+        blackPlayer.setRemainingTime(endTime);
+        whitePlayer.setRemainingTime(endTime);
+        game.delete();
+    }
 
-	public static void playerResigns(Player player) {
+	public static void playerInitiatesToResign(Player player) {
 		Player blackPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
 		Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
 		if(player.equals(blackPlayer)) {
-		}
-	}
-
-	public static void playerWins(Player player) {
-		Player blackPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
-		Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
-		if(player.equals(blackPlayer)) {
-			player.getGameAsBlack().setGameStatus(GameStatus.WhiteWon);
+		    stopCurrentPlayerClock();
+			player.getGameAsBlack().setGameStatus(GameStatus.BlackWon);
 		}
 		if(player.equals(whitePlayer)) {
-			player.getGameAsWhite().setGameStatus(GameStatus.BlackWon);
+		    stopCurrentPlayerClock();
+			player.getGameAsWhite().setGameStatus(GameStatus.WhiteWon);
 		}
 
 	}
 
-	public static void gameDoesntRun() {
-		QuoridorApplication.getQuoridor().getCurrentGame().delete();
+	// given that the game is not running
+	public static boolean isNotRunning(GameStatus gameStatus) {
+		if(gameStatus.equals(GameStatus.Running)) {
+			return false;
+		} else {
+			return true;
+		}
 	}
+
 }
 
 

@@ -17,7 +17,16 @@ public class ResignGameStepDef {
 
     @When("Player initates to resign")
     public void player_initates_to_resign() {
-            QuoridorController.playerWins(QuoridorController.getCurrentPlayer());
+        IdentifyGameWonStepDefinition.player = QuoridorController.getCurrentPlayer();
+        QuoridorController.playerInitiatesToResign(IdentifyGameWonStepDefinition.player);
+        if(IdentifyGameWonStepDefinition.player.equals(QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer())) {
+            IdentifyGameWonStepDefinition.currRow = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getRow();
+            IdentifyGameWonStepDefinition.currCol = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getColumn();
+        } else {
+            IdentifyGameWonStepDefinition.currRow = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getRow();
+            IdentifyGameWonStepDefinition.currCol = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getColumn();
+        }
+
     }
 
     /* DONE in IdentifyGameWonStepDefinition.java
