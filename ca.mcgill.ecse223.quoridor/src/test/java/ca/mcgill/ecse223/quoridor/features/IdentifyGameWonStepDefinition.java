@@ -126,21 +126,8 @@ public class IdentifyGameWonStepDefinition {
 	}
 	
 	@When("The clock of {string} counts down to zero")
-	public void the_clock_of_counts_down_to_zero(String string) throws Exception {
-		Player blackPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
-		Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
-		Time zeroTime = new Time(0);
-		long whitePlayerTime = whitePlayer.getRemainingTime().getTime();
-		long blackPlayerTime = blackPlayer.getRemainingTime().getTime();
-
-		// if white player takes too long to move
-		if(string.equals("white") && whitePlayerTime>0) {
-			// eventually player will reach a time of zero
-			whitePlayer.setRemainingTime(zeroTime);
-		}else if(string.equals("black") && blackPlayerTime>0) {
-			blackPlayer.setRemainingTime(zeroTime);
-		} else {
-			throw new Exception("Player time is already zero.");
-		}
+	public void the_clock_of_counts_down_to_zero(String thisPlayer) throws Exception {
+		// logic is handled on the controller method
+		QuoridorController.checkIfClockCountingDown(thisPlayer);
 	}
 }

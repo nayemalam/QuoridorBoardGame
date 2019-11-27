@@ -1964,6 +1964,24 @@ public class QuoridorController {
 		}
 	}
 
+	public static void checkIfClockCountingDown(String thisPlayer) throws Exception {
+        Player blackPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
+        Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
+        Time zeroTime = new Time(0);
+        long whitePlayerTime = whitePlayer.getRemainingTime().getTime();
+        long blackPlayerTime = blackPlayer.getRemainingTime().getTime();
+
+        // if white player takes too long to move
+        if(thisPlayer.equals("white") && whitePlayerTime>0) {
+            // eventually player will reach a time of zero
+            whitePlayer.setRemainingTime(zeroTime);
+        }else if(thisPlayer.equals("black") && blackPlayerTime>0) {
+            blackPlayer.setRemainingTime(zeroTime);
+        } else {
+            throw new Exception("Player time is already zero.");
+        }
+    }
+
 }
 
 
