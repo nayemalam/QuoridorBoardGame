@@ -22,7 +22,7 @@ public class QuoridorController {
 	private static Quoridor quoridor;
 
 	private static List<Tile> availableTiles = new ArrayList<Tile>();
-
+	
 	private static Timer currentBlackPlayerTimer = null;
 	private static Timer currentWhitePlayerTimer = null;
 
@@ -85,7 +85,7 @@ public class QuoridorController {
 			setCurrentPlayer(getWhitePlayer());
 		}
 		startClock();
-
+		
 	}
 
 	/**
@@ -218,7 +218,7 @@ public class QuoridorController {
 			throw new RuntimeException("Game has incorrect amount of players. Please verify the players.");
 		}
 		Player currentPlayer = getCurrentPlayer();
-
+		
 		if(currentPlayer.equals(getBlackPlayer())) {
 			currentBlackPlayerTimer = new Timer(ControllerUtilities.CURRENT_BLACK_TIMER_THREAD_NAME);
 			currentBlackPlayerTimer.schedule(new ThreadTimer(currentPlayer), 0, 1000);
@@ -231,10 +231,10 @@ public class QuoridorController {
 
 		return true;
 	}
-
+	
 	public static void stopCurrentPlayerClock() {
 		Player currentPlayer = getCurrentPlayer();
-
+		
 		if(currentPlayer.equals(getBlackPlayer()) && !(currentBlackPlayerTimer == null)) {
 			currentBlackPlayerTimer.cancel();
 			currentBlackPlayerTimer = null;
@@ -243,11 +243,11 @@ public class QuoridorController {
 			currentWhitePlayerTimer = null;
 		} else {
 		}
-
+		
 	}
 	public static void stopNonCurrentPlayerClock() {
 		Player currentPlayer = getCurrentPlayer();
-
+		
 		if(currentPlayer.equals(getBlackPlayer()) && !(currentWhitePlayerTimer == null)) {
 			currentWhitePlayerTimer.cancel();
 			currentWhitePlayerTimer = null;
@@ -1042,7 +1042,7 @@ public class QuoridorController {
 	}
 
 	/**
-	 * Method - overwriteGamePositionFile(String filename)
+	 * Method - overwriteGameFile(String filename, Game game)
 	 * 
 	 * Controller method used to save the game as a text file This file can later be
 	 * loaded to keep playing this instance of the game
@@ -1125,11 +1125,11 @@ public class QuoridorController {
 	}
 
 	/**
-	 * Method - overWriteFile(String filename)
+	 * Method - overWriteFile()
 	 * 
-	 * Controller method used to overwrite a saved position file with the current game position
+	 * Controller method used to overwrite a saved game file with the current game
 	 * 
-	 * @param String - name of file
+	 * @param filename - String name of file
 	 * @return String - contains the content of the overwritten file
 	 * @author Nicolas Buisson
 	 * 
@@ -1160,12 +1160,11 @@ public class QuoridorController {
 	/**
 	 * Method - loadSavedPosition()
 	 * 
-	 * Controller method used to load a file containing a game's current position
+	 * Controller method used to load a file containing the game state of a previous
+	 * game that the user wishes to continue playing
 	 * 
 	 * @param filename - name of file
-	 * @param whitePlayer - white player
-	 * @param blackPlayer - black player
-	 * @return boolean - true if loaded successfully, throws exception otherwise
+	 * @return GamePosition - the game position is returned
 	 * @author Nicolas Buisson
 	 * 
 	 */
@@ -1309,8 +1308,8 @@ public class QuoridorController {
 		}
 		return true;
 	}
-
-	/**
+  
+/**
 	 * Method - overwriteGameFile(String filename)
 	 * 
 	 * Controller method used to save the game as a text file.
@@ -1528,6 +1527,7 @@ public class QuoridorController {
 		}
 		return true;
 	}
+  
 
 	/**
 	 * Method used to rotate a wall
@@ -2123,19 +2123,81 @@ public class QuoridorController {
 			if(tile.getRow() == row && tile.getColumn() == col) {
 				return true;
 			}
-
+			
 		}
-		return false;
+			return false;
 	}
 
 	public static void InitTwoUsers() {
 		QuoridorApplication.getQuoridor().addUser("U1");
 		QuoridorApplication.getQuoridor().addUser("U2");
 	}
-
+	
 	public static List<Tile> getAvailableTiles(){
-		return availableTiles;
+		return availableTiles; // for view
+	}
+	
+	/**
+	 * This method checks if the player reached the other side of the board (thus if he won).
+	 * @param player  the player we are checking for position
+	 * @param row   the row of the tile of the position of the player we are checking the position for
+	 * @param col   the column of the tile of the position of the player we are checking the position for
+	 * @return true if he reached the other side, false if he did not
+	 * @author Alexander Legouverneur
+	 */
+	public static boolean checkIfWon(Player player, int row, int col) {
+		Quoridor q = QuoridorApplication.getQuoridor();
+		if(player.equals(q.getCurrentGame().getBlackPlayer())) {
+			if(row == 1 ) {
+				//stopGame(q.getCurrentGame());
+				return true;
+			}
+			
+		}
+		else {
+			if(row == 9) {
+				//stopGame(q.getCurrentGame());
+				return true;
+			}
+		}
+		return false;
+	}
+	public static void stopGame(Game game) {
+		game.delete();
+	}
+	
+	/**
+	 * This method is used in the replay mode to jump to the start of the game to be able to replay
+	 * and monitor what happened from the start.
+	 * @param moveNum the moveNumber currently monitored
+	 * @author Alexander Legouverneur
+	 */
+	public static void jumpToStart(int moveNum, int roundNum) {
+		Quoridor q = QuoridorApplication.getQuoridor();
+		
+		Tile aTile = new Tile(1,5,q.getBoard());
+		PlayerPosition Bpos = new PlayerPosition(q.getCurrentGame().getBlackPlayer(), aTile);
+		q.getCurrentGame().getCurrentPosition().setBlackPosition(Bpos);
+		
+		Tile aTile1 = new Tile(9,5,q.getBoard());
+		PlayerPosition Wpos = new PlayerPosition(q.getCurrentGame().getWhitePlayer(), aTile1);
+		q.getCurrentGame().getCurrentPosition().setBlackPosition(Wpos);
+		if(roundNum==2) {
+			int thresh = 2*(moveNum-1)+1;
+			for(int i = 0; i<thresh; i++) {
+				stepBack();
+			}
+		}
+		else {
+			int thresh = 2*(moveNum-1);
+			for(int i = 0; i<thresh;i++) {
+				stepBack();
+			}
+		}
+		
+		
+	}
+	public static Move stepBack() {
+		
 	}
 }
-
-
