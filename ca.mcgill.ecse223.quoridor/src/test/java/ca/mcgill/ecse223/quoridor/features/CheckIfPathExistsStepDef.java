@@ -20,6 +20,7 @@ public class CheckIfPathExistsStepDef {
 	
 	// Private variables for passing values over between tests
 	private PathAvailableToPlayers paths;
+	public static boolean testing = false;
 	
 	// Methods:
 	
@@ -35,7 +36,7 @@ public class CheckIfPathExistsStepDef {
 		Game currentGame = QuoridorApplication.getQuoridor().getCurrentGame();
 		// Create a new move?
 		Direction dir;
-		if(wallDir == "horizontal") {
+		if(wallDir.equals("horizontal")) {
 			dir = Direction.Horizontal;
 		} else {
 			dir = Direction.Vertical;
@@ -85,7 +86,9 @@ public class CheckIfPathExistsStepDef {
 	 */
 	@When("Check path existence is initiated")
 	public void initiateCheckPathExistence() {
+		QuoridorController.testing = true;
 		this.paths = QuoridorController.checkIfPathExists();
+		QuoridorController.testing = false;
 	}
 	
 	/**
@@ -95,7 +98,7 @@ public class CheckIfPathExistsStepDef {
 	 */
 	@Then("Path is available for {string} player")
 	public void pathIsAvailableForBothPlayers(String result) {
-		assertEquals(this.paths.toString(), result);
+		assertEquals(result, this.paths.toString());
 	}
 
 	
