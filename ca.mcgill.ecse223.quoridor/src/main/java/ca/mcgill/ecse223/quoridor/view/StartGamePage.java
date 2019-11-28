@@ -1,4 +1,4 @@
-package ca.mcgill.ecse223.quoridor.view;
+
 
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
@@ -401,3 +401,4 @@ public class StartGamePage {
 		}
 	}
 }
+
