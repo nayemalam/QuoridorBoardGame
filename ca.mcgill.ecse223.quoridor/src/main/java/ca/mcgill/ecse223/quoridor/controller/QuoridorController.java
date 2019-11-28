@@ -2348,11 +2348,12 @@ public class QuoridorController {
 	}
 	
 	/**
-	 * Method to perform simple depth first traversal on the specified graph,
-	 * starting at the specified root. Again, this method was adapted from 
+	 * Method to perform simple depth first traversal iteratively on the specified
+	 * graph, starting at the specified root. Again, this method was adapted from
 	 * https://www.baeldung.com/java-graphs
+	 * 
 	 * @param graph - Graph to traverse
-	 * @param root - Starting point from which to traverse from
+	 * @param root  - Starting point from which to traverse from
 	 * @return - Set of visited nodes
 	 */
 	public static Set<Tile> depthFirstTraversal(Graph graph, Tile root) {
@@ -2381,7 +2382,7 @@ public class QuoridorController {
 	 * @author Tristan Bouchard
 	 */
 	private static Graph modifyGameGraphBasedOnPlayerPosition(Graph gameGraph, Player currentPlayer, Player enemyPlayer) {
-		// TODO Auto-generated method stub
+		// TODO For now, not verifying if the graph has available pawn jumps to verify path to victory 
 		return gameGraph;
 	}
 
@@ -2393,24 +2394,26 @@ public class QuoridorController {
 	 */
 	private static Graph createCurrentBoardGraph(Quoridor quoridor) {
 		
+		// Input null checks
 		Boolean boardIsValid = quoridor != null && quoridor.getBoard() != null && quoridor.getBoard().hasTiles();
 		Boolean gameIsValid = quoridor != null && quoridor.getCurrentGame() != null && quoridor.getCurrentGame().hasWallMoveCandidate();
 		if(!boardIsValid || !gameIsValid) {
 			throw new IllegalArgumentException("Game must be initialized and must have wall move candidate before creating the graph");
 		}
-		
-		// Connect nodes together based on the walls present in the game, based on basic moves only (no jumps yet)
 		Board board = QuoridorApplication.getQuoridor().getBoard();
 		Game game = QuoridorApplication.getQuoridor().getCurrentGame();
-		
 		if(board.getTiles().size() != 81) {
 			throw new IllegalArgumentException("Board is not properly initialized");
 		}
+		
+		// Connect nodes together based on the walls present in the game, based on basic moves only (no jumps yet)
 		Graph gameGraph = new Graph();
 
+		// For all the tiles on the board, create nodes and edges
 		for(Tile currentTile : board.getTiles()){
 			gameGraph.addNode(currentTile);
 			
+			// Obtain adjacent tiles to the current tile, no walls are verified here
 			List<Tile> adjacentTiles = getAdjacentTiles(currentTile);
 			if(adjacentTiles.size() < 2 || adjacentTiles.size() > 4){
 				throw new IllegalArgumentException("Tile specified is invalid");
@@ -2418,15 +2421,12 @@ public class QuoridorController {
 			for(Tile adjTile : adjacentTiles) {
 				// Verify the walls here!
 				if(!checkIfWallOnWayTile(currentTile, adjTile) && !wallMoveCandidateIsInWay(currentTile, adjTile, game.getWallMoveCandidate())) {
+					// If nothing blocking here, add the node and the according edges.
 					gameGraph.addNode(adjTile);
 					gameGraph.addEdge(currentTile, adjTile);
 				}
 			}
 		}
-		Tile tile = getTileAtRowCol(3, 5);
-		Tile tile2 = getTileAtRowCol(3,6);
-		Tile tile3 = getTileAtRowCol(4, 5);
-		Tile tile4 = getTileAtRowCol(4, 6);
 		return gameGraph;
 	}
 
@@ -2438,6 +2438,7 @@ public class QuoridorController {
 	 * @return
 	 */
 	private static boolean wallMoveCandidateIsInWay(Tile currentTile, Tile targetTile, WallMove wallMoveCandidate) {
+		// Determine the move direction
 		MoveDirections direct;
 		if(targetTile.getRow() == currentTile.getRow() - 1) {
 			direct = MoveDirections.up;
@@ -2450,6 +2451,8 @@ public class QuoridorController {
 		} else {
 			throw new IllegalArgumentException("Invalid tile configuration");
 		}
+		
+		// Get logic from another method without having to create a Move from the WallMove candidate
 		int wallCol = wallMoveCandidate.getTargetTile().getColumn();
 		int wallRow = wallMoveCandidate.getTargetTile().getRow();
 		int targetCol = targetTile.getColumn();
