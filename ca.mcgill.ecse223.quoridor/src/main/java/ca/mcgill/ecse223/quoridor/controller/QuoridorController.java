@@ -1956,12 +1956,8 @@ public class QuoridorController {
 	}
 
 	// given that the game is not running
-	public static boolean isNotRunning(GameStatus gameStatus) {
-		if(gameStatus.equals(GameStatus.Running)) {
-			return false;
-		} else {
-			return true;
-		}
+	public static void GameStatusNotRunning() {
+		QuoridorApplication.getQuoridor().getCurrentGame().setGameStatus(GameStatus.ReadyToStart);
 	}
 
 	public static void checkIfClockCountingDown(String thisPlayer) throws Exception {
@@ -1981,6 +1977,7 @@ public class QuoridorController {
             throw new Exception("Player time is already zero.");
         }
     }
+
 
 }
 
