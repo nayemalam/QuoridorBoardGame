@@ -129,5 +129,4 @@ public class IdentifyGameWonStepDefinition {
 	public void the_clock_of_counts_down_to_zero(String thisPlayer) throws Exception {
 		// logic is handled on the controller method
 		QuoridorController.checkIfClockCountingDown(thisPlayer);
-	}
 }

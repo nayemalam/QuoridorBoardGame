@@ -123,7 +123,7 @@ public class MainMenu {
 			public void mouseReleased(MouseEvent arg0) {
 				frame.dispose();
 				try {
-					LoadPositionPage loadPage = new LoadPositionPage();
+					LoadGamePage loadPage = new LoadGamePage();
 					loadPage.frame.setVisible(true);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
