@@ -2375,11 +2375,13 @@ public class QuoridorController {
 	private static Graph createCurrentBoardGraph(Quoridor quoridor) {
 		
 		Boolean boardIsValid = quoridor != null && quoridor.getBoard() != null && quoridor.getBoard().hasTiles();
-		if(!boardIsValid) {
-			throw new IllegalArgumentException("Game must be initialized before creating the graph");
+		Boolean gameIsValid = quoridor != null && quoridor.getCurrentGame() != null && quoridor.getCurrentGame().hasWallMoveCandidate();
+		if(!boardIsValid || !gameIsValid) {
+			throw new IllegalArgumentException("Game must be initialized and must have wall move candidate before creating the graph");
 		}
+		
 		// Connect nodes together based on the walls present in the game, based on basic moves only (no jumps yet)
-		 Graph gameGraph = createGraphOfCurrentGameBoard(QuoridorApplication.getQuoridor().getBoard());
+		 Graph gameGraph = createGraphOfCurrentGameBoard(QuoridorApplication.getQuoridor().getBoard(), QuoridorApplication.getQuoridor().getCurrentGame());
 		return gameGraph;
 	}
 
@@ -2390,7 +2392,7 @@ public class QuoridorController {
 	 * @return Generic graph of the current game and wall placement
 	 * @author Tristan Bouchard
 	 */
-	private static Graph createGraphOfCurrentGameBoard(Board board) {
+	private static Graph createGraphOfCurrentGameBoard(Board board, Game game) {
 		if(board.getTiles().size() != 81) {
 			throw new IllegalArgumentException("Board is not properly initialized");
 		}
@@ -2405,13 +2407,67 @@ public class QuoridorController {
 			}
 			for(Tile adjTile : adjacentTiles) {
 				// Verify the walls here!
-				if(!checkIfWallOnWayTile(currentTile, adjTile)) {
+				if(!checkIfWallOnWayTile(currentTile, adjTile) && !wallMoveCandidateIsInWay(currentTile, adjTile, game.getWallMoveCandidate())) {
 					gameGraph.addNode(adjTile);
 					gameGraph.addEdge(currentTile, adjTile);
 				}
 			}
 		}
 		return gameGraph;
+	}
+
+	/**
+	 * Method used to verify if the wall move candidate is in the path of the move
+	 * @param currentTile
+	 * @param targetTile
+	 * @param game
+	 * @return
+	 */
+	private static boolean wallMoveCandidateIsInWay(Tile currentTile, Tile targetTile, WallMove wallMoveCandidate) {
+		MoveDirections direct;
+		if(targetTile.getRow() == currentTile.getRow() - 1) {
+			direct = MoveDirections.up;
+		} else if(targetTile.getRow() == currentTile.getRow() + 1){
+			direct = MoveDirections.down;
+		} else if(targetTile.getColumn() == currentTile.getColumn() - 1){
+			direct = MoveDirections.left;
+		} else if(targetTile.getColumn() == currentTile.getColumn() + 1){
+			direct = MoveDirections.right;
+		} else {
+			throw new IllegalArgumentException("Invalid tile configuration");
+		}
+		int wallCol = wallMoveCandidate.getTargetTile().getColumn();
+		int wallRow = wallMoveCandidate.getTargetTile().getRow();
+		int targetCol = targetTile.getColumn();
+		int targetRow = targetTile.getRow();
+		String side = direct.toString();
+		Direction dir = wallMoveCandidate.getWallDirection();
+		// Logic to verify if the potential wall is in the way:
+		if(side.equals("left") && targetRow == wallRow && targetCol == wallCol && dir.equals(Direction.Vertical)) {
+			return true;
+		}
+		if(side.equals("left") && targetRow == wallRow + 1 && targetCol == wallCol && dir.equals(Direction.Vertical)) {
+			return true;
+		}
+		if(side.equals("right") && targetRow == wallRow && targetCol == wallCol + 1 && dir.equals(Direction.Vertical)) {
+			return true;
+		}
+		if(side.equals("right") && targetRow == wallRow + 1 && targetCol == wallCol + 1 && dir.equals(Direction.Vertical)) {
+			return true;
+		}
+		if(side.equals("up") && targetRow == wallRow && targetCol == wallCol + 1 && dir.equals(Direction.Horizontal)) {
+			return true;
+		}
+		if(side.equals("up") && targetRow == wallRow && targetCol == wallCol && dir.equals(Direction.Horizontal)) {
+			return true;
+		}
+		if(side.equals("down") && targetRow == wallRow + 1 && targetCol == wallCol + 1 && dir.equals(Direction.Horizontal)) {
+			return true;
+		}
+		if(side.equals("down") && targetRow == wallRow + 1 && targetCol == wallCol && dir.equals(Direction.Horizontal)) {
+			return true;
+		}
+		return false;
 	}
 
 	/**

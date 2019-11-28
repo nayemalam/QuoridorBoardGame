@@ -8,11 +8,13 @@ import ca.mcgill.ecse223.quoridor.model.Direction;
 import ca.mcgill.ecse223.quoridor.model.Game;
 import ca.mcgill.ecse223.quoridor.model.PlayerPosition;
 import ca.mcgill.ecse223.quoridor.model.Tile;
+import ca.mcgill.ecse223.quoridor.model.Wall;
 import ca.mcgill.ecse223.quoridor.model.WallMove;
 import ca.mcgill.ecse223.quoridor.utilities.ControllerUtilities.PathAvailableToPlayers;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
+import javafx.geometry.Orientation;
 
 public class CheckIfPathExistsStepDef {
 	
@@ -38,11 +40,17 @@ public class CheckIfPathExistsStepDef {
 		} else {
 			dir = Direction.Vertical;
 		}
+		int index = -1;
+		if(QuoridorController.getCurrentPlayer().equals(QuoridorController.getWhitePlayer())) {
+			index = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getWhiteWallsInStock().size() - 1;
+		} else {
+			index = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getBlackWallsInStock().size() - 1;
+		}
+		
+		Wall aWall = QuoridorController.getCurrentPlayer().getWall(index);
 		// Get next wall available for the current player
-		//QuoridorController.getCurrentPlayer().
-		//QuoridorController.
-		//WallMove moveCandidate = new WallMove(row, col, QuoridorController.getCurrentPlayer(), dir,)
-		//currentGame.addMove(aMove)
+		WallMove moveCandidate = new WallMove(row, col, QuoridorController.getCurrentPlayer(), QuoridorController.getTileAtRowCol(row, col), currentGame, dir, aWall);
+		QuoridorApplication.getQuoridor().getCurrentGame().setWallMoveCandidate(moveCandidate);
 	}
 	
 	/**
