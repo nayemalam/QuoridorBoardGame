@@ -13,6 +13,12 @@ Feature: Check if path exists
       |    4 |    6 | horizontal |
       |    4 |    8 | horizontal |
       |    3 |    6 | vertical   |
+      
+	# Structure of existing walls
+	# R1
+	# R2
+	# R3 __ __   |
+	# R4     __ _|_ __    
 
   Scenario Outline: Path to target area is not blocked
     Given A "<dir>" wall move candidate exists at position <frow>:<fcol>
@@ -21,6 +27,7 @@ Feature: Check if path exists
     When Check path existence is initiated
     Then Path is available for "<result>" player
     
+    # A wall move candidate is placed at numerous place
  		Examples: 
       | dir        | frow | fcol | brow | bcol | wrow | wcol | result |
       | horizontal |    3 |    7 |    2 |    5 |    6 |    5 | both   |
