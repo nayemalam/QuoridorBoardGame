@@ -2218,8 +2218,6 @@ public class QuoridorController {
     }
 
 
-}
-
 	/**
 	 * This method is used in the replay mode to jump to the start of the game to be able to replay
 	 * and monitor what happened from the start.
@@ -2254,4 +2252,5 @@ public class QuoridorController {
 	public static Move stepBack() {
 		return null;
 	}
+
 }
