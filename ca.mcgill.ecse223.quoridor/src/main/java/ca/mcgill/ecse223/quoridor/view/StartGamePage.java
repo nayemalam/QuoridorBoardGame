@@ -1,5 +1,4 @@
 
-package ca.mcgill.ecse223.quoridor.view;
 
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
@@ -18,7 +17,7 @@ public class StartGamePage {
 	// UI elements
 	public JFrame frame;
 	private JTextPane QuoridorTitleField;
-	private JLabel errorMessage;
+	private TextArea errorMessage;
 	// player 1
 	private JLabel PlayerLabel_1;
 	private JComboBox PlayerSelect_1;
@@ -71,6 +70,7 @@ public class StartGamePage {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() throws Exception {
+		//QuoridorController.InitTwoUsers();
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -136,6 +136,7 @@ public class StartGamePage {
 		Seconds_label = new JLabel("Seconds");
 		Seconds_label.setHorizontalAlignment(SwingConstants.CENTER);
 		Seconds_TextField = new JTextArea();
+		Seconds_TextField.setText("0");
 
 		// elements for starting new game
 		btnStartGame = new JButton("START GAME");
@@ -161,9 +162,8 @@ public class StartGamePage {
 		});
 
 		// elements for error message
-		errorMessage = new JLabel("");
+		errorMessage = new TextArea("");
 		errorMessage.setFont(new Font("Monospaced", Font.BOLD, 30));
-		errorMessage.setHorizontalAlignment(SwingConstants.CENTER);
 		errorMessage.setForeground(Color.RED);
 
 		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
@@ -261,9 +261,42 @@ public class StartGamePage {
 	// Methods
 	private void startGameActionPerformed(ActionEvent evt) {
 		// clears error message
-		error = null;
+		boolean err = false;
+		error = "";
+		// Verify text fields
+		if(String.valueOf(PlayerSelect_1.getSelectedItem()).trim().equals("") || String.valueOf(PlayerSelect_1.getSelectedItem()).trim().equals("null")) {
+			err = true;
+			error += "Please enter a valid name for player 1\n";
+		} 
+		if(String.valueOf(PlayerSelect_2.getSelectedItem()).trim().equals("") || String.valueOf(PlayerSelect_2.getSelectedItem()).trim().equals("null")) {
+			err = true;
+			error += "Please enter a valid name for player 2\n";
+		}
+		if(Minutes_TextField.getText().trim().equals("")) {
+			err = true;
+			error += "Please enter a valid thinking time for the players (minutes)\n";
+		}
+		if(err) {
+			errorMessage.setForeground(Color.RED);
+			errorMessage.setText(error);
+			return;
+		}
+		// If no errors, perform the respective actions and start the game
+		addPlayerOneUsernameActionPerformed(evt);
+		addPlayerTwoUsernameActionPerformed(evt);
+		try {
+			setTotalThinkingTimeActionPerformed(evt);
+		} catch (Exception e) {
+			error = "Cannot set a non-integer as time! Please set a correct integer";
+			errorMessage.setForeground(Color.RED);
+			errorMessage.setText(error);
+			return;
+		}
+		
 		try {
 			QuoridorController.initializeNewGame(QuoridorApplication.getQuoridor(), QuoridorController.createWhitePlayer(), QuoridorController.createBlackPlayer());
+			QuoridorController.stopCurrentPlayerClock();
+			QuoridorController.stopNonCurrentPlayerClock();
 			MainGameWindow gameWindow = new MainGameWindow();
 			MainGameWindow.frmQuoridorPlay.setVisible(true);
 			frame.dispose();
@@ -275,7 +308,7 @@ public class StartGamePage {
 	}
 	private void backActionPerformed(ActionEvent evt) {
 		// clears error message
-		error = null;
+		error = "";
 		try {
 			MainMenu mainMenu = new MainMenu();
 			mainMenu.frame.setVisible(true);
@@ -351,6 +384,7 @@ public class StartGamePage {
 		// clears error message
 		error = null;
 
+
 		// call controller
 		Integer min = Integer.parseInt(Minutes_TextField.getText().trim());
 		Integer sec = Integer.parseInt(Seconds_TextField.getText().trim());
@@ -367,3 +401,4 @@ public class StartGamePage {
 		}
 	}
 }
+
