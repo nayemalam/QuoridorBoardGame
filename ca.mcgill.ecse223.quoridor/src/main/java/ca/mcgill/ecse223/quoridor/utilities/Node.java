@@ -21,4 +21,27 @@ public class Node {
     public Node(Tile tile) {
     	this.tile = tile;
     }
+    
+    /**
+     * Method overriding the equals method from object
+     */
+    @Override
+	public boolean equals(Object obj) {
+    	if(this == obj) {
+    		return true;
+    	}
+    	if(obj == null || obj.getClass() != this.getClass()) {
+    		return false;
+    	}
+    	Node node = (Node) obj;
+		return this.tile.equals(node.tile);
+	}
+    
+    /**
+     * Method overriding the hashCode method from object
+     */
+    @Override
+    public int hashCode() {
+    	return tile.hashCode();
+    }
 }

@@ -3,15 +3,21 @@ package ca.mcgill.ecse223.quoridor.controller;
 
 import java.io.*;
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
+import ca.mcgill.ecse223.quoridor.controller.PawnBehavior.MoveDirection;
 import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.model.Game.GameStatus;
 import ca.mcgill.ecse223.quoridor.model.Game.MoveMode;
 import ca.mcgill.ecse223.quoridor.utilities.*;
+import ca.mcgill.ecse223.quoridor.utilities.ControllerUtilities.MoveDirections;
+import ca.mcgill.ecse223.quoridor.utilities.ControllerUtilities.PathAvailableToPlayers;
 
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
+
+import ca.mcgill.ecse223.quoridor.utilities.Graph;
+import ca.mcgill.ecse223.quoridor.utilities.Node;
 
 public class QuoridorController {
 
@@ -1744,7 +1750,6 @@ public class QuoridorController {
 		// Begin by getting all possible tiles this player can move to
 		mainValidateMovePawn(player);
 
-		int i = 0;
 		for (Tile tile: availableTiles) {
 
 			if(side.equals("left")) {
@@ -1963,7 +1968,7 @@ public class QuoridorController {
 		for(int i=0; i<20; i++) {
 
 			if(i<10) {
-				if(q.getCurrentGame().getWhitePlayer().getWall(i).hasMove() == true) {
+				if(q.getCurrentGame().getWhitePlayer().getWall(i).hasMove()) {
 					wallRow = q.getCurrentGame().getWhitePlayer().getWall(i).getMove().getTargetTile().getRow();
 					wallCol = q.getCurrentGame().getWhitePlayer().getWall(i).getMove().getTargetTile().getColumn();
 					dir =  q.getCurrentGame().getWhitePlayer().getWall(i).getMove().getWallDirection();
@@ -1971,7 +1976,7 @@ public class QuoridorController {
 				else continue;
 			}
 			else {
-				if(q.getCurrentGame().getBlackPlayer().getWall(i - 10).hasMove() == true) {
+				if(q.getCurrentGame().getBlackPlayer().getWall(i - 10).hasMove()) {
 					wallRow = q.getCurrentGame().getBlackPlayer().getWall(i - 10).getMove().getTargetTile().getRow();
 					wallCol = q.getCurrentGame().getBlackPlayer().getWall(i - 10).getMove().getTargetTile().getColumn();
 					dir =  q.getCurrentGame().getBlackPlayer().getWall(i - 10).getMove().getWallDirection();
@@ -2005,7 +2010,28 @@ public class QuoridorController {
 
 		}
 		return false;
-
+	}
+	
+	/**
+	 * Method used to verify if a wall is placed between two tiles
+	 * @param currentTile - Tile pawn is currently placed on
+	 * @param targetTile - Tile pawn wants to move to
+	 * @return
+	 */
+	private static boolean checkIfWallOnWayTile(Tile currentTile, Tile targetTile) {
+		MoveDirections dir;
+		if(targetTile.getRow() == currentTile.getRow() - 1) {
+			dir = MoveDirections.up;
+		} else if(targetTile.getRow() == currentTile.getRow() + 1){
+			dir = MoveDirections.down;
+		} else if(targetTile.getColumn() == currentTile.getColumn() - 1){
+			dir = MoveDirections.left;
+		} else if(targetTile.getColumn() == currentTile.getColumn() + 1){
+			dir = MoveDirections.right;
+		} else {
+			throw new IllegalArgumentException("Invalid tile configuration");
+		}
+		return checkWallOnWay(targetTile.getRow(), targetTile.getColumn(), dir.toString());
 	}
 
 	/**
@@ -2129,9 +2155,9 @@ public class QuoridorController {
 	 * @return true if there is a match, false if there is no match
 	 * @author Alexander Legouverneur
 	 */
-	public static boolean compareAvailableTiles(int row, int col){
-		for(Tile tile : availableTiles) {
-			if(tile.getRow() == row && tile.getColumn() == col) {
+	public static boolean compareAvailableTiles(int row, int col) {
+		for (Tile tile : availableTiles) {
+			if (tile.getRow() == row && tile.getColumn() == col) {
 				return true;
 			}
 
@@ -2238,6 +2264,188 @@ public class QuoridorController {
 		}
 	}
 
+	/**
+	 * Method used to determine if paths to victory are achievable by 
+	 * which players.
+	 * @return PathAvailableToPlayers enum of which players can reach victory
+	 */
+	public static PathAvailableToPlayers checkIfPathExists() {
+		// Begin by creating graph of tiles and walls
+		Graph gameGraph = createCurrentBoardGraph(QuoridorApplication.getQuoridor());
+		
+		// Modify graph based on player position and traverse
+		Graph whitePlayerGraph = modifyGameGraphBasedOnPlayerPosition(gameGraph, QuoridorController.getWhitePlayer(), QuoridorController.getBlackPlayer());
+		Graph blackPlayerGraph = modifyGameGraphBasedOnPlayerPosition(gameGraph, QuoridorController.getBlackPlayer(), QuoridorController.getWhitePlayer());
+		
+		// Traverse graph using the A* algorithm
+		Boolean pathForWhiteAvailable = traversePlayerGraphToFinish(whitePlayerGraph, QuoridorController.getWhitePlayer());
+		Boolean pathForBlackAvailable = traversePlayerGraphToFinish(blackPlayerGraph, QuoridorController.getBlackPlayer());
+		
+		// Determine which paths are available
+		if(pathForWhiteAvailable && pathForBlackAvailable) {
+			return PathAvailableToPlayers.both;
+		} else if(pathForWhiteAvailable && !pathForBlackAvailable) {
+			return PathAvailableToPlayers.white;
+		} else if(!pathForWhiteAvailable && pathForBlackAvailable) {
+			return PathAvailableToPlayers.black;
+		} else if(!pathForWhiteAvailable && !pathForBlackAvailable) {
+			return PathAvailableToPlayers.none;
+		} else {
+			throw new IllegalArgumentException("Uhhh not sure how we got here");
+		}	
+	}
+	
+	/**
+	 * Method used to traverse the respective player's graphs to determine if they can reach
+	 * their desired zone for victory.
+	 * @param playerGraph - Current Player graph
+	 * @param player - Player associated to the graph
+	 * @return True is path to victory zone is reachable, false otherwise
+	 * @author Tristan Bouchard
+	 */
+	private static Boolean traversePlayerGraphToFinish(Graph playerGraph, Player player) {
+		
+		Tile startingTile = null;
+		int targetColumn = -1;
+		if(player.equals(getWhitePlayer())) {
+			startingTile = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getWhitePosition().getTile();
+			targetColumn = 9;
+		} else if(player.equals(getBlackPlayer())) {
+			startingTile = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getBlackPosition().getTile();
+			targetColumn = 1;
+		} else {
+			throw new IllegalArgumentException("Player is invalid");
+		}
+		
+		Set<Tile> tilesVisited = depthFirstTraversal(playerGraph, startingTile);
+		
+		// If a tile in the target region is visited, return true
+		for(Tile tile : tilesVisited) {
+			if(tile.getColumn() == targetColumn) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Method to perform simple depth first traversal on the specified graph,
+	 * starting at the specified root. Again, this method was adapted from 
+	 * https://www.baeldung.com/java-graphs
+	 * @param graph - Graph to traverse
+	 * @param root - Starting point from which to traverse from
+	 * @return - Set of visited nodes
+	 */
+	public static Set<Tile> depthFirstTraversal(Graph graph, Tile root) {
+	    Set<Tile> visited = new LinkedHashSet<Tile>();
+	    Stack<Tile> stack = new Stack<Tile>();
+	    stack.push(root);
+	    while (!stack.isEmpty()) {
+	        Tile tile = stack.pop();
+	        if (!visited.contains(tile)) {
+	            visited.add(tile);
+	            for (Node v : graph.getAdjNodes(tile)) {              
+	                stack.push(v.tile);
+	            }
+	        }
+	    }
+	    return visited;
+	}
+	
+	/**
+	 * Method used to modify the generic game graph based on the players position.
+	 * This will make jumps included in the possible links between tiles
+	 * @param gameGraph - Generic game graph, based on walls
+	 * @param currentPlayer - Current player perspective with which to modify perspective
+	 * @param enemyPlayer -  Enemy player for the current player
+	 * @return Graph in the perspective of the white player
+	 * @author Tristan Bouchard
+	 */
+	private static Graph modifyGameGraphBasedOnPlayerPosition(Graph gameGraph, Player currentPlayer, Player enemyPlayer) {
+		// TODO Auto-generated method stub
+		return gameGraph;
+	}
+
+	/**
+	 * This method create the graph of the game board and the available moves
+	 * @param quoridor - Current Quoridor instance
+	 * @return Generic graph of the current game, with current wall configuration
+	 * @author Tristan Bouchard
+	 */
+	private static Graph createCurrentBoardGraph(Quoridor quoridor) {
+		
+		Boolean boardIsValid = quoridor != null && quoridor.getBoard() != null && quoridor.getBoard().hasTiles();
+		if(!boardIsValid) {
+			throw new IllegalArgumentException("Game must be initialized before creating the graph");
+		}
+		// Connect nodes together based on the walls present in the game, based on basic moves only (no jumps yet)
+		 Graph gameGraph = createGraphOfCurrentGameBoard(QuoridorApplication.getQuoridor().getBoard());
+		return gameGraph;
+	}
+
+	/**
+	 * Method used to create graph of adjacent nodes based on the board configuration
+	 * of tiles and walls. 
+	 * @param board - CurrentGameBoard for which to create graph for
+	 * @return Generic graph of the current game and wall placement
+	 * @author Tristan Bouchard
+	 */
+	private static Graph createGraphOfCurrentGameBoard(Board board) {
+		if(board.getTiles().size() != 81) {
+			throw new IllegalArgumentException("Board is not properly initialized");
+		}
+		Graph gameGraph = new Graph();
+
+		for(Tile currentTile : board.getTiles()){
+			gameGraph.addNode(currentTile);
+			
+			List<Tile> adjacentTiles = getAdjacentTiles(currentTile);
+			if(adjacentTiles.size() < 2 || adjacentTiles.size() > 4){
+				throw new IllegalArgumentException("Tile specified is invalid");
+			}
+			for(Tile adjTile : adjacentTiles) {
+				// Verify the walls here!
+				if(!checkIfWallOnWayTile(currentTile, adjTile)) {
+					gameGraph.addNode(adjTile);
+					gameGraph.addEdge(currentTile, adjTile);
+				}
+			}
+		}
+		return gameGraph;
+	}
+
+	/**
+	 * Method used to return the adjacent tiles to the specified tile.
+	 * @param tile - Tile which to return adjacent tiles.
+	 * @return List<Tile> of adjacent tiles of length 2 - 4 tiles
+	 * @author Tristan Bouchard
+	 */
+	private static List<Tile> getAdjacentTiles(Tile tile) {
+				
+		List<Tile> adjacentTiles = new ArrayList<Tile>();
+		
+		Integer currentRow = tile.getRow(); 
+		Integer currentCol = tile.getColumn();
+		if(currentRow - 1 >= 1) {
+			// Not top row
+			adjacentTiles.add(getTileAtRowCol(currentRow - 1, currentCol));
+		}
+		if(currentRow + 1 <= 9) {
+			// Not bottom row
+			adjacentTiles.add(getTileAtRowCol(currentRow + 1, currentCol));
+		}
+		if(currentCol - 1 >= 1) {
+			// Not left column
+			adjacentTiles.add(getTileAtRowCol(currentRow, currentCol - 1));
+		}
+		if(currentCol + 1 <= 9) {
+			// Not right column
+			adjacentTiles.add(getTileAtRowCol(currentRow, currentCol + 1));
+		}
+		return adjacentTiles;
+	}
+
+}
 
 	/**
 	 * This method is used in the replay mode to jump to the start of the game to be able to replay
