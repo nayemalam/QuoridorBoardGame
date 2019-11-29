@@ -9,6 +9,7 @@ import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.model.Game.GameStatus;
 import ca.mcgill.ecse223.quoridor.model.Game.MoveMode;
 import ca.mcgill.ecse223.quoridor.utilities.*;
+import java.math.*;
 
 import java.sql.Time;
 import java.util.ArrayList;
@@ -1455,8 +1456,10 @@ public class QuoridorController {
 						gamePositionToLoad.getWhitePosition().setTile(whitePawnTile);
 						//create associated move
 						StepMove whitePawnMove = new StepMove(moveNumber, 1, whitePlayer, whitePawnTile, game);
+						Move currentMove = game.getMove(game.getMoves().size()-1);
+						currentMove.setNextMove(whitePawnMove);
+						whitePawnMove.setPrevMove(currentMove);
 						game.addMove(whitePawnMove);
-
 					} else {
 						quoridor.setCurrentGame(null);
 						throw new IllegalArgumentException("Invalid Move loaded!");
@@ -1486,7 +1489,11 @@ public class QuoridorController {
 
 						WallMove whiteWallMove = new WallMove(moveNumber, 1, getWhitePlayer(), whiteWallTile, game, whiteWallDirection, whiteWall);
 						whiteWall.setMove(whiteWallMove);
+						Move currentMove = game.getMove(game.getMoves().size()-1);
+						currentMove.setNextMove(whiteWallMove);
+						whiteWallMove.setPrevMove(currentMove);
 						game.addMove(whiteWallMove);
+						
 					} else {
 						quoridor.setCurrentGame(null);
 						throw new IllegalArgumentException("Invalid Move loaded!");
@@ -1504,6 +1511,9 @@ public class QuoridorController {
 						gamePositionToLoad.getBlackPosition().setTile(blackPawnTile);
 						//create associated move
 						StepMove blackPawnMove = new StepMove(moveNumber, 2, whitePlayer, blackPawnTile, game);
+						Move currentMove = game.getMove(game.getMoves().size()-1);
+						currentMove.setNextMove(blackPawnMove);
+						blackPawnMove.setPrevMove(currentMove);
 						game.addMove(blackPawnMove);
 					} else {
 						quoridor.setCurrentGame(null);
@@ -1534,6 +1544,9 @@ public class QuoridorController {
 
 						WallMove blackWallMove = new WallMove(moveNumber, 1, getBlackPlayer(), blackWallTile, game, blackWallDirection, blackWall);
 						blackWall.setMove(blackWallMove);
+						Move currentMove = game.getMove(game.getMoves().size()-1);
+						currentMove.setNextMove(blackWallMove);
+						blackWallMove.setPrevMove(currentMove);
 						game.addMove(blackWallMove);
 					} else {
 						quoridor.setCurrentGame(null);
@@ -1548,6 +1561,46 @@ public class QuoridorController {
 		}
 		return true;
 	}
+	
+	/**
+	 * @param r1 row of first move
+	 * @param c1 column of first move
+	 * @param r2 row of following move
+	 * @param c2 column of following move
+	 * @return boolean - false if distance covered by 2 consecutive moves are strictly greater than 2 else return true
+	 * @author Nicolas Buisson
+	 */
+	public static boolean verifyDistanceOfMove(int r1, int c1, int r2, int c2) {
+		
+		if(Math.abs(r1 - r2) > 2) {
+			return false;
+		}
+		if(Math.abs(c1 - c2) > 2) {
+			return false;
+		}else {
+			return false;
+		}
+	}
+	
+	/** 
+	 * @param r1 row of first move
+	 * @param c1 column of first move
+	 * @param r2 row of following move
+	 * @param c2 column of following move
+	 * @return boolean - false if distance covered by 2 consecutive moves are strictly greater than 1: this means the move is a jump 
+	 * --- Else return true, move is a step move
+	 * @author Nicolas Buisson
+	 */
+	public static boolean typeOfDisplacement(int r1, int c1, int r2, int c2) {
+		
+		if(Math.abs(r1 - r2 - c1 - c2) > 1) {
+			return false; //false jump move
+		}else {
+			return true; //true step move
+		}
+	}
+	
+	
   
 
 	/**
