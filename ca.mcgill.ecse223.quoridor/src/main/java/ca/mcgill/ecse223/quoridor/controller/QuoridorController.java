@@ -1567,18 +1567,16 @@ public class QuoridorController {
 	 * @param c1 column of first move
 	 * @param r2 row of following move
 	 * @param c2 column of following move
-	 * @return boolean - false if distance covered by 2 consecutive moves are strictly greater than 2 else return true
+	 * @return boolean - false if distance covered by 2 consecutive moves are strictly greater than 2 
+	 * ---Else return true
 	 * @author Nicolas Buisson
 	 */
 	public static boolean verifyDistanceOfMove(int r1, int c1, int r2, int c2) {
-		
-		if(Math.abs(r1 - r2) > 2) {
-			return false;
-		}
-		if(Math.abs(c1 - c2) > 2) {
+		//if distance between 2 pawn positions across two moves is greater than 2 tiles, incorrect move
+		if(Math.abs((r1 - r2) + (c1 - c2)) > 2) {
 			return false;
 		}else {
-			return false;
+			return true;
 		}
 	}
 	
@@ -1593,7 +1591,7 @@ public class QuoridorController {
 	 */
 	public static boolean typeOfDisplacement(int r1, int c1, int r2, int c2) {
 		
-		if(Math.abs(r1 - r2 - c1 - c2) > 1) {
+		if(Math.abs((r1 - r2) + (c1 - c2)) > 1) {
 			return false; //false jump move
 		}else {
 			return true; //true step move
