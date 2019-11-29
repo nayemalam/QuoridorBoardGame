@@ -23,6 +23,8 @@ public class QuoridorController {
 
 	private static Timer currentBlackPlayerTimer = null;
 	private static Timer currentWhitePlayerTimer = null;
+	private static int ReplayModeMoveNum;
+	private static int ReplayModeRoundNum;
 
 	/**
 	 * Method to capture the time at which the clock is stopped
@@ -1317,8 +1319,8 @@ public class QuoridorController {
 		return fileExists;
 
 	}
-  
-/**
+
+	/**
 	 * Method - overwriteGameFile(String filename)
 	 * 
 	 * Controller method used to save the game as a text file.
@@ -1342,7 +1344,7 @@ public class QuoridorController {
 			//iterate through the list of moves
 			//encode the move into the string format
 			String encodedMove = "";
-			
+
 			Integer column = moves.get(i).getTargetTile().getColumn();
 			Integer row = moves.get(i).getTargetTile().getRow();
 
@@ -1536,7 +1538,7 @@ public class QuoridorController {
 		}
 		return true;
 	}
-  
+
 
 	/**
 	 * Method used to rotate a wall
@@ -2134,7 +2136,7 @@ public class QuoridorController {
 			}
 
 		}
-			return false;
+		return false;
 	}
 
 	public static void InitTwoUsers() {
@@ -2145,7 +2147,7 @@ public class QuoridorController {
 	public static List<Tile> getAvailableTiles(){
 		return availableTiles; // for view
 	}
-	
+
 	/**
 	 * This method checks if the player reached the other side of the board (thus if he won).
 	 * @param player  the player we are checking for position
@@ -2177,14 +2179,14 @@ public class QuoridorController {
 	 * @author Nayem Alam
 	 */
 	public static void stopGame(Game game) {
-//	    game.delete();
-	    Player blackPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
-        Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
-        Time endTime = new Time(0);
-        blackPlayer.setRemainingTime(endTime);
-        whitePlayer.setRemainingTime(endTime);
-        game.delete();
-    }
+		//	    game.delete();
+		Player blackPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
+		Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
+		Time endTime = new Time(0);
+		blackPlayer.setRemainingTime(endTime);
+		whitePlayer.setRemainingTime(endTime);
+		game.delete();
+	}
 
 	/**
 	 * Method checks which player chooses to resign
@@ -2195,11 +2197,11 @@ public class QuoridorController {
 		Player blackPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
 		Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
 		if(player.equals(blackPlayer)) {
-		    stopCurrentPlayerClock();
+			stopCurrentPlayerClock();
 			player.getGameAsBlack().setGameStatus(GameStatus.BlackWon);
 		}
 		if(player.equals(whitePlayer)) {
-		    stopCurrentPlayerClock();
+			stopCurrentPlayerClock();
 			player.getGameAsWhite().setGameStatus(GameStatus.WhiteWon);
 		}
 
@@ -2219,22 +2221,22 @@ public class QuoridorController {
 	 * @author Nayem Alam
 	 */
 	public static void checkIfClockCountingDown(String thisPlayer) throws Exception {
-        Player blackPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
-        Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
-        Time zeroTime = new Time(0);
-        long whitePlayerTime = whitePlayer.getRemainingTime().getTime();
-        long blackPlayerTime = blackPlayer.getRemainingTime().getTime();
+		Player blackPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
+		Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
+		Time zeroTime = new Time(0);
+		long whitePlayerTime = whitePlayer.getRemainingTime().getTime();
+		long blackPlayerTime = blackPlayer.getRemainingTime().getTime();
 
-        // if white player takes too long to move
-        if(thisPlayer.equals("white") && whitePlayerTime>0) {
-            // eventually player will reach a time of zero
-            whitePlayer.setRemainingTime(zeroTime);
-        }else if(thisPlayer.equals("black") && blackPlayerTime>0) {
-            blackPlayer.setRemainingTime(zeroTime);
-        } else {
-            throw new Exception("Player time is already zero.");
-        }
-    }
+		// if white player takes too long to move
+		if(thisPlayer.equals("white") && whitePlayerTime>0) {
+			// eventually player will reach a time of zero
+			whitePlayer.setRemainingTime(zeroTime);
+		}else if(thisPlayer.equals("black") && blackPlayerTime>0) {
+			blackPlayer.setRemainingTime(zeroTime);
+		} else {
+			throw new Exception("Player time is already zero.");
+		}
+	}
 
 
 	/**
@@ -2245,30 +2247,53 @@ public class QuoridorController {
 	 */
 	public static void jumpToStart(int moveNum, int roundNum) {
 		Quoridor q = QuoridorApplication.getQuoridor();
-		
 		Tile aTile = new Tile(1,5,q.getBoard());
 		PlayerPosition Bpos = new PlayerPosition(q.getCurrentGame().getBlackPlayer(), aTile);
 		q.getCurrentGame().getCurrentPosition().setBlackPosition(Bpos);
-		
+
 		Tile aTile1 = new Tile(9,5,q.getBoard());
 		PlayerPosition Wpos = new PlayerPosition(q.getCurrentGame().getWhitePlayer(), aTile1);
 		q.getCurrentGame().getCurrentPosition().setBlackPosition(Wpos);
-		if(roundNum==2) {
-			int thresh = 2*(moveNum-1)+1;
-			for(int i = 0; i<thresh; i++) {
-				stepBack();
+
+		if(moveNum != 0) {
+			if(roundNum==2) {
+
+				stepBack(moveNum, roundNum);
+
+				jumpToStart(moveNum, roundNum-1);
+
+			}
+			else {
+
+				stepBack(moveNum, roundNum);
+				jumpToStart(moveNum-1, roundNum+1);
 			}
 		}
-		else {
-			int thresh = 2*(moveNum-1);
-			for(int i = 0; i<thresh;i++) {
-				stepBack();
-			}
-		}
-		
-		
+
+
 	}
-	public static Move stepBack() {
+
+	/**
+	 * Helper method to get the current move number 
+	 * @return move number
+	 */
+	public static int getMoveNum() {
+
+
+		return ReplayModeMoveNum;
+	}
+
+
+	/**
+	 * helper method to return the round number
+	 * @return round number
+	 */
+	public static int getRound() {
+		return ReplayModeRoundNum;
+	}
+	public static Move stepBack(int moveNumber, int roundNumber) {
+		ReplayModeMoveNum = moveNumber;
+		ReplayModeRoundNum= roundNumber;
 		return null;
 	}
 
