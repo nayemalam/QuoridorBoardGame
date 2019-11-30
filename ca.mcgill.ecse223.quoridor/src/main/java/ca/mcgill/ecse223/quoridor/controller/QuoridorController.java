@@ -1011,6 +1011,31 @@ public class QuoridorController {
 		}
 
 	}
+	/**
+	 * Cancels overwriting the file
+	 */
+	public static void cancelOverWriteFile() {
+		//cancel overwrite file GUI method
+	}
+	/**
+	 * 
+	 * @param filename
+	 * @return boolean - true if file respects naming conventions and is saved successfully, 
+	 * false if file does not respect naming conventions or is not saved successfully
+	 * @throws IOException
+	 * @throws IllegalArgumentException
+	 */
+	
+	public static boolean save(String filename) throws IOException, IllegalArgumentException {
+		if(filename.contains(".dat")) {
+			return saveGamePosition(filename);
+		}
+		if(filename.contains(".mov")) {
+			return saveGameFile(filename);
+		}else {
+			return false;
+		}
+	}
 
 	/**
 	 * Method - saveGamePosition(String filename, Game game)
@@ -1122,40 +1147,6 @@ public class QuoridorController {
 		}
 
 		return gameData;
-
-	}
-
-	/**
-	 * Method - overWriteFile()
-	 * 
-	 * Controller method used to overwrite a saved position file with the current game position
-	 * 
-	 * @param filename - String name of file
-	 * @return String - contains the content of the overwritten file
-	 * @author Nicolas Buisson
-	 * 
-	 */
-
-	public static String overWriteFile(String filename) throws IOException {
-		// overwriting taken care of by saveGamePosition method
-		return overwriteGamePosition(filename);
-	}
-
-	/**
-	 * Method - cancelOverWriteFile()
-	 * 
-	 * Controller method used to cancel overwriting a file
-	 * 
-	 * @return void
-	 * @author Nicolas Buisson
-	 * 
-	 */
-	public static void cancelOverWriteFile() {
-
-		// if user cancels overwriting the file
-		// then nothing happens, file and model are unchanged
-		// only change is in UI
-		// might not have to be a controller method
 	}
 
 	/**
@@ -1331,7 +1322,7 @@ public class QuoridorController {
 
 	}
   
-/**
+	/**
 	 * Method - overwriteGameFile(String filename)
 	 * 
 	 * Controller method used to save the game as a text file.
@@ -1567,8 +1558,8 @@ public class QuoridorController {
 	 * @param c1 column of first move
 	 * @param r2 row of following move
 	 * @param c2 column of following move
-	 * @return boolean - false if distance covered by 2 consecutive moves are strictly greater than 2 
-	 * ---Else return true
+	 * @return boolean - false if distance covered by 2 consecutive moves is strictly greater than 2 
+	 * ---Else return true, move is valid in terms of distance
 	 * @author Nicolas Buisson
 	 */
 	public static boolean verifyDistanceOfMove(int r1, int c1, int r2, int c2) {
@@ -1596,10 +1587,7 @@ public class QuoridorController {
 		}else {
 			return true; //true step move
 		}
-	}
-	
-	
-  
+	}	
 
 	/**
 	 * Method used to rotate a wall
@@ -2129,8 +2117,6 @@ public class QuoridorController {
 		else {
 			return false;
 		}
-
-
 	}
 
 	/**
