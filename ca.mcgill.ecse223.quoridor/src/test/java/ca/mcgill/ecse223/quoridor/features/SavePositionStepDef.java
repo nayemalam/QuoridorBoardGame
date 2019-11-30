@@ -44,7 +44,7 @@ public class SavePositionStepDef {
 
 		// new File creates a pointer to the file
 		//createNewFile actually creates it
-		
+
 		if(file.exists()) {
 			//if file exists, delete it
 			file.delete();
@@ -61,7 +61,12 @@ public class SavePositionStepDef {
 	@When ("The user initiates to save the game with name {string}")
 	public void TheUserInitiatesToSaveTheGameWithName(String filename) throws IOException {
 		//Create test game and content , Run saveGame() -- throws exception
-		savedContent = QC.overwriteGamePosition(filename);
+		if(filename.contains(".dat")) {
+			savedContent = QC.overwriteGamePosition(filename);
+		}
+		if(filename.contains(".mov")) {
+			savedContent = QC.overwriteGameFile(filename);
+		}
 	}
 
 
@@ -70,7 +75,7 @@ public class SavePositionStepDef {
 	 */
 	@Then ("A file with {string} shall be created in the filesystem")
 	public void AFileShallBeCreatedInTheFileSystem(String filename) throws IOException {
-		
+
 		String pathName = filename;
 		File file = new File(pathName);
 		//boolean FileExists = false;
@@ -81,7 +86,7 @@ public class SavePositionStepDef {
 		//check if file exists
 		//check if it has the right name
 	}
-		
+
 
 	// *********************************************
 	// Save position with existing file name scenario
@@ -93,16 +98,20 @@ public class SavePositionStepDef {
 	@Given ("File {string} exists in the filesystem")
 	public void FileExistsInTheFileSystem(String filename) {
 		//Read previous content from file
-		expected = "W: a3" + "\n" + "B: f5";
-		//TEST FOR WALLS
-		Game testGame = QuoridorApplication.getQuoridor().getCurrentGame();
-		Tile blackTile = new Tile(5, 6, QuoridorApplication.getQuoridor().getBoard());
-		Tile whiteTile = new Tile(3, 1, QuoridorApplication.getQuoridor().getBoard());
-		PlayerPosition aNewBlackPosition = new PlayerPosition(QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer(), blackTile);
-		PlayerPosition aNewWhitePosition = new PlayerPosition(QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer(), whiteTile);
-		testGame.getCurrentPosition().setBlackPosition(aNewBlackPosition);
-		testGame.getCurrentPosition().setWhitePosition(aNewWhitePosition);
-		
+		if(filename.contains(".dat")) {
+			expected = "W: a3" + "\n" + "B: f5";
+			//TEST FOR WALLS
+			Game testGame = QuoridorApplication.getQuoridor().getCurrentGame();
+			Tile blackTile = new Tile(5, 6, QuoridorApplication.getQuoridor().getBoard());
+			Tile whiteTile = new Tile(3, 1, QuoridorApplication.getQuoridor().getBoard());
+			PlayerPosition aNewBlackPosition = new PlayerPosition(QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer(), blackTile);
+			PlayerPosition aNewWhitePosition = new PlayerPosition(QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer(), whiteTile);
+			testGame.getCurrentPosition().setBlackPosition(aNewBlackPosition);
+			testGame.getCurrentPosition().setWhitePosition(aNewWhitePosition);
+		}
+		if(filename.contains(".mov")) {
+			expected = "1. e8 e2" + "\n" + "2. e7 e3" + "\n" + "3. e3h e6h" ;
+		}
 		String pathName = filename;
 
 		File file = new File(pathName);
@@ -116,7 +125,7 @@ public class SavePositionStepDef {
 			try {
 				file.createNewFile();
 			} catch (IOException e) {
-				
+
 				e.printStackTrace();
 			}
 		}
@@ -150,7 +159,7 @@ public class SavePositionStepDef {
 			e.printStackTrace();
 		}
 		BufferedReader BF = new BufferedReader(reader); 
-	
+
 		String newContent = "";
 		StringBuilder sb = new StringBuilder();
 		try {
@@ -182,7 +191,7 @@ public class SavePositionStepDef {
 	@And ("The user cancels to overwrite existing file")
 	public void TheUserCancelsToOverwriteExistingFile() {
 		QC.cancelOverWriteFile();
-		
+
 	}
 
 	/**   
@@ -192,7 +201,7 @@ public class SavePositionStepDef {
 	public void FileShallNotBeChangedInTheFileSystem(String filename) {
 		// # as above, but assert taht real content = previous content
 		String pathName = filename;
-		
+
 		File file = new File(pathName);
 
 		FileReader reader = null;
@@ -203,7 +212,7 @@ public class SavePositionStepDef {
 			e.printStackTrace();
 		}
 		BufferedReader BF = new BufferedReader(reader); 
-		
+
 		String readContent = "";
 		StringBuilder sb = new StringBuilder();
 		try {
