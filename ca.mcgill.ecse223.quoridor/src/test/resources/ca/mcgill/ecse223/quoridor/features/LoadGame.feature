@@ -34,7 +34,7 @@ Feature: Load Game
     Examples: 
       | filename                 | 
       | quoridor_test_game_3.mov |  
-@Nicotest
+
   Scenario Outline: Invalid move in game file
     When I initiate to load a saved game "<filename>"
     And The game to load has an invalid move

@@ -1391,6 +1391,7 @@ public class QuoridorController {
 	 */
 	public static boolean loadGame(String filename, Player whitePlayer, Player blackPlayer)
 			throws IOException {
+		boolean valid = false;
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
 
 		try {
@@ -1551,6 +1552,7 @@ public class QuoridorController {
 				throw new IllegalArgumentException("Invalid Move loaded! black and white pawns can't be on same tile at same time");
 			}
 			if(gamePositionToLoad.getBlackPosition().getTile().equals(gamePositionToLoad.getWhitePosition().getTile())) {
+				
 				throw new IllegalArgumentException("Invalid Move loaded! black and white pawns can't be on same tile at same time");
 			}
 		}
