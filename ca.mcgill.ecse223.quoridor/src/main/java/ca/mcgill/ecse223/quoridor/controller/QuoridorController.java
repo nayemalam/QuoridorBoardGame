@@ -1362,14 +1362,14 @@ public class QuoridorController {
 
 			//must check if need to start a new line or not
 			if(moves.get(i).hasPrevMove()) {
-				if(moves.get(i).getMoveNumber() != moves.get(i).getPrevMove().getMoveNumber()) {
-					gameData = gameData + "\n" + ((Integer)moves.get(i).getMoveNumber()).toString() + ". " + encodedMove; 
+				if(moves.get(i).getRoundNumber() != moves.get(i).getPrevMove().getRoundNumber()) {
+					gameData = gameData + "\n" + ((Integer)moves.get(i).getRoundNumber()).toString() + ". " + encodedMove; 
 				}else {
 					gameData = gameData + " " + encodedMove; 
 				}
 			}else {
 				//means this is the first move in the game
-				gameData = gameData + "\n" + ((Integer)moves.get(i).getMoveNumber()).toString() + ". " + encodedMove;
+				gameData = gameData  + ((Integer)moves.get(i).getRoundNumber()).toString() + ". " + encodedMove;
 			}
 		}
 

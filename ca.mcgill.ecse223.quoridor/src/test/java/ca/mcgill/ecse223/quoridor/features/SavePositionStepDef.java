@@ -111,7 +111,45 @@ public class SavePositionStepDef {
 		}
 		if(filename.contains(".mov")) {
 			expected = "1. e8 e2" + "\n" + "2. e7 e3" + "\n" + "3. e3h e6h" ;
+			Game testGame = QuoridorApplication.getQuoridor().getCurrentGame();
+			List<Move> moves = testGame.getMoves();
+			
+			//CREATE MOVES
+			
+			StepMove whiteMove1 = new StepMove(1, 1, QC.getWhitePlayer(), new Tile(8,5, QuoridorApplication.getQuoridor().getBoard()), testGame);
+			StepMove blackMove1 = new StepMove(2, 1, QC.getBlackPlayer(), new Tile(2,5, QuoridorApplication.getQuoridor().getBoard()), testGame);
+			StepMove whiteMove2 = new StepMove(1, 2, QC.getWhitePlayer(), new Tile(7,5, QuoridorApplication.getQuoridor().getBoard()), testGame);
+			StepMove blackMove2 = new StepMove(2, 2, QC.getBlackPlayer(), new Tile(3,5, QuoridorApplication.getQuoridor().getBoard()), testGame);
+			Wall whiteWall = testGame.getCurrentPosition().getWhiteWallsInStock(0);
+			testGame.getCurrentPosition().removeWhiteWallsInStock(whiteWall);
+			WallMove whiteWallMove1 = new WallMove(1, 3, QC.getWhitePlayer(),new Tile(3, 5, QuoridorApplication.getQuoridor().getBoard()), testGame, Direction.Horizontal, whiteWall);
+//			whiteWall.setMove(whiteWallMove1);
+			testGame.getCurrentPosition().addWhiteWallsOnBoard(whiteWall);
+			Wall blackWall = testGame.getCurrentPosition().getBlackWallsInStock(0);
+			testGame.getCurrentPosition().removeBlackWallsInStock(blackWall);
+			WallMove blackWallMove1 = new WallMove(2, 3, QC.getBlackPlayer(),new Tile(6, 5, QuoridorApplication.getQuoridor().getBoard()), testGame, Direction.Horizontal, blackWall);
+//			blackWall.setMove(blackWallMove1);
+			testGame.getCurrentPosition().addBlackWallsOnBoard(blackWall);
+			
+			//Wall moves don't automatically get added to List of moves
+			
+			//LINK MOVES TOGETHER
+			
+			whiteMove1.setNextMove(blackMove1);
+			blackMove1.setPrevMove(whiteMove1);
+			blackMove1.setNextMove(whiteMove2);
+			whiteMove2.setPrevMove(blackMove1);
+			whiteMove2.setNextMove(blackMove2);
+			blackMove2.setPrevMove(whiteMove2);
+			blackMove2.setNextMove(whiteWallMove1);
+			whiteWallMove1.setPrevMove(blackMove2);
+			whiteWallMove1.setNextMove(blackWallMove1);
+			blackWallMove1.setPrevMove(whiteWallMove1);	
+			
+			testGame.addMove(whiteWallMove1);
+			testGame.addMove(blackWallMove1);
 		}
+		
 		String pathName = filename;
 
 		File file = new File(pathName);
@@ -199,7 +237,7 @@ public class SavePositionStepDef {
 	 */
 	@Then ("File {string} shall not be changed in the filesystem")
 	public void FileShallNotBeChangedInTheFileSystem(String filename) {
-		// # as above, but assert taht real content = previous content
+		// same as above, but assert that real content = previous content
 		String pathName = filename;
 
 		File file = new File(pathName);
