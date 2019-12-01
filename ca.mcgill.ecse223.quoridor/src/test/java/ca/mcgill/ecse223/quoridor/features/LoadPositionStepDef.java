@@ -68,7 +68,6 @@ public class LoadPositionStepDef {
 	@And ("The position to load is valid")
 	public void ThePositionToLoadIsValid() {
 		assertEquals(null, thrownException);
-		//assertEquals(true, valid);
 	}
 
 	/**  
@@ -77,9 +76,15 @@ public class LoadPositionStepDef {
 	@Then("It shall be {string}'s turn")
 	public void ItShallBePlayerTurn(String player) {
 		gamePosition = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition();
-		gamePosition.getPlayerToMove().getUser().setName("black");
-		gamePosition.getPlayerToMove().getNextPlayer().getUser().setName("white");
+		if(gamePosition.getPlayerToMove().equals(QC.getBlackPlayer())) {
+			gamePosition.getPlayerToMove().getUser().setName("black");
+			gamePosition.getPlayerToMove().getNextPlayer().getUser().setName("white");
+		}else {
+			gamePosition.getPlayerToMove().getUser().setName("white");
+			gamePosition.getPlayerToMove().getNextPlayer().getUser().setName("black");
+		}
 		assertEquals(player, gamePosition.getPlayerToMove().getUser().getName());
+	
 	}
 	/**  
 	 * @author Nicolas Buisson
