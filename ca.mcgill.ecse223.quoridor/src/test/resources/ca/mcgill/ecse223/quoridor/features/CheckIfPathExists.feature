@@ -25,7 +25,8 @@ Feature: Check if path exists
     And The black player is located at <brow>:<bcol>
     And The white player is located at <wrow>:<wcol>
     When Check path existence is initiated
-    Then Path is available for "<result>" player
+    Then Path is available for "<result>" player(s)
+    #Then Path is available for "<result>" player
     
     # A wall move candidate is placed at numerous place
  		Examples: 

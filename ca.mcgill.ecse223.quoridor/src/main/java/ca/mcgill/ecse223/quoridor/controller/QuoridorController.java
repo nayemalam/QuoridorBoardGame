@@ -2518,6 +2518,66 @@ public class QuoridorController {
 		return adjacentTiles;
 	}
 
+	/**
+	 * Method used to verify the current state of the game
+	 * @author Tristan Bouchard
+	 */
+	public static Boolean checkIfGameDrawn() {
+		// Obtain currentGame
+		Boolean gameIsValid = QuoridorApplication.getQuoridor() != null &&
+							  QuoridorApplication.getQuoridor().getCurrentGame() != null &&
+							  QuoridorApplication.getQuoridor().getCurrentGame().hasMoves();
+		if(!gameIsValid) {
+			throw new IllegalArgumentException("Game has no moves!");
+		}
+		List<Move> moveList = QuoridorApplication.getQuoridor().getCurrentGame().getMoves(); 
+		// Verify the moves in the list of moves to make sure that no three are identical
+		int whiteIndex = 0;
+		int blackIndex = 0;
+		if(moveList.size() < 8) {
+			return false;
+		}
+		Move[] blackMoves = new Move[5];
+		Move[] whiteMoves = new Move[5];
+		Boolean blackMovesRepeat = false;
+		Boolean whiteMovesRepeat = false;
+		for(Move move: moveList) {
+			if(move.getRoundNumber() == 1) {
+				whiteMoves[whiteIndex] = move;
+				whiteIndex = whiteIndex == 4 ? 0: whiteIndex + 1; 
+			} else {
+				blackMoves[blackIndex] = move;
+				blackIndex = blackIndex == 4 ? 0: blackIndex + 1;
+			}
+			
+			// Compare black moves
+			if(blackMoves[0] != null) {
+				if(blackMoves[2] != null) {
+					if(blackMoves[4] != null) {
+						blackMovesRepeat = blackMoves[0].getTargetTile() == blackMoves[2].getTargetTile() &&
+								   		   blackMoves[0].getTargetTile() == blackMoves[4].getTargetTile();
+						break;
+						
+					}
+				}
+			}
+			if(whiteMoves[0] != null) {
+				if(whiteMoves[2] != null) {
+					if(whiteMoves[4] != null) {
+						whiteMovesRepeat = whiteMoves[0].getTargetTile() == whiteMoves[2].getTargetTile() &&
+										   whiteMoves[0].getTargetTile() == whiteMoves[4].getTargetTile();
+						break;
+					}
+				}
+			}
+			
+		}
+		if(blackMovesRepeat || whiteMovesRepeat) {
+			QuoridorApplication.getQuoridor().getCurrentGame().setGameStatus(GameStatus.Draw);
+		}
+		return blackMovesRepeat || whiteMovesRepeat;
+	}
+
 }
 
 	/**

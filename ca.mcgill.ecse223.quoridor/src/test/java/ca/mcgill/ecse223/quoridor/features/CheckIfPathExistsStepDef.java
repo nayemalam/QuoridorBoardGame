@@ -96,7 +96,7 @@ public class CheckIfPathExistsStepDef {
 	 * @param result - Path available to players
 	 * @author Tristan Bouchard
 	 */
-	@Then("Path is available for {string} player")
+	@Then("Path is available for {string} player\\(s)")
 	public void pathIsAvailableForBothPlayers(String result) {
 		assertEquals(result, this.paths.toString());
 	}
