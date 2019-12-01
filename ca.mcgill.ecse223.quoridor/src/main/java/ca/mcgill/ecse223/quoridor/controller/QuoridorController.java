@@ -53,7 +53,7 @@ public class QuoridorController {
 				throw new Exception("Game is already at the last step");
 			game.setCurrentPosition(game.getPosition(id));
 		} else {
-			throw new Exception("Game is not running");
+			throw new Exception("Game is not in replay mode");
 		}
 
 	}
@@ -61,8 +61,15 @@ public class QuoridorController {
 	/**
 	 * @author Ousmane Baricisse
 	 * @return
+	 * @throws Exception
 	 */
-	public static void stepBackward() {
+	public static void stepBackward() throws Exception {
+		if(!isReplay()) throw new Exception("Game is not in replay mode");
+		Game game = QuoridorApplication.getQuoridor().getCurrentGame();
+		List<Move> listOfMove = game.getMoves();
+		int id  = findPastGamePositionIndex(game);
+		if(id==0) throw new Exception("Game already at initiall step");
+		game.setCurrentPosition(game.getPosition(id));
 
 	}
 
