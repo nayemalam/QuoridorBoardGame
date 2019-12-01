@@ -89,13 +89,13 @@ public class MainGameWindow {
 	private JButton btnPlaceNewWall;
 	private JButton btnNewButton;
 	private JButton button;
+	private JButton saveGameButton = new JButton();
 	private static int wallWidth = 185;
 	private static int wallWidthV = 11;
 	private static int wallHeight = 102;
 	private static boolean WallGrabbed = false;
 	private static int CurrRow;
 	private static int CurrCol;
-	private static JButton saveGameButton = new JButton("Save Game");
 	static JLabel errorMessage = new JLabel("Incorrect Move");
 	private static int wallIndex;
 	private static int tileLength = 45;
@@ -613,6 +613,7 @@ public class MainGameWindow {
 			MoveCandidate moveCandidate = currentPlayer.equals(QuoridorController.getWhitePlayer()) ? whitePawnMove : blackPawnMove;
 			targetRow = moveCandidate.row;
 			targetCol = moveCandidate.col;
+			//TODO check this out
 			if (dir == ControllerUtilities.MoveDirections.up && validateIfPawnMoveIsPossible(moveCandidate.row - 1, moveCandidate.col)) {
 				targetModified = true;
 				targetRow = moveCandidate.row - 1;
@@ -766,13 +767,13 @@ public class MainGameWindow {
 		frmQuoridorPlay.repaint();
 	}
 
-	private void createWalls(JPanel jPanel) {
-		for (int i = 0; i < 10; i++) { // Initializing the walls for both players
-			JButton btn = new JButton("Wall" + i);
-			btn.setBounds(10, 11 + i * (wallHeight + 5), wallWidth, wallHeight);
-			jPanel.add(btn);
-		}
-	}
+//	private void createWalls(JPanel jPanel) {
+//		for (int i = 0; i < 10; i++) { // Initializing the walls for both players
+//			JButton btn = new JButton("Wall" + i);
+//			btn.setBounds(10, 11 + i * (wallHeight + 5), wallWidth, wallHeight);
+//			jPanel.add(btn);
+//		}
+//	}
 
 	/**
 	 * This methods sets all the available tiles for pawn move in green

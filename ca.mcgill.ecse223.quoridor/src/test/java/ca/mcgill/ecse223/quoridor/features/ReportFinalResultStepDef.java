@@ -7,7 +7,7 @@ import ca.mcgill.ecse223.quoridor.model.Player;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import sun.security.util.PendingException;
+//import sun.security.util.PendingException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
