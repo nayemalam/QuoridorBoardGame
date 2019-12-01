@@ -21,6 +21,7 @@ Feature: Load Game
 
     Examples: 
       | filename                 | player | p_row | p_col | opponent | o_row | o_col | pw_row | pw_col | pw_orientation | ow_row | ow_col | ow_orientation | remaining_walls |
+      |save_game_test.mov				 | white  |     7 |     5 | black    |     3 |     5 |      3 |      5 | horizontal     |      6 |      5 | horizontal     |               9 |
       | quoridor_test_game_1.mov | white  |     3 |     5 | black    |     7 |     5 |      6 |      5 | horizontal     |      3 |      5 | vertical       |               9 |
       | quoridor_test_game_2.mov | white  |     2 |     5 | black    |     8 |     5 |      6 |      5 | horizontal     |      3 |      5 | vertical       |               8 |
 
