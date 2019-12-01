@@ -28,6 +28,10 @@ public class IdentifyGameWonStepDefinition {
 	public static int currRow;
 	public static int currCol;
 
+	/**
+	 * Sets the current player
+	 * @param string is the player
+	 */
 	@Given("Player {string} has just completed his move")
 	public void player_has_just_completed_his_move(String string) {
 
@@ -41,6 +45,12 @@ public class IdentifyGameWonStepDefinition {
 
 	}
 
+	/**
+	 * Getting the new position
+	 * @param string
+	 * @param int1
+	 * @param int2
+	 */
 	@Given("The new position of {string} is {int}:{int}")
 	public void the_new_position_of_is(String string, Integer int1, Integer int2) {
 		Quoridor q = QuoridorApplication.getQuoridor();
@@ -85,6 +95,10 @@ public class IdentifyGameWonStepDefinition {
 		}
 	}
 
+	/**
+	 * Initiates the check of the game result
+	 * @author Alexander Legouverneur
+	 */
 	@When("Checking of game result is initated")
 	public void checking_of_game_result_is_initated() {
 		Quoridor q = QuoridorApplication.getQuoridor();
@@ -105,26 +119,19 @@ public class IdentifyGameWonStepDefinition {
 	 *
 	 * @param string String to check if white/black won or pending
 	 * @author Alexander Legouverneur
-	 * @author Nayem Alam
 	 */
 	@Then("Game result shall be {string}")
 	public void game_result_shall_be(String string) {
 		Quoridor q = QuoridorApplication.getQuoridor();
-//		boolean status = QuoridorController.checkIfWon(player, currRow, currCol);
-		boolean isSecondScenario = currRow == 8 && currCol == 5;
-		boolean isThirdScenario = currRow == 2 && currCol == 4;
-		boolean isFourthScenario = currRow == 9 && currCol == 4;
-		boolean isFifthScenario = currRow == 1 && currCol == 3;
-		if ((isSecondScenario) && player.equals(q.getCurrentGame().getWhitePlayer())) {
+		boolean status = QuoridorController.checkIfWon(player, currRow, currCol);
+		if (!status) {
 			assertEquals(string, "pending");
 		}
-		if ((isThirdScenario || isFourthScenario) && player.equals(q.getCurrentGame().getBlackPlayer())) {
-			assertEquals(string, "pending");
-		}
-		if (isFourthScenario && player.equals(q.getCurrentGame().getWhitePlayer())) {
+		
+		if (status && player.equals(q.getCurrentGame().getWhitePlayer())) {
 			assertEquals(string, "whiteWon");
 		}
-		if (isFifthScenario && player.equals(q.getCurrentGame().getBlackPlayer())) {
+		if (status && player.equals(q.getCurrentGame().getBlackPlayer())) {
 			assertEquals(string, "blackWon");
 		}
 

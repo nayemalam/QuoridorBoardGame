@@ -1937,7 +1937,6 @@ public class QuoridorController {
 	 */
 	public static void mainValidateMovePawn(Player player) {
 		availableTiles = new ArrayList<Tile>();
-
 		Quoridor q = QuoridorApplication.getQuoridor();
 		int currentRow;
 		int currentCol;
@@ -1948,6 +1947,7 @@ public class QuoridorController {
 		else {
 			currentRow = q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getRow();
 			currentCol = q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getColumn();
+
 		}
 
 		// Add checks to verify if on side of board
@@ -1955,35 +1955,60 @@ public class QuoridorController {
 		boolean rightIsAllowed = (currentCol < 9);
 		boolean upIsAllowed = (currentRow > 1);
 		boolean downIsAllowed = (currentRow < 9);
+		int pawnOnWay = pawnOnWay(player, false);
 
+		
+		//Jump pawn getting tiles
+				if(!checkWallOnWay(currentRow, currentCol-1, "left") && pawnOnWay != 5) {
+					pawnOnWay(player, true);
+					if(pawnOnWay == 1 ) {
+						availableTiles.add(getTileAtRowCol(currentRow-1,currentCol));
+						availableTiles.add(getTileAtRowCol(currentRow,currentCol-1));
+						availableTiles.add(getTileAtRowCol(currentRow,currentCol+1));
+					}
+					if( pawnOnWay == 2) {
+						availableTiles.add(getTileAtRowCol(currentRow,currentCol-1));
+						availableTiles.add(getTileAtRowCol(currentRow+1,currentCol));
+						availableTiles.add(getTileAtRowCol(currentRow,currentCol+1));
+					}
+					if(pawnOnWay == 3) {
+						availableTiles.add(getTileAtRowCol(currentRow,currentCol+1));
+						availableTiles.add(getTileAtRowCol(currentRow-1,currentCol));
+						availableTiles.add(getTileAtRowCol(currentRow+1,currentCol));
+					}
+					if(pawnOnWay == 4) {
+						availableTiles.add(getTileAtRowCol(currentRow,currentCol-1));
+						availableTiles.add(getTileAtRowCol(currentRow-1,currentCol));
+						availableTiles.add(getTileAtRowCol(currentRow+1,currentCol));
+					}
+				}
+				if(!checkWallOnWay(currentRow, currentCol+1, "right") && pawnOnWay != 5) {
+					pawnOnWay(player, true);
+					
+				}
+				if(!checkWallOnWay(currentRow-1,currentCol, "up") && pawnOnWay !=5) {
+					pawnOnWay(player, true);
+					
+				}
+				if(!checkWallOnWay(currentRow+1, currentCol, "down") && pawnOnWay != 5) {
+					pawnOnWay(player, true);
+					
+				}
 		// Regular moves, no jumps
-		if(leftIsAllowed && !checkWallOnWay(currentRow, currentCol-1, "left") && !pawnOnWay(player, false)) {
+		if(leftIsAllowed && !checkWallOnWay(currentRow, currentCol-1, "left") && pawnOnWay == 5) {
 			availableTiles.add(getTileAtRowCol(currentRow,currentCol-1));
 		}
-		if(rightIsAllowed && !checkWallOnWay(currentRow, currentCol+1, "right") && !pawnOnWay(player, false)) {
+		if(rightIsAllowed && !checkWallOnWay(currentRow, currentCol+1, "right") && pawnOnWay == 5) {
 			availableTiles.add(getTileAtRowCol(currentRow,currentCol+1));
 		}
-		if(upIsAllowed && !checkWallOnWay(currentRow-1, currentCol, "up") && !pawnOnWay(player, false) ) {
+		if(upIsAllowed && !checkWallOnWay(currentRow-1, currentCol, "up") && pawnOnWay == 5 ) {
 			availableTiles.add(getTileAtRowCol(currentRow-1,currentCol));
 		}
-		if(downIsAllowed && !checkWallOnWay(currentRow+1, currentCol, "down") && !pawnOnWay(player, false) ) {
+		if(downIsAllowed && !checkWallOnWay(currentRow+1, currentCol, "down") && pawnOnWay == 5 ) {
 			availableTiles.add(getTileAtRowCol(currentRow+1,currentCol));
 		}
 
-		//Jump pawn getting tiles
-		if(!checkWallOnWay(currentRow, currentCol-1, "left") && pawnOnWay(player, false)) {
-			pawnOnWay(player, true);
-		}
-		if(!checkWallOnWay(currentRow, currentCol+1, "right") && pawnOnWay(player, false)) {
-			pawnOnWay(player, true);
-		}
-		if(!checkWallOnWay(currentRow-1,currentCol, "up") && pawnOnWay(player, false)) {
-			pawnOnWay(player, true);
-		}
-		if(!checkWallOnWay(currentRow+1, currentCol, "down") && pawnOnWay(player, false)) {
-			pawnOnWay(player, true);
-		}
-		int i = 0;
+		
 	}
 
 	/**
@@ -2056,56 +2081,62 @@ public class QuoridorController {
 	 * @return true if there is a pawn in an adjacent tile to the current player, else false
 	 * @author Alexander Legouverneur
 	 */
-	public static boolean pawnOnWay(Player player, boolean cond) { //sometimes I call the method and don t want to call pawnJump with it
+	public static int pawnOnWay(Player player, boolean cond) { //sometimes I call the method and don t want to call pawnJump with it
 		Quoridor q = QuoridorApplication.getQuoridor();				//thats why I add a condition boolean
 		int currentPlayerRow;
 		int currentPlayerCol;
 		int opponentRow;
 		int opponentCol;
-		if(player.equals(q.getCurrentGame().getBlackPlayer())) {
-			currentPlayerRow = q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getRow();
-			currentPlayerCol = q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getColumn();
-			opponentRow = q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getRow();
-			opponentCol = q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getColumn();
-
-		}
-		else {
+		
+		
+		if(player.equals(q.getCurrentGame().getWhitePlayer())) {
 			currentPlayerRow = q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getRow();
 			currentPlayerCol = q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getColumn();
 			opponentRow = q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getRow();
 			opponentCol = q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getColumn();
-
+			System.out.println("Current Player"+currentPlayerRow+" . "+ currentPlayerCol);
+			System.out.println("Opponent"+opponentRow+" . "+ opponentCol);
+		}
+		else {
+			currentPlayerRow = q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getRow();
+			currentPlayerCol = q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getColumn();
+			opponentRow = q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getRow();
+			opponentCol = q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getColumn();
+			System.out.println("Current Player"+currentPlayerRow+" . "+ currentPlayerCol);
+			System.out.println("Opponent"+opponentRow+" . "+ opponentCol);
 		}
 		// If opponent below
 		if((currentPlayerRow + 1 == opponentRow) && (currentPlayerCol == opponentCol)) {
 			if(cond == true) {
 				getJumpPawnTiles(opponentRow, opponentCol, currentPlayerRow,currentPlayerCol);
 			}
-			return true;
+			return 1;
 		}
 		// If opponent above
 		if(currentPlayerRow-1 ==opponentRow && currentPlayerCol == opponentCol) {
 			if(cond == true) {
 				getJumpPawnTiles(opponentRow, opponentCol, currentPlayerRow,currentPlayerCol);
 			}
-			return true;
+			return 2;
 		}
 		// If opponent left
-		if(currentPlayerRow == opponentRow && currentPlayerCol-1 == currentPlayerCol) {
+		if(currentPlayerRow == opponentRow && currentPlayerCol-1 == opponentCol) {
 			if(cond == true) {
 				getJumpPawnTiles(opponentRow, opponentCol, currentPlayerRow,currentPlayerCol);
 			}
-			return true;
+			return 3;
 		}
 		//if opponent right
 		if (currentPlayerRow == opponentRow && currentPlayerCol+1 == opponentCol) {
 			if(cond == true) {
 				getJumpPawnTiles(opponentRow, opponentCol, currentPlayerRow,currentPlayerCol);
 			}
-			return true;
+			return 4;
 		}
 		else {
-			return false;
+			
+			//System.out.println("yeayy5: ");
+			return 5;
 		}
 	}
 
@@ -2194,16 +2225,17 @@ public class QuoridorController {
 	 * @author Alexander Legouverneur
 	 */
 	public static boolean checkIfWon(Player player, int row, int col) {
+		Quoridor q = QuoridorApplication.getQuoridor();
 		Player blackPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
 		Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
 		if(player.equals(blackPlayer)) {
-			if(row == 1 && col == 3) {
+			if(row == 1) {
 				//stopGame(q.getCurrentGame());
 				return true;
 			}
 		}
 		else if(player.equals(whitePlayer)){
-			if(row == 9 && col == 4) {
+			if(row == 9) {
 				//stopGame(q.getCurrentGame());
 				return true;
 			}
