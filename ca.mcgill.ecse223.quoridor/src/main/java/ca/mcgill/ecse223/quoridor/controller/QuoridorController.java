@@ -46,7 +46,10 @@ public class QuoridorController {
 		try {
 			if(isReplay()){
 				List<Move> listOfMove = game.getMoves();
+				int id = findPastGamePositionIndex(game);
 
+				if(id==game.getPositions().size()-1) throw new Exception("Game is already at the last step");
+				game.setCurrentPosition(game.getPosition(id));
 			}
 		} catch(Exception e){
 			System.out.println("Game is not running");
