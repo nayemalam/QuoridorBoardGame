@@ -36,6 +36,15 @@ public class QuoridorController {
 	private static int ReplayModeMoveNum;
 	private static int ReplayModeRoundNum;
 
+
+	public static void stepForward(){
+		Game game = QuoridorApplication.getQuoridor().getCurrentGame();
+
+	}
+
+	public static void stepBackward() {
+		
+	}
 	/**
 	 * Method to capture the time at which the clock is stopped
 	 * Used as a helper method
