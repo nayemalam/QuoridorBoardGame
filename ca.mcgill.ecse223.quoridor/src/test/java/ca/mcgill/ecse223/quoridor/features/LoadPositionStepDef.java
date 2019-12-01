@@ -31,6 +31,8 @@ public class LoadPositionStepDef {
 	private GamePosition gamePosition;	
 	private Exception thrownException;
 	private boolean valid;
+	private int blackWallsPlacedCounter = 0;
+	private int whiteWallsPlacedCounter = 0;
 	
 	//false if invalid position
 	//true if valid position
@@ -115,13 +117,15 @@ public class LoadPositionStepDef {
 		Player white = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
 		
 		if(black.getUser().getName().equals(player)) {
-			assertEquals(Direction.Vertical, gamePosition.getBlackWallsOnBoard(0).getMove().getWallDirection());
-			assertEquals(pw_row, gamePosition.getBlackWallsOnBoard(0).getMove().getTargetTile().getRow());
-			assertEquals(pw_col, gamePosition.getBlackWallsOnBoard(0).getMove().getTargetTile().getColumn());
+			assertEquals(Direction.Vertical, gamePosition.getBlackWallsOnBoard(blackWallsPlacedCounter).getMove().getWallDirection());
+			assertEquals(pw_row, gamePosition.getBlackWallsOnBoard(blackWallsPlacedCounter).getMove().getTargetTile().getRow());
+			assertEquals(pw_col, gamePosition.getBlackWallsOnBoard(blackWallsPlacedCounter).getMove().getTargetTile().getColumn());
+			blackWallsPlacedCounter++; //increment counter after placing wall
 		}else if (white.getUser().getName().equals(player)) {
-			assertEquals(Direction.Vertical, gamePosition.getWhiteWallsOnBoard(0).getMove().getWallDirection());
-			assertEquals(pw_row, gamePosition.getWhiteWallsOnBoard(0).getMove().getTargetTile().getRow());
-			assertEquals(pw_col, gamePosition.getWhiteWallsOnBoard(0).getMove().getTargetTile().getColumn());
+			assertEquals(Direction.Vertical, gamePosition.getWhiteWallsOnBoard(whiteWallsPlacedCounter).getMove().getWallDirection());
+			assertEquals(pw_row, gamePosition.getWhiteWallsOnBoard(whiteWallsPlacedCounter).getMove().getTargetTile().getRow());
+			assertEquals(pw_col, gamePosition.getWhiteWallsOnBoard(whiteWallsPlacedCounter).getMove().getTargetTile().getColumn());
+			whiteWallsPlacedCounter++; //increment counter after placing wall
 		}else {
 			fail("Issue setting up test!");
 		}
@@ -137,13 +141,15 @@ public class LoadPositionStepDef {
 		Player white = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
 		
 		if(black.getUser().getName().equals(player)) {
-			assertEquals(Direction.Horizontal, gamePosition.getBlackWallsOnBoard(0).getMove().getWallDirection());
-			assertEquals(pw_row, gamePosition.getBlackWallsOnBoard(0).getMove().getTargetTile().getRow());
-			assertEquals(pw_col, gamePosition.getBlackWallsOnBoard(0).getMove().getTargetTile().getColumn());
+			assertEquals(Direction.Horizontal, gamePosition.getBlackWallsOnBoard(blackWallsPlacedCounter).getMove().getWallDirection());
+			assertEquals(pw_row, gamePosition.getBlackWallsOnBoard(blackWallsPlacedCounter).getMove().getTargetTile().getRow());
+			assertEquals(pw_col, gamePosition.getBlackWallsOnBoard(blackWallsPlacedCounter).getMove().getTargetTile().getColumn());
+			blackWallsPlacedCounter++;
 		}else if (white.getUser().getName().equals(player)) {
-			assertEquals(Direction.Horizontal, gamePosition.getWhiteWallsOnBoard(0).getMove().getWallDirection());
-			assertEquals(pw_row, gamePosition.getWhiteWallsOnBoard(0).getMove().getTargetTile().getRow());
-			assertEquals(pw_col, gamePosition.getWhiteWallsOnBoard(0).getMove().getTargetTile().getColumn());
+			assertEquals(Direction.Horizontal, gamePosition.getWhiteWallsOnBoard(whiteWallsPlacedCounter).getMove().getWallDirection());
+			assertEquals(pw_row, gamePosition.getWhiteWallsOnBoard(whiteWallsPlacedCounter).getMove().getTargetTile().getRow());
+			assertEquals(pw_col, gamePosition.getWhiteWallsOnBoard(whiteWallsPlacedCounter).getMove().getTargetTile().getColumn());
+			whiteWallsPlacedCounter++;
 		}else {
 			fail("Issues setting up test!");
 		}
