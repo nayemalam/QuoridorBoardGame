@@ -1,8 +1,6 @@
+
 package ca.mcgill.ecse223.quoridor.controller;
 
-import java.util.*;
-
-import javax.swing.text.Utilities;
 import java.io.*;
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.model.*;
@@ -26,6 +24,8 @@ public class QuoridorController {
 
 	private static Timer currentBlackPlayerTimer = null;
 	private static Timer currentWhitePlayerTimer = null;
+	private static int ReplayModeMoveNum;
+	private static int ReplayModeRoundNum;
 
 	/**
 	 * Method to capture the time at which the clock is stopped
@@ -33,7 +33,7 @@ public class QuoridorController {
 	 * @param
 	 * @author Ousmane Baricisse
 	 * @return time in seconds
-	 */ 
+	 */
 	public static long stopClock() throws Exception {
 		try {
 			return TimerUtilities.getCurrentTime();
@@ -44,7 +44,7 @@ public class QuoridorController {
 	}
 
 	/**
-	 * This method, according to the Gherkin definition, should Complete 
+	 * This method, according to the Gherkin definition, should Complete
 	 * a player move from the given position to the next tile.
 	 * returns true if the move was completed successfully.
 	 * @param quoridor
@@ -68,8 +68,8 @@ public class QuoridorController {
 	}
 	/**
 	 * @author Ousmane Baricisse
-	 * @return 
-	 * 
+	 * @return
+	 *
 	 */
 	public static void switchCurrentPlayer(){
 		stopCurrentPlayerClock();
@@ -91,8 +91,8 @@ public class QuoridorController {
 
 	/**
 	 * @author Ousmane Baricisse
-	 * @return 
-	 * 
+	 * @return
+	 *
 	 */
 	public static String getCurPlayerToString(){
 		Game game = QuoridorApplication.getQuoridor().getCurrentGame();
@@ -108,7 +108,7 @@ public class QuoridorController {
 	 * This method, according to the Gherkin definition, should grab wall from the
 	 * stock and add it to the board Need to know the player and the board as
 	 * parameters
-	 * 
+	 *
 	 * @param board, player
 	 * @author Ousmane Baricisse
 	 * @return
@@ -162,7 +162,7 @@ public class QuoridorController {
 
 	/**
 	 * Method: initializeNewGame(Quoridor quoridor)
-	 * 
+	 *
 	 * @param quoridor - Quoridor object within which to create new game
 	 * @return {true} if game correctly initialized, an exception otherwise
 	 * @throws IllegalArgumentException - If the supplied quoridor is null or
@@ -203,7 +203,7 @@ public class QuoridorController {
 	/**
 	 * Method: startClock(Game game) This method, according to the Gherkin
 	 * specification files, should: 1. Run the game 2. Initialize the board
-	 * 
+	 *
 	 * @param No parameters - The current player's clock will start counting down
 	 * @throws RuntimeException
 	 * @author Tristan Bouchard
@@ -261,12 +261,12 @@ public class QuoridorController {
 
 	/**
 	 * Method - initializeBoard(Quoridor quoridor)
-	 * 
+	 *
 	 * This method, based on the Gherkin definition, should initialize the game
 	 * board for the specified quoridor. It should: 1. Set the current player to
 	 * white player 2. Set both pawns to their initial position 3. Set all of the
 	 * players walls to their stock 4. Start the white player's clock
-	 * 
+	 *
 	 * @throws Exception
 	 * @author Tristan Bouchard
 	 */
@@ -311,7 +311,7 @@ public class QuoridorController {
 
 	/**
 	 * Method used to set the initial game position and walls in the new game object
-	 * 
+	 *
 	 * @param currentGame        - Current game in which to set the initial position
 	 * @param quoridor           - Current instance of the board
 	 * @param currentWhitePlayer - Current white player to initiate position
@@ -341,7 +341,7 @@ public class QuoridorController {
 	/**
 	 * Method used to set the next player to play. Requires currentPlayer and next
 	 * player
-	 * 
+	 *
 	 * @param currentPlayer - Player to set nextPlayer in
 	 * @param nextPlayer    - Player to be set as next player
 	 */
@@ -507,14 +507,6 @@ public class QuoridorController {
 		bPlayer.setRemainingTime(thinkingTime);
 		wPlayer.setRemainingTime(thinkingTime);
 	}
-
-	// public static List<String> myUsers() {
-	// List<String> userList = new ArrayList<>();
-	// userList.add("Daniel");
-	// userList.add("Hyacinth");
-	// return userList;
-	// }
-
 	/**
 	 * Method - selectNewUserName(String username)
 	 *
@@ -538,7 +530,7 @@ public class QuoridorController {
 
 	/**
 	 * Modifier method used to set the name of the white player
-	 * 
+	 *
 	 * @param name
 	 * @return true if name is set correctly, false otherwise
 	 * @author Tristan Bouchard
@@ -555,7 +547,7 @@ public class QuoridorController {
 
 	/**
 	 * Modifier method used to set the name of the black player
-	 * 
+	 *
 	 * @param name
 	 * @return true if name is set correctly, false otherwise
 	 * @author Tristan Bouchard
@@ -572,7 +564,7 @@ public class QuoridorController {
 
 	/**
 	 * Query method to obtain the white player from the current game
-	 * 
+	 *
 	 * @return
 	 * @author Tristan Bouchard
 	 */
@@ -582,7 +574,7 @@ public class QuoridorController {
 
 	/**
 	 * Query method to obtain the black player from the current game
-	 * 
+	 *
 	 * @return
 	 * @author Tristan Bouchard
 	 */
@@ -592,7 +584,7 @@ public class QuoridorController {
 
 	/**
 	 * Modifier method used to set the thinking time for both players
-	 * 
+	 *
 	 * @param thinkingTime
 	 * @return
 	 * @author Tristan Bouchard
@@ -608,7 +600,7 @@ public class QuoridorController {
 
 	/**
 	 * Modifier method used to set the thinking time for black player
-	 * 
+	 *
 	 * @param thinkingTime
 	 * @return
 	 * @author Tristan Bouchard
@@ -624,7 +616,7 @@ public class QuoridorController {
 
 	/**
 	 * Modifier method used to set the thinking time for white player
-	 * 
+	 *
 	 * @param thinkingTime
 	 * @return
 	 * @author Tristan Bouchard
@@ -640,7 +632,7 @@ public class QuoridorController {
 
 	/**
 	 * Query method used to verify the correct initialization of the board
-	 * 
+	 *
 	 * @return
 	 * @author Tristan Bouchard
 	 */
@@ -666,7 +658,7 @@ public class QuoridorController {
 	/**
 	 * Query method used to obtain the current position of the white player, as a
 	 * PlayerPosition
-	 * 
+	 *
 	 * @return current PlayerPosition
 	 * @author Tristan Bouchard
 	 */
@@ -679,7 +671,7 @@ public class QuoridorController {
 	/**
 	 * Query method used to obtain the current position of the black player, as a
 	 * PlayerPosition
-	 * 
+	 *
 	 * @return current PlayerPosition
 	 * @author Tristan Bouchard
 	 */
@@ -691,7 +683,7 @@ public class QuoridorController {
 
 	/**
 	 * Method that initializes the Validation of the position,
-	 * 
+	 *
 	 * @param row , the row of the position of the pawn
 	 * @param col , the column of the pawn
 	 * @returns true/false , true if the position is valid else false
@@ -707,7 +699,7 @@ public class QuoridorController {
 	/**
 	 * Method that returns if the position is valid by calling
 	 * InitializeVaidatePostion()
-	 * 
+	 *
 	 * @param row of the pawn position
 	 * @param col of th pawn position
 	 * @returns ok/error strings
@@ -723,7 +715,7 @@ public class QuoridorController {
 	/**
 	 * Method that initiates the validation of the position by checking all cases of
 	 * incorrect position for all placed walls.
-	 * 
+	 *
 	 * @param row     , is the row of the target tile of the WallMove associated to
 	 *                the wall
 	 * @param col     , the column of the target tile of the wall move associated to
@@ -801,7 +793,7 @@ public class QuoridorController {
 				}
 			}
 			return true;
-		} 
+		}
 
 		else {
 			System.out.println("this");
@@ -812,7 +804,7 @@ public class QuoridorController {
 	/**
 	 * Method that returns if the wall can be placed at the indicated position by
 	 * calling InitiatePosValidation()
-	 * 
+	 *
 	 * @param row , the row of the tile of the WallMove associated with to the wall
 	 * @param dir , direction of the wall
 	 * @param col , column of the tile of the WallMove associated to the wall
@@ -828,7 +820,7 @@ public class QuoridorController {
 
 	/**
 	 * Method that checks if wall Position is valid
-	 * 
+	 *
 	 * @param row  , row of the tile of the WallMove associated with the wall
 	 * @param col  , column of the tile of the WallMove associated with the wall
 	 * @param dir  , direction of the wall
@@ -847,7 +839,7 @@ public class QuoridorController {
 	// end of validate position
 	/**
 	 * Checks if the wall is on the side edge of the board
-	 * 
+	 *
 	 * @param aWall
 	 * @return true/false -true if on side edge
 	 * @throws UnsupportedOperationException
@@ -891,7 +883,7 @@ public class QuoridorController {
 	 * Methods that checks if the move on the specified side is possible, with if
 	 * statements to see if the move is legal, if yes proceed to the move otherwise,
 	 * call the method IlllegalWallMove()
-	 * 
+	 *
 	 * @param aWall
 	 * @param side
 	 * @throws UnsupportedOperationException
@@ -942,7 +934,7 @@ public class QuoridorController {
 	 * This method is called by VerifyMoveWallOnSide if the move is illegal. Returns
 	 * a string "illegal", and makes sure the coordinates of the wall remain the
 	 * same as before
-	 * 
+	 *
 	 * @param aWall
 	 * @return String
 	 * @throws UnsupportedOperationException
@@ -956,7 +948,7 @@ public class QuoridorController {
 	 * This method generalizes the wall move. It will go through all the possible
 	 * errors by calling other methods. To be sure that the wall move is possible,
 	 * and if yes, execute the wall move.
-	 * 
+	 *
 	 * @param row    row of the target tile for the move
 	 * @param col    column of the target tile for the move
 	 * @param dir    direction of the move
@@ -1004,7 +996,7 @@ public class QuoridorController {
 				}
 
 				return true;
-			} 
+			}
 			else {
 				return false;
 			}
@@ -1039,16 +1031,16 @@ public class QuoridorController {
 
 	/**
 	 * Method - saveGamePosition(String filename, Game game)
-	 * 
+	 *
 	 * Controller method used to save the game as a text file This file can later be
 	 * loaded to keep playing this instance of the game first checks if the file
 	 * exists or not
-	 * 
+	 *
 	 * @param filename - String name of file
 	 * @return String - contents of the file that was just written by calling
 	 *         overwriteGamePosition
 	 * @author Nicolas Buisson
-	 * 
+	 *
 	 */
 	public static boolean saveGamePosition(String filename) throws IllegalArgumentException, IOException {
 		File file = new File(filename);
@@ -1068,15 +1060,13 @@ public class QuoridorController {
 	}
 
 	/**
-	 * Method - overwriteGamePosition(String filename, Game game)
-	 * 
 	 * Controller method used to save the game as a text file This file can later be
 	 * loaded to keep playing this instance of the game
-	 * 
+	 *
 	 * @param filename - String name of file
 	 * @return String - contents of the file that was just written
 	 * @author Nicolas Buisson
-	 * 
+	 *
 	 */
 	public static String overwriteGamePosition(String filename) throws IOException {
 
@@ -1151,14 +1141,14 @@ public class QuoridorController {
 
 	/**
 	 * Method - loadSavedPosition()
-	 * 
+	 *
 	 * Controller method used to load a file containing the game state of a previous
 	 * game that the user wishes to continue playing
-	 * 
+	 *
 	 * @param filename - name of file
 	 * @return GamePosition - the game position is returned
 	 * @author Nicolas Buisson
-	 * 
+	 *
 	 */
 	public static boolean loadSavedPosition(String filename, Player whitePlayer, Player blackPlayer)
 			throws IOException {
@@ -1233,7 +1223,7 @@ public class QuoridorController {
 		}
 		for (int i = 1; i < whitePositions.length; i++) {
 
-			whitePositions[i] = whitePositions[i].trim(); 
+			whitePositions[i] = whitePositions[i].trim();
 
 			int whiteWallColumn = whitePositions[i].charAt(0) - 96;
 			int whiteWallRow = whitePositions[i].charAt(1) - 48; // ASCII value of char representing row, not actual
@@ -1552,6 +1542,7 @@ public class QuoridorController {
 		return true;
 	}
 
+
 	/**
 	 * @param r1 row of first move
 	 * @param c1 column of first move
@@ -1590,7 +1581,7 @@ public class QuoridorController {
 
 	/**
 	 * Method used to rotate a wall
-	 * 
+	 *
 	 * @author Iyatan Atchoro
 	 */
 	public static void rotateWall() throws Exception {
@@ -1608,7 +1599,7 @@ public class QuoridorController {
 	}
 	/**
 	 * Method used to drop a wall
-	 * 
+	 *
 	 * @author Iyatan Atchoro
 	 */
 	public static void dropWall() throws Exception {
@@ -1668,7 +1659,7 @@ public class QuoridorController {
 	/**
 	 * This method uses getCurrentPlayer method to transform the current player into
 	 * an int so that it can be used into the view
-	 * 
+	 *
 	 * @return 0/1 where 0 is white player and 1 is dark player
 	 * @author Alexander Legouverneur
 	 */
@@ -1685,7 +1676,7 @@ public class QuoridorController {
 
 	/**
 	 * This methods is a getter for the next wall to be placed
-	 * 
+	 *
 	 * @author Alexander Legouverneur
 	 * @return the next wall to be placed
 	 */
@@ -1713,7 +1704,7 @@ public class QuoridorController {
 
 	/**
 	 * Method used to notify invalid Wall move
-	 * 
+	 *
 	 * @author Iyatan Atchoro
 	 */
 
@@ -1730,7 +1721,7 @@ public class QuoridorController {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param id
 	 * @return
 	 */
@@ -1738,7 +1729,7 @@ public class QuoridorController {
 		return QuoridorApplication.getQuoridor().getCurrentGame().getWallMoveCandidate().getWallPlaced();
 	}
 	/**
-	 * 
+	 *
 	 * @param id
 	 * @return
 	 */
@@ -1760,7 +1751,7 @@ public class QuoridorController {
 	 * Method used to move a pawn based on a selection of possible tiles
 	 * @param player - Current player to move
 	 * @param side - Direction of move
-	 * @return true if successful move 
+	 * @return true if successful move
 	 * @throws IllegalArgumentException on error
 	 * @author Tristan Bouchard, Nicolas Buisson
 	 */
@@ -1905,13 +1896,13 @@ public class QuoridorController {
 		}
 		//switchCurrentPlayer();
 		return true;
-	} 
+	}
 
 	/**
 	 * helper method made to access a Tile
 	 * using its row and column coordinates
 	 * @author Nicolas Buisson
-	 * 
+	 *
 	 */
 	public static Tile getTileAtRowCol(int row, int column) {
 		return QuoridorApplication.getQuoridor().getBoard().getTile((row-1)*9 + column-1);
@@ -1922,7 +1913,7 @@ public class QuoridorController {
 	/**
 	 * helper method to get the player position
 	 * @author Alexander Legouverneur
-	 * @param player to move 
+	 * @param player to move
 	 * @return the tile of the position of the player
 	 */
 	public static Tile getPlayerPosition(Player player) {
@@ -2065,7 +2056,7 @@ public class QuoridorController {
 	 * @return true if there is a pawn in an adjacent tile to the current player, else false
 	 * @author Alexander Legouverneur
 	 */
-	public static boolean pawnOnWay(Player player, boolean cond) { //sometimes I call the method and don t want to call pawnJump with it 
+	public static boolean pawnOnWay(Player player, boolean cond) { //sometimes I call the method and don t want to call pawnJump with it
 		Quoridor q = QuoridorApplication.getQuoridor();				//thats why I add a condition boolean
 		int currentPlayerRow;
 		int currentPlayerCol;
@@ -2203,24 +2194,86 @@ public class QuoridorController {
 	 * @author Alexander Legouverneur
 	 */
 	public static boolean checkIfWon(Player player, int row, int col) {
-		Quoridor q = QuoridorApplication.getQuoridor();
-		if(player.equals(q.getCurrentGame().getBlackPlayer())) {
-			if(row == 1 ) {
+		Player blackPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
+		Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
+		if(player.equals(blackPlayer)) {
+			if(row == 1 && col == 3) {
 				//stopGame(q.getCurrentGame());
 				return true;
 			}
-
 		}
-		else {
-			if(row == 9) {
+		else if(player.equals(whitePlayer)){
+			if(row == 9 && col == 4) {
 				//stopGame(q.getCurrentGame());
 				return true;
 			}
 		}
 		return false;
 	}
+	/**
+	 * Method stops game by setting all players timers to 0
+	 * @param game Game gets the current game
+	 * @author Nayem Alam
+	 */
 	public static void stopGame(Game game) {
+		//	    game.delete();
+		Player blackPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
+		Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
+		Time endTime = new Time(0);
+		blackPlayer.setRemainingTime(endTime);
+		whitePlayer.setRemainingTime(endTime);
 		game.delete();
+	}
+
+
+	/**
+	 * Method checks which player chooses to resign
+	 * @param player Player is current player
+	 * @author Nayem Alam
+	 */
+	public static void playerInitiatesToResign(Player player) {
+		Player blackPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
+		Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
+		if(player.equals(blackPlayer)) {
+			stopCurrentPlayerClock();
+			player.getGameAsBlack().setGameStatus(GameStatus.BlackWon);
+		}
+		if(player.equals(whitePlayer)) {
+			stopCurrentPlayerClock();
+			player.getGameAsWhite().setGameStatus(GameStatus.WhiteWon);
+		}
+
+	}
+
+	// given that the game is not running
+	public static void GameStatusNotRunning() {
+		QuoridorApplication.getQuoridor().getCurrentGame().setGameStatus(GameStatus.ReadyToStart);
+	}
+
+	/**
+	 * Method verifies that as the clock is counting down
+	 * if a player is taking too long, their timer will eventually reach zero
+	 *
+	 * @param thisPlayer String is current player
+	 * @exception Exception throws exception in case player already has no time left (i.e. clock is not counting down anymore)
+	 * @author Nayem Alam
+	 */
+	public static void checkIfClockCountingDown(String thisPlayer) throws Exception {
+		Player blackPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
+		Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
+		Time zeroTime = new Time(0);
+		long whitePlayerTime = whitePlayer.getRemainingTime().getTime();
+		long blackPlayerTime = blackPlayer.getRemainingTime().getTime();
+
+		// if white player takes too long to move
+		if(thisPlayer.equals("white") && whitePlayerTime>0) {
+			// eventually player will reach a time of zero
+			whitePlayer.setRemainingTime(zeroTime);
+		}else if(thisPlayer.equals("black") && blackPlayerTime>0) {
+			blackPlayer.setRemainingTime(zeroTime);
+		} else {
+			throw new Exception("Player time is already zero.");
+		}
 	}
 
 	/**
@@ -2231,7 +2284,6 @@ public class QuoridorController {
 	 */
 	public static void jumpToStart(int moveNum, int roundNum) {
 		Quoridor q = QuoridorApplication.getQuoridor();
-
 		Tile aTile = new Tile(1,5,q.getBoard());
 		PlayerPosition Bpos = new PlayerPosition(q.getCurrentGame().getBlackPlayer(), aTile);
 		q.getCurrentGame().getCurrentPosition().setBlackPosition(Bpos);
@@ -2239,22 +2291,48 @@ public class QuoridorController {
 		Tile aTile1 = new Tile(9,5,q.getBoard());
 		PlayerPosition Wpos = new PlayerPosition(q.getCurrentGame().getWhitePlayer(), aTile1);
 		q.getCurrentGame().getCurrentPosition().setBlackPosition(Wpos);
-		if(roundNum==2) {
-			int thresh = 2*(moveNum-1)+1;
-			for(int i = 0; i<thresh; i++) {
-				stepBack();
+
+		if(moveNum != 0) {
+			if(roundNum==2) {
+
+				stepBack(moveNum, roundNum);
+
+				jumpToStart(moveNum, roundNum-1);
+
 			}
-		}
-		else {
-			int thresh = 2*(moveNum-1);
-			for(int i = 0; i<thresh;i++) {
-				stepBack();
+			else {
+
+				stepBack(moveNum, roundNum);
+				jumpToStart(moveNum-1, roundNum+1);
 			}
 		}
 
 
 	}
-	public static Move stepBack() {
+
+	/**
+	 * Helper method to get the current move number 
+	 * @return move number
+	 */
+	public static int getMoveNum() {
+
+
+		return ReplayModeMoveNum;
+	}
+
+
+	/**
+	 * helper method to return the round number
+	 * @return round number
+	 */
+	public static int getRound() {
+		return ReplayModeRoundNum;
+	}
+	public static Move stepBack(int moveNumber, int roundNumber) {
+		ReplayModeMoveNum = moveNumber;
+		ReplayModeRoundNum= roundNumber;
 		return null;
 	}
+
 }
+

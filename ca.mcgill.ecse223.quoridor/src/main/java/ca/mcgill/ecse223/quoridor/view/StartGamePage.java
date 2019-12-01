@@ -383,6 +383,8 @@ public class StartGamePage {
 	private void setTotalThinkingTimeActionPerformed(ActionEvent evt) {
 		// clears error message
 		error = null;
+
+
 		// call controller
 		Integer min = Integer.parseInt(Minutes_TextField.getText().trim());
 		Integer sec = Integer.parseInt(Seconds_TextField.getText().trim());
@@ -399,3 +401,4 @@ public class StartGamePage {
 		}
 	}
 }
+
