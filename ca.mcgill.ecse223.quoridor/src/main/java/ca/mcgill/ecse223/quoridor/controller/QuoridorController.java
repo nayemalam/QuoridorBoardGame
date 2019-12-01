@@ -55,6 +55,10 @@ public class QuoridorController {
 		Game game = QuoridorApplication.getQuoridor().getCurrentGame();
 		return game.getGameStatus().equals(GameStatus.Replay);
 	}
+	public static int findPastGamePositionIndex(Game pastGame){
+		Game game = QuoridorApplication.getQuoridor().getCurrentGame();
+		return pastGame.getCurrentPosition().getId();
+	}
 	/**
 	 * Method to capture the time at which the clock is stopped
 	 * Used as a helper method
