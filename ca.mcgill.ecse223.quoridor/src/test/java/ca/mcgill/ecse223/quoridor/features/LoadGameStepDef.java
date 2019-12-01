@@ -63,7 +63,7 @@ public class LoadGameStepDef {
 		//check if one of the players won
 		if(QC.checkIfWon(QC.getBlackPlayer())) {
 			assertEquals(true, QC.checkIfWon(QC.getBlackPlayer()));
-		}else {
+		}else if(QC.checkIfWon(QC.getWhitePlayer())) {
 			assertEquals(true, QC.checkIfWon(QC.getWhitePlayer()));
 		}
 	}
