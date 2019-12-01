@@ -1898,17 +1898,19 @@ public class QuoridorController {
 	 */
 	public static void mainValidateMovePawn(Player player) {
 		availableTiles = new ArrayList<Tile>();
-
 		Quoridor q = QuoridorApplication.getQuoridor();
 		int currentRow;
 		int currentCol;
 		if(player.equals(q.getCurrentGame().getBlackPlayer())) {
 			currentRow = q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getRow();
 			currentCol = q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getColumn();
+			//System.out.println("Black: "+q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getRow()+ " , "+ q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getColumn());
 		}
 		else {
 			currentRow = q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getRow();
 			currentCol = q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getColumn();
+			//System.out.println("White: "+q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getRow()+ " , "+ q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getColumn());
+
 		}
 
 		// Add checks to verify if on side of board
@@ -1934,15 +1936,19 @@ public class QuoridorController {
 		//Jump pawn getting tiles
 		if(!checkWallOnWay(currentRow, currentCol-1, "left") && pawnOnWay(player, false)) {
 			pawnOnWay(player, true);
+			System.out.println("yeayy)");
 		}
 		if(!checkWallOnWay(currentRow, currentCol+1, "right") && pawnOnWay(player, false)) {
 			pawnOnWay(player, true);
+			System.out.println("yeayy)");
 		}
 		if(!checkWallOnWay(currentRow-1,currentCol, "up") && pawnOnWay(player, false)) {
 			pawnOnWay(player, true);
+			System.out.println("yeayy)");
 		}
 		if(!checkWallOnWay(currentRow+1, currentCol, "down") && pawnOnWay(player, false)) {
 			pawnOnWay(player, true);
+			System.out.println("yeayy)");
 		}
 		int i = 0;
 	}
@@ -2023,11 +2029,14 @@ public class QuoridorController {
 		int currentPlayerCol;
 		int opponentRow;
 		int opponentCol;
+		int i=0;
 		if(player.equals(q.getCurrentGame().getBlackPlayer())) {
 			currentPlayerRow = q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getRow();
 			currentPlayerCol = q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getColumn();
 			opponentRow = q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getRow();
 			opponentCol = q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getColumn();
+			//System.out.println("Current Player"+currentPlayerRow+" . "+ currentPlayerCol);
+			//System.out.println("Opponent"+opponentRow+" . "+ opponentCol);
 
 		}
 		else {
@@ -2035,7 +2044,8 @@ public class QuoridorController {
 			currentPlayerCol = q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getColumn();
 			opponentRow = q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getRow();
 			opponentCol = q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getColumn();
-
+			//System.out.println("Current Player"+currentPlayerRow+" . "+ currentPlayerCol);
+			//System.out.println("Opponent"+opponentRow+" . "+ opponentCol);
 		}
 		// If opponent below
 		if((currentPlayerRow + 1 == opponentRow) && (currentPlayerCol == opponentCol)) {
@@ -2066,6 +2076,8 @@ public class QuoridorController {
 			return true;
 		}
 		else {
+			i++;
+			System.out.println("yeayy: "+i);
 			return false;
 		}
 
@@ -2114,6 +2126,7 @@ public class QuoridorController {
 		if(initializeValidatePosition(opponentRow, opponentCol - 1) && !checkWallOnWay(opponentRow,opponentCol-1,"left")) {
 			if((opponentRow != currentPlayerRow || opponentCol - 1 != currentPlayerCol)) {
 				availableTiles.add(getTileAtRowCol(opponentRow,opponentCol - 1 ));
+				System.out.println(opponentCol);
 			}
 		}
 		if(initializeValidatePosition(opponentRow, opponentCol + 1) && !checkWallOnWay(opponentRow,opponentCol+1,"right")) {
@@ -2157,16 +2170,17 @@ public class QuoridorController {
 	 * @author Alexander Legouverneur
 	 */
 	public static boolean checkIfWon(Player player, int row, int col) {
+		Quoridor q = QuoridorApplication.getQuoridor();
 		Player blackPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
 		Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
 		if(player.equals(blackPlayer)) {
-			if(row == 1 && col == 3) {
+			if(row == 1) {
 				//stopGame(q.getCurrentGame());
 				return true;
 			}
 		}
 		else if(player.equals(whitePlayer)){
-			if(row == 9 && col == 4) {
+			if(row == 9) {
 				//stopGame(q.getCurrentGame());
 				return true;
 			}
