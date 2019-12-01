@@ -1648,8 +1648,11 @@ public class QuoridorController {
 	 *
 	 * @author Iyatan Atchoro
 	 */
-	public static void enterReplayMode(){
+	public static void enterReplayMode() throws Exception{
 		Game curGame = QuoridorApplication.getQuoridor().getCurrentGame();
+		if((curGame.getGameStatus().toString() != "Running")) {
+			throw new Exception("The Game is not running");
+		}
 		curGame.setGameStatus(Game.GameStatus.Replay);
 	}
 	/**
@@ -1660,6 +1663,7 @@ public class QuoridorController {
 	public static void continueGame() {
 		Game curGame = QuoridorApplication.getQuoridor().getCurrentGame();
 		curGame.setGameStatus(Game.GameStatus.ReadyToStart);
+		curGame.getMoves().clear();
 	}
 
 	/**
