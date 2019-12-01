@@ -144,7 +144,7 @@ public class SaveGamePage {
 				}
 				
 				try {
-					fileExists = QC.saveGameFile(saveGameFileNameLabel.getText());
+					fileExists = QC.save(saveGameFileNameLabel.getText());
 				} catch (IllegalArgumentException e) {
 					
 					e.printStackTrace();

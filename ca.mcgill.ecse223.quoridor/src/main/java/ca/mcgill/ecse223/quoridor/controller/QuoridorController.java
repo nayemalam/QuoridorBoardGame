@@ -10,6 +10,7 @@ import ca.mcgill.ecse223.quoridor.model.Game.MoveMode;
 import ca.mcgill.ecse223.quoridor.utilities.*;
 import ca.mcgill.ecse223.quoridor.utilities.ControllerUtilities.MoveDirections;
 import ca.mcgill.ecse223.quoridor.utilities.ControllerUtilities.PathAvailableToPlayers;
+import java.math.*;
 
 import java.sql.Time;
 import java.util.ArrayList;
@@ -1012,6 +1013,31 @@ public class QuoridorController {
 		}
 
 	}
+	/**
+	 * Cancels overwriting the file
+	 */
+	public static void cancelOverWriteFile() {
+		//cancel overwrite file GUI method
+	}
+	/**
+	 * 
+	 * @param filename
+	 * @return boolean - true if file respects naming conventions and is saved successfully, 
+	 * false if file does not respect naming conventions or is not saved successfully
+	 * @throws IOException
+	 * @throws IllegalArgumentException
+	 */
+
+	public static boolean save(String filename) throws IOException, IllegalArgumentException {
+		if(filename.contains(".dat")) {
+			return saveGamePosition(filename);
+		}
+		if(filename.contains(".mov")) {
+			return saveGameFile(filename);
+		}else {
+			return false;
+		}
+	}
 
 	/**
 	 * Method - saveGamePosition(String filename, Game game)
@@ -1121,40 +1147,6 @@ public class QuoridorController {
 		}
 
 		return gameData;
-
-	}
-
-	/**
-	 * Method - overWriteFile()
-	 * 
-	 * Controller method used to overwrite a saved position file with the current game position
-	 * 
-	 * @param filename - String name of file
-	 * @return String - contains the content of the overwritten file
-	 * @author Nicolas Buisson
-	 *
-	 */
-
-	public static String overWriteFile(String filename) throws IOException {
-		// overwriting taken care of by saveGamePosition method
-		return overwriteGamePosition(filename);
-	}
-
-	/**
-	 * Method - cancelOverWriteFile()
-	 *
-	 * Controller method used to cancel overwriting a file
-	 *
-	 * @return void
-	 * @author Nicolas Buisson
-	 *
-	 */
-	public static void cancelOverWriteFile() {
-
-		// if user cancels overwriting the file
-		// then nothing happens, file and model are unchanged
-		// only change is in UI
-		// might not have to be a controller method
 	}
 
 	/**
@@ -1264,7 +1256,6 @@ public class QuoridorController {
 				gamePositionToLoad.removeWhiteWallsInStock(whiteWall);
 				gamePositionToLoad.addWhiteWallsOnBoard(whiteWall);
 				Tile whiteWallTile = quoridor.getBoard().getTile((whiteWallRow - 1) * 9 + (whiteWallColumn - 1));
-				// TODO Double check round and move stuff.
 				WallMove whiteWallMove = new WallMove(i, i, getWhitePlayer(), whiteWallTile, game,
 						whiteWallDirection, whiteWall);
 				whiteWall.setMove(whiteWallMove);
@@ -1370,14 +1361,14 @@ public class QuoridorController {
 
 			//must check if need to start a new line or not
 			if(moves.get(i).hasPrevMove()) {
-				if(moves.get(i).getMoveNumber() != moves.get(i).getPrevMove().getMoveNumber()) {
-					gameData = gameData + "\n" + ((Integer)moves.get(i).getMoveNumber()).toString() + ". " + encodedMove; 
+				if(moves.get(i).getRoundNumber() != moves.get(i).getPrevMove().getRoundNumber()) {
+					gameData = gameData + "\n" + ((Integer)moves.get(i).getRoundNumber()).toString() + ". " + encodedMove; 
 				}else {
 					gameData = gameData + " " + encodedMove; 
 				}
 			}else {
 				//means this is the first move in the game
-				gameData = gameData + "\n" + ((Integer)moves.get(i).getMoveNumber()).toString() + ". " + encodedMove;
+				gameData = gameData  + ((Integer)moves.get(i).getRoundNumber()).toString() + ". " + encodedMove;
 			}
 		}
 
@@ -1439,116 +1430,164 @@ public class QuoridorController {
 			//iterates through each line of the string
 
 			aLineOfMoves = moves[i].split(" ");
-			for(int j = 0; j < aLineOfMoves.length; j++) {
-				moveNumber = ((int)aLineOfMoves[0].charAt(0)) - 48;
-				whiteMove = aLineOfMoves[1];
-				blackMove = aLineOfMoves[2];
 
-				if(whiteMove.length() == 2) {
-					//pawn move
-					int whitePawnColumn = ((int) whiteMove.charAt(0)) - 96;
-					int whitePawnRow = whiteMove.charAt(1) - 48;
+			moveNumber = ((int)aLineOfMoves[0].charAt(0)) - 48;
+			whiteMove = aLineOfMoves[1];
+			blackMove = aLineOfMoves[2];
 
-					boolean whitePawnValid = initializeValidatePosition(whitePawnRow, whitePawnColumn);
-					if (whitePawnValid) {
-						Tile whitePawnTile = quoridor.getBoard().getTile((whitePawnRow - 1) * 9 + whitePawnColumn - 1);
-						gamePositionToLoad.getWhitePosition().setTile(whitePawnTile);
-						//create associated move
-						StepMove whitePawnMove = new StepMove(moveNumber, 1, whitePlayer, whitePawnTile, game);
-						game.addMove(whitePawnMove);
+			if(whiteMove.length() == 2) {
+				//pawn move
+				int whitePawnColumn = ((int) whiteMove.charAt(0)) - 96;
+				int whitePawnRow = whiteMove.charAt(1) - 48;
 
-					} else {
-						quoridor.setCurrentGame(null);
-						throw new IllegalArgumentException("Invalid Move loaded!");
-					}
-				}
-				if(whiteMove.length() == 3) {
-					//wall move
-					int whiteWallColumn = whiteMove.charAt(0) - 96;
-					int whiteWallRow = whiteMove.charAt(1) - 48; 
-					char whiteWallO = whiteMove.charAt(2);
-					Direction whiteWallDirection;
-					String wallOrientation = "";
-					if (whiteWallO == 'v') {
-						wallOrientation = "vertical";
-						whiteWallDirection = Direction.Vertical;
-					} else {
-						wallOrientation = "horizontal";
-						whiteWallDirection = Direction.Horizontal;
-					}
-
-					boolean whiteWallsValid = initiatePosValidation(whiteWallRow, whiteWallColumn, wallOrientation, i-1);
-					if (whiteWallsValid) {
-						Wall whiteWall = gamePositionToLoad.getWhiteWallsInStock(0);
-						gamePositionToLoad.removeWhiteWallsInStock(whiteWall);
-						gamePositionToLoad.addWhiteWallsOnBoard(whiteWall);
-						Tile whiteWallTile = quoridor.getBoard().getTile((whiteWallRow - 1) * 9 + (whiteWallColumn - 1));
-
-						WallMove whiteWallMove = new WallMove(moveNumber, 1, getWhitePlayer(), whiteWallTile, game, whiteWallDirection, whiteWall);
-						whiteWall.setMove(whiteWallMove);
-						game.addMove(whiteWallMove);
-					} else {
-						quoridor.setCurrentGame(null);
-						throw new IllegalArgumentException("Invalid Move loaded!");
-					}
-
-				}
-				if(blackMove.length() == 2) {
-					//pawn move
-					int blackPawnColumn = ((int) blackMove.charAt(0)) - 96;
-					int blackPawnRow = blackMove.charAt(1) - 48;
-
-					boolean blackPawnValid = initializeValidatePosition(blackPawnRow, blackPawnColumn);
-					if (blackPawnValid) {
-						Tile blackPawnTile = quoridor.getBoard().getTile((blackPawnRow - 1) * 9 + blackPawnColumn - 1);
-						gamePositionToLoad.getBlackPosition().setTile(blackPawnTile);
-						//create associated move
-						StepMove blackPawnMove = new StepMove(moveNumber, 2, whitePlayer, blackPawnTile, game);
-						game.addMove(blackPawnMove);
-					} else {
-						quoridor.setCurrentGame(null);
-						throw new IllegalArgumentException("Invalid Move loaded!");
-					}
-				}
-				if(blackMove.length() == 3) {
-					//wall move
-					int blackWallColumn = blackMove.charAt(0) - 96;
-					int blackWallRow = blackMove.charAt(1) - 48; 
-					char blackWallO = blackMove.charAt(2);
-					Direction blackWallDirection;
-					String wallOrientation = "";
-					if (blackWallO == 'v') {
-						wallOrientation = "vertical";
-						blackWallDirection = Direction.Vertical;
-					} else {
-						wallOrientation = "horizontal";
-						blackWallDirection = Direction.Horizontal;
-					}
-
-					boolean blackWallsValid = initiatePosValidation(blackWallRow, blackWallColumn, wallOrientation, i-1);
-					if (blackWallsValid) {
-						Wall blackWall = gamePositionToLoad.getBlackWallsInStock(0);
-						gamePositionToLoad.removeBlackWallsInStock(blackWall);
-						gamePositionToLoad.addBlackWallsOnBoard(blackWall);
-						Tile blackWallTile = quoridor.getBoard().getTile((blackWallRow - 1) * 9 + (blackWallColumn - 1));
-
-						WallMove blackWallMove = new WallMove(moveNumber, 1, getBlackPlayer(), blackWallTile, game, blackWallDirection, blackWall);
-						blackWall.setMove(blackWallMove);
-						game.addMove(blackWallMove);
-					} else {
-						quoridor.setCurrentGame(null);
-						throw new IllegalArgumentException("Invalid Move loaded!");
-					}
-
-				}
-				if(blackMove.length() > 3 || blackMove.length() < 2 || whiteMove.length() < 2 || whiteMove.length() > 3){
-					throw new IllegalArgumentException("Invalid Move loaded!");
+				boolean whitePawnValid = initializeValidatePosition(whitePawnRow, whitePawnColumn);
+				if (whitePawnValid) {
+					Tile whitePawnTile = quoridor.getBoard().getTile((whitePawnRow - 1) * 9 + whitePawnColumn - 1);
+					gamePositionToLoad.getWhitePosition().setTile(whitePawnTile);
+					//create associated move
+					StepMove whitePawnMove = new StepMove(moveNumber, 1, whitePlayer, whitePawnTile, game);
+					Move currentMove = game.getMove(game.getMoves().size()-1);
+					currentMove.setNextMove(whitePawnMove);
+					whitePawnMove.setPrevMove(currentMove);
+					game.addMove(whitePawnMove);
+				} else {
+					quoridor.setCurrentGame(null);
+					throw new IllegalArgumentException("Invalid Move loaded! white pawn");
 				}
 			}
+			if(whiteMove.length() == 3) {
+				//wall move
+				int whiteWallColumn = whiteMove.charAt(0) - 96;
+				int whiteWallRow = whiteMove.charAt(1) - 48; 
+				char whiteWallO = whiteMove.charAt(2);
+				Direction whiteWallDirection;
+				String wallOrientation = "";
+				if (whiteWallO == 'v') {
+					wallOrientation = "vertical";
+					whiteWallDirection = Direction.Vertical;
+				} else {
+					wallOrientation = "horizontal";
+					whiteWallDirection = Direction.Horizontal;
+				}
+
+				boolean whiteWallsValid = initiatePosValidation(whiteWallRow, whiteWallColumn, wallOrientation, i-1);
+				if (whiteWallsValid) {
+					Wall whiteWall = gamePositionToLoad.getWhiteWallsInStock(0);
+					gamePositionToLoad.removeWhiteWallsInStock(whiteWall);
+					gamePositionToLoad.addWhiteWallsOnBoard(whiteWall);
+					Tile whiteWallTile = quoridor.getBoard().getTile((whiteWallRow - 1) * 9 + (whiteWallColumn - 1));
+
+					WallMove whiteWallMove = new WallMove(moveNumber, 1, getWhitePlayer(), whiteWallTile, game, whiteWallDirection, whiteWall);
+					whiteWall.setMove(whiteWallMove);
+					Move currentMove = game.getMove(game.getMoves().size()-1);
+					currentMove.setNextMove(whiteWallMove);
+					whiteWallMove.setPrevMove(currentMove);
+					game.addMove(whiteWallMove);
+
+				} else {
+					quoridor.setCurrentGame(null);
+					throw new IllegalArgumentException("Invalid Move loaded! white wall");
+				}
+
+			}
+			if(blackMove.length() == 2) {
+				//pawn move
+				int blackPawnColumn = ((int) blackMove.charAt(0)) - 96;
+				int blackPawnRow = blackMove.charAt(1) - 48;
+
+				boolean blackPawnValid = initializeValidatePosition(blackPawnRow, blackPawnColumn);
+				if (blackPawnValid) {
+					Tile blackPawnTile = quoridor.getBoard().getTile((blackPawnRow - 1) * 9 + blackPawnColumn - 1);
+					gamePositionToLoad.getBlackPosition().setTile(blackPawnTile);
+					//create associated move
+					StepMove blackPawnMove = new StepMove(moveNumber, 2, whitePlayer, blackPawnTile, game);
+					Move currentMove = game.getMove(game.getMoves().size()-1);
+					currentMove.setNextMove(blackPawnMove);
+					blackPawnMove.setPrevMove(currentMove);
+					game.addMove(blackPawnMove);
+				} else {
+					quoridor.setCurrentGame(null);
+					throw new IllegalArgumentException("Invalid Move loaded! black pawn");
+				}
+			}
+			if(blackMove.length() == 3) {
+				//wall move
+				int blackWallColumn = blackMove.charAt(0) - 96;
+				int blackWallRow = blackMove.charAt(1) - 48; 
+				char blackWallO = blackMove.charAt(2);
+				Direction blackWallDirection;
+				String wallOrientation = "";
+				if (blackWallO == 'v') {
+					wallOrientation = "vertical";
+					blackWallDirection = Direction.Vertical;
+				} else {
+					wallOrientation = "horizontal";
+					blackWallDirection = Direction.Horizontal;
+				}
+
+				boolean blackWallsValid = initiatePosValidation(blackWallRow, blackWallColumn, wallOrientation, i-1);
+				if (blackWallsValid) {
+					Wall blackWall = gamePositionToLoad.getBlackWallsInStock(0);
+					gamePositionToLoad.removeBlackWallsInStock(blackWall);
+					gamePositionToLoad.addBlackWallsOnBoard(blackWall);
+					Tile blackWallTile = quoridor.getBoard().getTile((blackWallRow - 1) * 9 + (blackWallColumn - 1));
+
+					WallMove blackWallMove = new WallMove(moveNumber, 1, getBlackPlayer(), blackWallTile, game, blackWallDirection, blackWall);
+					blackWall.setMove(blackWallMove);
+					Move currentMove = game.getMove(game.getMoves().size()-1);
+					currentMove.setNextMove(blackWallMove);
+					blackWallMove.setPrevMove(currentMove);
+					game.addMove(blackWallMove);
+				} else {
+					quoridor.setCurrentGame(null);
+					throw new IllegalArgumentException("Invalid Move loaded! black wall");
+				}
+
+			}
+			if(blackMove.length() > 3 || blackMove.length() < 2 || whiteMove.length() < 2 || whiteMove.length() > 3){
+				throw new IllegalArgumentException("Invalid Move loaded!");
+			}
 		}
+
 		return true;
 	}
 
+
+	/**
+	 * @param r1 row of first move
+	 * @param c1 column of first move
+	 * @param r2 row of following move
+	 * @param c2 column of following move
+	 * @return boolean - false if distance covered by 2 consecutive moves is strictly greater than 2 
+	 * ---Else return true, move is valid in terms of distance
+	 * @author Nicolas Buisson
+	 */
+	public static boolean verifyDistanceOfMove(int r1, int c1, int r2, int c2) {
+		//if distance between 2 pawn positions across two moves is greater than 2 tiles, incorrect move
+		if(Math.abs((r1 - r2) + (c1 - c2)) > 2) {
+			return false;
+		}else {
+			return true;
+		}
+	}
+
+	/** 
+	 * @param r1 row of first move
+	 * @param c1 column of first move
+	 * @param r2 row of following move
+	 * @param c2 column of following move
+	 * @return boolean - false if distance covered by 2 consecutive moves are strictly greater than 1: this means the move is a jump 
+	 * --- Else return true, move is a step move
+	 * @author Nicolas Buisson
+	 */
+	public static boolean typeOfDisplacement(int r1, int c1, int r2, int c2) {
+
+		if(Math.abs((r1 - r2) + (c1 - c2)) > 1) {
+			return false; //false jump move
+		}else {
+			return true; //true step move
+		}
+	}	
 
 	/**
 	 * Method used to rotate a wall
@@ -1907,7 +1946,6 @@ public class QuoridorController {
 	 */
 	public static void mainValidateMovePawn(Player player) {
 		availableTiles = new ArrayList<Tile>();
-
 		Quoridor q = QuoridorApplication.getQuoridor();
 		int currentRow;
 		int currentCol;
@@ -1918,6 +1956,7 @@ public class QuoridorController {
 		else {
 			currentRow = q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getRow();
 			currentCol = q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getColumn();
+
 		}
 
 		// Add checks to verify if on side of board
@@ -1925,35 +1964,60 @@ public class QuoridorController {
 		boolean rightIsAllowed = (currentCol < 9);
 		boolean upIsAllowed = (currentRow > 1);
 		boolean downIsAllowed = (currentRow < 9);
+		int pawnOnWay = pawnOnWay(player, false);
 
+		
+		//Jump pawn getting tiles
+				if(!checkWallOnWay(currentRow, currentCol-1, "left") && pawnOnWay != 5) {
+					pawnOnWay(player, true);
+					if(pawnOnWay == 1 ) {
+						availableTiles.add(getTileAtRowCol(currentRow-1,currentCol));
+						availableTiles.add(getTileAtRowCol(currentRow,currentCol-1));
+						availableTiles.add(getTileAtRowCol(currentRow,currentCol+1));
+					}
+					if( pawnOnWay == 2) {
+						availableTiles.add(getTileAtRowCol(currentRow,currentCol-1));
+						availableTiles.add(getTileAtRowCol(currentRow+1,currentCol));
+						availableTiles.add(getTileAtRowCol(currentRow,currentCol+1));
+					}
+					if(pawnOnWay == 3) {
+						availableTiles.add(getTileAtRowCol(currentRow,currentCol+1));
+						availableTiles.add(getTileAtRowCol(currentRow-1,currentCol));
+						availableTiles.add(getTileAtRowCol(currentRow+1,currentCol));
+					}
+					if(pawnOnWay == 4) {
+						availableTiles.add(getTileAtRowCol(currentRow,currentCol-1));
+						availableTiles.add(getTileAtRowCol(currentRow-1,currentCol));
+						availableTiles.add(getTileAtRowCol(currentRow+1,currentCol));
+					}
+				}
+				if(!checkWallOnWay(currentRow, currentCol+1, "right") && pawnOnWay != 5) {
+					pawnOnWay(player, true);
+					
+				}
+				if(!checkWallOnWay(currentRow-1,currentCol, "up") && pawnOnWay !=5) {
+					pawnOnWay(player, true);
+					
+				}
+				if(!checkWallOnWay(currentRow+1, currentCol, "down") && pawnOnWay != 5) {
+					pawnOnWay(player, true);
+					
+				}
 		// Regular moves, no jumps
-		if(leftIsAllowed && !checkWallOnWay(currentRow, currentCol-1, "left") && !pawnOnWay(player, false)) {
+		if(leftIsAllowed && !checkWallOnWay(currentRow, currentCol-1, "left") && pawnOnWay == 5) {
 			availableTiles.add(getTileAtRowCol(currentRow,currentCol-1));
 		}
-		if(rightIsAllowed && !checkWallOnWay(currentRow, currentCol+1, "right") && !pawnOnWay(player, false)) {
+		if(rightIsAllowed && !checkWallOnWay(currentRow, currentCol+1, "right") && pawnOnWay == 5) {
 			availableTiles.add(getTileAtRowCol(currentRow,currentCol+1));
 		}
-		if(upIsAllowed && !checkWallOnWay(currentRow-1, currentCol, "up") && !pawnOnWay(player, false) ) {
+		if(upIsAllowed && !checkWallOnWay(currentRow-1, currentCol, "up") && pawnOnWay == 5 ) {
 			availableTiles.add(getTileAtRowCol(currentRow-1,currentCol));
 		}
-		if(downIsAllowed && !checkWallOnWay(currentRow+1, currentCol, "down") && !pawnOnWay(player, false) ) {
+		if(downIsAllowed && !checkWallOnWay(currentRow+1, currentCol, "down") && pawnOnWay == 5 ) {
 			availableTiles.add(getTileAtRowCol(currentRow+1,currentCol));
 		}
 
-		//Jump pawn getting tiles
-		if(!checkWallOnWay(currentRow, currentCol-1, "left") && pawnOnWay(player, false)) {
-			pawnOnWay(player, true);
-		}
-		if(!checkWallOnWay(currentRow, currentCol+1, "right") && pawnOnWay(player, false)) {
-			pawnOnWay(player, true);
-		}
-		if(!checkWallOnWay(currentRow-1,currentCol, "up") && pawnOnWay(player, false)) {
-			pawnOnWay(player, true);
-		}
-		if(!checkWallOnWay(currentRow+1, currentCol, "down") && pawnOnWay(player, false)) {
-			pawnOnWay(player, true);
-		}
-		int i = 0;
+		
 	}
 
 	/**
@@ -2047,59 +2111,63 @@ public class QuoridorController {
 	 * @return true if there is a pawn in an adjacent tile to the current player, else false
 	 * @author Alexander Legouverneur
 	 */
-	public static boolean pawnOnWay(Player player, boolean cond) { //sometimes I call the method and don t want to call pawnJump with it
+	public static int pawnOnWay(Player player, boolean cond) { //sometimes I call the method and don t want to call pawnJump with it
 		Quoridor q = QuoridorApplication.getQuoridor();				//thats why I add a condition boolean
 		int currentPlayerRow;
 		int currentPlayerCol;
 		int opponentRow;
 		int opponentCol;
-		if(player.equals(q.getCurrentGame().getBlackPlayer())) {
-			currentPlayerRow = q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getRow();
-			currentPlayerCol = q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getColumn();
-			opponentRow = q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getRow();
-			opponentCol = q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getColumn();
-
-		}
-		else {
+		
+		
+		if(player.equals(q.getCurrentGame().getWhitePlayer())) {
 			currentPlayerRow = q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getRow();
 			currentPlayerCol = q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getColumn();
 			opponentRow = q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getRow();
 			opponentCol = q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getColumn();
-
+			System.out.println("Current Player"+currentPlayerRow+" . "+ currentPlayerCol);
+			System.out.println("Opponent"+opponentRow+" . "+ opponentCol);
+		}
+		else {
+			currentPlayerRow = q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getRow();
+			currentPlayerCol = q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getColumn();
+			opponentRow = q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getRow();
+			opponentCol = q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getColumn();
+			System.out.println("Current Player"+currentPlayerRow+" . "+ currentPlayerCol);
+			System.out.println("Opponent"+opponentRow+" . "+ opponentCol);
 		}
 		// If opponent below
 		if((currentPlayerRow + 1 == opponentRow) && (currentPlayerCol == opponentCol)) {
 			if(cond == true) {
 				getJumpPawnTiles(opponentRow, opponentCol, currentPlayerRow,currentPlayerCol);
 			}
-			return true;
+			return 1;
 		}
 		// If opponent above
 		if(currentPlayerRow-1 ==opponentRow && currentPlayerCol == opponentCol) {
 			if(cond == true) {
 				getJumpPawnTiles(opponentRow, opponentCol, currentPlayerRow,currentPlayerCol);
 			}
-			return true;
+			return 2;
 		}
 		// If opponent left
-		if(currentPlayerRow == opponentRow && currentPlayerCol-1 == currentPlayerCol) {
+		if(currentPlayerRow == opponentRow && currentPlayerCol-1 == opponentCol) {
 			if(cond == true) {
 				getJumpPawnTiles(opponentRow, opponentCol, currentPlayerRow,currentPlayerCol);
 			}
-			return true;
+			return 3;
 		}
 		//if opponent right
 		if (currentPlayerRow == opponentRow && currentPlayerCol+1 == opponentCol) {
 			if(cond == true) {
 				getJumpPawnTiles(opponentRow, opponentCol, currentPlayerRow,currentPlayerCol);
 			}
-			return true;
+			return 4;
 		}
 		else {
-			return false;
+			
+			//System.out.println("yeayy5: ");
+			return 5;
 		}
-
-
 	}
 
 	/**
@@ -2244,6 +2312,7 @@ public class QuoridorController {
 		whitePlayer.setRemainingTime(endTime);
 		game.delete();
 	}
+
 
 	/**
 	 * Method checks which player chooses to resign
@@ -2608,7 +2677,6 @@ public class QuoridorController {
 		}
 		return;
 	}
-
 
 	/**
 	 * This method is used in the replay mode to jump to the start of the game to be able to replay
