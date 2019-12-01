@@ -32,17 +32,40 @@ public class ControllerUtilities {
 	public static final String CURRENT_BLACK_TIMER_THREAD_NAME = "CurrentBlackPlayerTimerThread";
 	public static final String CURRENT_WHITE_TIMER_THREAD_NAME = "CurrentWhitePlayerTimerThread";
 	
+	/**
+	 * Enumeration describing the potential diagonal direction a player
+	 * may move in.
+	 * @author Tristan Bouchard
+	 *
+	 */
 	public enum DiagonalDirections{
 		upleft,
 		upright,
 		downleft,
 		downright
 	}
+	
+	/**
+	 * Enumeration describing the possible standard moves of a player
+	 * @author Tristan Bouchard
+	 *
+	 */
 	public enum MoveDirections{
 		up,
 		down,
 		left,
 		right
+	}
+	
+	/**
+	 * Enumeration describing which players can reach their victory zone
+	 * @author Tristan Bouchard
+	 */
+	public enum PathAvailableToPlayers{
+		none,
+		white,
+		black,
+		both
 	}
 	
 	// ***************************************

@@ -837,16 +837,19 @@ public class PawnBehavior
    */
   // line 119 "../../../../../PawnStateMachine.ump"
   public boolean isLegalJump(MoveDirection dir){
-    Boolean playerAdjacent =  QuoridorController.pawnOnWay(this.player, false);
-    	// TODO: validate jump direction.
-    	return playerAdjacent;
+    int playerAdjacent = QuoridorController.pawnOnWay(this.player, false);
+		// TODO: validate jump direction.
+		if (playerAdjacent != 5) {
+			return false;
+		}
+		return true;
   }
 
 
   /**
    * Action to be called when an illegal move is attempted
    */
-  // line 126 "../../../../../PawnStateMachine.ump"
+  // line 129 "../../../../../PawnStateMachine.ump"
   public void illegalMove(){
     throw new IllegalArgumentException("Move out of bounds!");
   }
@@ -855,7 +858,7 @@ public class PawnBehavior
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 131 "../../../../../PawnStateMachine.ump"
+  // line 134 "../../../../../PawnStateMachine.ump"
   enum MoveDirection 
   {
     East, South, West, North;

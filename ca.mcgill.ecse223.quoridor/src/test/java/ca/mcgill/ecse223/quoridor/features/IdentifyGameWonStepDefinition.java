@@ -1,4 +1,3 @@
-
 package ca.mcgill.ecse223.quoridor.features;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -32,18 +31,17 @@ public class IdentifyGameWonStepDefinition {
 	 * Sets the current player
 	 * @param string is the player
 	 */
-	@Given("Player {string} has just completed his move")
-	public void player_has_just_completed_his_move(String string) {
-
-		Quoridor q = QuoridorApplication.getQuoridor();
-
-		if (string.equals("black")) {
-			player = q.getCurrentGame().getBlackPlayer();
-		} else {
-			player = q.getCurrentGame().getWhitePlayer();
-		}
-
-	}
+//	@Given("Player {string} has just completed his move")
+//	public void player_has_just_completed_his_move(String string) {
+//
+//		Quoridor q = QuoridorApplication.getQuoridor();
+//
+//		if (string.equals("black")) {
+//			player = q.getCurrentGame().getBlackPlayer();
+//		} else {
+//			player = q.getCurrentGame().getWhitePlayer();
+//		}
+//	}
 
 	/**
 	 * Getting the new position
@@ -55,6 +53,7 @@ public class IdentifyGameWonStepDefinition {
 	public void the_new_position_of_is(String string, Integer int1, Integer int2) {
 		Quoridor q = QuoridorApplication.getQuoridor();
 		Tile aTile = new Tile(int1, int2, q.getBoard());
+		Player player = string.equals("black") ? QuoridorController.getBlackPlayer() : QuoridorController.getWhitePlayer(); 
 		PlayerPosition pos = new PlayerPosition(player, aTile);
 
 		if (string.equals("black")) {
@@ -62,8 +61,6 @@ public class IdentifyGameWonStepDefinition {
 		} else {
 			q.getCurrentGame().getCurrentPosition().setWhitePosition(pos);
 		}
-
-
 	}
 
 	/**
@@ -99,20 +96,20 @@ public class IdentifyGameWonStepDefinition {
 	 * Initiates the check of the game result
 	 * @author Alexander Legouverneur
 	 */
-	@When("Checking of game result is initated")
-	public void checking_of_game_result_is_initated() {
-		Quoridor q = QuoridorApplication.getQuoridor();
-		if (player.equals(q.getCurrentGame().getBlackPlayer())) {
-			currRow = q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getRow();
-			currCol = q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getColumn();
-			//stategame = QuoridorController.checkIfWon(player,row, col);
-		} else {
-			currRow = q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getRow();
-			currCol = q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getColumn();
-			//stategame = QuoridorController.checkIfWon(player,row, col);
-		}
-
-	}
+//	@When("Checking of game result is initated")
+//	public void checking_of_game_result_is_initated() {
+//		Quoridor q = QuoridorApplication.getQuoridor();
+//		if (player.equals(q.getCurrentGame().getBlackPlayer())) {
+//			currRow = q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getRow();
+//			currCol = q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getColumn();
+//			//stategame = QuoridorController.checkIfWon(player,row, col);
+//		} else {
+//			currRow = q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getRow();
+//			currCol = q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getColumn();
+//			//stategame = QuoridorController.checkIfWon(player,row, col);
+//		}
+//
+//	}
 
 	/**
 	 * Method checks whether white/black player won or they are still moving (i.e. pending)
@@ -120,33 +117,33 @@ public class IdentifyGameWonStepDefinition {
 	 * @param string String to check if white/black won or pending
 	 * @author Alexander Legouverneur
 	 */
-	@Then("Game result shall be {string}")
-	public void game_result_shall_be(String string) {
-		Quoridor q = QuoridorApplication.getQuoridor();
-		boolean status = QuoridorController.checkIfWon(player, currRow, currCol);
-		if (!status) {
-			assertEquals(string, "pending");
-		}
-		
-		if (status && player.equals(q.getCurrentGame().getWhitePlayer())) {
-			assertEquals(string, "whiteWon");
-		}
-		if (status && player.equals(q.getCurrentGame().getBlackPlayer())) {
-			assertEquals(string, "blackWon");
-		}
-
-	}
+//	@Then("Game result shall be {string}")
+//	public void game_result_shall_be(String string) {
+//		Quoridor q = QuoridorApplication.getQuoridor();
+//		boolean status = QuoridorController.checkIfWon(player, currRow, currCol);
+//		if (!status) {
+//			assertEquals(string, "pending");
+//		}
+//		
+//		if (status && player.equals(q.getCurrentGame().getWhitePlayer())) {
+//			assertEquals(string, "whiteWon");
+//		}
+//		if (status && player.equals(q.getCurrentGame().getBlackPlayer())) {
+//			assertEquals(string, "blackWon");
+//		}
+//
+//	}
 
 	/**
 	 * Method stops the game and sets all timers to 0 (i.e. game is no longer running)
 	 *
 	 * @author Nayem Alam
 	 */
-	@Then("The game shall no longer be running")
-	public void the_game_shall_no_longer_be_running() {
-		// method sets the timers of both players to zero; which marks the end of the game
-		QuoridorController.stopGame(QuoridorApplication.getQuoridor().getCurrentGame());
-	}
+//	@Then("The game shall no longer be running")
+//	public void the_game_shall_no_longer_be_running() {
+//		// method sets the timers of both players to zero; which marks the end of the game
+//		QuoridorController.stopGame(QuoridorApplication.getQuoridor().getCurrentGame());
+//	}
 
 	/**
 	 * Method verifies that the clock is counting down to zero
@@ -161,4 +158,3 @@ public class IdentifyGameWonStepDefinition {
 		QuoridorController.checkIfClockCountingDown(thisPlayer);
 	}
 }
-

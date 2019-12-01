@@ -52,8 +52,8 @@ public class LoadGameStepDef {
 		Game g = q.getCurrentGame();
 
 		//check both players haven't won
-		assertEquals(false, QC.checkIfWon(QC.getBlackPlayer(), g.getCurrentPosition().getBlackPosition().getTile().getRow(), g.getCurrentPosition().getBlackPosition().getTile().getColumn()));
-		assertEquals(false, QC.checkIfWon(QC.getWhitePlayer(), g.getCurrentPosition().getWhitePosition().getTile().getRow(), g.getCurrentPosition().getWhitePosition().getTile().getColumn()));
+		assertEquals(false, QC.checkIfWon(QC.getBlackPlayer()));
+		assertEquals(false, QC.checkIfWon(QC.getWhitePlayer()));
 	}
 
 	@When("The game has a final result")
@@ -61,10 +61,10 @@ public class LoadGameStepDef {
 		Quoridor q = QuoridorApplication.getQuoridor();
 		Game g = q.getCurrentGame();
 		//check if one of the players won
-		if(QC.checkIfWon(QC.getBlackPlayer(), g.getCurrentPosition().getBlackPosition().getTile().getRow(), g.getCurrentPosition().getBlackPosition().getTile().getColumn())) {
-			assertEquals(true, QC.checkIfWon(QC.getBlackPlayer(), g.getCurrentPosition().getBlackPosition().getTile().getRow(), g.getCurrentPosition().getBlackPosition().getTile().getColumn()));
+		if(QC.checkIfWon(QC.getBlackPlayer())) {
+			assertEquals(true, QC.checkIfWon(QC.getBlackPlayer()));
 		}else {
-			assertEquals(true, QC.checkIfWon(QC.getWhitePlayer(), g.getCurrentPosition().getWhitePosition().getTile().getRow(), g.getCurrentPosition().getWhitePosition().getTile().getColumn()));
+			assertEquals(true, QC.checkIfWon(QC.getWhitePlayer()));
 		}
 	}
 
