@@ -23,7 +23,7 @@ public class CheckIfPathExistsStepDef {
 	
 	// Methods:
 	
-	/**
+	/** 
 	 * Method used to ensure that a wall move exists at a certain position
 	 * @param wallDir - Direction of the wall move candidate
 	 * @param row - row of the wall move candidate
