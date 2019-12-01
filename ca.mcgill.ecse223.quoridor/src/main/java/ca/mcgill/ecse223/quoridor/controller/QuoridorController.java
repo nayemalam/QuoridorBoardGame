@@ -1419,9 +1419,9 @@ public class QuoridorController {
 		String aLineOfMoves[];
 		String whiteMove = "";
 		String blackMove = "";
-		int roundNumber = 0;
-		int whiteWallIdIterator = 1;
-		int blackWallIdIterator = 1;
+		int roundNumber = 1;
+		int whiteWallIdIterator = 0;
+		int blackWallIdIterator = 0;
 		for(int i = 0; i < moves.length; i++) {
 			//iterates through each line of the string
 
@@ -1523,7 +1523,7 @@ public class QuoridorController {
 					blackWallDirection = Direction.Horizontal;
 				}
 
-				boolean blackWallsValid = initiatePosValidation(blackWallRow, blackWallColumn, wallOrientation, blackWallIdIterator);
+				boolean blackWallsValid = initiatePosValidation(blackWallRow, blackWallColumn, wallOrientation, blackWallIdIterator +10);
 				if (blackWallsValid) {
 					//Wall blackWall = gamePositionToLoad.getBlackWallsInStock(blackWallIdIterator);
 					Wall blackWall = gamePositionToLoad.getBlackWallsInStock(0);
