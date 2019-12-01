@@ -1,6 +1,7 @@
 package ca.mcgill.ecse223.quoridor.features;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import java.util.List;
 import java.util.Map;
@@ -22,7 +23,6 @@ import io.cucumber.java.en.When;
 
 public class CheckIfGameDrawnStepDef {
 	
-	Boolean gameDrawn = null;
 	/**
 	 * Method used to set the set of moves previously executed by the players
 	 * @param dataTable
@@ -77,13 +77,11 @@ public class CheckIfGameDrawnStepDef {
 		Integer move = lastMove.getMoveNumber();
 		Integer turn = player.equals(QuoridorController.getWhitePlayer()) ? 1 : 2;
 		
-		
 		Tile targetTile = QuoridorController.getTileAtRowCol(row, col);
 		Game game = QuoridorApplication.getQuoridor().getCurrentGame();
 		
 		// Create pawn move and add to current game
 		StepMove pawnMove = new StepMove(move + 1, turn, player, targetTile, game);
-		
 	}
 	
 	/**
@@ -92,7 +90,9 @@ public class CheckIfGameDrawnStepDef {
 	 */
 	@When("Checking of game result is initated")
 	public void checkGameResultToVerifyIfDrawn() {
-		gameDrawn = QuoridorController.checkIfGameDrawn();
+		QuoridorController.testing = true;
+		QuoridorController.updateGameStatus();
+		QuoridorController.testing = false;
 	}
 	
 	/**
@@ -102,13 +102,14 @@ public class CheckIfGameDrawnStepDef {
 	 */
 	@Then("Game result shall be {string}")
 	public void gameResultShallBe(String result) {
-		String gameResult = "";
-		if(gameDrawn) {
-			gameResult = "Drawn";
-		} else {
+		String gameResult = QuoridorApplication.getQuoridor().getCurrentGame().getGameStatus().toString();
+		if(gameResult.equals(GameStatus.Running.toString())) {
 			gameResult = "Pending";
 		}
-		assertEquals(result, gameResult);
+		if(gameResult.equals(GameStatus.Draw.toString())) {
+			gameResult = "Drawn";
+		}
+		assertEquals(result.toLowerCase(), gameResult.toLowerCase());
 	}
 	
 	/**
@@ -117,8 +118,7 @@ public class CheckIfGameDrawnStepDef {
 	 */
 	@And("The game shall no longer be running")
 	public void verifyGameEndedOnDraw() {
-		assertEquals(QuoridorApplication.getQuoridor().getCurrentGame().getGameStatus(), GameStatus.Draw);
+		assertNotEquals(GameStatus.Running, QuoridorApplication.getQuoridor().getCurrentGame().getGameStatus());
 	}
-	
 	
 }

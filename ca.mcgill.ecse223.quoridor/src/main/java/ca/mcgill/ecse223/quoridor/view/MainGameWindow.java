@@ -89,6 +89,7 @@ public class MainGameWindow {
 	private JButton btnPlaceNewWall;
 	private JButton btnNewButton;
 	private JButton button;
+	private JButton saveGameButton;
 	private static int wallWidth = 185;
 	private static int wallWidthV = 11;
 	private static int wallHeight = 102;

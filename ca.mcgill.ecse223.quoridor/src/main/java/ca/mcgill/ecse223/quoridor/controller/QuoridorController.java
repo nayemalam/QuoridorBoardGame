@@ -13,7 +13,10 @@ import ca.mcgill.ecse223.quoridor.utilities.ControllerUtilities.PathAvailableToP
 
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.Stack;
 import java.util.Timer;
 
 import ca.mcgill.ecse223.quoridor.utilities.Graph;
@@ -2174,6 +2177,25 @@ public class QuoridorController {
 	public static List<Tile> getAvailableTiles(){
 		return availableTiles; // for view
 	}
+	
+	public static void updateGameStatus() {
+		boolean gameWonOpponent = false;
+		boolean gameWonCurrent = checkIfWon(getCurrentPlayer());
+		if(gameWonCurrent) {
+			return;
+		}
+		gameWonOpponent = checkIfWon(getCurrentPlayer().equals(getWhitePlayer()) ? getBlackPlayer() : getWhitePlayer());
+		if (gameWonOpponent) {
+			return;
+		}
+
+		try {
+			checkIfGameDrawn();
+		} catch (Exception e) {
+			// do nothing lol
+		}
+		
+	}
 
 	/**
 	 * This method checks if the player reached the other side of the board (thus if he won).
@@ -2183,21 +2205,29 @@ public class QuoridorController {
 	 * @return true if he reached the other side, false if he did not
 	 * @author Alexander Legouverneur
 	 */
-	public static boolean checkIfWon(Player player, int row, int col) {
+	public static boolean checkIfWon(Player player) {
+		Quoridor q = QuoridorApplication.getQuoridor();
 		Player blackPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
 		Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
+		PlayerPosition pos = player.equals(getWhitePlayer()) ? QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getWhitePosition() :
+															   QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getBlackPosition();
+		int row = pos.getTile().getRow();
+		int col = pos.getTile().getColumn();
 		if(player.equals(blackPlayer)) {
-			if(row == 1 && col == 3) {
+			if((testing && row == 1) || (!testing && col == 1)) {
 				//stopGame(q.getCurrentGame());
+				QuoridorApplication.getQuoridor().getCurrentGame().setGameStatus(GameStatus.BlackWon);
 				return true;
 			}
 		}
 		else if(player.equals(whitePlayer)){
-			if(row == 9 && col == 4) {
+			if((testing && row == 9) || (!testing && col == 9)) {
 				//stopGame(q.getCurrentGame());
+				QuoridorApplication.getQuoridor().getCurrentGame().setGameStatus(GameStatus.WhiteWon);
 				return true;
 			}
 		}
+		QuoridorApplication.getQuoridor().getCurrentGame().setGameStatus(GameStatus.Running);
 		return false;
 	}
 	/**
@@ -2522,7 +2552,7 @@ public class QuoridorController {
 	 * Method used to verify the current state of the game
 	 * @author Tristan Bouchard
 	 */
-	public static Boolean checkIfGameDrawn() {
+	public static void checkIfGameDrawn() {
 		// Obtain currentGame
 		Boolean gameIsValid = QuoridorApplication.getQuoridor() != null &&
 							  QuoridorApplication.getQuoridor().getCurrentGame() != null &&
@@ -2535,7 +2565,7 @@ public class QuoridorController {
 		int whiteIndex = 0;
 		int blackIndex = 0;
 		if(moveList.size() < 8) {
-			return false;
+			return;
 		}
 		Move[] blackMoves = new Move[5];
 		Move[] whiteMoves = new Move[5];
@@ -2572,13 +2602,13 @@ public class QuoridorController {
 			}
 			
 		}
+		QuoridorApplication.getQuoridor().getCurrentGame().setGameStatus(GameStatus.Running);
 		if(blackMovesRepeat || whiteMovesRepeat) {
 			QuoridorApplication.getQuoridor().getCurrentGame().setGameStatus(GameStatus.Draw);
 		}
-		return blackMovesRepeat || whiteMovesRepeat;
+		return;
 	}
 
-}
 
 	/**
 	 * This method is used in the replay mode to jump to the start of the game to be able to replay
