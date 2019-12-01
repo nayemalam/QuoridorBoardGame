@@ -39,11 +39,21 @@ public class QuoridorController {
 
 	public static void stepForward(){
 		Game game = QuoridorApplication.getQuoridor().getCurrentGame();
+		try {
+
+		} catch(Exception e){
+			System.out.println("Game is not running");
+		}
 
 	}
 
 	public static void stepBackward() {
-		
+
+	}
+
+	public static boolean isReplay(){
+		Game game = QuoridorApplication.getQuoridor().getCurrentGame();
+		return game.getGameStatus().equals(GameStatus.Replay);
 	}
 	/**
 	 * Method to capture the time at which the clock is stopped
