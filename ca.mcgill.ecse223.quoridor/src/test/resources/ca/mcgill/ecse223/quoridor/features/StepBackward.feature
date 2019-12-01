@@ -5,7 +5,6 @@ Feature: Step backward
 
   Background: 
     Given The game is in replay mode
-
   Scenario Outline: Step Backward
     Given The following moves have been played in game:
       | mv | rnd | move |
@@ -18,7 +17,7 @@ Feature: Step backward
       |  4 |   1 | d3v  |
       |  4 |   2 | f2   |
     And The next move is <movno>.<rndno>
-    When Step forward is initiated
+    When Step backward is initiated
     Then The next move shall be <nmov>.<nrnd>
     And White player's position shall be (<wrow>,<wcol>)
     And Black player's position shall be (<brow>,<bcol>)

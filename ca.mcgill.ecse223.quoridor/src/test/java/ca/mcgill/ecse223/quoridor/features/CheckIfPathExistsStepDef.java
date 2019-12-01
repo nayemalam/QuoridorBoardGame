@@ -14,7 +14,6 @@ import ca.mcgill.ecse223.quoridor.utilities.ControllerUtilities.PathAvailableToP
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
-import javafx.geometry.Orientation;
 
 public class CheckIfPathExistsStepDef {
 	
