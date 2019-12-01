@@ -748,7 +748,6 @@ public class QuoridorController {
 				if (id == i) {
 					continue; // don t want to compare the wall with itself
 				}
-				//System.out.println("Iteration Id"+ i);
 				if (i > 9) {
 
 					if (q.getCurrentGame().getBlackPlayer().getWall(i - 10).hasMove() == false) {
@@ -806,7 +805,6 @@ public class QuoridorController {
 		}
 
 		else {
-			System.out.println("this");
 			return false;
 		}
 	}
@@ -860,7 +858,6 @@ public class QuoridorController {
 		int row = aWall.getMove().getTargetTile().getRow();
 		int col = aWall.getMove().getTargetTile().getColumn();
 		Direction dir = aWall.getMove().getWallDirection();
-		// System.out.println("Coordinates: "+row+","+col);
 
 		if (col == 1 && side.equals("left") && dir == Direction.Vertical) {
 			return true;
@@ -966,7 +963,6 @@ public class QuoridorController {
 	 * @param player player to whom the wall belongs
 	 */
 	public static boolean wallMove(int row, int col, String dir, Wall aWall, Player player) {
-		System.out.println("wall move not working " + row + ","+ col + " id "+ aWall.getId());
 
 		Quoridor q = QuoridorApplication.getQuoridor();
 		boolean pos;
@@ -974,8 +970,6 @@ public class QuoridorController {
 
 		if (dir.toLowerCase().equals("vertical")) {
 			pos = initiatePosValidation(row, col, "vertical", aWall.getId());
-			System.out.println("THIS IS IN MOVE WALL "+pos);
-			System.out.println("Wall Has move "+aWall.hasMove());
 			if (aWall.hasMove() && pos) {
 				moveNumber++;
 				aWall.getMove().setWallDirection(Direction.Vertical);
@@ -2133,16 +2127,12 @@ public class QuoridorController {
 			currentPlayerCol = q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getColumn();
 			opponentRow = q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getRow();
 			opponentCol = q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getColumn();
-			System.out.println("Current Player"+currentPlayerRow+" . "+ currentPlayerCol);
-			System.out.println("Opponent"+opponentRow+" . "+ opponentCol);
 		}
 		else {
 			currentPlayerRow = q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getRow();
 			currentPlayerCol = q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getColumn();
 			opponentRow = q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getRow();
 			opponentCol = q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getColumn();
-			System.out.println("Current Player"+currentPlayerRow+" . "+ currentPlayerCol);
-			System.out.println("Opponent"+opponentRow+" . "+ opponentCol);
 		}
 		// If opponent below
 		if((currentPlayerRow + 1 == opponentRow) && (currentPlayerCol == opponentCol)) {
@@ -2174,7 +2164,6 @@ public class QuoridorController {
 		}
 		else {
 			
-			//System.out.println("yeayy5: ");
 			return 5;
 		}
 	}
