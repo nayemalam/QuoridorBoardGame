@@ -36,21 +36,35 @@ public class QuoridorController {
 	private static int ReplayModeMoveNum;
 	private static int ReplayModeRoundNum;
 
-
+	/**
+	 * @author Ousmane Baricisse
+	 * @return
+	 */
 	public static void stepForward(){
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
 		Game game = QuoridorApplication.getQuoridor().getCurrentGame();
 		try {
+			if(isReplay()){
+				List<Move> listOfMove = game.getMoves();
 
+			}
 		} catch(Exception e){
 			System.out.println("Game is not running");
 		}
 
 	}
 
+	/**
+	 * @author Ousmane Baricisse
+	 * @return
+	 */
 	public static void stepBackward() {
 
 	}
-
+	/**
+	 * @author Ousmane Baricisse
+	 * @return
+	 */
 	public static boolean isReplay(){
 		Game game = QuoridorApplication.getQuoridor().getCurrentGame();
 		return game.getGameStatus().equals(GameStatus.Replay);
