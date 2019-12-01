@@ -1965,44 +1965,12 @@ public class QuoridorController {
 		boolean upIsAllowed = (currentRow > 1);
 		boolean downIsAllowed = (currentRow < 9);
 		int pawnOnWay = pawnOnWay(player, false);
-
+		boolean WallOnLeft = checkWallOnWay(currentRow, currentCol-1, "left");
+		boolean WallOnRight = checkWallOnWay(currentRow, currentCol+1, "right");
+		boolean WallUp = checkWallOnWay(currentRow, currentCol+1, "right");
+		boolean WallDown = checkWallOnWay(currentRow+1, currentCol, "down");
 		
-		//Jump pawn getting tiles
-				if(!checkWallOnWay(currentRow, currentCol-1, "left") && pawnOnWay != 5) {
-					pawnOnWay(player, true);
-					if(pawnOnWay == 1 ) {
-						availableTiles.add(getTileAtRowCol(currentRow-1,currentCol));
-						availableTiles.add(getTileAtRowCol(currentRow,currentCol-1));
-						availableTiles.add(getTileAtRowCol(currentRow,currentCol+1));
-					}
-					if( pawnOnWay == 2) {
-						availableTiles.add(getTileAtRowCol(currentRow,currentCol-1));
-						availableTiles.add(getTileAtRowCol(currentRow+1,currentCol));
-						availableTiles.add(getTileAtRowCol(currentRow,currentCol+1));
-					}
-					if(pawnOnWay == 3) {
-						availableTiles.add(getTileAtRowCol(currentRow,currentCol+1));
-						availableTiles.add(getTileAtRowCol(currentRow-1,currentCol));
-						availableTiles.add(getTileAtRowCol(currentRow+1,currentCol));
-					}
-					if(pawnOnWay == 4) {
-						availableTiles.add(getTileAtRowCol(currentRow,currentCol-1));
-						availableTiles.add(getTileAtRowCol(currentRow-1,currentCol));
-						availableTiles.add(getTileAtRowCol(currentRow+1,currentCol));
-					}
-				}
-				if(!checkWallOnWay(currentRow, currentCol+1, "right") && pawnOnWay != 5) {
-					pawnOnWay(player, true);
-					
-				}
-				if(!checkWallOnWay(currentRow-1,currentCol, "up") && pawnOnWay !=5) {
-					pawnOnWay(player, true);
-					
-				}
-				if(!checkWallOnWay(currentRow+1, currentCol, "down") && pawnOnWay != 5) {
-					pawnOnWay(player, true);
-					
-				}
+		
 		// Regular moves, no jumps
 		if(leftIsAllowed && !checkWallOnWay(currentRow, currentCol-1, "left") && pawnOnWay == 5) {
 			availableTiles.add(getTileAtRowCol(currentRow,currentCol-1));
@@ -2016,7 +1984,48 @@ public class QuoridorController {
 		if(downIsAllowed && !checkWallOnWay(currentRow+1, currentCol, "down") && pawnOnWay == 5 ) {
 			availableTiles.add(getTileAtRowCol(currentRow+1,currentCol));
 		}
-
+		//Jump pawn getting tiles
+		if(!checkWallOnWay(currentRow, currentCol-1, "left") && pawnOnWay == 3) {
+			pawnOnWay(player, true);
+			
+			
+			
+				availableTiles.add(getTileAtRowCol(currentRow,currentCol+1));
+				availableTiles.add(getTileAtRowCol(currentRow-1,currentCol));
+				availableTiles.add(getTileAtRowCol(currentRow+1,currentCol));
+			
+			
+		}
+		if(!checkWallOnWay(currentRow, currentCol+1, "right") && pawnOnWay == 4) {
+			pawnOnWay(player, true);
+			
+			
+				availableTiles.add(getTileAtRowCol(currentRow,currentCol-1));
+				availableTiles.add(getTileAtRowCol(currentRow-1,currentCol));
+				availableTiles.add(getTileAtRowCol(currentRow+1,currentCol));
+			
+			
+		}
+		if(!checkWallOnWay(currentRow-1,currentCol, "up") && pawnOnWay ==2) {
+			pawnOnWay(player, true);
+			
+			
+				availableTiles.add(getTileAtRowCol(currentRow,currentCol-1));
+				availableTiles.add(getTileAtRowCol(currentRow+1,currentCol));
+				availableTiles.add(getTileAtRowCol(currentRow,currentCol+1));
+			
+			
+			
+		}
+		if(!checkWallOnWay(currentRow+1, currentCol, "down") && pawnOnWay == 1) {
+			pawnOnWay(player, true);
+			
+				availableTiles.add(getTileAtRowCol(currentRow-1,currentCol));
+				availableTiles.add(getTileAtRowCol(currentRow,currentCol-1));
+				availableTiles.add(getTileAtRowCol(currentRow,currentCol+1));
+			
+			
+		}
 		
 	}
 
