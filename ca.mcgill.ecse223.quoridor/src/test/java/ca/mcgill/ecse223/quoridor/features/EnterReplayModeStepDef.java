@@ -17,7 +17,7 @@ import static org.junit.Assert.assertEquals;
 
 public class EnterReplayModeStepDef{
 	@When("I initiate replay mode")
-	public void i_initiate_replay_mode() {
+	public void i_initiate_replay_mode() throws Exception {
 	    QuoridorController.enterReplayMode();
 	}
 	
@@ -35,15 +35,15 @@ public class EnterReplayModeStepDef{
 
 	@When("I initiate to continue game")
 	public void i_initiate_to_continue_game() {
-		Game curGame = QuoridorApplication.getQuoridor().getCurrentGame();
-		assertEquals(curGame.getGameStatus(),"Replay");
+		QuoridorController.continueGame();
 	}
-
+	
 	@Then("The remaining moves of the game shall be removed")
 	public void the_remaining_moves_of_the_game_shall_be_removed() {
-	    // Write code here that turns the phrase above into concrete actions
-	    throw new cucumber.api.PendingException();
+		Game curGame = QuoridorApplication.getQuoridor().getCurrentGame();
+		assertEquals(curGame.getMoves().size(), 0);
 	}
+	
 	@Then("I shall be notified that finished games cannot be continued")
 	public void i_shall_be_notified_that_finished_games_cannot_be_continued() {
 		String aString = new String("Finished Game Cannot be continued");

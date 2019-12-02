@@ -1636,6 +1636,44 @@ public class QuoridorController {
 	}
 
 	/**
+	 * Method used to jump to Final
+	 *
+	 * @author Iyatan Atchoro
+	 */
+	
+	public static void jumpToFinal() {
+		//If not in replay mode throw an exeption
+		Game curGame = QuoridorApplication.getQuoridor().getCurrentGame();
+		int finalIndex = curGame.getPositions().size()-1;
+		GamePosition finalPosition = curGame.getPosition(finalIndex);
+		curGame.setCurrentPosition(finalPosition);
+		
+	}
+	/**
+	 * Method to Enter replay Mode
+	 *
+	 * @author Iyatan Atchoro
+	 */
+	public static void enterReplayMode() throws Exception{
+		Game curGame = QuoridorApplication.getQuoridor().getCurrentGame();
+		if((curGame.getGameStatus().toString() != "Running")) {
+			throw new Exception("The Game is not running");
+		}
+		curGame.setGameStatus(Game.GameStatus.Replay);
+	}
+	/**
+	 * Method to continue the game
+	 *
+	 * @author Iyatan Atchoro
+	 */
+	public static void continueGame() {
+		Game curGame = QuoridorApplication.getQuoridor().getCurrentGame();
+		curGame.setGameStatus(Game.GameStatus.ReadyToStart);
+		curGame.getMoves().clear();
+	}
+
+
+	/**
 	 * Method used to get currentPlayer
 	 * @return player the current player
 	 */
@@ -1720,6 +1758,16 @@ public class QuoridorController {
 
 	public static String invalidWallMove() {
 		return "Invalid";
+	}
+	/**
+	 * Method used to notify that finished game cannot be continued
+	 *
+	 * @author Iyatan Atchoro
+	 */
+
+	public static String finishedGameCannotBeContinued() {
+		
+		return "Finished Game Cannot be continued";
 	}
 
 	/**
@@ -2739,6 +2787,8 @@ public class QuoridorController {
 		ReplayModeRoundNum= roundNumber;
 		return null;
 	}
+
+
 
 }
 
