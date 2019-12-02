@@ -1,6 +1,7 @@
 Feature: Load Game
   As a player, I want to load a previously played game recorded in an algebraic notation in a text file 
   so that I can continue or review it. If the game is not yet finished, 
+
   I wish to continue playing from the final position.
 
   Background: 
@@ -45,4 +46,3 @@ Feature: Load Game
       | quoridor_test_game_invalid_pawn_move.mov |
       | quoridor_test_game_invalid_wall_move.mov |
       | quoridor_test_game_invalid_jump_move.mov |
-
