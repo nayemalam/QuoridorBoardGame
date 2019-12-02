@@ -214,6 +214,10 @@ public class QuoridorController {
 		return wasRemoved;
 
 	}
+	
+	public static void cancelGrabbedWall(){
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+	}
 
 	/**
 	 * Method: initializeNewGame(Quoridor quoridor)
@@ -1934,7 +1938,9 @@ public class QuoridorController {
 	 * @author ousmanebaricisse
 	 *
 	 */
-	public static boolean isWhitePlayer(Quoridor quoridor, Player player) {
+	public static boolean isWhitePlayer() {
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		Player player = getCurrentPlayer();
 		return player.equals(quoridor.getCurrentGame().getWhitePlayer());
 	}
 
