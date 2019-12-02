@@ -145,7 +145,6 @@ public class QuoridorController {
 			setCurrentPlayer(getWhitePlayer());
 		}
 		startClock();
-
 	}
 
 	/**
@@ -210,11 +209,8 @@ public class QuoridorController {
 				wallMove = new WallMove(move.getMoveNumber(), move.getRoundNumber(), playerToMove, tile,
 						quoridor.getCurrentGame(), Direction.Horizontal, wall);
 			}
-
 			quoridor.getCurrentGame().setWallMoveCandidate(wallMove);
-
 		}
-
 		return wasRemoved;
 
 	}
@@ -242,10 +238,6 @@ public class QuoridorController {
 			throw new RuntimeException("Not enough users to start a game! There must be at least 2 users.");
 		}
 
-		// TODO: Talk to Imad about this?
-		// Logic behind this is that the white player wants to get to the black players'
-		// tile
-		// and vice versa
 		whitePlayer.setGameAsWhite(newGame);
 		blackPlayer.setGameAsBlack(newGame);
 
@@ -292,6 +284,9 @@ public class QuoridorController {
 		return true;
 	}
 
+	/**
+	 * Method used to stop the clock of the current player
+	 */
 	public static void stopCurrentPlayerClock() {
 		Player currentPlayer = getCurrentPlayer();
 
@@ -306,6 +301,9 @@ public class QuoridorController {
 
 	}
 
+	/**
+	 * Method used to stop the clock of the non-current player, aka the opponent of the current player
+	 */
 	public static void stopNonCurrentPlayerClock() {
 		Player currentPlayer = getCurrentPlayer();
 
@@ -376,6 +374,7 @@ public class QuoridorController {
 	 * @param quoridor           - Current instance of the board
 	 * @param currentWhitePlayer - Current white player to initiate position
 	 * @param currentBlackPlayer - Current black player to initiate position
+	 * @author Tristan Bouchard
 	 */
 	private static void setInitialGamePosition(Game currentGame, Board board, Player currentWhitePlayer,
 			Player currentBlackPlayer) {
@@ -406,9 +405,9 @@ public class QuoridorController {
 	 *
 	 * @param currentPlayer - Player to set nextPlayer in
 	 * @param nextPlayer    - Player to be set as next player
+	 * @author Tristan Bouchard
 	 */
 	private static void setNextPlayer(Player currentPlayer, Player nextPlayer) {
-		// TODO: Is this valid?
 		// Set white players' next player to be the black player and set
 		// black players next player to null
 		currentPlayer.setNextPlayer(nextPlayer);
@@ -599,7 +598,7 @@ public class QuoridorController {
 	/**
 	 * Modifier method used to set the name of the white player
 	 *
-	 * @param name
+	 * @param name - Name to be set as a username
 	 * @return true if name is set correctly, false otherwise
 	 * @author Tristan Bouchard
 	 */
@@ -616,7 +615,7 @@ public class QuoridorController {
 	/**
 	 * Modifier method used to set the name of the black player
 	 *
-	 * @param name
+	 * @param name - Name to be set as a username
 	 * @return true if name is set correctly, false otherwise
 	 * @author Tristan Bouchard
 	 */
@@ -633,7 +632,7 @@ public class QuoridorController {
 	/**
 	 * Query method to obtain the white player from the current game
 	 *
-	 * @return
+	 * @return White player
 	 * @author Tristan Bouchard
 	 */
 	public static Player getWhitePlayer() {
@@ -643,7 +642,7 @@ public class QuoridorController {
 	/**
 	 * Query method to obtain the black player from the current game
 	 *
-	 * @return
+	 * @return Black Player
 	 * @author Tristan Bouchard
 	 */
 	public static Player getBlackPlayer() {
@@ -861,9 +860,7 @@ public class QuoridorController {
 				}
 			}
 			return true;
-		}
-
-		else {
+		} else {
 			return false;
 		}
 	}
@@ -2265,12 +2262,7 @@ public class QuoridorController {
 			if(validateIfPawnMoveIsPossible(currentRow,currentCol+1)) {
 				availableTiles.add(getTileAtRowCol(currentRow,currentCol+1));
 			}
-			
-			
-
-
 		}
-
 	}
 
 	/**
@@ -2337,7 +2329,6 @@ public class QuoridorController {
 					&& dir.equals(Direction.Horizontal)) {
 				return true;
 			}
-
 		}
 		return false;
 	}
@@ -2347,7 +2338,8 @@ public class QuoridorController {
 	 * 
 	 * @param currentTile - Tile pawn is currently placed on
 	 * @param targetTile  - Tile pawn wants to move to
-	 * @return
+	 * @return True if a wall is between the two tiles
+	 * @author Tristan Bouchard
 	 */
 	private static boolean checkIfWallOnWayTile(Tile currentTile, Tile targetTile) {
 		MoveDirections dir;
@@ -2441,19 +2433,8 @@ public class QuoridorController {
 	 * @param currentPlayerCol col of the current player position
 	 * @author Alexander Legouverneur
 	 */
-	public static void getJumpPawnTiles(int opponentRow, int opponentCol, int currentPlayerRow, int currentPlayerCol) {// row
-																														// and
-																														// col
-																														// are
-																														// the
-																														// coordinates
-																														// of
-																														// the
-																														// player
-																														// we
-																														// want
-																														// to
-																														// jump
+	public static void getJumpPawnTiles(int opponentRow, int opponentCol, int currentPlayerRow, int currentPlayerCol) {
+		// row and col are the coordinates of the player we want to jump
 		// ActualRow and ActualCol are the coordinates of the current player
 
 		// Booleans for player jumps, aka "Double tile jumps"
@@ -2523,12 +2504,19 @@ public class QuoridorController {
 		QuoridorApplication.getQuoridor().addUser("U2");
 	}
 
+	/**
+	 * Method used to obtain available tiles to move on for the current player
+	 * @return List of available adjacent tiles.
+	 */
 	public static List<Tile> getAvailableTiles() {
 		return availableTiles; // for view
 	}
 
 	/**
-	 * Method used to update the status of the game after a move
+	 * Method used to update the status of the game after a move. This method verifies that a game is 
+	 * won and that a game is drawn.
+	 * 
+	 * @author Tristan Bouchard
 	 */
 	public static void updateGameStatus() {
 		boolean gameWonOpponent = false;
@@ -2665,7 +2653,8 @@ public class QuoridorController {
 	/**
 	 * Method used to determine if paths to victory are achievable by which players.
 	 * 
-	 * @return PathAvailableToPlayers enum of which players can reach victory
+	 * @return PathAvailableToPlayers enumeration of which players can reach victory
+	 * @author Tristan Bouchard
 	 */
 	public static PathAvailableToPlayers checkIfPathExists() {
 		// Begin by creating graph of tiles and walls
@@ -2708,20 +2697,6 @@ public class QuoridorController {
 	 */
 	private static Boolean traversePlayerGraphToFinish(Graph playerGraph, Player player) {
 
-		/*
-		 * So, the step definitions have a little mismatch with the initial starting
-		 * positions and the ones we have decided. We have decided to play horizontally,
-		 * with the white player startin on the left of the screen at column 1 and
-		 * aiming for column 9, and inversely for the black player. This step definition
-		 * defines that the game is played vertically: The white player starts at the
-		 * bottom, on row 9, and aims for row 1, whereas the black player starts at row
-		 * 1 and aims for row 9. I have created a quick work-around for this, such that
-		 * this feature will still work in our game situation, but allow the tests to
-		 * pass in the hypothetical that the game is played vertically: If the tests are
-		 * running, the row zones are verified, and in normal gameplay situation, the
-		 * rows are verified.
-		 */
-
 		Tile startingTile = null;
 		int targetRow = -1;
 		if(player.equals(getWhitePlayer())) {
@@ -2753,6 +2728,7 @@ public class QuoridorController {
 	 * @param graph - Graph to traverse
 	 * @param root  - Starting point from which to traverse from
 	 * @return - Set of visited nodes
+	 * @author Tristan Bouchard
 	 */
 	public static Set<Tile> depthFirstTraversal(Graph graph, Tile root) {
 		Set<Tile> visited = new LinkedHashSet<Tile>();
@@ -2840,10 +2816,11 @@ public class QuoridorController {
 	/**
 	 * Method used to verify if the wall move candidate is in the path of the move
 	 * 
-	 * @param currentTile
-	 * @param targetTile
-	 * @param game
-	 * @return
+	 * @param currentTile - Tile the pawn is currently standing on
+	 * @param targetTile - Tile the pawn wishes to move to
+	 * @param wallMoveCandidate - Current wall move candidate in consideration
+	 * @return true if the wall move candidate is in the way of the move, false otherwise
+	 * @author Tristan Bouchard
 	 */
 	private static boolean wallMoveCandidateIsInWay(Tile currentTile, Tile targetTile, WallMove wallMoveCandidate) {
 		// Determine the move direction
@@ -2933,7 +2910,7 @@ public class QuoridorController {
 	}
 
 	/**
-	 * Method used to verify the current state of the game
+	 * Method used to verify that the current state of the game is drawn.
 	 * 
 	 * @author Tristan Bouchard
 	 */
@@ -3053,6 +3030,12 @@ public class QuoridorController {
 		return null;
 	}
 
+	/**
+	 * Method used to get the next available wall from the specified player
+	 * @param player - Player to obtain the wall from
+	 * @return
+	 * @author Tristan Bouchard
+	 */
 	public static Wall getNextAvailableWall(Player player) {
 		List<Wall> walls = player.equals(getWhitePlayer())
 				? QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getWhiteWallsInStock()
@@ -3070,6 +3053,7 @@ public class QuoridorController {
 	 * @param targetRow - Targeted row of the pawn move
 	 * @param targetCol - targeted column of the pawn move
 	 * @return true if valid, false otherwise
+	 * @author Tristan Bouchard
 	 */
 	private static boolean validateIfPawnMoveIsPossible(int targetRow, int targetCol) {
 		
@@ -3083,6 +3067,7 @@ public class QuoridorController {
 
 	/**
 	 * Method used to end the game
+	 * @author Tristan Bouchard
 	 */
 	public static void endGameAndReportResult() {
 		stopCurrentPlayerClock();
