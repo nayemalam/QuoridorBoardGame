@@ -1477,7 +1477,7 @@ public class QuoridorController {
 					whiteWallDirection = Direction.Horizontal;
 				}
 
-				boolean whiteWallsValid = initiatePosValidation(whiteWallRow, whiteWallColumn, wallOrientation, i-1);
+				boolean whiteWallsValid = initiatePosValidation(whiteWallRow, whiteWallColumn, wallOrientation, whiteWallIdIterator);
 				if (whiteWallsValid) {
 					Wall whiteWall = gamePositionToLoad.getWhiteWallsInStock(0);
 					gamePositionToLoad.removeWhiteWallsInStock(whiteWall);
@@ -1492,6 +1492,7 @@ public class QuoridorController {
 						whiteWallMove.setPrevMove(currentMove);
 					}
 					game.addMove(whiteWallMove);
+					whiteWallIdIterator++;
 
 				} else {
 					quoridor.setCurrentGame(null);
@@ -1560,6 +1561,7 @@ public class QuoridorController {
 						blackWallMove.setPrevMove(currentMove);
 					}
 					game.addMove(blackWallMove);
+					blackWallIdIterator++;
 				} else {
 					quoridor.setCurrentGame(null);
 					throw new IllegalArgumentException("Invalid Move loaded! black wall");
