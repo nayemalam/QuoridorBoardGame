@@ -42,12 +42,10 @@ import java.util.List;
 
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
-import ca.mcgill.ecse223.quoridor.model.Direction;
+import ca.mcgill.ecse223.quoridor.model.Game.GameStatus;
 import ca.mcgill.ecse223.quoridor.model.Player;
 import ca.mcgill.ecse223.quoridor.model.Tile;
-import ca.mcgill.ecse223.quoridor.model.WallMove;
 import ca.mcgill.ecse223.quoridor.utilities.ControllerUtilities;
-import ca.mcgill.ecse223.quoridor.utilities.ControllerUtilities.PathAvailableToPlayers;
 import ca.mcgill.ecse223.quoridor.view.QuoridorPage;
 import java.awt.CardLayout;
 import java.awt.GridBagLayout;
@@ -367,17 +365,17 @@ public class MainGameWindow {
 
 		whitePawn.setMaximumSize(new Dimension(20, 20));
 
-		whitePawn.setBounds(btnArray[8][4].getX() + tileWidth, btnArray[8][4].getY() + tileLength, 20, 20);
+		whitePawn.setBounds(btnArray[0][4].getX() + tileWidth, btnArray[0][4].getY() + tileLength, 20, 20);
 		JButton blackPawn = new JButton();
 		blackPawn.setIcon(new ImageIcon("./lightWall.png"));
 
-		btnArray[8][4].add(whitePawn);
-		btnArray[0][4].add(blackPawn);
+		btnArray[8][4].add(blackPawn);
+		btnArray[0][4].add(whitePawn);
 
 		blackPawn.setMaximumSize(new Dimension(20, 20));
-		blackPawn.setBounds(btnArray[0][4].getX() + tileWidth / 2, btnArray[0][4].getY(), 20, 20);
-		this.blackPawnMove = new MoveCandidate(blackPawn, 0, 4);
-		this.whitePawnMove = new MoveCandidate(whitePawn, 8, 4);
+		blackPawn.setBounds(btnArray[8][4].getX() + tileWidth / 2, btnArray[8][4].getY(), 20, 20);
+		this.blackPawnMove = new MoveCandidate(blackPawn, 8, 4);
+		this.whitePawnMove = new MoveCandidate(whitePawn, 0, 4);
 	}
 
 	private void wallsHandler(JPanel jPanel, String player) {
@@ -532,11 +530,9 @@ public class MainGameWindow {
 					if (wallMoveCandidate.isRotated) {
 						setHorizontal();
 						wallMoveCandidate.isRotated = false;
-						QuoridorApplication.getQuoridor().getCurrentGame().getWallMoveCandidate().setWallDirection(Direction.Horizontal);
 					} else {
 						setVertical();
 						wallMoveCandidate.isRotated = true;
-						QuoridorApplication.getQuoridor().getCurrentGame().getWallMoveCandidate().setWallDirection(Direction.Vertical);
 					}
 				}
 			}
@@ -628,13 +624,13 @@ public class MainGameWindow {
 			return;
 		}
 		if (wallMoveCandidate != null) {
-			if (dir.equals(ControllerUtilities.MoveDirections.up) && wallMoveIsValidated(wallMoveCandidate.row - 1, wallMoveCandidate.col)) {
+			if (dir == ControllerUtilities.MoveDirections.up && wallMoveIsValidated(wallMoveCandidate.row - 1, wallMoveCandidate.col)) {
 				wallMoveCandidate.row -= 1;
-			} else if (dir.equals(ControllerUtilities.MoveDirections.down) && wallMoveIsValidated(wallMoveCandidate.row + 1, wallMoveCandidate.col)) {
+			} else if (dir == ControllerUtilities.MoveDirections.down && wallMoveIsValidated(wallMoveCandidate.row + 1, wallMoveCandidate.col)) {
 				wallMoveCandidate.row += 1;
-			} else if (dir.equals(ControllerUtilities.MoveDirections.left) && wallMoveIsValidated(wallMoveCandidate.row, wallMoveCandidate.col - 1)) {
+			} else if (dir == ControllerUtilities.MoveDirections.left && wallMoveIsValidated(wallMoveCandidate.row, wallMoveCandidate.col - 1)) {
 				wallMoveCandidate.col -= 1;
-			} else if (dir.equals(ControllerUtilities.MoveDirections.right) && wallMoveIsValidated(wallMoveCandidate.row, wallMoveCandidate.col + 1)) {
+			} else if (dir == ControllerUtilities.MoveDirections.right && wallMoveIsValidated(wallMoveCandidate.row, wallMoveCandidate.col + 1)) {
 				wallMoveCandidate.col += 1;
 			}
 
@@ -725,9 +721,17 @@ public class MainGameWindow {
 				}
 			}
 		}
-		if (wallMoveCandidate == null && playerMoved) {
-
-			switchCurrentPlayerGuiAndBackend();
+		if(wallMoveCandidate == null && playerMoved) {
+			QuoridorController.switchCurrentPlayer();
+			QuoridorController.updateGameStatus();
+			GameStatus currentStatus = QuoridorApplication.getQuoridor().getCurrentGame().getGameStatus(); 
+			if(!currentStatus.equals(GameStatus.Running)) {
+				// Here, end the game and display the winner! or the draw if that is the case
+				QuoridorController.endGameAndReportResult();
+				gameStarted = false;
+				GameWonPopup gameWon = new GameWonPopup();
+				gameWon.frame.setVisible(true);
+			}
 		}
 		getAvailableMovesToCurrentPlayer();
 		frmQuoridorPlay.repaint();
@@ -766,8 +770,6 @@ public class MainGameWindow {
 					boardPanel.remove(wallMoveCandidate.wallMoveBtn);
 					wallMoveCandidate = null;
 					grabWall.setText("Grab Wall");
-					QuoridorApplication.getQuoridor().getCurrentGame().getWallMoveCandidate().delete();
-					QuoridorApplication.getQuoridor().getCurrentGame().setWallMoveCandidate(null);
 				}
 				frmQuoridorPlay.repaint();
 			}
@@ -782,9 +784,6 @@ public class MainGameWindow {
 				if ( wallMoveCandidate != null && QuoridorController.wallMove(wallMoveCandidate.row + 1, wallMoveCandidate.col + 1,
 						QuoridorController.getWallDirection(wallMoveCandidate.isRotated).toString(),
 						QuoridorController.getWallMoveCandidate(), QuoridorController.getCurrentPlayer())) {
-					if(!QuoridorController.checkIfPathExists().equals(PathAvailableToPlayers.both)){
-						return;
-					}
 					wallMoveCandidate.wallMoveBtn.setIcon(new ImageIcon("./dropped.png"));
 					try {
 						QuoridorController.dropWall();

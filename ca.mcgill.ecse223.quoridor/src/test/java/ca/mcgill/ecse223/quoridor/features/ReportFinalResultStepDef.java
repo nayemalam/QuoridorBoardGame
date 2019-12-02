@@ -16,7 +16,7 @@ public class ReportFinalResultStepDef {
 
     @When("The game is no longer running")
     public void the_game_is_no_longer_running() {
-
+    	QuoridorController.endGameAndReportResult();
     }
 
     @Then("The final result shall be displayed")
