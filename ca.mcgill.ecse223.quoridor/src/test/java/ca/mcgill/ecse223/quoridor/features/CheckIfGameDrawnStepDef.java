@@ -96,7 +96,7 @@ public class CheckIfGameDrawnStepDef {
 	/**
 	 * Method used to verify the game result as drawn or not
 	 * @param result
-	 * @author Tristan Bouchard
+	 * @author Tristan Bouchard, Alexander Legouverneur
 	 */
 	@Then("Game result shall be {string}")
 	public void gameResultShallBe(String result) {
@@ -106,6 +106,12 @@ public class CheckIfGameDrawnStepDef {
 		}
 		if(gameResult.equals(GameStatus.Draw.toString())) {
 			gameResult = "Drawn";
+		}
+		if(gameResult.equals(GameStatus.BlackWon.toString())) {
+			gameResult = "BlackWon";
+		}
+		if(gameResult.equals(GameStatus.WhiteWon.toString())) {
+			gameResult = "WhiteWon";
 		}
 		assertEquals(result.toLowerCase(), gameResult.toLowerCase());
 	}
