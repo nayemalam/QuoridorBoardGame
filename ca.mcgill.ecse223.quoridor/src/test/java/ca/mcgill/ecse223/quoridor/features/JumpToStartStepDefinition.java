@@ -114,12 +114,18 @@ public class JumpToStartStepDefinition {
 
 	}
 
-	@Then("White player's position shall be \\({double})")
-	public void white_player_s_position_shall_be(Double double1) {
+	@Then("White player's position shall be \\({int},{int})")
+	public void white_player_s_position_shall_be(int row, int col) {
 		Quoridor q = QuoridorApplication.getQuoridor();
-		int row = double1.intValue();
-		Double colD = (double1 % 1) * 10;
-		int col = colD.intValue();
+		//int row = double1.intValue()/10;
+		// System.out.println(double1);
+		// double yew= double1 % 1;
+		// double prerow = double1-yew;
+		// int row = (int)prerow;
+		// Double colD = (double1 % 1) * 10;
+		// int col = colD.intValue();
+		
+		
 		assertEquals(row, q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getRow());
 		assertEquals(col, q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getColumn());
 	}
