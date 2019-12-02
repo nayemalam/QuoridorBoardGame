@@ -5,7 +5,6 @@ Feature: Step backward
 
   Background: 
     Given The game is in replay mode
-
   Scenario Outline: Step Backward
     Given The following moves have been played in game:
       | mv | rnd | move |
