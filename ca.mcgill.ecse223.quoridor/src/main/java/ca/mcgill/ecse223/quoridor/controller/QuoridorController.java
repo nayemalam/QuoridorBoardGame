@@ -1429,7 +1429,7 @@ public class QuoridorController {
 
 			aLineOfMoves = moves[i].split(" ");
 
-			moveNumber = ((int)aLineOfMoves[0].charAt(0)) - 48;
+			roundNumber = ((int)aLineOfMoves[0].charAt(0)) - 48;
 			whiteMove = aLineOfMoves[1];
 			blackMove = aLineOfMoves[2];
 
@@ -1477,14 +1477,14 @@ public class QuoridorController {
 					whiteWallDirection = Direction.Horizontal;
 				}
 
-				boolean whiteWallsValid = initiatePosValidation(whiteWallRow, whiteWallColumn, wallOrientation, i-1);
+				boolean whiteWallsValid = initiatePosValidation(whiteWallRow, whiteWallColumn, wallOrientation, whiteWallIdIterator);
 				if (whiteWallsValid) {
 					Wall whiteWall = gamePositionToLoad.getWhiteWallsInStock(0);
 					gamePositionToLoad.removeWhiteWallsInStock(whiteWall);
 					gamePositionToLoad.addWhiteWallsOnBoard(whiteWall);
 					Tile whiteWallTile = quoridor.getBoard().getTile((whiteWallRow - 1) * 9 + (whiteWallColumn - 1));
 
-					WallMove whiteWallMove = new WallMove(moveNumber, 1, getWhitePlayer(), whiteWallTile, game, whiteWallDirection, whiteWall);
+					WallMove whiteWallMove = new WallMove(1, roundNumber, getWhitePlayer(), whiteWallTile, game, whiteWallDirection, whiteWall);
 					whiteWall.setMove(whiteWallMove);
 					if(game.getMoves().size() > 0) {
 						Move currentMove = game.getMove(game.getMoves().size()-1);
@@ -1492,6 +1492,7 @@ public class QuoridorController {
 						whiteWallMove.setPrevMove(currentMove);
 					}
 					game.addMove(whiteWallMove);
+					whiteWallIdIterator++;
 
 				} else {
 					quoridor.setCurrentGame(null);
@@ -1552,7 +1553,7 @@ public class QuoridorController {
 					gamePositionToLoad.addBlackWallsOnBoard(blackWall);
 					Tile blackWallTile = quoridor.getBoard().getTile((blackWallRow - 1) * 9 + (blackWallColumn - 1));
 
-					WallMove blackWallMove = new WallMove(moveNumber, 1, getBlackPlayer(), blackWallTile, game, blackWallDirection, blackWall);
+					WallMove blackWallMove = new WallMove(2, roundNumber, getBlackPlayer(), blackWallTile, game, blackWallDirection, blackWall);
 					blackWall.setMove(blackWallMove);
 					if(game.getMoves().size() > 0) {
 						Move currentMove = game.getMove(game.getMoves().size()-1);
@@ -1560,6 +1561,7 @@ public class QuoridorController {
 						blackWallMove.setPrevMove(currentMove);
 					}
 					game.addMove(blackWallMove);
+					blackWallIdIterator++;
 				} else {
 					quoridor.setCurrentGame(null);
 					throw new IllegalArgumentException("Invalid Move loaded! black wall");
