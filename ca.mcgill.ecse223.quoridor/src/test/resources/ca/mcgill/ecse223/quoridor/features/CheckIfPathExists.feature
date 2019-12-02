@@ -30,17 +30,17 @@ Feature: Check if path exists
     
     # A wall move candidate is placed at numerous place
  		Examples: 
-      | dir        | frow | fcol | brow | bcol | wrow | wcol | result |
+      | dir        | frow | fcol | wrow | wcol | brow | bcol | result |
       | horizontal |    3 |    7 |    2 |    5 |    6 |    5 | both   |
       | horizontal |    4 |    2 |    2 |    5 |    6 |    5 | both   |
       | horizontal |    3 |    5 |    2 |    5 |    6 |    5 | none   |
       | horizontal |    3 |    5 |    6 |    5 |    2 |    5 | both   |
-      | horizontal |    3 |    5 |    2 |    5 |    3 |    5 | white  |
-      | horizontal |    3 |    5 |    5 |    5 |    6 |    5 | black  |
+      | horizontal |    3 |    5 |    2 |    5 |    3 |    5 | black  |
+      | horizontal |    3 |    5 |    5 |    5 |    6 |    5 | white  |
       | vertical   |    2 |    4 |    2 |    5 |    6 |    5 | both   |
       | vertical   |    3 |    4 |    2 |    5 |    6 |    5 | none   |
       | vertical   |    3 |    4 |    6 |    5 |    2 |    5 | both   |
-      | vertical   |    3 |    4 |    5 |    5 |    6 |    5 | black  |
+      | vertical   |    3 |    4 |    5 |    5 |    6 |    5 | white  |
       | vertical   |    1 |    6 |    2 |    5 |    6 |    5 | both   |
-      | vertical   |    1 |    6 |    2 |    7 |    6 |    5 | white  |
+      | vertical   |    1 |    6 |    2 |    7 |    6 |    5 | black  |
       | vertical   |    1 |    6 |    6 |    5 |    2 |    7 | both   |
