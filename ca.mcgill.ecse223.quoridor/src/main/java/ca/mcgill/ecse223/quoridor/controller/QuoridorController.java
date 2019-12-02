@@ -1746,9 +1746,12 @@ public class QuoridorController {
 	 *
 	 * @author Iyatan Atchoro
 	 */
-	public static void enterReplayMode(){
+	public static void enterReplayMode() {
+		GameStatus gs = GameStatus.Replay;
+		MoveMode mvM = MoveMode.PlayerMove;
 		// Game curGame = QuoridorApplication.getQuoridor().getCurrentGame();
 		// Move Mode
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
 
 		int thinkingTime = 180;
 		User user1;
@@ -1769,13 +1772,10 @@ public class QuoridorController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		// if((curGame.getGameStatus().toString() != "Running")) {
-		// throw new Exception("The Game is not running");
-		// }
 		Game curGame = QuoridorApplication.getQuoridor().getCurrentGame();
 		curGame.setGameStatus(Game.GameStatus.Replay);
 	}
+
 
 	/**
 	 * 
