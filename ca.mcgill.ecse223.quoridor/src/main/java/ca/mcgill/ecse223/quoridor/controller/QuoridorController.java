@@ -71,7 +71,7 @@ public class QuoridorController {
 		int id = findPastGamePositionIndex(game);
 		if (id == 0)
 			throw new Exception("Game already at initiall step");
-		game.setCurrentPosition(game.getPosition(id));
+		game.setCurrentPosition(game.getPosition(id-1));
 
 	}
 
@@ -2997,30 +2997,69 @@ public class QuoridorController {
 	 * 
 	 * @param moveNum the moveNumber currently monitored
 	 * @author Alexander Legouverneur
+	 * @throws Exception 
 	 */
 	public static void jumpToStart(int moveNum, int roundNum) {
 		Quoridor q = QuoridorApplication.getQuoridor();
-		Tile aTile = new Tile(1, 5, q.getBoard());
-		PlayerPosition Bpos = new PlayerPosition(q.getCurrentGame().getBlackPlayer(), aTile);
-		q.getCurrentGame().getCurrentPosition().setBlackPosition(Bpos);
-
-		Tile aTile1 = new Tile(9, 5, q.getBoard());
-		PlayerPosition Wpos = new PlayerPosition(q.getCurrentGame().getWhitePlayer(), aTile1);
-		q.getCurrentGame().getCurrentPosition().setBlackPosition(Wpos);
-
-		if (moveNum != 0) {
-			if (roundNum == 2) {
-
-				stepBack(moveNum, roundNum);
-
-				jumpToStart(moveNum, roundNum - 1);
-
-			} else {
-
-				stepBack(moveNum, roundNum);
-				jumpToStart(moveNum - 1, roundNum + 1);
-			}
+//		Tile aTile = new Tile(1, 5, q.getBoard());
+//		PlayerPosition Bpos = new PlayerPosition(q.getCurrentGame().getBlackPlayer(), aTile);
+//		q.getCurrentGame().getCurrentPosition().setBlackPosition(Bpos);
+//
+//		Tile aTile1 = new Tile(9, 5, q.getBoard());
+//		PlayerPosition Wpos = new PlayerPosition(q.getCurrentGame().getWhitePlayer(), aTile1);
+//		q.getCurrentGame().getCurrentPosition().setBlackPosition(Wpos);
+		//List <Move> moves = q.getCurrentGame().getMoves();
+		//Move currentMove = moves.get((moveNum-1)*2+roundNum-1);
+		
+		
+		StepMove mv = new StepMove(moveNum, 1, q.getCurrentGame().getBlackPlayer(),
+				QuoridorController.getTileAtRowCol(1, 5), q.getCurrentGame());
+		q.getCurrentGame().getCurrentPosition().getBlackPosition().setTile(QuoridorController.getTileAtRowCol(1, 5));
+		
+		StepMove mvW = new StepMove(moveNum, 1, q.getCurrentGame().getWhitePlayer(),
+				QuoridorController.getTileAtRowCol(9, 5), q.getCurrentGame());
+		q.getCurrentGame().getCurrentPosition().getWhitePosition().setTile(QuoridorController.getTileAtRowCol(9, 5));
+		mvW.setNextMove(q.getCurrentGame().getMoves().get(0));
+		List <Wall> wallL = q.getCurrentGame().getCurrentPosition().getBlackWallsOnBoard();
+		for(Wall aWall: wallL) {
+			
+			aWall.delete();
+			
 		}
+		List <Wall> wallB = q.getCurrentGame().getCurrentPosition().getWhiteWallsOnBoard();
+for(Wall aWall: wallB) {
+			
+			aWall.delete();
+			
+		}
+		
+//		q.getCurrentGame().getCurrentPosition().getBlackPosition().setTile(getTileAtRowCol(9, 5));
+//		q.getCurrentGame().getCurrentPosition().getBlackPosition().setTile(getTileAtRowCol(1, 5));
+//		Move aMove = q.getCurrentGame().getMoves().get(0).get;
+		//aMove.set
+//		while(currentMove.hasPrevMove()) {
+//			currentMove.getPrevMove().;
+//		}
+//		if (moveNum != 0) {
+//			if (roundNum == 2) {
+//				int index = (moveNum*2)-1;
+//				while(index > 0) {
+//					stepBackward();
+//					index--;
+//				}
+//				
+//
+//				
+//
+//			} else {
+//				int index = (moveNum-1)*2;
+//				while(index>0) {
+//					stepBackward();
+//					index--;
+//				}
+//				
+//			}
+//		}
 
 	}
 
@@ -3059,6 +3098,9 @@ public class QuoridorController {
 		}
 		return walls.get(index);
 	}
+	public static int moveController() {
+		return 0;
+	}
 
 	/**
 	 * Method used to validate that a pawn move is possible, i.e. that the
@@ -3076,5 +3118,17 @@ public class QuoridorController {
 		}
 		return true;
 	}
-
+ public static void gamePositions() {
+	 Quoridor q = QuoridorApplication.getQuoridor();
+	 for(int i = 0; i<= q.getCurrentGame().getPositions().size(); i++) {
+		
+		int BROW = q.getCurrentGame().getPositions().get(i).getBlackPosition().getTile().getRow();
+		int BCOL = q.getCurrentGame().getPositions().get(i).getBlackPosition().getTile().getColumn();
+		int WROW = q.getCurrentGame().getPositions().get(i).getWhitePosition().getTile().getRow();
+		int WCOL = q.getCurrentGame().getPositions().get(i).getWhitePosition().getTile().getColumn();
+		System.out.println("BLACK POS: "+ BROW+" , "+ BCOL);
+		System.out.println("WHITE POS: "+ WROW+" , "+ WCOL);
+		 
+	 }
+ }
 }
