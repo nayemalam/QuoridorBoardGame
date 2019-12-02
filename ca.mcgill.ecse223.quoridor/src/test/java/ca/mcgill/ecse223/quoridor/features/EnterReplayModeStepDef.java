@@ -25,12 +25,11 @@ public class EnterReplayModeStepDef{
 	}
 	
 	@Given("The game is replay mode")
-	public void the_game_is_replay_mode() {
-		GameStatus gs = GameStatus.Replay;
-		MoveMode mvM = MoveMode.PlayerMove;
-		Quoridor quoridor = QuoridorApplication.getQuoridor();
-     	Game curGame = new Game(gs,mvM,quoridor);
-		curGame.setGameStatus(Game.GameStatus.Replay);
+	public void the_game_is_replay_mode() throws Exception {
+	 Game curGame = QuoridorApplication.getQuoridor().getCurrentGame();
+		
+		assertEquals(curGame.getGameStatus(),"Replay");
+
 	}
 
 	@Given("The game does not have a final result")

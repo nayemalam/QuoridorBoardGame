@@ -14,7 +14,6 @@ import ca.mcgill.ecse223.quoridor.utilities.ControllerUtilities.PathAvailableToP
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
-import javafx.geometry.Orientation;
 
 public class CheckIfPathExistsStepDef {
 	
@@ -24,7 +23,7 @@ public class CheckIfPathExistsStepDef {
 	
 	// Methods:
 	
-	/**
+	/** 
 	 * Method used to ensure that a wall move exists at a certain position
 	 * @param wallDir - Direction of the wall move candidate
 	 * @param row - row of the wall move candidate
