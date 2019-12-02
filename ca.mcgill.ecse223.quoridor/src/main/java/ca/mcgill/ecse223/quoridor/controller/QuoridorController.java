@@ -2432,11 +2432,11 @@ public class QuoridorController {
 		Player whitePlayer = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
 		if(player.equals(blackPlayer)) {
 			stopCurrentPlayerClock();
-			player.getGameAsBlack().setGameStatus(GameStatus.BlackWon);
+			player.getGameAsBlack().setGameStatus(GameStatus.WhiteWon);
 		}
 		if(player.equals(whitePlayer)) {
 			stopCurrentPlayerClock();
-			player.getGameAsWhite().setGameStatus(GameStatus.WhiteWon);
+			player.getGameAsWhite().setGameStatus(GameStatus.BlackWon);
 		}
 
 	}
