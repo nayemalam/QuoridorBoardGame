@@ -1655,10 +1655,15 @@ public class QuoridorController {
 	 * @author Iyatan Atchoro
 	 */
 	public static void enterReplayMode() throws Exception{
-		Game curGame = QuoridorApplication.getQuoridor().getCurrentGame();
-		if((curGame.getGameStatus().toString() != "Running")) {
-			throw new Exception("The Game is not running");
-		}
+		GameStatus gs = GameStatus.Replay;
+		MoveMode mvM = MoveMode.PlayerMove;
+//		Game curGame = QuoridorApplication.getQuoridor().getCurrentGame();
+		//Move Mode
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+     	Game curGame = new Game(gs,mvM,quoridor);
+//		if((curGame.getGameStatus().toString() != "Running")) {
+//			throw new Exception("The Game is not running");
+//		}
 		curGame.setGameStatus(Game.GameStatus.Replay);
 	}
 	/**
