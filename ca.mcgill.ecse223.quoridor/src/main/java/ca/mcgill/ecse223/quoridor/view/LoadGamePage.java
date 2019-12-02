@@ -107,7 +107,7 @@ public class LoadGamePage {
 					emptyFileNameLabel.setVisible(true);
 					return;
 				}
-				if(!LoadFileNameTextField.getText().contains(".mov")) {
+				if(!(new File(LoadFileNameTextField.getText())).exists()) {
 					invalidLoadFileLabel.setVisible(true);
 					return;
 				}
