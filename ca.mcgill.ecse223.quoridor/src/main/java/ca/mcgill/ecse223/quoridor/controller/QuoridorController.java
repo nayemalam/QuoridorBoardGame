@@ -1436,7 +1436,7 @@ public class QuoridorController {
 				//pawn move
 				int whitePawnColumn = ((int) whiteMove.charAt(0)) - 96;
 				int whitePawnRow = whiteMove.charAt(1) - 48;
-				
+				//testcommit
 
 				boolean whitePawnValid = initializeValidatePosition(whitePawnRow, whitePawnColumn);
 				mainValidateMovePawn(whitePlayer);
