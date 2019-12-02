@@ -35,7 +35,6 @@ public class QuoridorController {
 	private static Timer currentWhitePlayerTimer = null;
 	private static int ReplayModeMoveNum;
 	private static int ReplayModeRoundNum;
-	public static boolean testing = false;
 
 	/**
 	 * Method to capture the time at which the clock is stopped
@@ -1375,8 +1374,8 @@ public class QuoridorController {
 
 		return gameData;
 	}
-
-	/**
+	
+/**
 	 * Method - loadGame()
 	 * 
 	 * Controller method used to load a file containing the game state of a previous
@@ -1677,8 +1676,16 @@ public class QuoridorController {
 	 *
 	 * @author Iyatan Atchoro
 	 */
-	public static void enterReplayMode(){
-		Game curGame = QuoridorApplication.getQuoridor().getCurrentGame();
+	public static void enterReplayMode() throws Exception{
+		GameStatus gs = GameStatus.Replay;
+		MoveMode mvM = MoveMode.PlayerMove;
+//		Game curGame = QuoridorApplication.getQuoridor().getCurrentGame();
+		//Move Mode
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+     	Game curGame = new Game(gs,mvM,quoridor);
+//		if((curGame.getGameStatus().toString() != "Running")) {
+//			throw new Exception("The Game is not running");
+//		}
 		curGame.setGameStatus(Game.GameStatus.Replay);
 	}
 	/**
@@ -1689,7 +1696,9 @@ public class QuoridorController {
 	public static void continueGame() {
 		Game curGame = QuoridorApplication.getQuoridor().getCurrentGame();
 		curGame.setGameStatus(Game.GameStatus.ReadyToStart);
+		curGame.getMoves().clear();
 	}
+
 
 	/**
 	 * Method used to get currentPlayer
@@ -1779,11 +1788,13 @@ public class QuoridorController {
 	}
 
 	/**
-	 * Method used to notify there finished game cannot be continued
+	 * Method used to notify that finished game cannot be continued
 	 *
 	 * @author Iyatan Atchoro
 	 */
+
 	public static String finishedGameCannotBeContinued() {
+		
 		return "Finished Game Cannot be continued";
 	}
 
@@ -2355,14 +2366,14 @@ public class QuoridorController {
 		int row = pos.getTile().getRow();
 		int col = pos.getTile().getColumn();
 		if(player.equals(blackPlayer)) {
-			if((testing && row == 1) || (!testing && col == 1)) {
+			if(row == 1) {
 				//stopGame(q.getCurrentGame());
 				QuoridorApplication.getQuoridor().getCurrentGame().setGameStatus(GameStatus.BlackWon);
 				return true;
 			}
 		}
 		else if(player.equals(whitePlayer)){
-			if((testing && row == 9) || (!testing && col == 9)) {
+			if(row == 9) {
 				//stopGame(q.getCurrentGame());
 				QuoridorApplication.getQuoridor().getCurrentGame().setGameStatus(GameStatus.WhiteWon);
 				return true;
@@ -2491,16 +2502,14 @@ public class QuoridorController {
 		 * If the tests are running, the row zones are verified, and in normal gameplay situation,
 		 * the rows are verified.
 		 */
+
 		Tile startingTile = null;
-		int targetColumn = -1;
 		int targetRow = -1;
 		if(player.equals(getWhitePlayer())) {
 			startingTile = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getWhitePosition().getTile();
-			targetColumn = 9;
 			targetRow = 1;
 		} else if(player.equals(getBlackPlayer())) {
 			startingTile = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getBlackPosition().getTile();
-			targetColumn = 1;
 			targetRow = 9;
 		} else {
 			throw new IllegalArgumentException("Player is invalid");
@@ -2510,9 +2519,7 @@ public class QuoridorController {
 
 		// If a tile in the target region is visited, return true
 		for(Tile tile : tilesVisited) {
-			if(testing && tile.getRow() == targetRow) {
-				return true;
-			} else if(!testing && tile.getColumn() == targetColumn) {
+			if(tile.getRow() == targetRow) {
 				return true;
 			}
 		}
@@ -2574,7 +2581,7 @@ public class QuoridorController {
 		}
 		Board board = QuoridorApplication.getQuoridor().getBoard();
 		Game game = QuoridorApplication.getQuoridor().getCurrentGame();
-		if(board.getTiles().size() != 81) {
+		if(board.getTiles().size() < 81) {
 			throw new IllegalArgumentException("Board is not properly initialized");
 		}
 
@@ -2808,10 +2815,17 @@ public class QuoridorController {
 		ReplayModeRoundNum= roundNumber;
 		return null;
 	}
-
-
+	
+	public static Wall getNextAvailableWall(Player player) {
+		List<Wall> walls = player.equals(getWhitePlayer()) ? QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getWhiteWallsInStock() : 
+														   	 QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getWhiteWallsInStock();
+		int index = 0;
+		while(walls.get(index).hasMove()) {
+			index++;
+		}
+		return walls.get(index);
+	}
 
 
 
 }
-
