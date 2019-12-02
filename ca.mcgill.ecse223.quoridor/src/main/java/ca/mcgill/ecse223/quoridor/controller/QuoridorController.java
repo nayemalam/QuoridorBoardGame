@@ -2450,7 +2450,7 @@ public class QuoridorController {
 	 *
 	 * @param thisPlayer String is current player
 	 * @exception Exception throws exception in case player already has no time left (i.e. clock is not counting down anymore)
-	 * @author Nayem Alam
+	 * @author Nayem Alam, Alexander Legouverneur
 	 */
 	public static void checkIfClockCountingDown(String thisPlayer) throws Exception {
 		Player blackPlayer = QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
@@ -2463,8 +2463,11 @@ public class QuoridorController {
 		if(thisPlayer.equals("white") && whitePlayerTime>0) {
 			// eventually player will reach a time of zero
 			whitePlayer.setRemainingTime(zeroTime);
+			QuoridorApplication.getQuoridor().getCurrentGame().setGameStatus(GameStatus.BlackWon);
+			
 		}else if(thisPlayer.equals("black") && blackPlayerTime>0) {
 			blackPlayer.setRemainingTime(zeroTime);
+			QuoridorApplication.getQuoridor().getCurrentGame().setGameStatus(GameStatus.WhiteWon);
 		} else {
 			throw new Exception("Player time is already zero.");
 		}

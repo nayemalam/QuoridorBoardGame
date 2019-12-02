@@ -7,6 +7,7 @@ import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
 import ca.mcgill.ecse223.quoridor.model.Game;
+import ca.mcgill.ecse223.quoridor.model.Game.GameStatus;
 import ca.mcgill.ecse223.quoridor.model.Player;
 import ca.mcgill.ecse223.quoridor.model.PlayerPosition;
 import ca.mcgill.ecse223.quoridor.model.Quoridor;
@@ -26,6 +27,7 @@ public class IdentifyGameWonStepDefinition {
 	public static Player player;
 	public static int currRow;
 	public static int currCol;
+	boolean ClockNot0 = true;
 
 	/**
 	 * Sets the current player
@@ -79,15 +81,18 @@ public class IdentifyGameWonStepDefinition {
 			long whitePlayerTime = whitePlayer.getRemainingTime().getTime();
 			if (whitePlayerTime > zero) {
 				// game is still running
+				ClockNot0 = true;
 				QuoridorApplication.getQuoridor().getCurrentGame().setGameStatus(Game.GameStatus.Running);
 			}
 		} else if (string.equals("black")) {
 			long blackPlayerTime = blackPlayer.getRemainingTime().getTime();
 			if (blackPlayerTime > zero) {
 				// game is still running
+				ClockNot0 = true;
 				QuoridorApplication.getQuoridor().getCurrentGame().setGameStatus(Game.GameStatus.Running);
 			}
 		} else {
+			ClockNot0 = false;
 			throw new Exception("Game has ended. Time is zero.");
 		}
 	}
@@ -156,5 +161,7 @@ public class IdentifyGameWonStepDefinition {
 	public void the_clock_of_counts_down_to_zero(String thisPlayer) throws Exception {
 		// logic is handled on the controller method
 		QuoridorController.checkIfClockCountingDown(thisPlayer);
+		
+		
 	}
 }
