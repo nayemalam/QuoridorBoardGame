@@ -747,13 +747,13 @@ public class MainGameWindow {
 					JButton wallMoveBtn = createWallMoveCandidate();
 					wallMoveCandidate = new MoveCandidate(wallMoveBtn, 0, 0);
 					
-					WallMove actualCandidate = new WallMove(1, 1, QuoridorController.getCurrentPlayer(), 
-															QuoridorController.getTileAtRowCol(1, 1), 
-															QuoridorApplication.getQuoridor().getCurrentGame(),
-															Direction.Horizontal, 
-															QuoridorController.getNextAvailableWall(QuoridorController.getCurrentPlayer()));
-					
-					QuoridorApplication.getQuoridor().getCurrentGame().setWallMoveCandidate(actualCandidate);
+//					WallMove actualCandidate = new WallMove(1, 1, QuoridorController.getCurrentPlayer(), 
+//															QuoridorController.getTileAtRowCol(1, 1), 
+//															QuoridorApplication.getQuoridor().getCurrentGame(),
+//															Direction.Horizontal, 
+//															QuoridorController.getNextAvailableWall(QuoridorController.getCurrentPlayer()));
+//					
+					//QuoridorApplication.getQuoridor().getCurrentGame().setWallMoveCandidate(actualCandidate);
 					grabWall.setText("Cancel Move");
 				} else {
 					boardPanel.remove(wallMoveCandidate.wallMoveBtn);

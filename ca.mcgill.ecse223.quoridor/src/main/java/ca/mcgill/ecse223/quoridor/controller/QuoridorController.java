@@ -992,10 +992,8 @@ public class QuoridorController {
 				aWall.getMove().setTargetTile(aTile);
 				if(player.equals(q.getCurrentGame().getWhitePlayer())) {
 					q.getCurrentGame().getCurrentPosition().addWhiteWallsOnBoard(aWall);
-				}
-				else {
+				} else {
 					q.getCurrentGame().getCurrentPosition().addBlackWallsOnBoard(aWall);
-
 				}
 
 				return true;
