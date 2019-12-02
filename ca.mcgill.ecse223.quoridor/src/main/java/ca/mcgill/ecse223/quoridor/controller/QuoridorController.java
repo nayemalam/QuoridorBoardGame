@@ -149,7 +149,7 @@ public class QuoridorController {
 				wasRemoved = quoridor.getCurrentGame().getCurrentPosition().removeWhiteWallsInStock(wall);
 			}
 
-			Tile tile = new Tile(1, 1, quoridor.getBoard());
+			Tile tile = getTileAtRowCol(1, 1);
 			List<Move> listOfMoves = quoridor.getCurrentGame().getMoves();
 			WallMove wallMove;
 			if (listOfMoves.size() == 0) {
