@@ -2455,20 +2455,7 @@ public class QuoridorController {
 	 * @author Tristan Bouchard
 	 */
 	private static Boolean traversePlayerGraphToFinish(Graph playerGraph, Player player) {
-
-		/*
-		 * So, the step definitions have a little mismatch with the initial starting positions
-		 * and the ones we have decided. We have decided to play horizontally, with the white
-		 * player startin on the left of the screen at column 1 and aiming for column 9, and
-		 * inversely for the black player.
-		 * This step definition defines that the game is played vertically: The white player
-		 * starts at the bottom, on row 9, and aims for row 1, whereas the black player starts
-		 * at row 1 and aims for row 9. I have created a quick work-around for this, such that
-		 * this feature will still work in our game situation, but allow the tests to pass in
-		 * the hypothetical that the game is played vertically:
-		 * If the tests are running, the row zones are verified, and in normal gameplay situation,
-		 * the rows are verified.
-		 */
+		
 		Tile startingTile = null;
 		int targetRow = -1;
 		if(player.equals(getWhitePlayer())) {
@@ -2547,7 +2534,7 @@ public class QuoridorController {
 		}
 		Board board = QuoridorApplication.getQuoridor().getBoard();
 		Game game = QuoridorApplication.getQuoridor().getCurrentGame();
-		if(board.getTiles().size() != 81) {
+		if(board.getTiles().size() < 81) {
 			throw new IllegalArgumentException("Board is not properly initialized");
 		}
 
@@ -2780,6 +2767,16 @@ public class QuoridorController {
 		ReplayModeMoveNum = moveNumber;
 		ReplayModeRoundNum= roundNumber;
 		return null;
+	}
+	
+	public static Wall getNextAvailableWall(Player player) {
+		List<Wall> walls = player.equals(getWhitePlayer()) ? QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getWhiteWallsInStock() : 
+														   	 QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getWhiteWallsInStock();
+		int index = 0;
+		while(walls.get(index).hasMove()) {
+			index++;
+		}
+		return walls.get(index);
 	}
 
 
