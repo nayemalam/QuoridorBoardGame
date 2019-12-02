@@ -2529,10 +2529,10 @@ public class QuoridorController {
 		int targetRow = -1;
 		if(player.equals(getWhitePlayer())) {
 			startingTile = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getWhitePosition().getTile();
-			targetRow = 1;
+			targetRow = 9;
 		} else if(player.equals(getBlackPlayer())) {
 			startingTile = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getBlackPosition().getTile();
-			targetRow = 9;
+			targetRow = 1;
 		} else {
 			throw new IllegalArgumentException("Player is invalid");
 		}
