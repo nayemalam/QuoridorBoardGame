@@ -1943,7 +1943,7 @@ public class QuoridorController {
 						}
 					}
 				}
-			} else if(side.equals(ControllerUtilities.DiagonalDirections.upleft.toString())){
+			} else if(side.equals(ControllerUtilities.MoveDirections.upleft.toString())){
 				// UpLeft
 				if(upIsAllowed && leftIsAllowed) {
 					Tile upLeft = getTileAtRowCol(currentPlayerRow - 1, currentPlayerColumn - 1);
@@ -1952,7 +1952,7 @@ public class QuoridorController {
 						break;
 					}
 				}
-			} else if(side.equals(ControllerUtilities.DiagonalDirections.upright.toString())){
+			} else if(side.equals(ControllerUtilities.MoveDirections.upright.toString())){
 				// UpRight
 				if(upIsAllowed && rightIsAllowed) {
 					Tile upRight = getTileAtRowCol(currentPlayerRow - 1, currentPlayerColumn + 1);
@@ -1961,7 +1961,7 @@ public class QuoridorController {
 						break;
 					}
 				}
-			} else if(side.equals(ControllerUtilities.DiagonalDirections.downleft.toString())){
+			} else if(side.equals(ControllerUtilities.MoveDirections.downleft.toString())){
 				// downLeft
 				if(downIsAllowed && leftIsAllowed) {
 					Tile downLeft = getTileAtRowCol(currentPlayerRow + 1, currentPlayerColumn - 1);
@@ -1970,7 +1970,7 @@ public class QuoridorController {
 						break;
 					}
 				}
-			} else if(side.equals(ControllerUtilities.DiagonalDirections.downright.toString())){
+			} else if(side.equals(ControllerUtilities.MoveDirections.downright.toString())){
 				// downRight
 				if(downIsAllowed && rightIsAllowed) {
 					Tile downRight = getTileAtRowCol(currentPlayerRow + 1, currentPlayerColumn + 1);

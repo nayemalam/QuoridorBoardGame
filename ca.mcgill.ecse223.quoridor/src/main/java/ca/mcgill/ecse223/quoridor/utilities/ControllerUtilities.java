@@ -54,7 +54,11 @@ public class ControllerUtilities {
 		up,
 		down,
 		left,
-		right
+		right,
+		upleft,
+		upright,
+		downleft,
+		downright
 	}
 	
 	/**

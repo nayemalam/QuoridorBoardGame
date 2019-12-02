@@ -58,6 +58,7 @@ import ca.mcgill.ecse223.quoridor.view.*;
 import ca.mcgill.ecse223.quoridor.view.main.BlackWallPanel;
 import ca.mcgill.ecse223.quoridor.view.main.WhiteWallPanel;
 import ca.mcgill.ecse223.quoridor.view.*;
+import javax.swing.JTextArea;
 
 public class MainGameWindow {
 
@@ -581,6 +582,37 @@ public class MainGameWindow {
 			}
 		});
 	}
+	
+	private void moveUpRightHandler(BasicArrowButton btn) {
+		btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				moveHandler(ControllerUtilities.MoveDirections.upright);
+			}
+		});
+	}
+	
+	private void moveDownRightHandler(BasicArrowButton btn) {
+		btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				moveHandler(ControllerUtilities.MoveDirections.downright);
+			}
+		});
+	}
+	
+	private void moveUpLeftHandler(BasicArrowButton btn) {
+		btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				moveHandler(ControllerUtilities.MoveDirections.upleft);
+			}
+		});
+	}
+	private void moveDownLeftHandler(BasicArrowButton btn) {
+		btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				moveHandler(ControllerUtilities.MoveDirections.downleft);
+			}
+		});
+	}
 
 	private void moveHandler(ControllerUtilities.MoveDirections dir) {
 		
@@ -619,19 +651,56 @@ public class MainGameWindow {
 			targetRow = moveCandidate.row;
 			targetCol = moveCandidate.col;
 			//TODO check this out
-			if (dir == ControllerUtilities.MoveDirections.up && validateIfPawnMoveIsPossible(moveCandidate.row - 1, moveCandidate.col)) {
-				targetModified = true;
-				targetRow = moveCandidate.row - 1;
-			} else if (dir == ControllerUtilities.MoveDirections.down && validateIfPawnMoveIsPossible(moveCandidate.row + 1, moveCandidate.col)) {
-				targetModified = true;
-				targetRow = moveCandidate.row + 1;
-			} else if (dir == ControllerUtilities.MoveDirections.left && validateIfPawnMoveIsPossible(moveCandidate.row, moveCandidate.col - 1)) {
+			if (dir.equals(ControllerUtilities.MoveDirections.up)) {
+				if(validateIfPawnMoveIsPossible(moveCandidate.row - 1, moveCandidate.col)) {
+					targetModified = true;
+					targetRow = moveCandidate.row - 1;
+				} else if(validateIfPawnMoveIsPossible(moveCandidate.row - 2, moveCandidate.col)) {
+					targetModified = true;
+					targetRow = moveCandidate.row - 2;
+				}
+			} else if (dir.equals(ControllerUtilities.MoveDirections.down)) {
+				if(validateIfPawnMoveIsPossible(moveCandidate.row + 1, moveCandidate.col)) {
+					targetModified = true;
+					targetRow = moveCandidate.row + 1;
+				} else if(validateIfPawnMoveIsPossible(moveCandidate.row + 2, moveCandidate.col)) {
+					targetModified = true;
+					targetRow = moveCandidate.row + 2;
+				}
+			} else if (dir.equals(ControllerUtilities.MoveDirections.left)) {
+				if(validateIfPawnMoveIsPossible(moveCandidate.row, moveCandidate.col - 1)) {
+					targetModified = true;
+					targetCol = moveCandidate.col - 1;
+				} else if ( validateIfPawnMoveIsPossible(moveCandidate.row, moveCandidate.col - 2)) {
+					targetModified = true;
+					targetCol = moveCandidate.col - 2;
+				}
+			} else if (dir.equals(ControllerUtilities.MoveDirections.right)) {
+				if(validateIfPawnMoveIsPossible(moveCandidate.row, moveCandidate.col + 1)) {
+					targetModified = true;
+					targetCol = moveCandidate.col + 1;
+				} else if (validateIfPawnMoveIsPossible(moveCandidate.row, moveCandidate.col + 2)) {
+					targetModified = true;
+					targetCol = moveCandidate.col + 2;
+				}
+			} else if(dir.equals(ControllerUtilities.MoveDirections.upleft) && validateIfPawnMoveIsPossible(moveCandidate.row - 1, moveCandidate.col - 1)) {
 				targetModified = true;
 				targetCol = moveCandidate.col - 1;
-			} else if (dir == ControllerUtilities.MoveDirections.right && validateIfPawnMoveIsPossible(moveCandidate.row, moveCandidate.col + 1)) {
+				targetRow = moveCandidate.row - 1;
+			} else if(dir.equals(ControllerUtilities.MoveDirections.downleft) && validateIfPawnMoveIsPossible(moveCandidate.row + 1, moveCandidate.col - 1)) {
+				targetModified = true;
+				targetCol = moveCandidate.col - 1;
+				targetRow = moveCandidate.row + 1;
+			} else if(dir.equals(ControllerUtilities.MoveDirections.upright) && validateIfPawnMoveIsPossible(moveCandidate.row - 1, moveCandidate.col + 1)) {
 				targetModified = true;
 				targetCol = moveCandidate.col + 1;
+				targetRow = moveCandidate.row - 1;
+			} else if(dir.equals(ControllerUtilities.MoveDirections.downright) && validateIfPawnMoveIsPossible(moveCandidate.row + 1, moveCandidate.col + 1)) {
+				targetModified = true;
+				targetCol = moveCandidate.col + 1;
+				targetRow = moveCandidate.row + 1;
 			}
+			
 			if(targetModified) {
 				btnArray[moveCandidate.row][moveCandidate.col].remove(moveCandidate.wallMoveBtn);
 				moveCandidate.row = targetRow;
@@ -739,49 +808,105 @@ public class MainGameWindow {
 	private void createNavigationButtons() {
 		JPanel east = new JPanel();
 		east.setLayout(new BoxLayout(east, BoxLayout.X_AXIS));
-		JPanel newPanel = new JPanel();
-		newPanel.setLayout(new BoxLayout(newPanel, BoxLayout.Y_AXIS));
+		JPanel centerButtonPanel = new JPanel();
+		centerButtonPanel.setLayout(new BoxLayout(centerButtonPanel, BoxLayout.Y_AXIS));
 
 		navigationButtonsPanel.add(east, BorderLayout.NORTH);
 
 		BasicArrowButton north = new BasicArrowButton(BasicArrowButton.NORTH) {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public Dimension getPreferredSize() {
 				return new Dimension(70, 70);
 			}
 		};
-		;
 
 		BasicArrowButton south = new BasicArrowButton(BasicArrowButton.SOUTH) {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public Dimension getPreferredSize() {
 				return new Dimension(70, 70);
 			}
 		};
-		;
+
+		centerButtonPanel.add(north, BorderLayout.NORTH); // up
+		centerButtonPanel.add(south, BorderLayout.SOUTH);
+		
+		JPanel leftPanel = new JPanel();
+		east.add(leftPanel);
+		leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+		
+		BasicArrowButton leftUp = new BasicArrowButton(BasicArrowButton.WEST) {
+			@Override
+			public Dimension getPreferredSize() {
+				return new Dimension(70, 30);
+			}
+		};
+		
+		leftPanel.add(leftUp);
+		moveUpLeftHandler(leftUp);
+		
 		BasicArrowButton west = new BasicArrowButton(BasicArrowButton.WEST) {
 			@Override
 			public Dimension getPreferredSize() {
+				return new Dimension(70, 20);
+			}
+		};
+		leftPanel.add(west);
+		moveLeftHandler(west);
+		
+		BasicArrowButton bottomLeft = new BasicArrowButton(BasicArrowButton.WEST){
+			@Override
+			public Dimension getPreferredSize() {
+				return new Dimension(70, 30);
+			}
+		};
+		
+		leftPanel.add(bottomLeft);
+		moveDownLeftHandler(bottomLeft);
+		
+		east.add(centerButtonPanel, BorderLayout.CENTER);
+		moveUpHandler(north);
+		moveDownHandler(south);
+
+		JPanel panel = new JPanel();
+		east.add(panel);
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+		BasicArrowButton rightUp = new BasicArrowButton(BasicArrowButton.EAST){
+			@Override
+			public Dimension getPreferredSize() {
 				return new Dimension(70, 70);
 			}
 		};
-		;
+		panel.add(rightUp);
+		moveUpRightHandler(rightUp);
+
 		BasicArrowButton est = new BasicArrowButton(BasicArrowButton.EAST) {
 			@Override
 			public Dimension getPreferredSize() {
 				return new Dimension(70, 70);
 			}
 		};
-
-		newPanel.add(north, BorderLayout.NORTH); // up
-		newPanel.add(south, BorderLayout.SOUTH); // down
-		east.add(west, BorderLayout.WEST);
-		east.add(newPanel, BorderLayout.CENTER);
-		east.add(est, BorderLayout.EAST);
-		moveUpHandler(north);
-		moveDownHandler(south);
+		panel.add(est);
 		moveRightHandler(est);
-		moveLeftHandler(west);
+
+		BasicArrowButton rightDown = new BasicArrowButton(BasicArrowButton.EAST) {
+			@Override
+			public Dimension getPreferredSize() {
+				return new Dimension(70, 70);
+			}
+		};
+		panel.add(rightDown);
+		moveDownRightHandler(rightDown);
 		frmQuoridorPlay.repaint();
 	}
 
