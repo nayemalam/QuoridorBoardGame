@@ -13,12 +13,12 @@ Feature: Check if path exists
       |    4 |    6 | horizontal |
       |    4 |    8 | horizontal |
       |    3 |    6 | vertical   |
-
-# Structure of existing walls
-# R1
-# R2
-# R3 __ __   |
-# R4     __ _|_ __
+      
+	# Structure of existing walls
+	# R1
+	# R2
+	# R3 __ __   |
+	# R4     __ _|_ __    
 
   Scenario Outline: Path to target area is not blocked
     Given A "<dir>" wall move candidate exists at position <frow>:<fcol>
@@ -26,20 +26,21 @@ Feature: Check if path exists
     And The white player is located at <wrow>:<wcol>
     When Check path existence is initiated
     Then Path is available for "<result>" player(s)
-
-# A wall move candidate is placed at numerous places 
-    Examples: 
-      | dir        | frow | fcol | brow | bcol | wrow | wcol | result |
+    #Then Path is available for "<result>" player
+    
+    # A wall move candidate is placed at numerous place
+ 		Examples: 
+      | dir        | frow | fcol | wrow | wcol | brow | bcol | result |
       | horizontal |    3 |    7 |    2 |    5 |    6 |    5 | both   |
       | horizontal |    4 |    2 |    2 |    5 |    6 |    5 | both   |
       | horizontal |    3 |    5 |    2 |    5 |    6 |    5 | none   |
       | horizontal |    3 |    5 |    6 |    5 |    2 |    5 | both   |
-      | horizontal |    3 |    5 |    2 |    5 |    3 |    5 | white  |
-      | horizontal |    3 |    5 |    5 |    5 |    6 |    5 | black  |
+      | horizontal |    3 |    5 |    2 |    5 |    3 |    5 | black  |
+      | horizontal |    3 |    5 |    5 |    5 |    6 |    5 | white  |
       | vertical   |    2 |    4 |    2 |    5 |    6 |    5 | both   |
       | vertical   |    3 |    4 |    2 |    5 |    6 |    5 | none   |
       | vertical   |    3 |    4 |    6 |    5 |    2 |    5 | both   |
-      | vertical   |    3 |    4 |    5 |    5 |    6 |    5 | black  |
+      | vertical   |    3 |    4 |    5 |    5 |    6 |    5 | white  |
       | vertical   |    1 |    6 |    2 |    5 |    6 |    5 | both   |
-      | vertical   |    1 |    6 |    2 |    7 |    6 |    5 | white  |
+      | vertical   |    1 |    6 |    2 |    7 |    6 |    5 | black  |
       | vertical   |    1 |    6 |    6 |    5 |    2 |    7 | both   |

@@ -22,14 +22,54 @@ public class ControllerUtilities {
 	public static final int TOTAL_NUMBER_OF_COLS = 9;
 	public static final int WHITE_TILE_INDEX = 4;
 	public static final int BLACK_TILE_INDEX = 76;
+	public static final int WHITE_INITIAL_ROW = 9;
+	public static final int WHITE_INITIAL_COL = 5;
+	public static final int BLACK_INITIAL_ROW = 1;
+	public static final int BLACK_INITIAL_COL = 5;
+	
 	public static final int TOTAL_WALL_STOCK_AT_START = 10;
 	public static final int TOTAL_NUMBER_OF_WALLS_PER_PLAYER = 10;
+	public static final String CURRENT_BLACK_TIMER_THREAD_NAME = "CurrentBlackPlayerTimerThread";
+	public static final String CURRENT_WHITE_TIMER_THREAD_NAME = "CurrentWhitePlayerTimerThread";
 	
+	/**
+	 * Enumeration describing the potential diagonal direction a player
+	 * may move in.
+	 * @author Tristan Bouchard
+	 *
+	 */
 	public enum DiagonalDirections{
 		upleft,
 		upright,
 		downleft,
 		downright
+	}
+	
+	/**
+	 * Enumeration describing the possible standard moves of a player
+	 * @author Tristan Bouchard
+	 *
+	 */
+	public enum MoveDirections{
+		up,
+		down,
+		left,
+		right,
+		upleft,
+		upright,
+		downleft,
+		downright
+	}
+	
+	/**
+	 * Enumeration describing which players can reach their victory zone
+	 * @author Tristan Bouchard
+	 */
+	public enum PathAvailableToPlayers{
+		none,
+		white,
+		black,
+		both
 	}
 	
 	// ***************************************

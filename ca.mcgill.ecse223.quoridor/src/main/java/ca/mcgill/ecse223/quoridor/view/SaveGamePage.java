@@ -25,7 +25,7 @@ import ca.mcgill.ecse223.quoridor.controller.*;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
-public class SavePositionPage {
+public class SaveGamePage {
 	public JFrame frame;
 	private QuoridorController QC;
 	private boolean fileExists;
@@ -37,7 +37,7 @@ public class SavePositionPage {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					SavePositionPage window = new SavePositionPage();
+					SaveGamePage window = new SaveGamePage();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -49,7 +49,7 @@ public class SavePositionPage {
 	/**
 	 * Create the application.
 	 */
-	public SavePositionPage() {
+	public SaveGamePage() {
 		initialize();
 	}
 
@@ -61,21 +61,33 @@ public class SavePositionPage {
 		frame.setBounds(100, 100, 1165, 693);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
+		
+		// Forces fullscreen
+		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		frame.getContentPane().setLayout(null);
 
-		JLabel savePositionFileNameLabel = new JLabel("Enter Save Position File Name:");
-		savePositionFileNameLabel.setBackground(Color.WHITE);
-		savePositionFileNameLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		savePositionFileNameLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		savePositionFileNameLabel.setBounds(10, 151, 348, 68);
-		frame.getContentPane().add(savePositionFileNameLabel);
+		JLabel saveGameFileNameLabel = new JLabel("Enter Save Game File Name:");
+		saveGameFileNameLabel.setBackground(Color.WHITE);
+		saveGameFileNameLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		saveGameFileNameLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		saveGameFileNameLabel.setBounds(10, 151, 348, 68);
+		frame.getContentPane().add(saveGameFileNameLabel);
 
-		JLabel EnterValidFileNameLabel = new JLabel("Please enter a valid file name");
-		EnterValidFileNameLabel.setForeground(Color.RED);
-		EnterValidFileNameLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		EnterValidFileNameLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		EnterValidFileNameLabel.setBounds(441, 229, 232, 28);
-		frame.getContentPane().add(EnterValidFileNameLabel);
-		EnterValidFileNameLabel.setVisible(false);
+		JLabel emptyFileNameLabel = new JLabel("Please enter a file name");
+		emptyFileNameLabel.setForeground(Color.RED);
+		emptyFileNameLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		emptyFileNameLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		emptyFileNameLabel.setBounds(441, 229, 232, 28);
+		frame.getContentPane().add(emptyFileNameLabel);
+		emptyFileNameLabel.setVisible(false);
+		
+		JLabel invalidFileNameLabel = new JLabel("Please enter a valid file name");
+		invalidFileNameLabel.setForeground(Color.RED);
+		invalidFileNameLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		invalidFileNameLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		invalidFileNameLabel.setBounds(441, 120, 232, 28);
+		frame.getContentPane().add(invalidFileNameLabel);
+		emptyFileNameLabel.setVisible(false);
 		
 		JTextField gameFileNameTextField = new JTextField();
 		gameFileNameTextField.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -83,17 +95,17 @@ public class SavePositionPage {
 		frame.getContentPane().add(gameFileNameTextField);
 		gameFileNameTextField.setColumns(10);
 
-		JSplitPane PositionSavedPane = new JSplitPane();
-		PositionSavedPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
-		PositionSavedPane.setBounds(269, 272, 614, 88);
-		PositionSavedPane.setVisible(false);
-		frame.getContentPane().add(PositionSavedPane);
+		JSplitPane gameSavedPane = new JSplitPane();
+		gameSavedPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
+		gameSavedPane.setBounds(269, 272, 614, 88);
+		gameSavedPane.setVisible(false);
+		frame.getContentPane().add(gameSavedPane);
 
-		JLabel PositionSavedLabel = new JLabel("Position Succesfully Saved!");
-		PositionSavedLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		PositionSavedLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		PositionSavedPane.setLeftComponent(PositionSavedLabel);
-		PositionSavedLabel.setVisible(false);
+		JLabel gameSavedLabel = new JLabel("File Succesfully Saved!");
+		gameSavedLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		gameSavedLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		gameSavedPane.setLeftComponent(gameSavedLabel);
+		gameSavedLabel.setVisible(false);
 
 		JButton ReturntoMenu1 = new JButton("Return to Main Menu");
 		ReturntoMenu1.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -106,8 +118,8 @@ public class SavePositionPage {
 					
 			}
 		});
-		PositionSavedPane.setRightComponent(ReturntoMenu1);
-		PositionSavedPane.setVisible(false);
+		gameSavedPane.setRightComponent(ReturntoMenu1);
+		gameSavedPane.setVisible(false);
 		
 		JLabel OverwriteLabel = new JLabel("File already exists, Overwrite file?");
 		OverwriteLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -127,22 +139,22 @@ public class SavePositionPage {
 			public void mouseReleased(MouseEvent arg0) {
 				
 				if(gameFileNameTextField.getText().isEmpty()) {
-					EnterValidFileNameLabel.setVisible(true);
+					emptyFileNameLabel.setVisible(true);
 					return;
 				}
 				
 				try {
-					fileExists = QC.saveGamePosition(savePositionFileNameLabel.getText());
+					fileExists = QC.save(saveGameFileNameLabel.getText());
 				} catch (IllegalArgumentException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
+					invalidFileNameLabel.setVisible(true);
 					e.printStackTrace();
 				}
 				if(fileExists = true) {
-					PositionSavedPane.setVisible(true);
-					PositionSavedLabel.setVisible(true);
+					gameSavedPane.setVisible(true);
+					gameSavedLabel.setVisible(true);
 				}
 				else {
 					OverwritePane.setVisible(true);
@@ -177,7 +189,7 @@ public class SavePositionPage {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				try {
-					QC.overwriteGamePosition(gameFileNameTextField.getText());
+					QC.overwriteGameFile(saveGameFileNameLabel.getText());
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -185,8 +197,8 @@ public class SavePositionPage {
 				OverwritePane.setVisible(false);
 				OverwriteLabel.setVisible(false);
 		
-				PositionSavedPane.setVisible(true);
-				PositionSavedLabel.setVisible(true);
+				gameSavedPane.setVisible(true);
+				gameSavedLabel.setVisible(true);
 			}
 		});
 		ConfirmOverwriteButton.setFont(new Font("Tahoma", Font.PLAIN, 16));

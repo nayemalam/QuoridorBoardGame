@@ -94,7 +94,8 @@ public class MovePawnFeatureStepDef {
 
 	@Then("Player's new position shall be {int}:{int}")
 	public void player_s_new_position_shall_be(Integer int1, Integer int2) {
-
+		
+		// Player has switched after a valid move, will not switch after an invalid move
 		if(QuoridorController.getCurrentPlayer().equals(QuoridorController.getBlackPlayer())) {
 			assertEquals(int1, (Integer)QuoridorController.getBlackPlayer().getGameAsBlack().getCurrentPosition().getBlackPosition().getTile().getRow());
 			assertEquals(int2, (Integer)QuoridorController.getBlackPlayer().getGameAsBlack().getCurrentPosition().getBlackPosition().getTile().getColumn());
@@ -107,7 +108,6 @@ public class MovePawnFeatureStepDef {
 
 	@Then("The next player to move shall become {string}")
 	public void the_next_player_to_move_shall_become(String string) {
-
 		String nextPlayerToMove = "";
 		if(QuoridorController.getCurrentPlayer().equals(QuoridorController.getBlackPlayer())) {
 			if(legalMove) {
@@ -122,7 +122,9 @@ public class MovePawnFeatureStepDef {
 				nextPlayerToMove = "white";
 			}
 		}
+		QuoridorController.switchCurrentPlayer();
 		assertEquals(string, nextPlayerToMove);
+		
 	}
 
 	@Given("There is a {string} wall at {int}:{int}")

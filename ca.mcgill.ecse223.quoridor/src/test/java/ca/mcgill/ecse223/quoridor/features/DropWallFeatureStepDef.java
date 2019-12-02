@@ -111,6 +111,13 @@ public class DropWallFeatureStepDef {
 		Quoridor q = QuoridorApplication.getQuoridor();
 	    WallMove wallMoveCandidate = q.getCurrentGame().getWallMoveCandidate();
 	    int id = wallMoveCandidate.getWallPlaced().getId();
+	    Direction dir = string.equals(Direction.Horizontal.toString().toLowerCase()) ? Direction.Horizontal: Direction.Vertical;
+	    
+	    //QuoridorController.wallMove(int1, int2, string.toLowerCase(), QuoridorController.getWallMoveCandidate(), QuoridorController.getCurrentPlayer());
+	    WallMove mov = new WallMove(int1, int2, QuoridorController.getCurrentPlayer(),
+	    							QuoridorController.getTileAtRowCol(int1, int2),
+	    							QuoridorApplication.getQuoridor().getCurrentGame(), dir,
+	    							QuoridorController.getNextAvailableWall(QuoridorController.getCurrentPlayer()));
         //Should check to see if it is invalid
 		
 	

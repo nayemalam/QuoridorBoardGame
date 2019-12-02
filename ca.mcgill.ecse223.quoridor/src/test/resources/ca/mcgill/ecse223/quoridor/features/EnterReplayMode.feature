@@ -1,13 +1,13 @@
 Feature: Enter Replay Mode
 As a player, I wish to review a past game in replay mode to walk through the moves.
-
+  @enteringReplay
 	Scenario: Entering replay mode 
 		Given The game is not running
 		When I initiate replay mode
 		Then The game shall be in replay mode 
-			
+	@continueUnf
 	Scenario Outline: Continue an unfinished game  
-		Given The game is replay mode
+	Given The game is replay mode
     Given The following moves have been played in game:
       | mv | rnd | move |
       |  1 |   1 | e8   |
@@ -29,7 +29,7 @@ As a player, I wish to review a past game in replay mode to walk through the mov
 			|     2 |     1 | white  | 
 			|     2 |     2 | black  | 
 			|     3 |     1 | white  | 
-			
+	@continueFin		
 	Scenario Outline: Continue a finished game  
 		Given The game is replay mode
     Given The following moves have been played in game:
