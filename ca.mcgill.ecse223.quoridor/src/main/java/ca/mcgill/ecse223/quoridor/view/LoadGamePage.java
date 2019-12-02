@@ -57,17 +57,17 @@ public class LoadGamePage {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		
+
 		frame = new JFrame();
 		frame.setBounds(100, 100, 1165, 693);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-		
+
 		// Forces fullscreen
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.getContentPane().setLayout(null);
 
-		
+
 
 		LoadFileNameTextField = new JTextField();
 		LoadFileNameTextField.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -75,7 +75,7 @@ public class LoadGamePage {
 		LoadFileNameTextField.setBounds(507, 151, 521, 68);
 		frame.getContentPane().add(LoadFileNameTextField);
 		LoadFileNameTextField.setColumns(10);
-		
+
 		JLabel invalidLoadFileLabel = new JLabel("Invalid file, Please select a valid file to load");
 		invalidLoadFileLabel.setForeground(Color.RED);
 		invalidLoadFileLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -83,14 +83,14 @@ public class LoadGamePage {
 		invalidLoadFileLabel.setBounds(591, 121, 354, 20);
 		frame.getContentPane().add(invalidLoadFileLabel);
 		invalidLoadFileLabel.setVisible(false);
-		
+
 		JLabel loadGameFileLabel = new JLabel("Select File to Load:");
 		loadGameFileLabel.setBackground(Color.WHITE);
 		loadGameFileLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		loadGameFileLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		loadGameFileLabel.setBounds(132, 151, 332, 68);
 		frame.getContentPane().add(loadGameFileLabel);
-		
+
 		JLabel emptyFileNameLabel = new JLabel("Please enter a file name");
 		emptyFileNameLabel.setForeground(Color.RED);
 		emptyFileNameLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -98,13 +98,17 @@ public class LoadGamePage {
 		emptyFileNameLabel.setBounds(591, 229, 354, 26);
 		frame.getContentPane().add(emptyFileNameLabel);
 		emptyFileNameLabel.setVisible(false);
-		
+
 		JButton loadGameFileButton = new JButton("Load File\r\n");
 		loadGameFileButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				if(LoadFileNameTextField.getText().isEmpty()) {
 					emptyFileNameLabel.setVisible(true);
+					return;
+				}
+				if(!(new File(LoadFileNameTextField.getText())).exists()) {
+					invalidLoadFileLabel.setVisible(true);
 					return;
 				}
 				try {
@@ -116,12 +120,11 @@ public class LoadGamePage {
 					QuoridorController.initializeNewGame(QuoridorApplication.getQuoridor(), whitePlayer, blackPlayer);
 					valid = QC.loadGame(LoadFileNameTextField.getText(), whitePlayer, blackPlayer);
 					frame.dispose();
-					MainGameWindow main = new MainGameWindow();
-					main.frmQuoridorPlay.setVisible(true);
+					ReplayMode replay = new ReplayMode();
+					replay.frmQuoridorPlay.setVisible(true);
 				} catch (IOException e1) {
-					invalidLoadFileLabel.setVisible(true);
+					e1.printStackTrace();
 				} catch (Exception e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				if(valid = false) {
@@ -132,13 +135,13 @@ public class LoadGamePage {
 		loadGameFileButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		loadGameFileButton.setBounds(1103, 151, 238, 68);
 		frame.getContentPane().add(loadGameFileButton);
-		
+
 		JLabel TitleLabel = new JLabel("Quoridor\r\n");
 		TitleLabel.setFont(new Font("Tahoma", Font.PLAIN, 40));
 		TitleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		TitleLabel.setBounds(475, 10, 586, 101);
 		frame.getContentPane().add(TitleLabel);
-		
+
 		JButton btnReturntoMainMenu = new JButton("Return to Main Menu");
 		btnReturntoMainMenu.addMouseListener(new MouseAdapter() {
 			@Override

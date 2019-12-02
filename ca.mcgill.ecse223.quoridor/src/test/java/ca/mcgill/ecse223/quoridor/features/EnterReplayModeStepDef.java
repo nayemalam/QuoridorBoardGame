@@ -52,6 +52,4 @@ public class EnterReplayModeStepDef{
 		assertEquals(aString, QuoridorController.finishedGameCannotBeContinued());
 	}
 
-	
-	
 }
