@@ -90,7 +90,9 @@ public class CheckIfGameDrawnStepDef {
 	 */
 	@When("Checking of game result is initated")
 	public void checkGameResultToVerifyIfDrawn() {
+		QuoridorController.testing = true;
 		QuoridorController.updateGameStatus();
+		QuoridorController.testing = false;
 	}
 	
 	/**

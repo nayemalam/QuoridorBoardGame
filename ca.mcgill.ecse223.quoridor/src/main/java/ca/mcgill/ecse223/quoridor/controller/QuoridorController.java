@@ -35,6 +35,7 @@ public class QuoridorController {
 	private static Timer currentWhitePlayerTimer = null;
 	private static int ReplayModeMoveNum;
 	private static int ReplayModeRoundNum;
+	public static boolean testing = false;
 
 	/**
 	 * Method to capture the time at which the clock is stopped
@@ -1419,26 +1420,23 @@ public class QuoridorController {
 		String aLineOfMoves[];
 		String whiteMove = "";
 		String blackMove = "";
-    
 		int roundNumber = 1;
 		int whiteWallIdIterator = 0;
 		int blackWallIdIterator = 0;
-
 		for(int i = 0; i < moves.length; i++) {
 			//iterates through each line of the string
 
 			aLineOfMoves = moves[i].split(" ");
 
 			roundNumber = ((int)aLineOfMoves[0].charAt(0)) - 48;
-			blackMove = aLineOfMoves[1];
-			whiteMove = aLineOfMoves[2];
+			whiteMove = aLineOfMoves[1];
+			blackMove = aLineOfMoves[2];
 
 			if(whiteMove.length() == 2) {
 				//pawn move
-//				int whitePawnColumn = ((int) whiteMove.charAt(0)) - 96;
-//				int whitePawnRow = whiteMove.charAt(1) - 48;
-				int whitePawnRow = ((int) whiteMove.charAt(0)) - 96;
-				int whitePawnColumn = whiteMove.charAt(1) - 48;
+				int whitePawnColumn = ((int) whiteMove.charAt(0)) - 96;
+				int whitePawnRow = whiteMove.charAt(1) - 48;
+				
 
 				boolean whitePawnValid = initializeValidatePosition(whitePawnRow, whitePawnColumn);
 				mainValidateMovePawn(whitePlayer);
@@ -1447,7 +1445,6 @@ public class QuoridorController {
 					
 					gamePositionToLoad.getWhitePosition().setTile(whitePawnTile);
 					//create associated move
-
 					StepMove whitePawnMove = new StepMove(1, roundNumber, whitePlayer, whitePawnTile, game);
 					if(game.getMoves().size() > 1) {
 						Move currentMove = game.getMove(game.getMoves().size()-2);
@@ -1462,10 +1459,9 @@ public class QuoridorController {
 			}
 			if(whiteMove.length() == 3) {
 				//wall move
-//				int whiteWallColumn = whiteMove.charAt(0) - 96;
-//				int whiteWallRow = whiteMove.charAt(1) - 48; 
-				int whiteWallRow = whiteMove.charAt(0) - 96;
-				int whiteWallColumn = whiteMove.charAt(1) - 48;
+				int whiteWallColumn = whiteMove.charAt(0) - 96;
+				int whiteWallRow = whiteMove.charAt(1) - 48; 
+
 				char whiteWallO = whiteMove.charAt(2);
 				Direction whiteWallDirection;
 				String wallOrientation = "";
@@ -1479,6 +1475,7 @@ public class QuoridorController {
 
 				boolean whiteWallsValid = initiatePosValidation(whiteWallRow, whiteWallColumn, wallOrientation, whiteWallIdIterator);
 				if (whiteWallsValid) {
+					//Wall whiteWall = gamePositionToLoad.getWhiteWallsInStock(whiteWallIdIterator);
 					Wall whiteWall = gamePositionToLoad.getWhiteWallsInStock(0);
 					gamePositionToLoad.removeWhiteWallsInStock(whiteWall);
 					gamePositionToLoad.addWhiteWallsOnBoard(whiteWall);
@@ -1502,10 +1499,8 @@ public class QuoridorController {
 			}
 			if(blackMove.length() == 2) {
 				//pawn move
-//				int blackPawnColumn = ((int) blackMove.charAt(0)) - 96;
-//				int blackPawnRow = blackMove.charAt(1) - 48;
-				int blackPawnRow = ((int) blackMove.charAt(0)) - 96;
-				int blackPawnColumn = blackMove.charAt(1) - 48;
+				int blackPawnColumn = ((int) blackMove.charAt(0)) - 96;
+				int blackPawnRow = blackMove.charAt(1) - 48;
 				
 				boolean blackPawnValid = initializeValidatePosition(blackPawnRow, blackPawnColumn);
 				mainValidateMovePawn(blackPlayer);
@@ -1514,7 +1509,6 @@ public class QuoridorController {
 					
 					gamePositionToLoad.getBlackPosition().setTile(blackPawnTile);
 					//create associated move
-
 					StepMove blackPawnMove = new StepMove(2, roundNumber, whitePlayer, blackPawnTile, game);
 					if(game.getMoves().size() > 1) {
 						Move currentMove = game.getMove(game.getMoves().size()-2);
@@ -1529,10 +1523,9 @@ public class QuoridorController {
 			}
 			if(blackMove.length() == 3) {
 				//wall move
-//				int blackWallColumn = blackMove.charAt(0) - 96;
-//				int blackWallRow = blackMove.charAt(1) - 48; 
-				int blackWallRow = blackMove.charAt(0) - 96;
-				int blackWallColumn = blackMove.charAt(1) - 48;
+				int blackWallColumn = blackMove.charAt(0) - 96;
+				int blackWallRow = blackMove.charAt(1) - 48; 
+
 				char blackWallO = blackMove.charAt(2);
 				Direction blackWallDirection;
 				String wallOrientation = "";
@@ -1544,10 +1537,9 @@ public class QuoridorController {
 					blackWallDirection = Direction.Horizontal;
 				}
 
-				
 				boolean blackWallsValid = initiatePosValidation(blackWallRow, blackWallColumn, wallOrientation, blackWallIdIterator +10);
-
 				if (blackWallsValid) {
+					//Wall blackWall = gamePositionToLoad.getBlackWallsInStock(blackWallIdIterator);
 					Wall blackWall = gamePositionToLoad.getBlackWallsInStock(0);
 					gamePositionToLoad.removeBlackWallsInStock(blackWall);
 					gamePositionToLoad.addBlackWallsOnBoard(blackWall);
@@ -1571,7 +1563,6 @@ public class QuoridorController {
 			if(blackMove.length() > 3 || blackMove.length() < 2 || whiteMove.length() < 2 || whiteMove.length() > 3){
 				throw new IllegalArgumentException("Invalid Move loaded!");
 			}
-
 			if(gamePositionToLoad.getBlackPosition().getTile().getRow() == gamePositionToLoad.getWhitePosition().getTile().getRow() && gamePositionToLoad.getBlackPosition().getTile().getColumn() == gamePositionToLoad.getWhitePosition().getTile().getColumn()) {
 				throw new IllegalArgumentException("Invalid Move loaded! black and white pawns can't be on same tile at same time");
 			}
@@ -1579,7 +1570,6 @@ public class QuoridorController {
 
 				throw new IllegalArgumentException("Invalid Move loaded! black and white pawns can't be on same tile at same time");
 			}
-
 		}
 
 		return true;
@@ -1687,11 +1677,8 @@ public class QuoridorController {
 	 *
 	 * @author Iyatan Atchoro
 	 */
-	public static void enterReplayMode() throws Exception{
+	public static void enterReplayMode(){
 		Game curGame = QuoridorApplication.getQuoridor().getCurrentGame();
-		if((curGame.getGameStatus().toString() != "Running")) {
-			throw new Exception("The Game is not running");
-		}
 		curGame.setGameStatus(Game.GameStatus.Replay);
 	}
 	/**
@@ -1702,9 +1689,7 @@ public class QuoridorController {
 	public static void continueGame() {
 		Game curGame = QuoridorApplication.getQuoridor().getCurrentGame();
 		curGame.setGameStatus(Game.GameStatus.ReadyToStart);
-		curGame.getMoves().clear();
 	}
-
 
 	/**
 	 * Method used to get currentPlayer
@@ -1794,13 +1779,11 @@ public class QuoridorController {
 	}
 
 	/**
-	 * Method used to notify that finished game cannot be continued
+	 * Method used to notify there finished game cannot be continued
 	 *
 	 * @author Iyatan Atchoro
 	 */
-
 	public static String finishedGameCannotBeContinued() {
-		
 		return "Finished Game Cannot be continued";
 	}
 
@@ -2372,14 +2355,14 @@ public class QuoridorController {
 		int row = pos.getTile().getRow();
 		int col = pos.getTile().getColumn();
 		if(player.equals(blackPlayer)) {
-			if(row == 1) {
+			if((testing && row == 1) || (!testing && col == 1)) {
 				//stopGame(q.getCurrentGame());
 				QuoridorApplication.getQuoridor().getCurrentGame().setGameStatus(GameStatus.BlackWon);
 				return true;
 			}
 		}
 		else if(player.equals(whitePlayer)){
-			if(row == 9) {
+			if((testing && row == 9) || (!testing && col == 9)) {
 				//stopGame(q.getCurrentGame());
 				QuoridorApplication.getQuoridor().getCurrentGame().setGameStatus(GameStatus.WhiteWon);
 				return true;
@@ -2508,14 +2491,16 @@ public class QuoridorController {
 		 * If the tests are running, the row zones are verified, and in normal gameplay situation,
 		 * the rows are verified.
 		 */
-
 		Tile startingTile = null;
+		int targetColumn = -1;
 		int targetRow = -1;
 		if(player.equals(getWhitePlayer())) {
 			startingTile = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getWhitePosition().getTile();
+			targetColumn = 9;
 			targetRow = 1;
 		} else if(player.equals(getBlackPlayer())) {
 			startingTile = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getBlackPosition().getTile();
+			targetColumn = 1;
 			targetRow = 9;
 		} else {
 			throw new IllegalArgumentException("Player is invalid");
@@ -2525,7 +2510,9 @@ public class QuoridorController {
 
 		// If a tile in the target region is visited, return true
 		for(Tile tile : tilesVisited) {
-			if(tile.getRow() == targetRow) {
+			if(testing && tile.getRow() == targetRow) {
+				return true;
+			} else if(!testing && tile.getColumn() == targetColumn) {
 				return true;
 			}
 		}
@@ -2587,7 +2574,7 @@ public class QuoridorController {
 		}
 		Board board = QuoridorApplication.getQuoridor().getBoard();
 		Game game = QuoridorApplication.getQuoridor().getCurrentGame();
-		if(board.getTiles().size() < 81) {
+		if(board.getTiles().size() != 81) {
 			throw new IllegalArgumentException("Board is not properly initialized");
 		}
 
@@ -2821,16 +2808,8 @@ public class QuoridorController {
 		ReplayModeRoundNum= roundNumber;
 		return null;
 	}
-	
-	public static Wall getNextAvailableWall(Player player) {
-		List<Wall> walls = player.equals(getWhitePlayer()) ? QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getWhiteWallsInStock() : 
-														   	 QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getWhiteWallsInStock();
-		int index = 0;
-		while(walls.get(index).hasMove()) {
-			index++;
-		}
-		return walls.get(index);
-	}
+
+
 
 
 
