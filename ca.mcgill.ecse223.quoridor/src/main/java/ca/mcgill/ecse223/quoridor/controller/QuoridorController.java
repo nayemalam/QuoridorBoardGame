@@ -1766,11 +1766,73 @@ public class QuoridorController {
 		// Game curGame = QuoridorApplication.getQuoridor().getCurrentGame();
 		// Move Mode
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
-		Game curGame = new Game(gs, mvM, quoridor);
+
+		int thinkingTime = 180;
+		User user1;
+		User user2;
+		if (quoridor.getUsers().size() == 0) {
+			user1 = quoridor.addUser("user1");
+			user2 = quoridor.addUser("user2");
+		} else {
+			user1 = quoridor.getUser(0);
+			user2 = quoridor.getUser(1);
+		}
+
+		Player player1 = new Player(new Time(thinkingTime), user1, 9, Direction.Horizontal);
+		Player player2 = new Player(new Time(thinkingTime), user2, 1, Direction.Horizontal);
+		initializeNewGame(quoridor, player1, player2);
+
 		// if((curGame.getGameStatus().toString() != "Running")) {
 		// throw new Exception("The Game is not running");
 		// }
+		Game curGame = QuoridorApplication.getQuoridor().getCurrentGame();
 		curGame.setGameStatus(Game.GameStatus.Replay);
+	}
+
+	/**
+	 * 
+	 * @param userName1
+	 * @param userName2
+	 * @return
+	 */
+	private static ArrayList<Player> createUsersAndPlayers(String userName1, String userName2) {
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		User user1 = quoridor.addUser(userName1);
+		User user2 = quoridor.addUser(userName2);
+
+		int thinkingTime = 180;
+
+		// Players are assumed to start on opposite sides and need to make progress
+		// horizontally to get to the other side
+		//@formatter:off
+		/*
+		 *  __________
+		 * |          |
+		 * |          |
+		 * |x->    <-x|
+		 * |          |
+		 * |__________|
+		 * 
+		 */
+		//@formatter:on
+		Player player1 = new Player(new Time(thinkingTime), user1, 9, Direction.Horizontal);
+		Player player2 = new Player(new Time(thinkingTime), user2, 1, Direction.Horizontal);
+
+		Player[] players = { player1, player2 };
+
+		// Create all walls. Walls with lower ID belong to player1,
+		// while the second half belongs to player 2
+		for (int i = 0; i < 2; i++) {
+			for (int j = 1; j <= 10; j++) {
+				new Wall(i * 10 + j, players[i]);
+			}
+		}
+
+		ArrayList<Player> playersList = new ArrayList<Player>();
+		playersList.add(player1);
+		playersList.add(player2);
+
+		return playersList;
 	}
 
 	/**

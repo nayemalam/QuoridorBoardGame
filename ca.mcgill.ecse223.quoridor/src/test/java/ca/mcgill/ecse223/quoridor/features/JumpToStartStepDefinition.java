@@ -1,4 +1,5 @@
 package ca.mcgill.ecse223.quoridor.features;
+
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,6 @@ import io.cucumber.java.en.Then;
 import static org.junit.Assert.assertEquals;
 
 public class JumpToStartStepDefinition {
-
 
 	private int moveNumber;
 	private int RoundNumber;
@@ -37,36 +37,51 @@ public class JumpToStartStepDefinition {
 
 			int col = ((int) move.charAt(0)) - 96;
 			int row = move.charAt(1) - 48;
-		//	Tile aTile = new Tile(row, col,q.getBoard());
-			if(move.length() == 2) {
-				if(round == 1) {
-					StepMove mv = new StepMove( moveN, 1, q.getCurrentGame().getWhitePlayer(), QuoridorController.getTileAtRowCol(row, col), q.getCurrentGame());
-				}
-				else {
-					StepMove mv = new StepMove( moveN, 1, q.getCurrentGame().getBlackPlayer(), QuoridorController.getTileAtRowCol(row, col), q.getCurrentGame());
+			// Tile aTile = new Tile(row, col,q.getBoard());
+			if (move.length() == 2) {
+				if (round == 1) {
+					StepMove mv = new StepMove(moveN, 1, q.getCurrentGame().getWhitePlayer(),
+							QuoridorController.getTileAtRowCol(row, col), q.getCurrentGame());
+				} else {
+					StepMove mv = new StepMove(moveN, 1, q.getCurrentGame().getBlackPlayer(),
+							QuoridorController.getTileAtRowCol(row, col), q.getCurrentGame());
 				}
 
-			}
-			else {
+			} else {
 				int indexW = 0;
 				int indexB = 0;
-				if(move.charAt(2) == 'h') {
-					if(round == 1) {
-						new WallMove(moveN, round, q.getCurrentGame().getWhitePlayer(), QuoridorController.getTileAtRowCol(row, col), q.getCurrentGame(), Direction.Horizontal,q.getCurrentGame().getWhitePlayer().getWall(indexW));
+				if (move.charAt(2) == 'h') {
+					if (round == 1) {
+						new WallMove(moveN, round, q.getCurrentGame().getWhitePlayer(),
+								QuoridorController.getTileAtRowCol(row, col), q.getCurrentGame(), Direction.Horizontal,
+								q.getCurrentGame().getWhitePlayer().getWall(indexW));
 						indexW++;
 					}
-					if( round == 2) {
-						new WallMove(moveN, round, q.getCurrentGame().getBlackPlayer(), QuoridorController.getTileAtRowCol(row, col), q.getCurrentGame(), Direction.Horizontal,q.getCurrentGame().getBlackPlayer().getWall(indexB));
+					if (round == 2) {
+						new WallMove(moveN, round, q.getCurrentGame().getBlackPlayer(),
+								QuoridorController.getTileAtRowCol(row, col), q.getCurrentGame(), Direction.Horizontal,
+								q.getCurrentGame().getBlackPlayer().getWall(indexB));
 						indexB++;
 					}
 				}
-				if(move.charAt(2) == 'v') {
-					if(round == 1) {
-						new WallMove(moveN, round, q.getCurrentGame().getWhitePlayer(), QuoridorController.getTileAtRowCol(row, col), q.getCurrentGame(), Direction.Vertical,q.getCurrentGame().getWhitePlayer().getWall(indexW));
+				if (move.charAt(2) == 'v') {
+					if (round == 1) {
+						if (q.getCurrentGame().getWhitePlayer().getWall(indexW).hasMove()) {
+							indexW++;
+						}
+						new WallMove(moveN, round, q.getCurrentGame().getWhitePlayer(),
+								QuoridorController.getTileAtRowCol(row, col), q.getCurrentGame(), Direction.Vertical,
+								q.getCurrentGame().getWhitePlayer().getWall(indexW));
 						indexW++;
 					}
-					if( round == 2) {
-						new WallMove(moveN, round, q.getCurrentGame().getBlackPlayer(), QuoridorController.getTileAtRowCol(row, col), q.getCurrentGame(), Direction.Vertical,q.getCurrentGame().getBlackPlayer().getWall(indexB));
+					if (round == 2) {
+						if (q.getCurrentGame().getBlackPlayer().getWall(indexB).hasMove()) {
+							indexB++;
+						}
+
+						new WallMove(moveN, round, q.getCurrentGame().getBlackPlayer(),
+								QuoridorController.getTileAtRowCol(row, col), q.getCurrentGame(), Direction.Vertical,
+								q.getCurrentGame().getBlackPlayer().getWall(indexB));
 						indexB++;
 					}
 				}
@@ -78,7 +93,7 @@ public class JumpToStartStepDefinition {
 	@Given("The next move is {double}")
 	public void the_next_move_is(Double double1) {
 		int moveN = double1.intValue();
-		Double roundD = (double1%1)*10;
+		Double roundD = (double1 % 1) * 10;
 		int round = roundD.intValue();
 
 		moveNumber = moveN;
@@ -94,7 +109,7 @@ public class JumpToStartStepDefinition {
 	@Then("The next move shall be {double}")
 	public void the_next_move_shall_be(Double double1) {
 		int moveN = double1.intValue();
-		Double roundD = (double1%1)*10;
+		Double roundD = (double1 % 1) * 10;
 		int round = roundD.intValue();
 
 	}
@@ -103,20 +118,20 @@ public class JumpToStartStepDefinition {
 	public void white_player_s_position_shall_be(Double double1) {
 		Quoridor q = QuoridorApplication.getQuoridor();
 		int row = double1.intValue();
-		Double colD = (double1%1)*10;
+		Double colD = (double1 % 1) * 10;
 		int col = colD.intValue();
 		assertEquals(row, q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getRow());
-		assertEquals(col,q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getColumn());
+		assertEquals(col, q.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getColumn());
 	}
 
 	@Then("Black player's position shall be \\({double})")
 	public void black_player_s_position_shall_be(Double double1) {
 		Quoridor q = QuoridorApplication.getQuoridor();
 		int row = double1.intValue();
-		Double colD = (double1%1)*10;
+		Double colD = (double1 % 1) * 10;
 		int col = colD.intValue();
 		assertEquals(row, q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getRow());
-		assertEquals(col,q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getColumn());
+		assertEquals(col, q.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getColumn());
 	}
 
 	@Then("White has {int} on stock")
@@ -131,6 +146,4 @@ public class JumpToStartStepDefinition {
 		assertEquals(int1, q.getCurrentGame().getCurrentPosition().getBlackWallsInStock());
 	}
 
-
 }
-
