@@ -1523,7 +1523,7 @@ public class QuoridorController {
 					blackWallDirection = Direction.Horizontal;
 				}
 
-
+				
 				boolean blackWallsValid = initiatePosValidation(blackWallRow, blackWallColumn, wallOrientation, blackWallIdIterator +10);
 
 				if (blackWallsValid) {
