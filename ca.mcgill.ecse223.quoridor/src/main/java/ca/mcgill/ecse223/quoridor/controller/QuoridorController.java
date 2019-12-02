@@ -2078,42 +2078,55 @@ public class QuoridorController {
 		//Jump pawn getting tiles
 		if(!checkWallOnWay(currentRow, currentCol-1, "left") && pawnOnWay == 3) {
 			pawnOnWay(player, true);
-
-
-
-			availableTiles.add(getTileAtRowCol(currentRow,currentCol+1));
-			availableTiles.add(getTileAtRowCol(currentRow-1,currentCol));
-			availableTiles.add(getTileAtRowCol(currentRow+1,currentCol));
-
-
+			if (validateIfPawnMoveIsPossible(currentRow, currentCol + 1)) {
+				availableTiles.add(getTileAtRowCol(currentRow, currentCol + 1));
+			}
+			if (validateIfPawnMoveIsPossible(currentRow - 1, currentCol)) {
+				availableTiles.add(getTileAtRowCol(currentRow - 1, currentCol));
+			}
+			if (validateIfPawnMoveIsPossible(currentRow + 1, currentCol)) {
+				availableTiles.add(getTileAtRowCol(currentRow + 1, currentCol));
+			}
 		}
 		if(!checkWallOnWay(currentRow, currentCol+1, "right") && pawnOnWay == 4) {
 			pawnOnWay(player, true);
-
-
-			availableTiles.add(getTileAtRowCol(currentRow,currentCol-1));
-			availableTiles.add(getTileAtRowCol(currentRow-1,currentCol));
-			availableTiles.add(getTileAtRowCol(currentRow+1,currentCol));
-
-
+			if (validateIfPawnMoveIsPossible(currentRow, currentCol - 1)) {
+				availableTiles.add(getTileAtRowCol(currentRow, currentCol - 1));
+			}
+			if(validateIfPawnMoveIsPossible(currentRow-1,currentCol)){
+				availableTiles.add(getTileAtRowCol(currentRow-1,currentCol));
+			}
+			if(validateIfPawnMoveIsPossible(currentRow-1,currentCol)) {
+				availableTiles.add(getTileAtRowCol(currentRow-1,currentCol));
+			}
 		}
 		if(!checkWallOnWay(currentRow-1,currentCol, "up") && pawnOnWay ==2) {
 			pawnOnWay(player, true);
-
-
-			availableTiles.add(getTileAtRowCol(currentRow,currentCol-1));
-			availableTiles.add(getTileAtRowCol(currentRow+1,currentCol));
-			availableTiles.add(getTileAtRowCol(currentRow,currentCol+1));
-
-
-
+			if(validateIfPawnMoveIsPossible(currentRow,currentCol-1)) {
+				availableTiles.add(getTileAtRowCol(currentRow,currentCol-1));
+			}
+			if(validateIfPawnMoveIsPossible(currentRow+1,currentCol)) {
+				availableTiles.add(getTileAtRowCol(currentRow+1,currentCol));
+			}
+			if(validateIfPawnMoveIsPossible(currentRow,currentCol+1)) {
+				availableTiles.add(getTileAtRowCol(currentRow,currentCol+1));
+			}
 		}
 		if(!checkWallOnWay(currentRow+1, currentCol, "down") && pawnOnWay == 1) {
 			pawnOnWay(player, true);
 
-			availableTiles.add(getTileAtRowCol(currentRow-1,currentCol));
-			availableTiles.add(getTileAtRowCol(currentRow,currentCol-1));
-			availableTiles.add(getTileAtRowCol(currentRow,currentCol+1));
+			if(validateIfPawnMoveIsPossible(currentRow-1,currentCol)) {
+				availableTiles.add(getTileAtRowCol(currentRow-1,currentCol));
+			}
+			if(validateIfPawnMoveIsPossible(currentRow,currentCol-1)) {
+				availableTiles.add(getTileAtRowCol(currentRow,currentCol-1));
+			}
+			
+			if(validateIfPawnMoveIsPossible(currentRow,currentCol+1)) {
+				availableTiles.add(getTileAtRowCol(currentRow,currentCol+1));
+			}
+			
+			
 
 
 		}
@@ -2837,7 +2850,22 @@ public class QuoridorController {
 		return walls.get(index);
 	}
 
-
+	/**
+	 * Method used to validate that a pawn move is possible, i.e. that the
+	 * indicies are valid.
+	 * @param targetRow - Targeted row of the pawn move
+	 * @param targetCol - targeted column of the pawn move
+	 * @return true if valid, false otherwise
+	 */
+	private static boolean validateIfPawnMoveIsPossible(int targetRow, int targetCol) {
+		
+		boolean rowIsValid = targetRow >= 0 && targetRow < 9;
+		boolean colIsValid = targetCol >= 0 && targetCol < 9;
+		if(!rowIsValid || !colIsValid) {
+			return false;
+		}
+		return true;
+	}
 
 }
 
