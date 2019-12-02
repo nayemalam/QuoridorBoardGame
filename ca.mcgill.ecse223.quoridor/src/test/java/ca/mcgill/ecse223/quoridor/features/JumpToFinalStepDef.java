@@ -17,9 +17,10 @@ import static org.junit.Assert.assertEquals;
 
 public class JumpToFinalStepDef {
 	@Given("The game is in replay mode")
-	public void the_game_is_in_replay_mode() {
-		Game curGame = QuoridorApplication.getQuoridor().getCurrentGame();
-		assertEquals(curGame.getGameStatus(),"Replay");
+	public void the_game_is_in_replay_mode() throws Exception {
+		//Game curGame = QuoridorApplication.getQuoridor().getCurrentGame();
+		//assertEquals(curGame.getGameStatus(),"Replay");
+		QuoridorController.enterReplayMode();
 	}
 
 	@When("Jump to final position is initiated")
