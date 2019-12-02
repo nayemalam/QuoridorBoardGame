@@ -2527,6 +2527,9 @@ public class QuoridorController {
 		return availableTiles; // for view
 	}
 
+	/**
+	 * Method used to update the status of the game after a move
+	 */
 	public static void updateGameStatus() {
 		boolean gameWonOpponent = false;
 		boolean gameWonCurrent = checkIfWon(getCurrentPlayer());
@@ -2567,15 +2570,16 @@ public class QuoridorController {
 				: QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getBlackPosition();
 		int row = pos.getTile().getRow();
 		int col = pos.getTile().getColumn();
-		if (player.equals(blackPlayer)) {
-			if (row == 1) {
-				// stopGame(q.getCurrentGame());
+		if(player.equals(blackPlayer)) {
+			if(row == 9) {
+				//stopGame(q.getCurrentGame());
 				QuoridorApplication.getQuoridor().getCurrentGame().setGameStatus(GameStatus.BlackWon);
 				return true;
 			}
-		} else if (player.equals(whitePlayer)) {
-			if (row == 9) {
-				// stopGame(q.getCurrentGame());
+		}
+		else if(player.equals(whitePlayer)){
+			if(row == 1) {
+				//stopGame(q.getCurrentGame());
 				QuoridorApplication.getQuoridor().getCurrentGame().setGameStatus(GameStatus.WhiteWon);
 				return true;
 			}
@@ -3075,6 +3079,14 @@ public class QuoridorController {
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * Method used to end the game
+	 */
+	public static void endGameAndReportResult() {
+		stopCurrentPlayerClock();
+		stopNonCurrentPlayerClock();
 	}
 
 }

@@ -43,6 +43,7 @@ import java.util.List;
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
 import ca.mcgill.ecse223.quoridor.model.Direction;
+import ca.mcgill.ecse223.quoridor.model.Game.GameStatus;
 import ca.mcgill.ecse223.quoridor.model.Player;
 import ca.mcgill.ecse223.quoridor.model.Tile;
 import ca.mcgill.ecse223.quoridor.model.WallMove;
@@ -725,9 +726,17 @@ public class MainGameWindow {
 				}
 			}
 		}
-		if (wallMoveCandidate == null && playerMoved) {
-
-			switchCurrentPlayerGuiAndBackend();
+		if(wallMoveCandidate == null && playerMoved) {
+			QuoridorController.switchCurrentPlayer();
+			QuoridorController.updateGameStatus();
+			GameStatus currentStatus = QuoridorApplication.getQuoridor().getCurrentGame().getGameStatus(); 
+			if(!currentStatus.equals(GameStatus.Running)) {
+				// Here, end the game and display the winner! or the draw if that is the case
+				QuoridorController.endGameAndReportResult();
+				gameStarted = false;
+				GameWonPopup gameWon = new GameWonPopup();
+				gameWon.frame.setVisible(true);
+			}
 		}
 		getAvailableMovesToCurrentPlayer();
 		frmQuoridorPlay.repaint();
