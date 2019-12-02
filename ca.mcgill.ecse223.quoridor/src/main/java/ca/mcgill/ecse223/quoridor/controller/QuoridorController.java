@@ -35,7 +35,6 @@ public class QuoridorController {
 	private static Timer currentWhitePlayerTimer = null;
 	private static int ReplayModeMoveNum;
 	private static int ReplayModeRoundNum;
-	public static boolean testing = false;
 
 	/**
 	 * Method to capture the time at which the clock is stopped
@@ -2334,14 +2333,14 @@ public class QuoridorController {
 		int row = pos.getTile().getRow();
 		int col = pos.getTile().getColumn();
 		if(player.equals(blackPlayer)) {
-			if((testing && row == 1) || (!testing && col == 1)) {
+			if(row == 1) {
 				//stopGame(q.getCurrentGame());
 				QuoridorApplication.getQuoridor().getCurrentGame().setGameStatus(GameStatus.BlackWon);
 				return true;
 			}
 		}
 		else if(player.equals(whitePlayer)){
-			if((testing && row == 9) || (!testing && col == 9)) {
+			if(row == 9) {
 				//stopGame(q.getCurrentGame());
 				QuoridorApplication.getQuoridor().getCurrentGame().setGameStatus(GameStatus.WhiteWon);
 				return true;
@@ -2471,15 +2470,12 @@ public class QuoridorController {
 		 * the rows are verified.
 		 */
 		Tile startingTile = null;
-		int targetColumn = -1;
 		int targetRow = -1;
 		if(player.equals(getWhitePlayer())) {
 			startingTile = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getWhitePosition().getTile();
-			targetColumn = 9;
 			targetRow = 1;
 		} else if(player.equals(getBlackPlayer())) {
 			startingTile = QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getBlackPosition().getTile();
-			targetColumn = 1;
 			targetRow = 9;
 		} else {
 			throw new IllegalArgumentException("Player is invalid");
@@ -2489,9 +2485,7 @@ public class QuoridorController {
 
 		// If a tile in the target region is visited, return true
 		for(Tile tile : tilesVisited) {
-			if(testing && tile.getRow() == targetRow) {
-				return true;
-			} else if(!testing && tile.getColumn() == targetColumn) {
+			if(tile.getRow() == targetRow) {
 				return true;
 			}
 		}

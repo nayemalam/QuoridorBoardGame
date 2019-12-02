@@ -364,13 +364,13 @@ public class MainGameWindow {
 		JButton blackPawn = new JButton();
 		blackPawn.setIcon(new ImageIcon("./lightWall.png"));
 
-		btnArray[4][8].add(blackPawn);
-		btnArray[4][0].add(whitePawn);
+		btnArray[8][4].add(blackPawn);
+		btnArray[0][4].add(whitePawn);
 
 		blackPawn.setMaximumSize(new Dimension(20, 20));
-		blackPawn.setBounds(btnArray[4][8].getX() + tileWidth / 2, btnArray[4][8].getY(), 20, 20);
-		this.blackPawnMove = new MoveCandidate(blackPawn, 4, 8);
-		this.whitePawnMove = new MoveCandidate(whitePawn, 4, 0);
+		blackPawn.setBounds(btnArray[8][4].getX() + tileWidth / 2, btnArray[8][4].getY(), 20, 20);
+		this.blackPawnMove = new MoveCandidate(blackPawn, 8, 4);
+		this.whitePawnMove = new MoveCandidate(whitePawn, 0, 4);
 	}
 
 	private void wallsHandler(JPanel jPanel, String player) {
