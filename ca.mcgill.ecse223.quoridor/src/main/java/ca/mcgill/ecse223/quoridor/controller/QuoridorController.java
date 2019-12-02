@@ -1,4 +1,3 @@
-
 package ca.mcgill.ecse223.quoridor.controller;
 
 import java.io.*;
@@ -2808,10 +2807,4 @@ public class QuoridorController {
 		ReplayModeRoundNum= roundNumber;
 		return null;
 	}
-
-
-
-
-
 }
-
