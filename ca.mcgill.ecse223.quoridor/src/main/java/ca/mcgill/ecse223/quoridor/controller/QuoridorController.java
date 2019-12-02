@@ -1429,8 +1429,8 @@ public class QuoridorController {
 			aLineOfMoves = moves[i].split(" ");
 
 			roundNumber = ((int)aLineOfMoves[0].charAt(0)) - 48;
-			whiteMove = aLineOfMoves[2];
-			blackMove = aLineOfMoves[1];
+			whiteMove = aLineOfMoves[1];
+			blackMove = aLineOfMoves[2];
 
 			if(whiteMove.length() == 2) {
 				//pawn move
