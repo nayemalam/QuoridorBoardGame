@@ -156,12 +156,12 @@ public class LoadGameStepDef {
 			Player white = QuoridorApplication.getQuoridor().getCurrentGame().getWhitePlayer();
 
 			if(black.getUser().getName().equals(player)) {
-				assertEquals(p_col, gamePosition.getBlackPosition().getTile().getRow());
-				assertEquals(p_row, gamePosition.getBlackPosition().getTile().getColumn());
+				assertEquals(p_row, gamePosition.getBlackPosition().getTile().getRow());
+				assertEquals(p_col, gamePosition.getBlackPosition().getTile().getColumn());
 			}
 			else if(white.getUser().getName().equals(player)){
-				assertEquals(p_col, gamePosition.getWhitePosition().getTile().getRow());
-				assertEquals(p_row, gamePosition.getWhitePosition().getTile().getColumn());
+				assertEquals(p_row, gamePosition.getWhitePosition().getTile().getRow());
+				assertEquals(p_col, gamePosition.getWhitePosition().getTile().getColumn());
 			} else {
 				fail("Issue setting up test!");
 			}
@@ -177,13 +177,13 @@ public class LoadGameStepDef {
 
 			if(black.getUser().getName().equals(player)) {
 				assertEquals(Direction.Vertical, gamePosition.getBlackWallsOnBoard(blackWallsPlacedCounter).getMove().getWallDirection());
-				assertEquals(pw_col, gamePosition.getBlackWallsOnBoard(blackWallsPlacedCounter).getMove().getTargetTile().getRow());
-				assertEquals(pw_row, gamePosition.getBlackWallsOnBoard(blackWallsPlacedCounter).getMove().getTargetTile().getColumn());
+				assertEquals(pw_row, gamePosition.getBlackWallsOnBoard(blackWallsPlacedCounter).getMove().getTargetTile().getRow());
+				assertEquals(pw_col, gamePosition.getBlackWallsOnBoard(blackWallsPlacedCounter).getMove().getTargetTile().getColumn());
 				blackWallsPlacedCounter++; //increment counter after placing wall
 			}else if (white.getUser().getName().equals(player)) {
 				assertEquals(Direction.Vertical, gamePosition.getWhiteWallsOnBoard(whiteWallsPlacedCounter).getMove().getWallDirection());
-				assertEquals(pw_col, gamePosition.getWhiteWallsOnBoard(whiteWallsPlacedCounter).getMove().getTargetTile().getRow());
-				assertEquals(pw_row, gamePosition.getWhiteWallsOnBoard(whiteWallsPlacedCounter).getMove().getTargetTile().getColumn());
+				assertEquals(pw_row, gamePosition.getWhiteWallsOnBoard(whiteWallsPlacedCounter).getMove().getTargetTile().getRow());
+				assertEquals(pw_col, gamePosition.getWhiteWallsOnBoard(whiteWallsPlacedCounter).getMove().getTargetTile().getColumn());
 				whiteWallsPlacedCounter++; //increment counter after placing wall
 			}else {
 				fail("Issue setting up test!");
@@ -201,13 +201,13 @@ public class LoadGameStepDef {
 
 			if(black.getUser().getName().equals(player)) {
 				assertEquals(Direction.Horizontal, gamePosition.getBlackWallsOnBoard(blackWallsPlacedCounter).getMove().getWallDirection());
-				assertEquals(pw_col, gamePosition.getBlackWallsOnBoard(blackWallsPlacedCounter).getMove().getTargetTile().getRow());
-				assertEquals(pw_row, gamePosition.getBlackWallsOnBoard(blackWallsPlacedCounter).getMove().getTargetTile().getColumn());
+				assertEquals(pw_row, gamePosition.getBlackWallsOnBoard(blackWallsPlacedCounter).getMove().getTargetTile().getRow());
+				assertEquals(pw_col, gamePosition.getBlackWallsOnBoard(blackWallsPlacedCounter).getMove().getTargetTile().getColumn());
 				blackWallsPlacedCounter++;
 			}else if (white.getUser().getName().equals(player)) {
 				assertEquals(Direction.Horizontal, gamePosition.getWhiteWallsOnBoard(whiteWallsPlacedCounter).getMove().getWallDirection());
-				assertEquals(pw_col, gamePosition.getWhiteWallsOnBoard(whiteWallsPlacedCounter).getMove().getTargetTile().getRow());
-				assertEquals(pw_row, gamePosition.getWhiteWallsOnBoard(whiteWallsPlacedCounter).getMove().getTargetTile().getColumn());
+				assertEquals(pw_row, gamePosition.getWhiteWallsOnBoard(whiteWallsPlacedCounter).getMove().getTargetTile().getRow());
+				assertEquals(pw_col, gamePosition.getWhiteWallsOnBoard(whiteWallsPlacedCounter).getMove().getTargetTile().getColumn());
 				whiteWallsPlacedCounter++;
 			}else {
 				fail("Issues setting up test!");

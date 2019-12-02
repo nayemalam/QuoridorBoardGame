@@ -1374,8 +1374,8 @@ public class QuoridorController {
 
 		return gameData;
 	}
-
-	/**
+	
+/**
 	 * Method - loadGame()
 	 * 
 	 * Controller method used to load a file containing the game state of a previous
@@ -1419,11 +1419,9 @@ public class QuoridorController {
 		String aLineOfMoves[];
 		String whiteMove = "";
 		String blackMove = "";
-    
 		int roundNumber = 1;
 		int whiteWallIdIterator = 0;
 		int blackWallIdIterator = 0;
-
 		for(int i = 0; i < moves.length; i++) {
 			//iterates through each line of the string
 
@@ -1435,10 +1433,9 @@ public class QuoridorController {
 
 			if(whiteMove.length() == 2) {
 				//pawn move
-//				int whitePawnColumn = ((int) whiteMove.charAt(0)) - 96;
-//				int whitePawnRow = whiteMove.charAt(1) - 48;
-				int whitePawnRow = ((int) whiteMove.charAt(0)) - 96;
-				int whitePawnColumn = whiteMove.charAt(1) - 48;
+				int whitePawnColumn = ((int) whiteMove.charAt(0)) - 96;
+				int whitePawnRow = whiteMove.charAt(1) - 48;
+				
 
 				boolean whitePawnValid = initializeValidatePosition(whitePawnRow, whitePawnColumn);
 				mainValidateMovePawn(whitePlayer);
@@ -1447,7 +1444,6 @@ public class QuoridorController {
 					
 					gamePositionToLoad.getWhitePosition().setTile(whitePawnTile);
 					//create associated move
-
 					StepMove whitePawnMove = new StepMove(1, roundNumber, whitePlayer, whitePawnTile, game);
 					if(game.getMoves().size() > 1) {
 						Move currentMove = game.getMove(game.getMoves().size()-2);
@@ -1462,10 +1458,9 @@ public class QuoridorController {
 			}
 			if(whiteMove.length() == 3) {
 				//wall move
-//				int whiteWallColumn = whiteMove.charAt(0) - 96;
-//				int whiteWallRow = whiteMove.charAt(1) - 48; 
-				int whiteWallRow = whiteMove.charAt(0) - 96;
-				int whiteWallColumn = whiteMove.charAt(1) - 48;
+				int whiteWallColumn = whiteMove.charAt(0) - 96;
+				int whiteWallRow = whiteMove.charAt(1) - 48; 
+
 				char whiteWallO = whiteMove.charAt(2);
 				Direction whiteWallDirection;
 				String wallOrientation = "";
@@ -1479,6 +1474,7 @@ public class QuoridorController {
 
 				boolean whiteWallsValid = initiatePosValidation(whiteWallRow, whiteWallColumn, wallOrientation, whiteWallIdIterator);
 				if (whiteWallsValid) {
+					//Wall whiteWall = gamePositionToLoad.getWhiteWallsInStock(whiteWallIdIterator);
 					Wall whiteWall = gamePositionToLoad.getWhiteWallsInStock(0);
 					gamePositionToLoad.removeWhiteWallsInStock(whiteWall);
 					gamePositionToLoad.addWhiteWallsOnBoard(whiteWall);
@@ -1502,10 +1498,8 @@ public class QuoridorController {
 			}
 			if(blackMove.length() == 2) {
 				//pawn move
-//				int blackPawnColumn = ((int) blackMove.charAt(0)) - 96;
-//				int blackPawnRow = blackMove.charAt(1) - 48;
-				int blackPawnRow = ((int) blackMove.charAt(0)) - 96;
-				int blackPawnColumn = blackMove.charAt(1) - 48;
+				int blackPawnColumn = ((int) blackMove.charAt(0)) - 96;
+				int blackPawnRow = blackMove.charAt(1) - 48;
 				
 				boolean blackPawnValid = initializeValidatePosition(blackPawnRow, blackPawnColumn);
 				mainValidateMovePawn(blackPlayer);
@@ -1514,7 +1508,6 @@ public class QuoridorController {
 					
 					gamePositionToLoad.getBlackPosition().setTile(blackPawnTile);
 					//create associated move
-
 					StepMove blackPawnMove = new StepMove(2, roundNumber, whitePlayer, blackPawnTile, game);
 					if(game.getMoves().size() > 1) {
 						Move currentMove = game.getMove(game.getMoves().size()-2);
@@ -1529,10 +1522,9 @@ public class QuoridorController {
 			}
 			if(blackMove.length() == 3) {
 				//wall move
-//				int blackWallColumn = blackMove.charAt(0) - 96;
-//				int blackWallRow = blackMove.charAt(1) - 48; 
-				int blackWallRow = blackMove.charAt(0) - 96;
-				int blackWallColumn = blackMove.charAt(1) - 48;
+				int blackWallColumn = blackMove.charAt(0) - 96;
+				int blackWallRow = blackMove.charAt(1) - 48; 
+
 				char blackWallO = blackMove.charAt(2);
 				Direction blackWallDirection;
 				String wallOrientation = "";
@@ -1544,10 +1536,9 @@ public class QuoridorController {
 					blackWallDirection = Direction.Horizontal;
 				}
 
-				
 				boolean blackWallsValid = initiatePosValidation(blackWallRow, blackWallColumn, wallOrientation, blackWallIdIterator +10);
-
 				if (blackWallsValid) {
+					//Wall blackWall = gamePositionToLoad.getBlackWallsInStock(blackWallIdIterator);
 					Wall blackWall = gamePositionToLoad.getBlackWallsInStock(0);
 					gamePositionToLoad.removeBlackWallsInStock(blackWall);
 					gamePositionToLoad.addBlackWallsOnBoard(blackWall);
@@ -1571,7 +1562,6 @@ public class QuoridorController {
 			if(blackMove.length() > 3 || blackMove.length() < 2 || whiteMove.length() < 2 || whiteMove.length() > 3){
 				throw new IllegalArgumentException("Invalid Move loaded!");
 			}
-
 			if(gamePositionToLoad.getBlackPosition().getTile().getRow() == gamePositionToLoad.getWhitePosition().getTile().getRow() && gamePositionToLoad.getBlackPosition().getTile().getColumn() == gamePositionToLoad.getWhitePosition().getTile().getColumn()) {
 				throw new IllegalArgumentException("Invalid Move loaded! black and white pawns can't be on same tile at same time");
 			}
@@ -1579,7 +1569,6 @@ public class QuoridorController {
 
 				throw new IllegalArgumentException("Invalid Move loaded! black and white pawns can't be on same tile at same time");
 			}
-
 		}
 
 		return true;
@@ -2840,4 +2829,3 @@ public class QuoridorController {
 
 
 }
-

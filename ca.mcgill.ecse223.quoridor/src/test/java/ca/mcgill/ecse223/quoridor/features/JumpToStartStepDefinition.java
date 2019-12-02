@@ -37,13 +37,13 @@ public class JumpToStartStepDefinition {
 
 			int col = ((int) move.charAt(0)) - 96;
 			int row = move.charAt(1) - 48;
-		//	Tile aTile = new Tile(row, col,q.getBoard());
+			Tile aTile = new Tile(row, col,q.getBoard());
 			if(move.length() == 2) {
 				if(round == 1) {
-					StepMove mv = new StepMove( moveN, 1, q.getCurrentGame().getWhitePlayer(), QuoridorController.getTileAtRowCol(row, col), q.getCurrentGame());
+					StepMove mv = new StepMove( moveN, 1, q.getCurrentGame().getWhitePlayer(), aTile, q.getCurrentGame());
 				}
 				else {
-					StepMove mv = new StepMove( moveN, 1, q.getCurrentGame().getBlackPlayer(), QuoridorController.getTileAtRowCol(row, col), q.getCurrentGame());
+					StepMove mv = new StepMove( moveN, 1, q.getCurrentGame().getBlackPlayer(), aTile, q.getCurrentGame());
 				}
 
 			}
@@ -52,21 +52,21 @@ public class JumpToStartStepDefinition {
 				int indexB = 0;
 				if(move.charAt(2) == 'h') {
 					if(round == 1) {
-						new WallMove(moveN, round, q.getCurrentGame().getWhitePlayer(), QuoridorController.getTileAtRowCol(row, col), q.getCurrentGame(), Direction.Horizontal,q.getCurrentGame().getWhitePlayer().getWall(indexW));
+						new WallMove(moveN, round, q.getCurrentGame().getWhitePlayer(), aTile, q.getCurrentGame(), Direction.Horizontal,q.getCurrentGame().getWhitePlayer().getWall(indexW));
 						indexW++;
 					}
 					if( round == 2) {
-						new WallMove(moveN, round, q.getCurrentGame().getBlackPlayer(), QuoridorController.getTileAtRowCol(row, col), q.getCurrentGame(), Direction.Horizontal,q.getCurrentGame().getBlackPlayer().getWall(indexB));
+						new WallMove(moveN, round, q.getCurrentGame().getBlackPlayer(), aTile, q.getCurrentGame(), Direction.Horizontal,q.getCurrentGame().getBlackPlayer().getWall(indexB));
 						indexB++;
 					}
 				}
 				if(move.charAt(2) == 'v') {
 					if(round == 1) {
-						new WallMove(moveN, round, q.getCurrentGame().getWhitePlayer(), QuoridorController.getTileAtRowCol(row, col), q.getCurrentGame(), Direction.Vertical,q.getCurrentGame().getWhitePlayer().getWall(indexW));
+						new WallMove(moveN, round, q.getCurrentGame().getWhitePlayer(), aTile, q.getCurrentGame(), Direction.Vertical,q.getCurrentGame().getWhitePlayer().getWall(indexW));
 						indexW++;
 					}
 					if( round == 2) {
-						new WallMove(moveN, round, q.getCurrentGame().getBlackPlayer(), QuoridorController.getTileAtRowCol(row, col), q.getCurrentGame(), Direction.Vertical,q.getCurrentGame().getBlackPlayer().getWall(indexB));
+						new WallMove(moveN, round, q.getCurrentGame().getBlackPlayer(), aTile, q.getCurrentGame(), Direction.Vertical,q.getCurrentGame().getBlackPlayer().getWall(indexB));
 						indexB++;
 					}
 				}
