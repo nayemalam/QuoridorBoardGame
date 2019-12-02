@@ -86,9 +86,7 @@ public class CheckIfPathExistsStepDef {
 	 */
 	@When("Check path existence is initiated")
 	public void initiateCheckPathExistence() {
-		QuoridorController.testing = true;
 		this.paths = QuoridorController.checkIfPathExists();
-		QuoridorController.testing = false;
 	}
 	
 	/**

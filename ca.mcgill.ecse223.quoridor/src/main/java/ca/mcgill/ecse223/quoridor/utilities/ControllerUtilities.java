@@ -22,10 +22,10 @@ public class ControllerUtilities {
 	public static final int TOTAL_NUMBER_OF_COLS = 9;
 	public static final int WHITE_TILE_INDEX = 4;
 	public static final int BLACK_TILE_INDEX = 76;
-	public static final int WHITE_INITIAL_ROW = 5;
-	public static final int WHITE_INITIAL_COL = 1;
-	public static final int BLACK_INITIAL_ROW = 5;
-	public static final int BLACK_INITIAL_COL = 9;
+	public static final int WHITE_INITIAL_ROW = 9;
+	public static final int WHITE_INITIAL_COL = 5;
+	public static final int BLACK_INITIAL_ROW = 1;
+	public static final int BLACK_INITIAL_COL = 5;
 	
 	public static final int TOTAL_WALL_STOCK_AT_START = 10;
 	public static final int TOTAL_NUMBER_OF_WALLS_PER_PLAYER = 10;
