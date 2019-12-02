@@ -13,9 +13,10 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class EnterReplayModeStepDef{
+	
 	@When("I initiate replay mode")
 	public void i_initiate_replay_mode() throws Exception {
 	    QuoridorController.enterReplayMode();
