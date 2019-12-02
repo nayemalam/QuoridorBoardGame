@@ -15,12 +15,17 @@ import ca.mcgill.ecse223.quoridor.model.Game.GameStatus;
 import java.awt.SystemColor;
 import java.awt.Font;
 import javax.swing.JTextArea;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class GameWonPopup {
 
 	public JFrame frame;
 	private JTextField txtGameOver;
 	JTextField textArea;
+	private JPanel panel_2;
+	private JButton btnNewButton;
 
 	/**
 	 * Launch the application.
@@ -73,6 +78,18 @@ public class GameWonPopup {
 		textArea = new JTextField();
 		textArea.setEditable(false);
 		panel_1.add(textArea);
+		
+		panel_2 = new JPanel();
+		frame.getContentPane().add(panel_2, BorderLayout.SOUTH);
+		
+		btnNewButton = new JButton("Exit Game");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				frame.dispose();
+				System.exit(0);
+			}
+		});
+		panel_2.add(btnNewButton);
 		
 		// Get text to write down
 		DisplayWinnerText();
