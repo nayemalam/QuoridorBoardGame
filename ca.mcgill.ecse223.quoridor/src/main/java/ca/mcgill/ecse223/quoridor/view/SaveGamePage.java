@@ -19,6 +19,7 @@ import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.io.*;
 
 import ca.mcgill.ecse223.quoridor.controller.*;
 
@@ -28,7 +29,7 @@ import javax.swing.JSplitPane;
 public class SaveGamePage {
 	public JFrame frame;
 	private QuoridorController QC;
-	private boolean fileExists;
+	private boolean fileExists = false;
 
 	/**
 	 * Launch the application.
@@ -87,7 +88,7 @@ public class SaveGamePage {
 		invalidFileNameLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		invalidFileNameLabel.setBounds(441, 120, 232, 28);
 		frame.getContentPane().add(invalidFileNameLabel);
-		emptyFileNameLabel.setVisible(false);
+		invalidFileNameLabel.setVisible(false);
 		
 		JTextField gameFileNameTextField = new JTextField();
 		gameFileNameTextField.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -142,23 +143,23 @@ public class SaveGamePage {
 					emptyFileNameLabel.setVisible(true);
 					return;
 				}
-				
-				try {
-					fileExists = QC.save(saveGameFileNameLabel.getText());
-				} catch (IllegalArgumentException e) {
-					
-					e.printStackTrace();
-				} catch (IOException e) {
-					invalidFileNameLabel.setVisible(true);
-					e.printStackTrace();
+				if(new File(gameFileNameTextField.getText()).exists()) {
+					OverwritePane.setVisible(true);
+					OverwriteLabel.setVisible(true);
+					return;
+				}else {
+					try {
+						fileExists = QC.saveGameFile(saveGameFileNameLabel.getText());
+					} catch (IllegalArgumentException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
 				if(fileExists = true) {
 					gameSavedPane.setVisible(true);
 					gameSavedLabel.setVisible(true);
-				}
-				else {
-					OverwritePane.setVisible(true);
-					OverwriteLabel.setVisible(true);
+					
 				}
 			}		
 		});
@@ -188,17 +189,18 @@ public class SaveGamePage {
 		ConfirmOverwriteButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
+				
+				gameSavedPane.setVisible(true);
+				gameSavedLabel.setVisible(true);
+				
 				try {
 					QC.overwriteGameFile(saveGameFileNameLabel.getText());
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				OverwritePane.setVisible(false);
 				OverwriteLabel.setVisible(false);
 		
-				gameSavedPane.setVisible(true);
-				gameSavedLabel.setVisible(true);
 			}
 		});
 		ConfirmOverwriteButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
