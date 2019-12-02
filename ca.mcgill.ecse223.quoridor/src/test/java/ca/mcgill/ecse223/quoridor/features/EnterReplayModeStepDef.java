@@ -23,8 +23,9 @@ public class EnterReplayModeStepDef{
 	}
 	
 	@Given("The game is replay mode")
-	public void the_game_is_replay_mode() {
-		Game curGame = QuoridorApplication.getQuoridor().getCurrentGame();
+	public void the_game_is_replay_mode() throws Exception {
+	 Game curGame = QuoridorApplication.getQuoridor().getCurrentGame();
+		
 		assertEquals(curGame.getGameStatus(),"Replay");
 	}
 
