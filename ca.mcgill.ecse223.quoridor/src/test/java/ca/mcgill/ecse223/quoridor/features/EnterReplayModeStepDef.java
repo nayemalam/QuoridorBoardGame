@@ -8,6 +8,8 @@ import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.controller.QuoridorController;
 
 import ca.mcgill.ecse223.quoridor.model.*;
+import ca.mcgill.ecse223.quoridor.model.Game.GameStatus;
+import ca.mcgill.ecse223.quoridor.model.Game.MoveMode;
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -24,14 +26,16 @@ public class EnterReplayModeStepDef{
 	
 	@Given("The game is replay mode")
 	public void the_game_is_replay_mode() {
-		Game curGame = QuoridorApplication.getQuoridor().getCurrentGame();
-		assertEquals(curGame.getGameStatus(),"Replay");
+		GameStatus gs = GameStatus.Replay;
+		MoveMode mvM = MoveMode.PlayerMove;
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+     	Game curGame = new Game(gs,mvM,quoridor);
+		curGame.setGameStatus(Game.GameStatus.Replay);
 	}
 
 	@Given("The game does not have a final result")
 	public void the_game_does_not_have_a_final_result() {
 		Game curGame = QuoridorApplication.getQuoridor().getCurrentGame();
-		
 	}
 
 	@When("I initiate to continue game")

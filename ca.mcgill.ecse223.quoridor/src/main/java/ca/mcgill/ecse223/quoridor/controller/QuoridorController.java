@@ -1690,13 +1690,22 @@ public class QuoridorController {
 	public static void enterReplayMode() throws Exception{
 		GameStatus gs = GameStatus.Replay;
 		MoveMode mvM = MoveMode.PlayerMove;
-//		Game curGame = QuoridorApplication.getQuoridor().getCurrentGame();
-		//Move Mode
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
-     	Game curGame = new Game(gs,mvM,quoridor);
-//		if((curGame.getGameStatus().toString() != "Running")) {
-//			throw new Exception("The Game is not running");
-//		}
+		int thinkingTime = 180;
+		User user1;
+		User user2;
+		if (quoridor.getUsers().size() == 0) {
+			user1 = quoridor.addUser("user1");
+			user2 = quoridor.addUser("user2");
+		} else {
+			user1 = quoridor.getUser(0);
+			user2 = quoridor.getUser(1);
+		}
+
+		Player player1 = new Player(new Time(thinkingTime), user1, 9, Direction.Horizontal);
+		Player player2 = new Player(new Time(thinkingTime), user2, 1, Direction.Horizontal);
+		initializeNewGame(quoridor, player1, player2);
+		Game curGame = QuoridorApplication.getQuoridor().getCurrentGame();
 		curGame.setGameStatus(Game.GameStatus.Replay);
 	}
 	/**
